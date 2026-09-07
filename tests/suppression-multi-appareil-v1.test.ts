@@ -500,7 +500,7 @@ describe('MISSION SUPPRESSION-MULTI-APPAREIL-V1 — Test Suite Officielle', () =
       assert.ok(pkg, 'Le package doit être généré');
       const keyFile = pkg.files.find(f => f.filename === 'license-key.txt');
       assert.ok(keyFile);
-      assert.ok(keyFile.content.includes('1 appareil dédié, données 100% locales'));
+      assert.ok(String(keyFile.content).includes('1 appareil dédié, données 100% locales'));
     });
 
     test('I.2 : Non-régression sur le calcul de consanguinité Wright avec pedigree sans ancêtres', () => {

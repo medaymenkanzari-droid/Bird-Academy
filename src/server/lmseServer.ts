@@ -14,6 +14,7 @@ import { LicenseGenerator } from '../features/licensing/engines/LicenseGenerator
 import { LicenseValidator } from '../features/licensing/engines/LicenseValidator';
 import { LicenseAuditEngine } from '../features/licensing/engines/LicenseAuditEngine';
 import { ActivationEngine } from '../features/licensing/engines/ActivationEngine';
+import { LicenseLifecycleEngine } from '../features/licensing/engines/LicenseLifecycleEngine';
 import { FileLicenseRepository } from '../features/licensing/repositories/FileLicenseRepository';
 import { InMemoryLicenseRepository } from '../features/licensing/repositories/InMemoryLicenseRepository';
 import { ILicenseRepository } from '../features/licensing/repositories/ILicenseRepository';
@@ -464,6 +465,69 @@ export class LmseBackendServer {
       });
 
       return res.json({ success: true, license });
+    });
+
+    // POST /api/admin/licenses/:id/replace — Replace License (Super Admin & Admin only)
+    this.app.post('/api/admin/licenses/:id/replace', adminLimiter, AdminAuthService.requireAdmin(['super_admin', 'admin']), async (req: Request, res: Response) => {
+      const { id } = req.params;
+      const { reason, targetTier, durationDays } = req.body || {};
+
+      const oldLic = await this.repository.getLicenseById(id);
+      if (!oldLic) {
+        return res.status(404).json({ error: 'NOT_FOUND', message: 'Licence introuvable.' });
+      }
+
+      if (!LicenseLifecycleEngine.canTransition(oldLic.status, 'replaced')) {
+        return res.status(400).json({
+          error: 'ILLEGAL_TRANSITION',
+          message: `Impossible de remplacer une licence avec le statut "${oldLic.status}".`,
+        });
+      }
+
+      const oldMode = process.env.VITE_APP_MODE;
+      process.env.VITE_APP_MODE = 'admin';
+
+      try {
+        const newLic = await LicenseGenerator.generateLicense({
+          holderName: oldLic.holderName,
+          holderEmail: oldLic.holderEmail,
+          type: oldLic.type,
+          durationDays: durationDays !== undefined ? durationDays : (oldLic.expiresAt ? 365 : null),
+          maxDevices: oldLic.policy?.maxDevices || 1,
+          customFeatures: oldLic.policy?.features || [],
+          metadata: {
+            ...oldLic.metadata,
+            replacedLicenseId: oldLic.id,
+            targetTier: targetTier || 'PRO',
+          },
+        });
+
+        const { activeLicense, archivedLicense } = LicenseLifecycleEngine.replace(
+          oldLic,
+          newLic,
+          reason || 'Remplacement administratif'
+        );
+
+        process.env.VITE_APP_MODE = oldMode;
+
+        await this.repository.saveLicense(archivedLicense);
+        await this.repository.saveLicense(activeLicense);
+
+        this.recordAudit({
+          who: (req as any).adminSession.email,
+          role: (req as any).adminSession.role,
+          action: 'LICENSE_REPLACED',
+          target: activeLicense.id,
+          ip: req.ip || '127.0.0.1',
+          result: 'SUCCESS',
+          details: `Remplacement de la licence ${oldLic.id} par ${activeLicense.id}. Raison: ${reason || 'Remplacement administratif'}`,
+        });
+
+        return res.json({ success: true, activeLicense, archivedLicense });
+      } catch (err: any) {
+        process.env.VITE_APP_MODE = oldMode;
+        return res.status(500).json({ error: 'REPLACEMENT_FAILED', message: err.message });
+      }
     });
 
     // GET /api/admin/audit — Retrieve Audit Logs (Admin only)

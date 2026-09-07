@@ -78,6 +78,19 @@ export class LicenseValidator {
       };
     }
 
+    // 2.6. Replaced status check (Terminal state)
+    if (license.status === 'replaced') {
+      return {
+        isValid: false,
+        status: 'replaced',
+        license,
+        code: 'LICENSE_REPLACED',
+        message: 'Cette licence a été remplacée par une nouvelle licence.',
+        remainingDays: 0,
+        deviceRegistered: false,
+      };
+    }
+
     // 3. Revocation check
     const isRevokedInList = revocationList.some(
       r => r.toUpperCase() === license.key.toUpperCase() || r.toUpperCase() === license.checksum.toUpperCase()
