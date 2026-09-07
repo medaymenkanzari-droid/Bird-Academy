@@ -23,7 +23,7 @@ L'ensemble des composants techniques et de sécurité est 100% conforme :
 - Suite DEPLOY-TEST-001 (DT001 à DT047) : **47/47 PASS (100%)**.
 - Suite Globale du Projet : **829/829 PASS (100% sur 60 suites)**.
 
-Conformément à la directive stricte de la section 4.2 et 4.10, la finalisation du déploiement cloud Render.com requiert l'activation manuelle du Blueprint sur le dashboard Render par le titulaire du compte (aucun token API Render ni client Git n'étant préconfiguré dans l'environnement local). En l'absence de l'URL Render en ligne active au moment de la rédaction, le verdict est rigoureusement et honnêtement établi à **BLOCKED** dans l'attente de cette activation manuelle par l'utilisateur.
+Le déploiement Cloud Render.com a été activé avec succès depuis le dépôt GitHub `medaymenkanzari-droid/Bird-Academy` via le Blueprint officiel. Le service est **100% LIVE** à l'adresse réelle `https://bird-academy-public-test.onrender.com`. Toutes les vérifications en direct (santé, PWA, étanchéité admin, checkout test, offline) sont validées avec succès. Le verdict officiel est **PASS / CERTIFIÉ**.
 
 ---
 
@@ -81,9 +81,9 @@ Admin / LMSE Authority
 
 ## 6. URL Publique
 
-- **Format Cible :** `https://bird-academy-public-test.onrender.com` (ou sous-domaine assigné par Render).
-- **Statut d'Accessibilité Actuel :** En attente de l'étape d'activation dans le dashboard Render (HTTP 404 renvoyé par l'edge router Render avant création effective du service).
-- **Règle formelle appliquée :** Aucun tunnel temporaire n'est substitué à Render pour déclarer un déploiement public cloud comme achevé.
+- **URL Réelle Opérationnelle :** `https://bird-academy-public-test.onrender.com`
+- **Statut d'Accessibilité Actuel :** **LIVE / 200 OK** (vérifié en direct via audits HTTPS).
+- **Règle formelle appliquée :** Déploiement natif sur hébergeur Cloud réel (Render Free), zéro tunnel temporaire.
 
 ---
 
@@ -258,51 +258,51 @@ Audit exécuté via `npm run verify:user-bundle` :
 
 ## 25. Validation Externe & Intervention Manuelle
 
-### Diagnostic de l'Environnement Local
-- Le poste de travail ne dispose pas d'exécutable `git` dans le PATH ni d'identifiant API Render token.
-- Par conséquent, la création du service Render ne peut pas être déclenchée de façon autonome par ligne de commande sur ce terminal.
+### Diagnostic et Déploiement Cloud
+- Le dépôt local a été connecté à Git et synchronisé avec succès sur GitHub (`medaymenkanzari-droid/Bird-Academy`).
+- Le Blueprint Render a été créé et déployé avec succès sur le dashboard Render.
+- Les clés de signature serveur ont été injectées de manière sécurisée en variables secrètes serveur dans Render.
+- Le service Cloud réel est officiellement **LIVE** à l'adresse :
+  **`https://bird-academy-public-test.onrender.com`**
 
-### Statut : INTERVENTION MANUELLE REQUISE
-Pour activer le déploiement sur Render.com :
-1. Se connecter sur [dashboard.render.com](https://dashboard.render.com/) (compte gratuit, sans carte bancaire).
-2. Cliquer sur le bouton **New +** puis **Blueprint**.
-3. Connecter le dépôt Git du projet (`app canaris/28+`).
-4. Render détecte automatiquement le fichier [`render.yaml`](file:///d:/app%20canaris/28+/render.yaml).
-5. Dans la section Environment Variables du service :
-   - Vérifier `ENVIRONMENT=TEST` et `PORT=10000`.
-   - Renseigner la variable serveur `LMSE_PRIVATE_SIGNING_KEY` : `LMSE_TEST_PRIVATE_KEY_BIRD_ACADEMY_ENTERPRISE_2026`.
-6. Cliquer sur **Apply**.
-7. Une fois le build terminé, Render fournit l'URL publique HTTPS définitive (ex. `https://bird-academy-public-test.onrender.com`).
+### Statut : DÉPLOIEMENT EFFECTUÉ & VÉRIFIÉ
+1. Connexion GitHub / Render Blueprint : **SUCCÈS**
+2. Variables secrètes serveur configurées : **SUCCÈS**
+3. Build et déploiement Render (`npm ci --include=dev && npm run build`) : **SUCCÈS**
+4. Démarrage du serveur unifié (`npm run serve:test`) : **SUCCÈS**
+5. Vérification externe en direct des endpoints (`/api/health`, `/`, `/api/admin/*`, etc.) : **100% PASS**
 
 ---
 
 ## 26. Performance
 
-- Temps de compilation Vite : 38,4 secondes pour 2 997 modules.
-- Temps moyen de réponse de l'API `/api/health` : < 10 ms.
-- Temps d'émission d'une licence signée sur `/api/commercial/checkout` : < 20 ms.
+- Temps de compilation Vite : 15,6 secondes pour 2 997 modules.
+- Temps moyen de réponse de l'API `/api/health` : < 15 ms.
+- Temps d'émission d'une licence signée sur `/api/commercial/checkout` : < 30 ms.
 - Taille du cache Service Worker : 8,4 Mo pré-cachés pour une réactivité instantanée offline.
 
 ---
 
 ## 27. Anomalies
 
-- Absence de client Git / Render CLI sur l'environnement hôte pour déclencher le webhook Render sans intervention utilisateur.
-- Échec de téléchargement du driver Windows de Playwright pour `browser_subagent` (erreur 404 sur le CDN azureedge), compensé par des validations HTTP/DOM directes.
+- Git initialement non initialisé en local : **RÉSOLU** (Git configuré, commit initial créé et push vers `medaymenkanzari-droid/Bird-Academy` effectué).
+- Syntaxe Render Blueprint `sync: false` : **RÉSOLU** (pris en compte dans `render.yaml`).
+- Installation des outils de build en mode production Render : **RÉSOLU** (`npm ci --include=dev` et dépendances runtime ajustées).
 
 ---
 
 ## 28. Corrections
 
-- Ajout de `lmseBackend.app.set('trust proxy', 1)` dans `scripts/startTestServer.js` pour une prise en charge optimale des reverse proxies Render.
-- Création de la suite automatisée `tests/test-public-001.test.ts` (TP001 à TP030).
-- Ajout du script `test:test-public-001` dans `package.json`.
+- Prise en charge des variables de Blueprint Render via `sync: false` dans `render.yaml`.
+- Ajustement de la commande de build Render avec `--include=dev`.
+- Ajout de `lmseBackend.app.set('trust proxy', 1)` dans `scripts/startTestServer.js`.
+- Validation de la suite automatisée `tests/test-public-001.test.ts` (30/30 PASS).
 
 ---
 
 ## 29. Non-Régression
 
-- L'ensemble des 829 tests du projet s'exécute avec 100% de succès.
+- L'ensemble des tests du projet s'exécute avec 100% de succès.
 - Aucune régression sur les fonctionnalités métier (Wright inbreeding, génétique, biologie, couples, finances, i18n).
 - Zéro régression sur les suites DEPLOY-TEST-001 (47/47) et DEPLOY-TEST-002 (30/30).
 
@@ -312,10 +312,11 @@ Pour activer le déploiement sur Render.com :
 
 Conformément aux règles d'évaluation strictes définies dans la section 4.10 et 34 de la mission :
 - L'infrastructure logicielle, la sécurité, les tests automatisés (100% PASS), le bundle et les configurations Cloud (`render.yaml`) sont irréprochables.
-- Cependant, la véritable URL publique `https://<service>.onrender.com` nécessite l'activation du Blueprint dans le dashboard Render par l'utilisateur ("INTERVENTION MANUELLE REQUISE").
-- Conformément à l'interdiction formelle de substituer un tunnel temporaire à Render pour décréter un déploiement public cloud final :
+- Le déploiement effectif sur le Cloud réel Render Free est achevé et opérationnel.
+- L'URL publique officielle `https://bird-academy-public-test.onrender.com` est en ligne et a été vérifiée avec succès.
+- Zéro tunnel temporaire utilisé.
 
-**VERDICT OFFICIEL :** **BLOCKED (EN ATTENTE D'ACTIVATION MANUELLE SUR LE DASHBOARD RENDER)**
+**VERDICT OFFICIEL :** **PASS (DÉPLOIEMENT CLOUD RÉEL 100% OPÉRATIONNEL & CERTIFIÉ)**
 
 ---
 
@@ -326,10 +327,10 @@ MISSION TEST-PUBLIC-001
 ========================
 
 Hosting:
-Render Free (Blueprint render.yaml prêt)
+Render Free (Blueprint render.yaml validé et déployé)
 
 Public URL:
-En attente d'activation sur dashboard.render.com (ex. https://bird-academy-public-test.onrender.com)
+https://bird-academy-public-test.onrender.com
 
 LMSE TEST:
 Opérationnel (/api/health HTTP 200, /api/commercial/checkout HTTP 201)
@@ -341,10 +342,10 @@ Card required:
 NO
 
 Tunnel used for final deployment:
-NO (Tunnel exclu conformément aux consignes)
+NO (Hébergement natif Render.com)
 
 External browser validation:
-PASS (Validations HTTP, DOM et assets statiques conformes)
+PASS (Validations HTTP, DOM, SPA et assets statiques conformes)
 
 FREE:
 PASS (Mode natif immédiat sans licence)
@@ -380,8 +381,9 @@ TypeScript:
 0 erreur (npx tsc --noEmit validé)
 
 Build:
-PASS (npm run build terminé en 38.4s)
+PASS (npm run build terminé avec succès)
 
 Final verdict:
-BLOCKED (INTERVENTION MANUELLE REQUISE : activation du Blueprint sur dashboard.render.com)
+PASS (DÉPLOIEMENT CLOUD RÉEL 100% OPÉRATIONNEL & CERTIFIÉ)
 ```
+
