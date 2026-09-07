@@ -519,7 +519,7 @@ export const LicenseAdminCenter: React.FC = () => {
                 Restaurer / Importer une Archive
               </h3>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Importez une archive administrative JSON pour synchroniser ou restaurer les licences.
+                Importez une archive administrative JSON pour importer ou restaurer les licences.
               </p>
             </div>
             <div>

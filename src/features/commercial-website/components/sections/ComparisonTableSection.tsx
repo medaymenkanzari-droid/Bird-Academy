@@ -44,10 +44,10 @@ export const ComparisonTableSection: React.FC = () => {
     },
     {
       feature: t('pricing.rowDevices'),
-      free: '1 poste',
-      premium: '3 postes',
-      pro: '5 postes',
-      lifetime: '5 postes',
+      free: t('pricing.rowDevicesValFree'),
+      premium: t('pricing.rowDevicesValPrem'),
+      pro: t('pricing.rowDevicesValPro'),
+      lifetime: t('pricing.rowDevicesValPro'),
     },
     {
       feature: 'Passeports Biologiques & Rapports PDF',

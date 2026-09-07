@@ -185,7 +185,7 @@ export class CommercialOffersService {
         'Arbres généalogiques & simulation prédictive',
         'Exports professionnels PDF / CSV / QR',
         'Assistant IA Illimité contextuel',
-        'Multi-postes jusqu\'à 5 appareils',
+        'Licence mono-appareil (données 100% locales)',
       ],
       status: 'ACTIVE',
       version: '1.3.6',
@@ -250,7 +250,7 @@ export class CommercialOffersService {
       features: [
         'Validité permanente à vie sans renouvellement',
         'Toutes les fonctionnalités Pro débloquées',
-        'Multi-postes jusqu\'à 5 appareils',
+        'Licence mono-appareil (données 100% locales)',
         'Assistant IA Illimité',
       ],
       status: 'ACTIVE',

@@ -209,12 +209,12 @@ Pour parer à cette situation :
       content: `Q: Mes données de volière sont-elles partagées avec d'autres éleveurs ?
 R: Absolument pas. L'application est autonome (offline-first). Aucune donnée ne quitte votre appareil.
 
-Q: Puis-je synchroniser mes données sur plusieurs téléphones ?
-R: Oui. Pour ce faire, exportez un fichier de sauvegarde crypté au format JSON depuis le téléphone A, envoyez-le par e-mail ou messagerie sur le téléphone B, et importez-le via Import/Export Pro.
+Q: Existe-t-il une synchronisation automatique entre plusieurs appareils ?
+R: Non. Bird Academy V1.x est une application Single Device, Local-First et 100% hors-ligne sans synchronisation cloud automatique. Vos données d'élevage restent strictement sur votre appareil. Pour transférer vos données vers un autre appareil, exportez simplement un fichier de sauvegarde local au format JSON depuis l'appareil A et importez-le manuellement sur l'appareil B via les fonctions d'export/import.
 
 Q: Le coefficient de consanguinité de Wright est-il calculé de façon fiable ?
 R: Oui. L'algorithme résout de manière récursive la parenté sur l'ensemble de l'arbre généalogique jusqu'aux ancêtres communs de 4ème génération, en accord avec les formules scientifiques de Wright.`,
-      tags: ['faq', 'aide', 'sécurité', 'synchronisation', 'wright']
+      tags: ['faq', 'aide', 'sécurité', 'sauvegarde', 'wright']
     },
     {
       id: 'faq-troubleshooting',

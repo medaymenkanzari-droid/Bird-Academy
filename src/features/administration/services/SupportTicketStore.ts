@@ -133,7 +133,7 @@ export class SupportTicketStore {
         ticketNumber: 'TK-889102',
         userEmail: 'beta.tester12@elevage-expert.com',
         userName: 'Marc Dupont',
-        subject: 'Question sur la synchronisation hors-ligne LMSE',
+        subject: 'Question sur l\'activation hors-ligne LMSE',
         category: 'Licences & Activation',
         priority: 'medium',
         status: 'in_progress',

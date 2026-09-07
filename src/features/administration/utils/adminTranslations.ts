@@ -100,7 +100,7 @@ export const ADMIN_TRANSLATIONS: Record<Language, Record<string, string>> = {
     settingsTitle: "Configuration Générale de l'Application",
     saveSettingsBtn: "Enregistrer les Paramètres",
     pwaOfflineMode: "Mode PWA Offline Avancé",
-    apiSyncEndpoint: "Serveur de Synchronisation API",
+    apiSyncEndpoint: "Point d'accès API LMSE",
     backupInterval: "Fréquence des Sauvegardes Automatiques",
   },
 
@@ -190,7 +190,7 @@ export const ADMIN_TRANSLATIONS: Record<Language, Record<string, string>> = {
     settingsTitle: "General Application Settings",
     saveSettingsBtn: "Save Settings",
     pwaOfflineMode: "Advanced PWA Offline Mode",
-    apiSyncEndpoint: "API Sync Server",
+    apiSyncEndpoint: "LMSE API Server Endpoint",
     backupInterval: "Automated Backup Frequency",
   },
 
@@ -280,7 +280,7 @@ export const ADMIN_TRANSLATIONS: Record<Language, Record<string, string>> = {
     settingsTitle: "الإعدادات العامة للتطبيق",
     saveSettingsBtn: "حفظ الإعدادات",
     pwaOfflineMode: "وضع PWA المتقدم بدون إنترنت",
-    apiSyncEndpoint: "خادم مزامنة API",
+    apiSyncEndpoint: "نقطة وصول واجهة برمجية LMSE",
     backupInterval: "تكرار النسخ الاحتياطي التلقائي",
   },
 
@@ -370,7 +370,7 @@ export const ADMIN_TRANSLATIONS: Record<Language, Record<string, string>> = {
     settingsTitle: "Configuración General de la Aplicación",
     saveSettingsBtn: "Guardar Configuración",
     pwaOfflineMode: "Modo PWA Offline Avanzado",
-    apiSyncEndpoint: "Servidor de Sincronización API",
+    apiSyncEndpoint: "Punto de acceso API LMSE",
     backupInterval: "Frecuencia de Copias de Seguridad Automáticas",
   },
 
@@ -460,7 +460,7 @@ export const ADMIN_TRANSLATIONS: Record<Language, Record<string, string>> = {
     settingsTitle: "Impostazioni Generali dell Applicazione",
     saveSettingsBtn: "Salva Impostazioni",
     pwaOfflineMode: "Modalità PWA Offline Avanzata",
-    apiSyncEndpoint: "Server di Sincronizzazione API",
+    apiSyncEndpoint: "Endpoint Server API LMSE",
     backupInterval: "Frequenza Backup Automatici",
   }
 };
