@@ -1,0 +1,325 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Space Grotesk", sans-serif;
+
+  /* Bird Academy Enterprise Official Brand Design Tokens */
+  --color-brand-primary: #3F51B5; /* Primary Accent / Indigo */
+  --color-brand-dark: #1F2E3D;    /* Dark Slate / Shield Border */
+  --color-brand-accent: #FFB300;  /* Highlight / Tech Accent Golden Yellow */
+  --color-brand-light: #FFFFFF;   /* Clean Light Background */
+  --color-brand-surface: #F7F9FB; /* Soft light background */
+
+  /* Primary Active Accent : Blue / Indigo */
+  --color-blue-50: #EFF6FF;
+  --color-blue-100: #DBEAFE;
+  --color-blue-200: #BFDBFE;
+  --color-blue-300: #93C5FD;
+  --color-blue-400: #60A5FA;
+  --color-blue-500: #3B82F6;
+  --color-blue-600: #3F51B5; /* Aligned Brand Primary */
+  --color-blue-700: #303F9F;
+  --color-blue-800: #283593;
+  --color-blue-900: #1F2E3D; /* Aligned Brand Dark */
+  --color-blue-950: #141E28;
+
+  /* Alert / Info Accent : Indigo (#3F51B5) */
+  --color-indigo-50: #EEF2FF;
+  --color-indigo-100: #E0E7FF;
+  --color-indigo-200: #C7D2FE;
+  --color-indigo-300: #9FA8DA;
+  --color-indigo-400: #7986CB;
+  --color-indigo-500: #5C6BC0;
+  --color-indigo-600: #3F51B5; /* Official Primary Accent */
+  --color-indigo-700: #303F9F;
+  --color-indigo-800: #283593;
+  --color-indigo-900: #1A237E;
+
+  /* Accent Highlight : Golden Yellow (#FFB300) */
+  --color-amber-50: #FFFDE7;
+  --color-amber-100: #FFF9C4;
+  --color-amber-200: #FFF59D;
+  --color-amber-300: #FFE082;
+  --color-amber-400: #FFCA28;
+  --color-amber-500: #FFB300; /* Official Gold Accent */
+  --color-amber-600: #FFA000;
+  --color-amber-700: #FF8F00;
+  --color-amber-800: #FF6F00;
+  --color-amber-900: #E65100;
+
+  /* Success Status : Emerald (#10B981) */
+  --color-emerald-50: #ECFDF5;
+  --color-emerald-100: #D1FAE5;
+  --color-emerald-200: #A7F3D0;
+  --color-emerald-300: #6EE7B7;
+  --color-emerald-400: #34D399;
+  --color-emerald-500: #10B981; /* Succès */
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065F46;
+  --color-emerald-900: #064E3B;
+
+  /* High-Contrast Canvas & Neutral Slate */
+  --color-slate-50: #F8FAFC;
+  --color-slate-100: #F1F5F9;
+  --color-slate-200: #E2E8F0;
+  --color-slate-300: #CBD5E1; /* WCAG AA High Contrast Text Secondary */
+  --color-slate-400: #94A3B8; /* Readable Secondary/Muted */
+  --color-slate-500: #64748B;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155; /* Subtle Card Borders */
+  --color-slate-800: #1F2E3D; /* Aligned Dark Navy / Slate */
+  --color-slate-900: #141E28; /* Surface Cards */
+  --color-slate-950: #0B1117; /* Dark Canvas */
+
+  /* Statuts */
+  --color-green-500: #10B981; /* Succès */
+  --color-orange-500: #F97316; /* Alerte */
+  --color-red-500: #EF4444; /* Erreur */
+
+  /* Common Animation Classes */
+  --animate-fadeIn: fadeIn 0.2s ease-out;
+  --animate-fadeOut: fadeOut 0.2s ease-in;
+  --animate-slideUp: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slideDown: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-scaleIn: scaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-shake: shake 0.4s ease-in-out;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes slideDown {
+    from { transform: translateY(-16px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-4px); }
+    40%, 80% { transform: translateX(4px); }
+  }
+}
+
+body {
+  background-color: #F8FAFC; /* bg-main Light */
+  color: #0F172A; /* Text Primary Light */
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* Dark mode overrides for background and base text colors */
+.dark body {
+  background-color: #030712; /* Dark Canvas #030712 */
+  color: #F8FAFC; /* Text Primary Dark */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+  font-family: "IBM Plex Sans Arabic", "Inter", system-ui, sans-serif;
+  font-weight: 500;
+}
+
+/* WCAG 2.2 Accessibility Overrides */
+.wcag-visible-focus *:focus-visible {
+  outline: 3px solid #4F46E5 !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.4) !important;
+}
+
+.wcag-enlarge-targets button,
+.wcag-enlarge-targets input,
+.wcag-enlarge-targets select,
+.wcag-enlarge-targets a,
+.wcag-enlarge-targets [role="button"] {
+  min-height: 44px !important;
+}
+
+.wcag-high-contrast {
+  --color-slate-800: #000000 !important;
+  --color-slate-900: #000000 !important;
+  --color-slate-50: #FFFFFF !important;
+  --color-slate-100: #FFFFFF !important;
+  --color-slate-200: #000000 !important;
+  --color-emerald-600: #0000FF !important;
+  --color-green-500: #008000 !important;
+  --color-orange-500: #FF8C00 !important;
+  --color-red-500: #FF0000 !important;
+}
+
+.wcag-high-contrast body {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+.wcag-high-contrast .dark body {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+.wcag-high-contrast * {
+  border-color: #000000 !important;
+  text-shadow: none !important;
+}
+
+.wcag-high-contrast .dark * {
+  border-color: #FFFFFF !important;
+}
+
+/* Centralized Media Print Styles for Reports, Statistics, Expenses, Sales, Genetics & Calendar */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .print-hidden,
+  .print\:hidden,
+  nav,
+  header,
+  aside,
+  button:not(.print-keep) {
+    display: none !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #printable-area,
+  #printable-area * {
+    visibility: visible !important;
+  }
+
+  .printable-area,
+  .printable-area * {
+    visibility: visible !important;
+  }
+
+  #printable-area,
+  .printable-area {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 12mm !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  #printable-area *,
+  .printable-area * {
+    color: #111827 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  th, td {
+    border: 1px solid #e5e7eb !important;
+    padding: 6px 10px !important;
+    color: #111827 !important;
+  }
+
+  th {
+    background-color: #f3f4f6 !important;
+    font-weight: bold !important;
+  }
+}
+
+/* ==========================================================================
+   Bird Academy Enterprise — Centralized Cross-Platform Scrollbar Design System
+   ========================================================================== */
+
+/* Global WebKit Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4); /* slate-400 with opacity */
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7); /* slate-500 */
+}
+
+/* Dark Mode Scrollbars */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.5); /* slate-600 with opacity */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.8); /* slate-500 */
+}
+
+/* Standard scrollbars for supporting browsers */
+@supports (scrollbar-width: thin) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+  }
+
+  .dark * {
+    scrollbar-color: rgba(71, 85, 105, 0.5) transparent;
+  }
+}
+
+/* Dedicated utility classes */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+  border-radius: 9999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.8);
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.6);
+}
+
+.dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.7);
+}
+

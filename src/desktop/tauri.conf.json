@@ -1,0 +1,88 @@
+{
+  "build": {
+    "distDir": "../dist",
+    "devPath": "http://localhost:3000",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "package": {
+    "productName": "Bird Academy",
+    "version": "1.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "fs": {
+        "all": true,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "scope": ["$APPCONFIG/*", "$DOCUMENT/*", "$DOWNLOAD/*"]
+      },
+      "path": {
+        "all": true
+      },
+      "window": {
+        "all": true,
+        "create": true
+      },
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "dialog": {
+        "all": true,
+        "open": true,
+        "save": true
+      },
+      "notification": {
+        "all": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.birdacademy.app",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "resources": [],
+      "copyright": "Copyright © 2026 Bird Academy. All rights reserved.",
+      "category": "Utility",
+      "shortDescription": "Gestion professionnelle d'élevage d'oiseaux."
+    },
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;"
+    },
+    "windows": [
+      {
+        "title": "Bird Academy - Volière Manager",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false,
+        "maximized": false,
+        "decorations": true,
+        "transparent": false,
+        "theme": "Dark"
+      }
+    ],
+    "systemTray": {
+      "iconPath": "icons/system_tray.png",
+      "iconAsTemplate": true,
+      "menuOnLeftClick": false
+    },
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://releases.birdacademy.com/update/{{target}}/{{current_version}}"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmktc2lnIHB1YmxpYyBrZXkKUlRSTVpEVmZSTmRLSSt0M3U4S1o0Y01XZEw3dzB6L0crWW1aRkF5RTVKUGswY0c4U0FFPQ=="
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "features": "Features",
+    "pricing": "Editions & Pricing",
+    "assistant": "AI Assistant",
+    "intelligence": "Bird Intelligence",
+    "licenses": "LMSE Licenses",
+    "download": "Download",
+    "documentation": "Documentation",
+    "faq": "FAQ"
+  },
+  "home": {
+    "hero": {
+      "badge": "Professional Avian Management Software",
+      "title": "Master your breeding. Track every bird. Decide with precision.",
+      "subtitle": "The offline-first desktop platform for canary and show-bird breeders. Rigorous records, Mendelian genetics, and deterministic intelligence.",
+      "ctaDownload": "Download Bird Academy",
+      "ctaFeatures": "Explore Features",
+      "offlineGuarantee": "100% Autonomous & Offline — Your breeding data strictly stays on your device."
+    },
+    "offline": {
+      "badge": "Privacy & Resilience",
+      "title": "100% Offline-first Architecture by Design",
+      "subtitle": "No intermediate cloud server is required for daily breeding management.",
+      "cards": [
+        {
+          "title": "Sovereign Local Data",
+          "description": "Breeding profiles remain on your computer."
+        },
+        {
+          "title": "Total Aviary Availability",
+          "description": "Work directly inside facilities without internet."
+        },
+        {
+          "title": "Strictly Scoped Internet Use",
+          "description": "Used solely for binary download and LMSE verification."
+        }
+      ]
+    },
+    "featuresGrid": {
+      "badge": "Integrated Modules",
+      "title": "Specialized tools for every stage of breeding",
+      "subtitle": "A complete professional workspace engineered for dedicated aviculturists.",
+      "items": [
+        {
+          "slug": "birds",
+          "title": "Bird Records Management",
+          "desc": "Detailed profiles, official bands, cage locations, and biological traits."
+        },
+        {
+          "slug": "breeding",
+          "title": "Breeding & Clutches",
+          "desc": "Pairing tracking, egg-laying, candling, and weaning control."
+        },
+        {
+          "slug": "health",
+          "title": "Health & Care Journal",
+          "desc": "Medical treatments, daily observations, and quarantine protocols."
+        },
+        {
+          "slug": "genetics",
+          "title": "Mendelian Genetics",
+          "desc": "Accurate mutation modeling and lineage inbreeding control."
+        },
+        {
+          "slug": "intelligence",
+          "title": "Bird Intelligence",
+          "desc": "Deterministic analytical engine providing health alerts and clutch scores."
+        },
+        {
+          "slug": "assistant",
+          "title": "Local AI Assistant",
+          "desc": "Offline-first AI reasoning contextualized with your aviary records."
+        }
+      ]
+    }
+  },
+  "pricingPage": {
+    "header": {
+      "badge": "Editions & Licensing",
+      "title": "Choose the edition adapted to your aviary",
+      "subtitle": "Clear licensing powered locally by LMSE.",
+      "disclaimer": "Official pricing will be finalized at commercial launch."
+    },
+    "tiers": {
+      "free": {
+        "name": "FREE",
+        "target": "Beginners",
+        "price": "Free",
+        "period": "Lifetime",
+        "cta": "Download Free"
+      },
+      "premium": {
+        "name": "PREMIUM",
+        "target": "Active Breeders",
+        "price": "À DÉFINIR",
+        "period": "Annual license",
+        "cta": "Get a License"
+      },
+      "pro": {
+        "name": "PRO",
+        "target": "Show Competitors",
+        "price": "À DÉFINIR",
+        "period": "Annual license",
+        "cta": "Contact for PRO"
+      }
+    }
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  }
+}

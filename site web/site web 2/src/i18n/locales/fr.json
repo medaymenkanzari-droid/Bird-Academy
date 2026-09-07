@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "features": "Fonctionnalités",
+    "pricing": "Éditions & Tarifs",
+    "assistant": "Assistant IA",
+    "intelligence": "Bird Intelligence",
+    "licenses": "Licences LMSE",
+    "download": "Téléchargement",
+    "documentation": "Documentation",
+    "faq": "FAQ"
+  },
+  "home": {
+    "hero": {
+      "badge": "Solution Logicielle d'Élevage Professionnel",
+      "title": "Maîtrisez votre élevage. Suivez chaque oiseau. Décidez avec précision.",
+      "subtitle": "La plateforme logicielle conçue pour les éleveurs de canaris et d'oiseaux de race. Gestion complète, génétique mendélienne, suivi sanitaire et intelligence déterministe.",
+      "ctaDownload": "Télécharger Bird Academy",
+      "ctaFeatures": "Découvrir les fonctionnalités",
+      "offlineGuarantee": "100 % Autonome & Hors Ligne — Vos données restent strictement sur votre appareil."
+    },
+    "offline": {
+      "badge": "Confidentialité & Résilience",
+      "title": "Une architecture 100 % hors ligne par conception",
+      "subtitle": "Aucun serveur cloud intermédiaire n'est requis pour la gestion quotidienne de votre élevage.",
+      "cards": [
+        {
+          "title": "Données locales & souveraines",
+          "description": "Vos registres restent sur votre terminal."
+        },
+        {
+          "title": "Disponibilité totale en volière",
+          "description": "Travaillez directement sans connexion requise."
+        },
+        {
+          "title": "Usage ponctuel d'Internet",
+          "description": "Uniquement pour le binaire et la licence LMSE."
+        }
+      ]
+    },
+    "featuresGrid": {
+      "badge": "Modules Intégrés",
+      "title": "Des outils spécialisés pour chaque dimension de l'élevage",
+      "subtitle": "Un environnement professionnel conçu pour les éleveurs exigeants.",
+      "items": [
+        {
+          "slug": "birds",
+          "title": "Gestion des Oiseaux",
+          "desc": "Fiches individuelles détaillées, bagues, cages et statut biologique."
+        },
+        {
+          "slug": "breeding",
+          "title": "Reproduction & Couvées",
+          "desc": "Suivi des couples, pontes, mirage, éclosions et sevrage."
+        },
+        {
+          "slug": "health",
+          "title": "Suivi Sanitaire & Soins",
+          "desc": "Traitements, observations, carnet vaccinal et quarantaine."
+        },
+        {
+          "slug": "genetics",
+          "title": "Génétique Mendélienne",
+          "desc": "Calcul de mutations, consanguinité et conformité COM."
+        },
+        {
+          "slug": "intelligence",
+          "title": "Bird Intelligence",
+          "desc": "Moteur analytique déterministe, alertes et scores d'élevage."
+        },
+        {
+          "slug": "assistant",
+          "title": "Assistant IA Local",
+          "desc": "Raisonnement hors ligne contextualisé sans exfiltration de données."
+        }
+      ]
+    }
+  },
+  "pricingPage": {
+    "header": {
+      "badge": "Modèle & Éditions",
+      "title": "Choisissez l'édition adaptée à votre élevage",
+      "subtitle": "Une licence claire gérée localement par LMSE.",
+      "disclaimer": "Les tarifs officiels seront fixés lors de l'ouverture commerciale."
+    },
+    "tiers": {
+      "free": {
+        "name": "FREE",
+        "target": "Débutants",
+        "price": "Gratuit",
+        "period": "Illimité",
+        "cta": "Télécharger"
+      },
+      "premium": {
+        "name": "PREMIUM",
+        "target": "Éleveurs confirmés",
+        "price": "À DÉFINIR",
+        "period": "Licence annuelle",
+        "cta": "Demander une licence"
+      },
+      "pro": {
+        "name": "PRO",
+        "target": "Compétiteurs & Clubs",
+        "price": "À DÉFINIR",
+        "period": "Licence annuelle",
+        "cta": "Contacter pour PRO"
+      }
+    }
+  },
+  "footer": {
+    "rights": "Tous droits réservés.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions"
+  }
+}

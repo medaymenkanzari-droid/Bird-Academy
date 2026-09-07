@@ -1,0 +1,28 @@
+# BIRD ACADEMY ENTERPRISE — PUBLIC TEST DEPLOYMENT BLUEPRINT (RENDER.COM)
+# Free Tier (0 € / month) Web Service Deployment Configuration
+# Provides native HTTPS, automated CI/CD from GitHub, and isolated server environment.
+
+services:
+  - type: web
+    name: bird-academy-public-test
+    env: node
+    plan: free
+    region: frankfurt # or oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm run serve:test
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ENVIRONMENT
+        value: TEST
+      - key: PORT
+        value: 10000
+      - key: VITE_LMSE_ENV
+        value: production
+      # Server-side secrets (Configured in Render dashboard, NEVER in repository)
+      - key: LMSE_PRIVATE_SIGNING_KEY
+        generateValue: false # Set manually in Render Dashboard
+      - key: LMSE_SEED_SECRET
+        generateValue: false # Set manually in Render Dashboard
+    healthCheckPath: /api/health
+    autoDeploy: true

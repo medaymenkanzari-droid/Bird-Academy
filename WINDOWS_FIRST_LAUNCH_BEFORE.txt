@@ -1,0 +1,21 @@
+﻿==================================================================
+ BIRD ACADEMY ENTERPRISE -- SNAPSHOT AVANT RESET QA (FIRST LAUNCH)
+ Date: 2026-08-21 23:15:12
+==================================================================
+
+1. CHEMINS USERDATA DETECTES :
+  - Target Canonical (%APPDATA%\Bird Academy Enterprise): True
+  - Legacy 1 (%APPDATA%\react-example): True
+  - Legacy 2 (%APPDATA%\Bird Academy): False
+
+2. CONTENU DU PROFIL CANONIQUE (%APPDATA%\Bird Academy Enterprise) :
+  - Fichiers/Dossiers: blob_storage, Cache, Code Cache, DawnGraphiteCache, DawnWebGPUCache, GPUCache, Local Storage, Network, Service Worker, Session Storage, Shared Dictionary, WebStorage, DIPS, Local State, Preferences, SharedStorage
+  - Local Storage (LevelDB): Present (6 fichiers)
+
+3. CONTENU DU PROFIL LEGACY (%APPDATA%\react-example) :
+  - Fichiers/Dossiers: blob_storage, Cache, Code Cache, DawnGraphiteCache, DawnWebGPUCache, GPUCache, Local Storage, Network, Service Worker, Session Storage, Shared Dictionary, WebStorage, DIPS, Local State, Preferences, SharedStorage
+
+4. PROCESSUS BIRD ACADEMY EN COURS :
+  - Aucun processus actif (0)
+
+==================================================================

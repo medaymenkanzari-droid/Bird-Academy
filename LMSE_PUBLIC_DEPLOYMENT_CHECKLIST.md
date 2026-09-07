@@ -1,0 +1,18 @@
+# Checklist de Déploiement Public LMSE Backend
+
+- [x] **Backend Public Conteneurisé** (`Dockerfile`, `docker-compose.yml` opérationnels)
+- [x] **Health Check Endpoint** (`GET /api/health` renvoie HTTP 200 OK)
+- [x] **Stockage Persistant** (Volume Docker `./data` configuré)
+- [x] **Système de Sauvegarde Automatique** (`npm run lmse:backup` opérationnel)
+- [x] **Restauration Atomique Testée** (`npm run lmse:restore` validé avec checksum SHA-256)
+- [x] **Clé Privée LMSE Serveur uniquement** (`LMSE_PRIVATE_SIGNING_KEY` hors bundle client)
+- [x] **Aucun Secret dans Git** (Audit `.gitignore` et dépôts validés)
+- [x] **RBAC Rôles & Permissions Admin Validés** (`support` & `auditor` bloqués en HTTP 403)
+- [x] **Rate Limiting Opérationnel** (Interception HTTP 429 contre le brute force)
+- [x] **Politique CORS Sécurisée** (Origines administratives restreintes)
+- [x] **API Validation En Ligne Fonctionnelle** (`POST /api/license/validate`)
+- [x] **Binding Appareil Validé** (`maxDevices` contrôlé côté serveur)
+- [x] **Fonctionnement Offline Post-Activation Opérationnel** (Moteur autonome local)
+- [x] **Build Guard de Compilation Bêta Actif** (Blocage des builds Bêta contenant `localhost`)
+- [x] **Audit du Bundle Client Clean** (`npm run verify:user-bundle` 100% PASS)
+- [x] **Tous les Tests Automatisés du Projet PASS** (309/309 tests unitaires & d'intégration)

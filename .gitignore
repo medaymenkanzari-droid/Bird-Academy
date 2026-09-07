@@ -1,0 +1,42 @@
+node_modules/
+build/
+dist/
+dist_admin/
+dist_user/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Playwright & Testing
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Packaging & Release Artifacts
+/Release/
+/release*/
+*.exe
+*.msi
+*.zip
+*.7z
+*.apk
+*.aab
+*.ipa
+
+# Local backups, caches & state data
+/backups/
+/.npm-cache/
+/scratch/
+.gradle/
+/data/licenses.json
+/data/license-audit-logs.json
+/data/license-state.json
+/data/revocations.json
+
+# OS & IDE
+Thumbs.db
+.idea/

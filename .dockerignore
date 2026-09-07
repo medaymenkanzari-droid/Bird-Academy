@@ -1,0 +1,14 @@
+node_modules
+.git
+.gitignore
+dist
+dist_admin
+dist_user
+build
+coverage
+*.log
+.env*
+!.env.example
+backups
+Release
+release-*

@@ -1,0 +1,114 @@
+{
+  "nav": {
+    "features": "Características",
+    "pricing": "Planes y Precios",
+    "assistant": "Asistente IA",
+    "intelligence": "Bird Intelligence",
+    "licenses": "Licencias LMSE",
+    "download": "Descargar",
+    "documentation": "Documentación",
+    "faq": "Preguntas Frecuentes"
+  },
+  "home": {
+    "hero": {
+      "badge": "Solución Profesional para Criadores",
+      "title": "Domine su criadero. Rastree cada ave. Decida con precisión.",
+      "subtitle": "La plataforma de software especializada para la cría de canarios y aves. Gestión completa, genética mendeliana y seguimiento sanitario.",
+      "ctaDownload": "Descargar Bird Academy",
+      "ctaFeatures": "Descubrir características",
+      "offlineGuarantee": "100% Autónomo y Sin Conexión — Sus datos permanecen estrictamente en su dispositivo."
+    },
+    "offline": {
+      "badge": "Privacidad y Resiliencia",
+      "title": "Arquitectura 100% local y sin conexión",
+      "subtitle": "No se requiere servidor remoto en el día a día para gestionar su criadero.",
+      "cards": [
+        {
+          "title": "Datos soberanos",
+          "description": "Sus registros permanecen en su equipo."
+        },
+        {
+          "title": "Disponibilidad en aviario",
+          "description": "Trabaje directamente sin depender de la red."
+        },
+        {
+          "title": "Uso específico de internet",
+          "description": "Solo para la descarga inicial y activación LMSE."
+        }
+      ]
+    },
+    "featuresGrid": {
+      "badge": "Módulos Integrados",
+      "title": "Herramientas especializadas para cada dimensión",
+      "subtitle": "Un entorno profesional diseñado para criadores rigurosos.",
+      "items": [
+        {
+          "slug": "birds",
+          "title": "Gestión de Aves",
+          "desc": "Fichas individuales, anillas, ubicación en jaulas y estado."
+        },
+        {
+          "slug": "breeding",
+          "title": "Reproducción y Nidadas",
+          "desc": "Seguimiento de parejas, puestas, ovoscopia y destete."
+        },
+        {
+          "slug": "health",
+          "title": "Registro Sanitario",
+          "desc": "Tratamientos, historial médico y gestión de cuarentena."
+        },
+        {
+          "slug": "genetics",
+          "title": "Genética Mendeliana",
+          "desc": "Cálculo de mutaciones, consanguinidad y estándares COM."
+        },
+        {
+          "slug": "intelligence",
+          "title": "Bird Intelligence",
+          "desc": "Motor analítico determinista con alertas y puntuaciones."
+        },
+        {
+          "slug": "assistant",
+          "title": "Asistente IA Local",
+          "desc": "Razonamiento local contextualizado sin fuga de datos."
+        }
+      ]
+    }
+  },
+  "pricingPage": {
+    "header": {
+      "badge": "Planes y Licencias",
+      "title": "Elija la edición adecuada para su criadero",
+      "subtitle": "Licenciamiento transparente y gestionado localmente por LMSE.",
+      "disclaimer": "Los precios oficiales se confirmarán en el lanzamiento comercial."
+    },
+    "tiers": {
+      "free": {
+        "name": "FREE",
+        "target": "Principiantes",
+        "price": "Gratis",
+        "period": "Ilimitado",
+        "cta": "Descargar Gratis"
+      },
+      "premium": {
+        "name": "PREMIUM",
+        "target": "Criadores activos",
+        "price": "À DÉFINIR",
+        "period": "Licencia anual",
+        "cta": "Solicitar licencia"
+      },
+      "pro": {
+        "name": "PRO",
+        "target": "Competición y Clubes",
+        "price": "À DÉFINIR",
+        "period": "Licencia anual",
+        "cta": "Contactar para PRO"
+      }
+    }
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  }
+}

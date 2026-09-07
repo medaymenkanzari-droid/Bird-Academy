@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bird Academy — Avian Precision | Logiciel Professionnel d'Élevage d'Oiseaux</title>
+  
+  <!-- SEO & Social Metadata -->
+  <meta name="description" content="Maîtrisez votre élevage avec une précision absolue. Logiciel professionnel 100% hors-ligne de gestion avicole, génétique de Wright et suivi biologique.">
+  <meta name="keywords" content="Bird Academy, Avian Precision, élevage canari, gestion élevage oiseaux, suivi oiseaux, consanguinité wright, logiciel élevage canari, aviculture">
+  <meta property="og:title" content="Bird Academy — Avian Precision | Maîtrisez votre élevage">
+  <meta property="og:description" content="Plateforme professionnelle 100% hors-ligne pour la gestion, le suivi biologique et généalogique des élevages d'oiseaux. Souveraineté totale des données.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2e3a8c">
+
+  <!-- Google Fonts: Hanken Grotesk & Cairo for Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            // Avian Precision Palette
+            primary: {
+              DEFAULT: '#2e3a8c', // Indigo Primaire
+              dark: '#1e265c',
+              light: '#3f51b5',
+              50: '#f0f3fa',
+              100: '#e0e7f7',
+              200: '#c2d0f0',
+              700: '#2e3a8c',
+              800: '#242e70',
+              900: '#1b2354',
+            },
+            secondary: {
+              DEFAULT: '#3f51b5', // Ardoise / Indigo Clair
+              light: '#e8eaf6',
+              dark: '#303f9f',
+            },
+            accent: {
+              DEFAULT: '#ffc107', // Or / Gold Accent
+              dark: '#ffa000',
+              light: '#fff8e1',
+              gold: '#ffc107',
+            },
+            surface: '#FFFFFF',
+            bglight: '#f7f9fb', // Fond clair Avian Precision
+            bgsubtle: '#eef2f6',
+            darktext: '#0f172a', // Slate-900 (16.1:1 on white)
+            bodytext: '#1e293b', // Slate-800
+            mutedtext: '#475569', // Slate-600
+            bordercolor: '#e2e8f0',
+          },
+          fontFamily: {
+            sans: ['"Hanken Grotesk"', 'Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
+            arabic: ['Cairo', 'Tahoma', 'sans-serif'],
+          },
+          lineHeight: {
+            relaxed: '1.625',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar and Global Reset */
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+    body {
+      color: #1e293b;
+      background-color: #f7f9fb;
+      overflow-x: hidden;
+      font-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+      line-height: 1.625;
+      padding-bottom: 4.5rem; /* Space for mobile BottomNavBar */
+    }
+    @media (min-width: 768px) {
+      body {
+        padding-bottom: 0;
+      }
+    }
+    /* Arabic RTL Font Adjustments */
+    [dir="rtl"] {
+      font-family: 'Cairo', sans-serif;
+    }
+    /* Accessible focus rings */
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid #2e3a8c;
+      outline-offset: 2px;
+    }
+    .shadow-soft {
+      box-shadow: 0 10px 30px -5px rgba(46, 58, 140, 0.06), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+    }
+    .shadow-featured {
+      box-shadow: 0 20px 45px -10px rgba(46, 58, 140, 0.22), 0 8px 16px -4px rgba(15, 23, 42, 0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased text-bodytext bg-bglight">
+
+  <!-- ========================================== -->
+  <!-- CONFIGURATION & DATA DICTIONARIES (i18n) -->
+  <!-- ========================================== -->
+  <script>
+    // Centralized Config
+    window.SITE_CONFIG = {
+      version: '1.4.2-stable',
+      designSystem: 'Avian Precision',
+      downloads: {
+        windowsInstaller: 'https://downloads.birdacademy.internal/BirdAcademy-Setup-1.4.2.exe',
+        windowsPortable: 'https://downloads.birdacademy.internal/BirdAcademy-Portable-1.4.2.zip',
+        androidApk: 'https://downloads.birdacademy.internal/BirdAcademy-1.4.2.apk'
+      },
+      hashes: {
+        windowsInstaller: '1E965BCAA4C07EEBCEC64D248A2568B91F5B1F7E28146C29187EA675708E4813',
+        windowsPortable: '1701FB75AF19280E0A346B6F3525609516E0E801177916480E1ECB8311479A92',
+        androidApk: '8C2ACE49FA73191AB90B26615BBDD2CE591D67D16051496FE995ABC668498AC9'
+      },
+      supportEmail: 'contact@birdacademy.internal',
+      currentLocale: 'fr',
+    };
+
+    // Complete i18n Dictionary for 5 Languages (FR, EN, AR, ES, IT)
+    window.I18N = {
+      fr: {
+        dir: 'ltr',
+        nav: {
+          home: 'Accueil',
+          features: 'Fonctionnalités',
+          security: 'Sécurité & Tech',
+          pricing: 'Éditions & Tarifs',
+          support: 'Support & Contact',
+          faq: 'FAQ',
+          ctaLicense: 'Obtenir une Licence',
+        },
+        hero: {
+          badge: '100% Hors-Ligne • Souveraineté Totale des Données',
+          title: 'Maîtrisez votre élevage avec une précision absolue.',
+          subtitle: 'La suite logicielle avicole professionnelle 100% hors-ligne. Suivi biologique individuel, calculs génétiques déterministes de Wright et souveraineté totale de vos données.',
+          ctaDownload: 'Télécharger pour Windows',
+          ctaPricing: 'Comparer les Éditions',
+          trust1: 'Sans carte bancaire',
+          trust2: 'Fonctionne 100% hors-ligne',
+          trust3: 'Données chiffrées locales',
+        },
+        security: {
+          tag: 'Architecture & Souveraineté',
+          title: 'Sécurité & Technologie : Votre Élevage en Toute Souveraineté',
+          subtitle: 'Une architecture 100% hors-ligne qui garantit la confidentialité absolue de votre savoir-faire sans aucune dépendance au cloud.',
+          card1Title: '100% Hors-Ligne',
+          card1Desc: 'Base de données SQLite locale scellée sur votre disque dur. Aucune connexion Internet requise pour le suivi quotidien.',
+          card2Title: 'Chiffrement Local & LMSE',
+          card2Desc: 'Validation cryptographique modulaire par signatures numériques ECDSA. Intégrité logicielle inviolable.',
+          card3Title: 'Indépendance Cloud Totale',
+          card3Desc: 'Zéro télémétrie, zéro serveur tiers. Votre patrimoine avicole et vos fiches généalogiques vous appartiennent exclusivement.',
+        },
+        features: {
+          badge: 'Modules Métier Avian Precision',
+          title: 'Une Couverture Fonctionnelle Complète & Scientifique',
+          subtitle: 'Chaque aspect de votre élevage est structuré avec rigueur pour optimiser votre sélection et la santé de vos oiseaux.',
+          birds: {
+            title: 'Gestion des Oiseaux & Baguage',
+            desc: 'Fiches individuelles détaillées, numéros de bagues officielles, phénotypes, mutations, statuts et passeport biologique.'
+          },
+          habitat: {
+            title: 'Habitat, Cages & Volières',
+            desc: 'Organisation spatiale des cages, batteries, volières collectives, zones de quarantaine et d\'infirmerie.'
+          },
+          breeding: {
+            title: 'Reproduction & Nurserie',
+            desc: 'Constitution des couples, suivi des pontes, mirage des œufs, calcul prédictif d\'éclosion et élevage à la main (EAM).'
+          },
+          health: {
+            title: 'Santé & Suivi Sanitaire',
+            desc: 'Carnet de santé, historique des traitements par lot, posologies vétérinaires, dates de rappel et observations.'
+          },
+          genetics: {
+            title: 'Génétique & Consanguinité',
+            desc: 'Arbres généalogiques multi-générations, calcul du coefficient de consanguinité de Wright et simulation d\'accouplements.'
+          },
+          bio: {
+            title: 'Référentiel Biologique',
+            desc: 'Base de connaissances intégrée sur les canaris et passereaux : durées d\'incubation, constantes et standards officiels.'
+          }
+        },
+        pricing: {
+          badge: 'Tarification Claire & Transparente',
+          title: 'Quatre Formules Adaptées à Votre Élevage',
+          subtitle: 'Activation locale instantanée par licence modulaire LMSE. Zéro abonnement caché.',
+          popularBadge: 'POPULAIRE',
+          lifetimeBadge: 'À VIE',
+          comparisonTitle: 'Tableau Comparatif des Fonctionnalités',
+          comparisonSubtitle: 'Visualisez en un clin d\'œil les capacités exactes de chaque édition de Bird Academy.',
+          free: {
+            name: 'COMMUNITY',
+            price: '0 €',
+            period: 'Gratuit pour toujours',
+            desc: 'Pour démarrer et gérer un petit cheptel en toute simplicité.',
+            btn: 'Télécharger gratuitement',
+            f1: 'Jusqu\'à 50 oiseaux gérés & baguage',
+            f2: 'Suivi basique des cages et nichées',
+            f3: 'Référentiel biologique avicole intégré',
+            f4: 'Assistant IA (quota local de 10 req/jour)',
+            not1: 'Calcul de consanguinité de Wright',
+            not2: 'Moteur expert Bird Intelligence'
+          },
+          premium: {
+            name: 'PASSION / PREMIUM',
+            price: '49 €',
+            period: 'Licence Standard Annuelle',
+            desc: 'Pour les éleveurs passionnés souhaitant un suivi génétique, sanitaire et biologique étendu.',
+            btn: 'Obtenir la licence Passion',
+            f1: 'Toutes les fonctionnalités Community incluses',
+            f2: 'Nombre d\'oiseaux & volières illimité',
+            f3: 'Calculateur de consanguinité de Wright',
+            f4: 'Contexte élevage complet dans l\'IA (100 req/j)',
+            f5: 'Historique sanitaire détaillé & rappels',
+            f6: 'Activation sur 3 appareils simultanés',
+            not1: 'Score global Bird Intelligence d\'élevage'
+          },
+          pro: {
+            name: 'ENTERPRISE / PRO',
+            price: '119 €',
+            period: 'Licence Complète Annuelle',
+            desc: 'La solution complète pour les grands élevages, concours et clubs avicoles.',
+            btn: 'Obtenir la licence Enterprise',
+            f1: 'Toutes les fonctionnalités Passion incluses',
+            f2: 'Moteur Bird Intelligence complet (Scores & Alertes)',
+            f3: 'Généalogie profonde & simulation d\'accouplements',
+            f4: 'Assistant IA local sans restriction de quota',
+            f5: 'Génération de rapports et passeports PDF',
+            f6: 'Activation sur 5 appareils & Support prioritaire'
+          },
+          lifetime: {
+            name: 'ENTERPRISE LIFETIME',
+            price: '249 €',
+            period: 'Paiement unique à vie',
+            desc: 'Investissement souverain et définitif pour votre élevage sans renouvellement.',
+            btn: 'Obtenir l\'accès à vie',
+            f1: 'Toutes les fonctionnalités Enterprise à vie',
+            f2: 'Mises à jour majeures incluses sans surcoût',
+            f3: '5 appareils activés en simultané',
+            f4: 'Moteur Bird Intelligence & IA illimitée',
+            f5: 'Support VIP dédié sous 24h ouvrées'
+          }
+        },
+        download: {
+          badge: 'Distribution Officielle Certifiée',
+          title: 'Télécharger Bird Academy',
+          subtitle: 'Application native rapide et sécurisée. Installation en moins de 2 minutes, fonctionne immédiatement 100% hors-ligne.',
+          winInstTitle: 'Windows (Installateur Recommandé)',
+          winInstDesc: 'Package d\'installation complet pour Windows 10 & 11 (64-bit) avec mises à jour automatiques.',
+          winInstBtn: 'Télécharger pour Windows (Installateur .exe)',
+          winPortTitle: 'Windows (Version Portable)',
+          winPortDesc: 'Exécutable autonome sans installation requise, idéal pour clé USB.',
+          winPortBtn: 'Télécharger la version portable (.zip)',
+          androidTitle: 'Android (Package APK)',
+          androidDesc: 'Package d\'installation directe pour tablettes et smartphones Android (8.0+).',
+          androidBtn: 'Télécharger l\'APK Android (.apk)',
+          shaToggle: 'Vérifier l\'intégrité des fichiers (Empreintes SHA-256)',
+          shaDesc: 'Comparez l\'empreinte cryptographique de votre fichier téléchargé avec la valeur officielle scellée :',
+          copyBtn: 'Copier',
+          copiedMsg: 'Copié !',
+          certUtilTip: 'Commande PowerShell : CertUtil -hashfile BirdAcademy-Setup.exe SHA256'
+        },
+        support: {
+          badge: 'Centre de Support Avian Precision',
+          title: 'Assistance Technique & Accompagnement',
+          subtitle: 'Une équipe spécialisée en zootechnie et technologie avicole à votre écoute.',
+          trustBadge: '⚡ Temps de réponse garanti < 24h ouvrées',
+          trustTitle: 'Engagement de Service & Confidentialité',
+          trust1Title: 'Documentation & Guides Pratiques',
+          trust1Desc: 'Accédez aux fiches d\'installation, tutoriels de baguage et protocoles génétiques.',
+          trust2Title: 'Confidentialité Respectée',
+          trust2Desc: 'Vos coordonnées et messages restent strictement confidentiels sans démarchage.',
+          trust3Title: 'Assistance Dédiée Aviculture',
+          trust3Desc: 'Support assuré par des passionnés qui comprennent les réalités du terrain.',
+          formName: 'Votre Nom complet',
+          formEmail: 'Votre Adresse Email',
+          formCategory: 'Catégorie de la demande',
+          formSubject: 'Objet du message',
+          formMsg: 'Description détaillée',
+          formSubmit: 'Envoyer ma demande',
+          formSuccess: 'Votre message a été transmis avec succès. Notre équipe vous répondra sous 24h ouvrées.'
+        },
+        faq: {
+          badge: 'Foire Aux Questions',
+          title: 'Questions Fréquemment Posées',
+          subtitle: 'Retrouvez toutes les réponses claires sur le fonctionnement, les licences et la sécurité de Bird Academy.',
+          catAll: 'Toutes',
+          catLicensing: 'Licences & Activation',
+          catGenetics: 'Génétique & Zootechnie',
+          catSecurity: 'Sécurité & Données',
+          q1: 'Bird Academy nécessite-t-elle une connexion Internet ?',
+          a1: 'Non. Bird Academy est conçue selon l\'architecture offline-first. Vos données, fiches d\'oiseaux, calculs génétiques et IA s\'exécutent localement sur votre appareil sans aucune connexion requise.',
+          q2: 'Où sont stockées les données de mes oiseaux et de mon élevage ?',
+          a2: 'Vos données résident exclusivement sur le disque dur de votre ordinateur ou la mémoire locale de votre appareil Android dans une base de données SQLite scellée. Aucune donnée n\'est envoyée dans le cloud.',
+          q3: 'Qu\'est-ce que le calcul de consanguinité de Wright ?',
+          a3: 'C\'est la méthode scientifique zootechnique standardisée qui calcule avec exactitude le coefficient de parenté entre reproducteurs pour sécuriser vos accouplements et préserver la vitalité génétique de votre cheptel.',
+          q4: 'Mes données d\'élevage sont-elles conservées si je change d\'édition ?',
+          a4: 'Oui, à 100%. Le système de licence modulaire LMSE débloque instantanément les fonctionnalités PREMIUM ou PRO sur votre base locale sans modifier ni altérer vos historiques.',
+          q5: 'Comment fonctionne l\'activation par licence LMSE ?',
+          a5: 'Lors de votre commande, vous recevez un kit de licence chiffré comprenant un fichier .lmse, une clé textuelle et un QR code. L\'activation se fait localement en 1 clic sans compte cloud.'
+        },
+        footer: {
+          rights: '© 2026 Bird Academy — Identité Avian Precision. Tous droits réservés.',
+          disclaimer: 'Logiciel professionnel indépendant conçu selon les normes zootechniques et les standards biologiques avicoles.',
+          techContact: 'Support technique certifié :',
+          versionTag: 'Version Stable 1.4.2'
+        }
+      },
+      en: {
+        dir: 'ltr',
+        nav: {
+          home: 'Home',
+          features: 'Features',
+          security: 'Security & Tech',
+          pricing: 'Editions & Pricing',
+          support: 'Support & Contact',
+          faq: 'FAQ',
+          ctaLicense: 'Get a License',
+        },
+        hero: {
+          badge: '100% Offline • Sovereign Data Privacy',
+          title: 'Master your breeding with absolute precision.',
+          subtitle: 'The professional all-in-one offline software for bird breeders: individual biological tracking, deterministic Wright genetics, and local sovereign data.',
+          ctaDownload: 'Download for Windows',
+          ctaPricing: 'Compare Editions',
+          trust1: 'No credit card needed',
+          trust2: 'Works 100% offline',
+          trust3: 'Encrypted local data',
+        },
+        security: {
+          tag: 'Architecture & Sovereignty',
+          title: 'Security & Technology: Sovereign Aviary Management',
+          subtitle: 'A 100% offline architecture ensuring complete confidentiality of your pedigree data without cloud dependency.',
+          card1Title: '100% Offline Core',
+          card1Desc: 'Sealed local SQLite database on your disk. No internet connection needed for day-to-day operations.',
+          card2Title: 'Local Encryption & LMSE',
+          card2Desc: 'Modular cryptographic validation via ECDSA digital signatures for tamper-proof licensing.',
+          card3Title: 'Total Cloud Independence',
+          card3Desc: 'Zero telemetry, zero third-party cloud servers. Your pedigree records remain solely yours forever.',
+        },
+        features: {
+          badge: 'Avian Precision Modules',
+          title: 'Comprehensive & Scientific Breeding Features',
+          subtitle: 'Every dimension of your aviary managed with precision and rigor.',
+          birds: { title: 'Bird Management & Banding', desc: 'Detailed individual profiles, official ring numbers, phenotypes, mutations, and biological passport.' },
+          habitat: { title: 'Housing, Cages & Aviaries', desc: 'Spatial management of flight cages, batteries, quarantine zones, and infirmary sections.' },
+          breeding: { title: 'Breeding & Nursery', desc: 'Pairing logs, egg candling records, incubation forecasting, and hand-feeding logs.' },
+          health: { title: 'Health & Medical Records', desc: 'Flock medical logs, treatment batches, veterinary dosages, and clinical observations.' },
+          genetics: { title: 'Genetics & Pedigree', desc: 'Multi-generation pedigree trees, Wright inbreeding coefficient, and pairing simulation.' },
+          bio: { title: 'Biological Reference', desc: 'Built-in ornithological knowledge base: incubation times, biological constants, and breed standards.' }
+        },
+        pricing: {
+          badge: 'Transparent Pricing',
+          title: 'Four Editions Tailored to Your Aviary',
+          subtitle: 'Instant local activation via LMSE modular licenses. No hidden fees.',
+          popularBadge: 'POPULAR',
+          lifetimeBadge: 'LIFETIME',
+          comparisonTitle: 'Detailed Feature Comparison Table',
+          comparisonSubtitle: 'Compare all capabilities across Bird Academy editions at a glance.',
+          free: {
+            name: 'COMMUNITY',
+            price: '0 €',
+            period: 'Free forever',
+            desc: 'To get started and manage a small flock effortlessly.',
+            btn: 'Download Free',
+            f1: 'Up to 50 birds managed with ring logs',
+            f2: 'Basic cage and clutch tracking',
+            f3: 'Built-in biological database',
+            f4: 'Local AI Assistant (10 queries/day)',
+            not1: 'Wright inbreeding calculator',
+            not2: 'Full Bird Intelligence engine'
+          },
+          premium: {
+            name: 'PASSION / PREMIUM',
+            price: '49 €',
+            period: 'Standard Annual License',
+            desc: 'For dedicated breeders seeking extended genetic, health, and biological insights.',
+            btn: 'Get Passion License',
+            f1: 'All Community features included',
+            f2: 'Unlimited birds & flight aviaries',
+            f3: 'Wright inbreeding coefficient calculator',
+            f4: 'Full flock context passed to AI (100 req/day)',
+            f5: 'Detailed medical records & reminders',
+            f6: 'Activation on 3 devices simultaneously',
+            not1: 'Full Bird Intelligence flock score'
+          },
+          pro: {
+            name: 'ENTERPRISE / PRO',
+            price: '119 €',
+            period: 'Complete Annual License',
+            desc: 'The complete solution for competition breeders, clubs, and large facilities.',
+            btn: 'Get Enterprise License',
+            f1: 'All Passion features included',
+            f2: 'Full Bird Intelligence engine (Scores & Alerts)',
+            f3: 'Deep pedigree trees & pairing simulator',
+            f4: 'Unlimited local AI Assistant quota',
+            f5: 'PDF breeding reports & biological passports',
+            f6: 'Activation on 5 devices & Priority Support'
+          },
+          lifetime: {
+            name: 'ENTERPRISE LIFETIME',
+            price: '249 €',
+            period: 'One-time payment for life',
+            desc: 'Sovereign and definitive investment for your aviary with lifetime access.',
+            btn: 'Get Lifetime Access',
+            f1: 'All Enterprise features for life',
+            f2: 'Major future updates included',
+            f3: '5 devices activated simultaneously',
+            f4: 'Full Bird Intelligence & Unlimited AI',
+            f5: 'VIP Priority Support (< 24h response)'
+          }
+        },
+        download: {
+          badge: 'Official Certified Distribution',
+          title: 'Download Bird Academy',
+          subtitle: 'Fast, secure native application. Installs in under 2 minutes, works 100% offline immediately.',
+          winInstTitle: 'Windows (Recommended Installer)',
+          winInstDesc: 'Complete installation package for Windows 10 & 11 (64-bit) with automatic updates.',
+          winInstBtn: 'Download for Windows (Installer .exe)',
+          winPortTitle: 'Windows (Portable Edition)',
+          winPortDesc: 'Standalone executable without installation, ideal for USB drives.',
+          winPortBtn: 'Download Portable Edition (.zip)',
+          androidTitle: 'Android (APK Package)',
+          androidDesc: 'Direct installation package for Android tablets and smartphones (8.0+).',
+          androidBtn: 'Download Android APK (.apk)',
+          shaToggle: 'Verify file integrity (SHA-256 Checksums)',
+          shaDesc: 'Compare your downloaded file checksum against official sealed values:',
+          copyBtn: 'Copy',
+          copiedMsg: 'Copied!',
+          certUtilTip: 'PowerShell Command: CertUtil -hashfile BirdAcademy-Setup.exe SHA256'
+        },
+        support: {
+          badge: 'Avian Precision Support Center',
+          title: 'Technical Support & Assistance',
+          subtitle: 'Our dedicated aviculture and technology specialists are here to help.',
+          trustBadge: '⚡ Guaranteed response time < 24 business hours',
+          trustTitle: 'Service Quality & Trust Commitment',
+          trust1Title: 'Illustrated Guides & Documentation',
+          trust1Desc: 'Access detailed setup tutorials, ring tracking guides, and pedigree procedures.',
+          trust2Title: 'Guaranteed Privacy',
+          trust2Desc: 'Your contact details and messages remain strictly confidential.',
+          trust3Title: 'Specialized Aviculture Support',
+          trust3Desc: 'Support handled by passionate professionals who understand breeding realities.',
+          formName: 'Full Name',
+          formEmail: 'Email Address',
+          formCategory: 'Request Category',
+          formSubject: 'Subject',
+          formMsg: 'Detailed Description',
+          formSubmit: 'Submit Request',
+          formSuccess: 'Your message has been sent successfully. We will reply within 24 business hours.'
+        },
+        faq: {
+          badge: 'FAQ',
+          title: 'Frequently Asked Questions',
+          subtitle: 'Clear answers regarding offline functionality, licensing, and security.',
+          catAll: 'All',
+          catLicensing: 'Licensing & Activation',
+          catGenetics: 'Genetics & Zootechnics',
+          catSecurity: 'Security & Data',
+          q1: 'Does Bird Academy require an active Internet connection?',
+          a1: 'No. Bird Academy is engineered from the ground up with an offline-first architecture. All records, pedigree calculations, and AI inferences run locally on your device.',
+          q2: 'Where is my breeding data stored?',
+          a2: 'Your data stays exclusively on your local computer hard drive or Android storage in a sealed SQLite database. No data is ever uploaded to any cloud.',
+          q3: 'What is Wright\'s inbreeding coefficient?',
+          a3: 'It is the standardized scientific formula measuring the probability that two alleles are identical by descent, securing your pairings against inbreeding depression.',
+          q4: 'Will I lose my data if I upgrade my edition?',
+          a4: 'No. Your local database is completely preserved when applying a Passion or Enterprise license.',
+          q5: 'How does LMSE license activation work?',
+          a5: 'You receive an encrypted package with a .lmse file, key string, and QR code, activating your tier locally in 1 click.'
+        },
+        footer: {
+          rights: '© 2026 Bird Academy — Avian Precision. All rights reserved.',
+          disclaimer: 'Independent professional aviculture software engineered to international ornithological standards.',
+          techContact: 'Certified Technical Support:',
+          versionTag: 'Stable Release v1.4.2'
+        }
+      },
+      ar: {
+        dir: 'rtl',
+        nav: {
+          home: 'الرئيسية',
+          features: 'الميزات',
+          security: 'الأمان والتكنولوجيا',
+          pricing: 'الباقات والأسعار',
+          support: 'الدعم والتواصل',
+          faq: 'الأسئلة الشائعة',
+          ctaLicense: 'طلب ترخيص',
+        },
+        hero: {
+          badge: 'يعمل 100% بدون إنترنت • سيادة تامة على البيانات',
+          title: 'تحكم في تربية طيورك بدقة متناهية.',
+          subtitle: 'البرنامج الاحترافي المتكامل لإدارة الطيور، التتبع البيولوجي، حساب قرابة الدم والذكاء الاصطناعي المحلي. بياناتك محفوظة محلياً بالكامل.',
+          ctaDownload: 'تحميل لنظام ويندوز',
+          ctaPricing: 'مقارنة الباقات',
+          trust1: 'بدون بطاقة بنكية',
+          trust2: 'يعمل 100% بدون إنترنت',
+          trust3: 'بيانات محلية مشفرة',
+        },
+        security: {
+          tag: 'الأمان والسيادة',
+          title: 'الأمان والتكنولوجيا : سيادة تامة على بياناتك',
+          subtitle: 'تصميم حديث يعمل بدون إنترنت لحماية خبرتك وسجلاتك دون أي اعتماد على السحابة.',
+          card1Title: '100% بدون إنترنت',
+          card1Desc: 'قاعدة بيانات SQLite محلية مخزنة على جهازك فقط دون أي تسريب خارجي.',
+          card2Title: 'تشفير محلي وتراخيص LMSE',
+          card2Desc: 'تحقق مشفر محلي عبر توقيعات ECDSA الرقمية لضمان سلامة البرنامج.',
+          card3Title: 'استقلالية سحابية كاملة',
+          card3Desc: 'لا حاجة لأي خوادم سحابية، سجلاتك وأنساب طيورك ملك لك وحدك مدى الحياة.',
+        },
+        features: {
+          badge: 'وحدات Avian Precision',
+          title: 'تغطية وظيفية شاملة وعلمية للمربين',
+          subtitle: 'كل جانب من جوانب تربية الطيور منظم بدقة لتعزيز الإنتاج والصحة.',
+          birds: { title: 'إدارة الطيور والتحجيل', desc: 'سجلات فردية مفصلة، أرقام الحلقات، الطفرات الجينية والجواز البيولوجي.' },
+          habitat: { title: 'الأقفاص والسلاكات', desc: 'تنظيم دقيق للبطاريات، السلاكات الجماعية، مناطق الحجر الصحي والعزل.' },
+          breeding: { title: 'التكاثر والحضانة', desc: 'تشكيل الأزواج، متابعة وضع البيض، فحص الإخصاب والإطعام اليدوي.' },
+          health: { title: 'السجل الصحي والعلاجات', desc: 'سجل بيطري متكامل، تتبع الجرعات، التذكيرات والملاحظات السريرية.' },
+          genetics: { title: 'علم الوراثة والأنساب', desc: 'شجرة نسب متكاملة، حساب معاملات قرابة الدم وتوقع الطفرات.' },
+          bio: { title: 'المرجع البيولوجي', desc: 'قاعدة معارف مدمجة حول الكناري وفترات الحضانة والمعايير القياسية.' }
+        },
+        pricing: {
+          badge: 'أسعار واضحة وشفافة',
+          title: 'أربع باقات تناسب احتياجاتك',
+          subtitle: 'تفعيل محلي فوري عبر نظام LMSE بدون اشتراكات مخفية.',
+          popularBadge: 'شائعة',
+          lifetimeBadge: 'مدى الحياة',
+          comparisonTitle: 'جدول مقارنة الميزات التفصيلي',
+          comparisonSubtitle: 'مقارنة شاملة لكافة قدرات باقات البرنامج.',
+          free: {
+            name: 'COMMUNITY',
+            price: '0 €',
+            period: 'مجاناً للأبد',
+            desc: 'للبدء وإدارة عدد محدود من الطيور بسهولة.',
+            btn: 'تحميل مجاناً',
+            f1: 'إدارة حتى 50 طائراً مع سجلات الحلقات',
+            f2: 'متابعة أساسية للأقفاص والأعشاش',
+            f3: 'المرجع البيولوجي المدمج',
+            f4: 'المساعد الذكي (10 استفسارات/يوم)',
+            not1: 'حساب قرابة الدم المتقدم',
+            not2: 'محرك ذكاء الطيور الكامل'
+          },
+          premium: {
+            name: 'PASSION / PREMIUM',
+            price: '49 €',
+            period: 'ترخيص قياسي سنوي',
+            desc: 'للمربين المهتمين بتتبع وراثي، صحي وبيولوجي متقدم.',
+            btn: 'طلب باقة Passion',
+            f1: 'جميع ميزات الباقة المجانية',
+            f2: 'عدد غير محدود من الطيور والسلاكات',
+            f3: 'حاسبة معاملات قرابة الدم المتقدمة',
+            f4: 'ربط كامل بيانات القطيع بالذكاء الاصطناعي (100 req/d)',
+            f5: 'سجل صحي مفصل وتذكيرات علاجية',
+            f6: 'تفعيل على 3 أجهزة في وقت واحد',
+            not1: 'التقييم الشامل لصحة القطيع'
+          },
+          pro: {
+            name: 'ENTERPRISE / PRO',
+            price: '119 €',
+            period: 'ترخيص سنوي متكامل',
+            desc: 'الحل الشامل للمربين المحترفين ومزارع الإنتاج ومسابقات الطيور.',
+            btn: 'طلب باقة Enterprise',
+            f1: 'جميع ميزات باقة Passion',
+            f2: 'محرك ذكاء الطيور الكامل مع التنبيهات',
+            f3: 'شجرة الأنساب ومحاكي التزاوج المتقدم',
+            f4: 'استخدام غير محدود للمساعد الذكي المحلي',
+            f5: 'توليد تقارير وجوازات بيولوجية PDF',
+            f6: 'تفعيل على 5 أجهزة ودعم فني ذو أولوية'
+          },
+          lifetime: {
+            name: 'ENTERPRISE LIFETIME',
+            price: '249 €',
+            period: 'دفعة واحدة لمدى الحياة',
+            desc: 'استثمار دائم لتربية طيورك دون رسوم تجديد دورية.',
+            btn: 'الحصول على ترخيص دائم',
+            f1: 'كافة ميزات باقة Enterprise مدى الحياة',
+            f2: 'تحديثات مستقبلية شاملة بدون تكلفة',
+            f3: 'تفعيل على 5 أجهزة معاً',
+            f4: 'محرك ذكاء الطيور والذكاء الاصطناعي بلا حدود',
+            f5: 'دعم فني متميز خلال 24 ساعة'
+          }
+        },
+        download: {
+          badge: 'تنزيل رسمي معتمد',
+          title: 'تحميل برنامج Bird Academy',
+          subtitle: 'برنامج سريع وآمن، تثبيت في أقل من دقيقتين ويعمل فوراً بدون إنترنت.',
+          winInstTitle: 'ويندوز (المثبت الموصى به)',
+          winInstDesc: 'حزمة تثبيت كاملة لأنظمة ويندوز 10 و 11 (64 بت) مع التحديثات التلقائية.',
+          winInstBtn: 'تحميل لويندوز (مثبت برامج .exe)',
+          winPortTitle: 'ويندوز (نسخة محمولة Portable)',
+          winPortDesc: 'تعمل مباشرة بدون تثبيت، مناسبة لذواكر USB.',
+          winPortBtn: 'تحميل النسخة المحمولة (.zip)',
+          androidTitle: 'أندرويد (ملف APK)',
+          androidDesc: 'حزمة تثبيت مباشرة للهواتف والأجهزة اللوحية (أندرويد 8.0 فما فوق).',
+          androidBtn: 'تحميل ملف APK (.apk)',
+          shaToggle: 'التحقق من سلامة الملفات (بصمات SHA-256)',
+          shaDesc: 'قارن البصمة التشفيرية للملف المحمل مع البصمة الرسمية المعتمدة :',
+          copyBtn: 'نسخ',
+          copiedMsg: 'تم النسخ !',
+          certUtilTip: 'أمر ويندوز : CertUtil -hashfile BirdAcademy-Setup.exe SHA256'
+        },
+        support: {
+          badge: 'مركز دعم Avian Precision',
+          title: 'الدعم الفني والمساعدة',
+          subtitle: 'فريق متخصص في شؤون الطيور والبرمجيات لمساعدتك في أي وقت.',
+          trustBadge: '⚡ الرد مضمون خلال أقل من 24 ساعة عمل',
+          trustTitle: 'الالتزام بالجودة والسرية',
+          trust1Title: 'أدلة إرشادية وتوثيق شامل',
+          trust1Desc: 'تصفح شروحات التثبيت، استيراد البيانات وإدارة السلالات.',
+          trust2Title: 'خصوصية تامة ومضمونة',
+          trust2Desc: 'معلوماتك ورسائلك تظل سرية تماماً ولن يتم مشاركتها.',
+          trust3Title: 'دعم خبير في شؤون الطيور',
+          trust3Desc: 'فريق يفهم احتياجات المربين وخصوصية الرعاية Aviculture.',
+          formName: 'الاسم الكامل',
+          formEmail: 'البريد الإلكتروني',
+          formCategory: 'نوع الطلب',
+          formSubject: 'الموضوع',
+          formMsg: 'الوصف بالتفصيل',
+          formSubmit: 'إرسال الطلب',
+          formSuccess: 'تم إرسال رسالتك بنجاح. سنرد عليك في غضون 24 ساعة عمل.'
+        },
+        faq: {
+          badge: 'الأسئلة الشائعة',
+          title: 'الأسئلة الأكثر تكراراً',
+          subtitle: 'إجابات واضحة حول العمل بدون إنترنت، التراخيص والأمان.',
+          catAll: 'الكل',
+          catLicensing: 'التراخيص والتفعيل',
+          catGenetics: 'الوراثة والتربية',
+          catSecurity: 'الأمان والبيانات',
+          q1: 'هل يتطلب البرنامج اتصالاً مستمراً بالإنترنت؟',
+          a1: 'لا. تم تصميم البرنامج ليعمل بدون إنترنت تماماً (Offline-First). سجلاتك، حسابات الأنساب والذكاء الاصطناعي تعمل محلياً.',
+          q2: 'أين يتم تخزين بيانات الطيور الخاصة بي؟',
+          a2: 'تُخزن حصرياً على القرص الصلب لحاسوبك أو ذاكرة هاتفك في قاعدة بيانات SQLite مشفرة.',
+          q3: 'ما هو حساب قرابة الدم وفق معادلة رايت (Wright)؟',
+          a3: 'هو المعيار العلمي الدقيق المعتمد في علم الحيوان لحساب احتمالية تشابه الجينات وحماية الأزواج من مشاكل قرابة الدم.',
+          q4: 'هل أفقد بياناتي عند ترقية الترخيص؟',
+          a4: 'لا، تظل جميع بياناتك وسجلاتك محفوظة بالكامل دون أي مساس عند ترقية الترخيص.',
+          q5: 'كيف يتم التفعيل عبر نظام LMSE؟',
+          a5: 'تتلقى حزمة تشفيرية تحتوي ملف الترخيص ومفتاحاً ورمز QR للتفعيل المحلي بنقرة واحدة.'
+        },
+        footer: {
+          rights: '© 2026 Bird Academy — هوية Avian Precision. جميع الحقوق محفوظة.',
+          disclaimer: 'برنامج احترافي مستقل مصمم وفقاً للمعايير البيولوجية في تربية الطيور.',
+          techContact: 'الدعم الفني المعتمد :',
+          versionTag: 'النسخة المستقرة 1.4.2'
+        }
+      },
+      es: {
+        dir: 'ltr',
+        nav: {
+          home: 'Inicio',
+          features: 'Funciones',
+          security: 'Seguridad y Tech',
+          pricing: 'Planes y Precios',
+          support: 'Soporte y Contacto',
+          faq: 'Preguntas',
+          ctaLicense: 'Obtener Licencia',
+        },
+        hero: {
+          badge: '100% Offline • Soberanía Total de Datos',
+          title: 'Domine su criadero con una precisión absoluta.',
+          subtitle: 'Software profesional todo en uno para canaricultura y avicultura: seguimiento biológico, genética de Wright y datos locales seguros.',
+          ctaDownload: 'Descargar para Windows',
+          ctaPricing: 'Comparar Planes',
+          trust1: 'Sin tarjeta bancaria',
+          trust2: 'Funciona 100% offline',
+          trust3: 'Datos locales cifrados',
+        },
+        security: {
+          tag: 'Arquitectura y Soberanía',
+          title: 'Seguridad y Tecnología: Soberanía para su Criadero',
+          subtitle: 'Diseño 100% offline que protege sus registros y árboles genealógicos sin depender de la nube.',
+          card1Title: 'Núcleo 100% Offline',
+          card1Desc: 'Base de datos SQLite local en su propio disco duro sin necesidad de Internet para el trabajo diario.',
+          card2Title: 'Cifrado Local y LMSE',
+          card2Desc: 'Validación modular con firmas digitales ECDSA para una protección inviolable.',
+          card3Title: 'Independencia Cloud Total',
+          card3Desc: 'Cero telemetría y sin servidores externos. Sus datos le pertenecen a usted.',
+        },
+        features: {
+          badge: 'Módulos Avian Precision',
+          title: 'Cobertura Funcional Rigurosa y Científica',
+          subtitle: 'Cada aspecto de su aviario organizado para maximizar resultados.',
+          birds: { title: 'Gestión de Aves y Anillas', desc: 'Fichas individuales, anillas oficiales, fenotipos, mutaciones y pasaporte biológico.' },
+          habitat: { title: 'Hábitat, Jaulas y Voladeras', desc: 'Organización de baterías, voladeras comunitarias, zonas de cuarentena y enfermería.' },
+          breeding: { title: 'Reproducción y Cría', desc: 'Formación de parejas, ovoscopia, previsión de eclosión y protocolos de cría a mano.' },
+          health: { title: 'Salud y Tratamientos', desc: 'Historial clínico por lotes, posología veterinaria, recordatorios y notas clínicas.' },
+          genetics: { title: 'Genética y Linajes', desc: 'Árboles genealógicos multigeneración, consanguinidad de Wright y simulación de cruces.' },
+          bio: { title: 'Referencial Biológico', desc: 'Base ornitológica integrada: tiempos de incubación, constantes y estándares de raza.' }
+        },
+        pricing: {
+          badge: 'Precios Transparentes',
+          title: 'Cuatro Ediciones para su Criadero',
+          subtitle: 'Activación local instantánea mediante licencias LMSE. Sin suscripciones ocultas.',
+          popularBadge: 'POPULAR',
+          lifetimeBadge: 'DE POR VIDA',
+          comparisonTitle: 'Tabla Comparativa de Funcionalidades',
+          comparisonSubtitle: 'Compare todas las características de las ediciones de Bird Academy.',
+          free: {
+            name: 'COMMUNITY',
+            price: '0 €',
+            period: 'Gratis para siempre',
+            desc: 'Para comenzar y gestionar un aviario pequeño.',
+            btn: 'Descargar gratis',
+            f1: 'Hasta 50 aves gestionadas y anillas',
+            f2: 'Seguimiento básico de jaulas y nidadas',
+            f3: 'Base de datos biológica integrada',
+            f4: 'Asistente IA (10 consultas/día)',
+            not1: 'Cálculo de consanguinidad de Wright',
+            not2: 'Motor Bird Intelligence completo'
+          },
+          premium: {
+            name: 'PASSION / PREMIUM',
+            price: '49 €',
+            period: 'Licencia Estándar Anual',
+            desc: 'Para criadores dedicados que buscan un control genético y sanitario exhaustivo.',
+            btn: 'Obtener Licencia Passion',
+            f1: 'Todas las funciones Community incluidas',
+            f2: 'Aves y voladeras ilimitadas',
+            f3: 'Calculadora de consanguinidad de Wright',
+            f4: 'Contexto completo del aviario en la IA (100 req/d)',
+            f5: 'Historial sanitario detallado y recordatorios',
+            f6: 'Activación en 3 dispositivos simultáneos',
+            not1: 'Puntuación global Bird Intelligence'
+          },
+          pro: {
+            name: 'ENTERPRISE / PRO',
+            price: '119 €',
+            period: 'Licencia Completa Anual',
+            desc: 'Solución integral para criadores de competición, clubes y grandes aviarios.',
+            btn: 'Obtener Licencia Enterprise',
+            f1: 'Todas las funciones Passion incluidas',
+            f2: 'Bird Intelligence completo (Puntuación y Alertas)',
+            f3: 'Genealogía profunda y simulador de cruces',
+            f4: 'Asistente IA local ilimitado',
+            f5: 'Generación de informes y pasaportes PDF',
+            f6: 'Activación en 5 dispositivos y Soporte Prioritario'
+          },
+          lifetime: {
+            name: 'ENTERPRISE LIFETIME',
+            price: '249 €',
+            period: 'Pago único de por vida',
+            desc: 'Inversión definitiva y soberana para su aviario sin cuotas recurrentes.',
+            btn: 'Obtener acceso de por vida',
+            f1: 'Todas las funciones Enterprise para siempre',
+            f2: 'Actualizaciones futuras incluidas',
+            f3: '5 dispositivos activados',
+            f4: 'Bird Intelligence e IA ilimitada',
+            f5: 'Soporte prioritario garantizado en 24h'
+          }
+        },
+        download: {
+          badge: 'Distribución Oficial Certificada',
+          title: 'Descargar Bird Academy',
+          subtitle: 'Aplicación nativa rápida y segura. Instalación en 2 minutos, 100% offline al instante.',
+          winInstTitle: 'Windows (Instalador Recomendado)',
+          winInstDesc: 'Instalador completo para Windows 10 y 11 (64 bits) con actualizaciones automáticas.',
+          winInstBtn: 'Descargar para Windows (Instalador .exe)',
+          winPortTitle: 'Windows (Versión Portable)',
+          winPortDesc: 'Ejecutable sin instalación, ideal para llevar en memoria USB.',
+          winPortBtn: 'Descargar versión portable (.zip)',
+          androidTitle: 'Android (Paquete APK)',
+          androidDesc: 'Paquete directo para tabletas y teléfonos Android (8.0+).',
+          androidBtn: 'Descargar APK Android (.apk)',
+          shaToggle: 'Verificar integridad de los archivos (SHA-256)',
+          shaDesc: 'Compare la huella criptográfica de su archivo con el valor oficial:',
+          copyBtn: 'Copiar',
+          copiedMsg: '¡Copiado!',
+          certUtilTip: 'Comando PowerShell: CertUtil -hashfile BirdAcademy-Setup.exe SHA256'
+        },
+        support: {
+          badge: 'Centro de Soporte Avian Precision',
+          title: 'Soporte y Atención al Cliente',
+          subtitle: 'Nuestro equipo técnico y ornitológico está a su entera disposición.',
+          trustBadge: '⚡ Tiempo de respuesta garantizado < 24h laborables',
+          trustTitle: 'Compromiso de Calidad y Confidencialidad',
+          trust1Title: 'Documentación y Guías Completas',
+          trust1Desc: 'Acceda a guías ilustradas de instalación, importación y genealogía.',
+          trust2Title: 'Privacidad Garantizada',
+          trust2Desc: 'Sus datos de contacto y consultas se mantienen estrictamente confidenciales.',
+          trust3Title: 'Soporte Especializado en Avicultura',
+          trust3Desc: 'Atención técnica por profesionales que entienden la realidad de la cría.',
+          formName: 'Nombre completo',
+          formEmail: 'Correo electrónico',
+          formCategory: 'Categoría de la consulta',
+          formSubject: 'Asunto',
+          formMsg: 'Descripción detallada',
+          formSubmit: 'Enviar Mensaje',
+          formSuccess: 'Su mensaje ha sido enviado con éxito. Le responderemos en 24h laborables.'
+        },
+        faq: {
+          badge: 'Preguntas Frecuentes',
+          title: 'Preguntas Frecuentes',
+          subtitle: 'Respuestas claras sobre funcionamiento offline, licencias y seguridad.',
+          catAll: 'Todas',
+          catLicensing: 'Licencias y Activación',
+          catGenetics: 'Genética y Cría',
+          catSecurity: 'Seguridad y Datos',
+          q1: '¿Requiere Bird Academy conexión a Internet?',
+          a1: 'No. Diseñado con arquitectura offline-first, todos los registros y modelos de IA operan localmente.',
+          q2: '¿Dónde se guardan mis datos?',
+          a2: 'Exclusivamente en el disco duro local de su PC o dispositivo Android en una base SQLite sellada.',
+          q3: '¿Qué es el coeficiente de consanguinidad de Wright?',
+          a3: 'Es la fórmula científica estándar para calcular la probabilidad de homocigosis por descendencia y asegurar los cruces.',
+          q4: '¿Se pierden mis datos al cambiar de edición?',
+          a4: 'No, su base de datos local se conserva intacta al aplicar una licencia superior.',
+          q5: '¿Cómo funciona la activación LMSE?',
+          a5: 'Recibe un kit con archivo .lmse y código QR para activar su edición localmente en 1 clic.'
+        },
+        footer: {
+          rights: '© 2026 Bird Academy — Identidad Avian Precision. Todos los derechos reservados.',
+          disclaimer: 'Software profesional independiente diseñado bajo estándares biológicos ornitológicos.',
+          techContact: 'Soporte Técnico Certificado:',
+          versionTag: 'Versión Estable 1.4.2'
+        }
+      },
+      it: {
+        dir: 'ltr',
+        nav: {
+          home: 'Home',
+          features: 'Funzionalità',
+          security: 'Sicurezza e Tech',
+          pricing: 'Piani e Prezzi',
+          support: 'Supporto e Contatto',
+          faq: 'Domande',
+          ctaLicense: 'Ottieni Licenza',
+        },
+        hero: {
+          badge: '100% Offline • Sovranità Totale dei Dati',
+          title: 'Gestisci il tuo allevamento con precisione assoluta.',
+          subtitle: 'Software professionale all-in-one per il monitoraggio biologico, la genetica di Wright e il supporto decisionale. Dati 100% locali.',
+          ctaDownload: 'Scarica per Windows',
+          ctaPricing: 'Confronta i Piani',
+          trust1: 'Nessuna carta richiesta',
+          trust2: 'Funziona 100% offline',
+          trust3: 'Dati locali protetti',
+        },
+        security: {
+          tag: 'Architettura e Sovranità',
+          title: 'Sicurezza e Tecnologia: Sovranità per il Tuo Allevamento',
+          subtitle: 'Design 100% offline per proteggere i tuoi registri senza dipendere dal cloud.',
+          card1Title: 'Nucleo 100% Offline',
+          card1Desc: 'Database SQLite locale salvato sul tuo disco senza necessità di connessione per l\'uso quotidiano.',
+          card2Title: 'Crittografia Locale e LMSE',
+          card2Desc: 'Validazione modulare tramite firme digitali ECDSA per un\'integrità infallibile.',
+          card3Title: 'Indipendenza Totale dal Cloud',
+          card3Desc: 'Nessuna telemetria e nessun server esterno. I tuoi dati ti appartengono.',
+        },
+        features: {
+          badge: 'Moduli Avian Precision',
+          title: 'Copertura Funzionale Rigorosa e Scientifica',
+          subtitle: 'Ogni aspetto del tuo allevamento gestito con precisione e accuratezza.',
+          birds: { title: 'Gestione Uccelli e Anelli', desc: 'Schede individuali, anelli ufficiali, fenotipi, mutazioni e passaporto biologico.' },
+          habitat: { title: 'Alloggi, Gabbie e Voliere', desc: 'Gestione batterie, voliere comunitarie, aree di quarantena e infermeria.' },
+          breeding: { title: 'Riproduzione e Nidiata', desc: 'Accoppiamenti, speratura uova, previsione schiusa e allevamento allo stecco.' },
+          health: { title: 'Salute e Trattamenti', desc: 'Cartella sanitaria, storico trattamenti per lotti, dosaggi veterinari e note cliniche.' },
+          genetics: { title: 'Genetica e Genealogia', desc: 'Alberi genealogici, calcolo consanguineità di Wright e simulazione accoppiamenti.' },
+          bio: { title: 'Riferimento Biologico', desc: 'Database ornitologico integrato: tempi di cova, costanti e standard di razza.' }
+        },
+        pricing: {
+          badge: 'Prezzi Trasparenti',
+          title: 'Quattro Edizioni per il Tuo Allevamento',
+          subtitle: 'Attivazione locale istantanea tramite licenze LMSE. Nessun abbonamento nascosto.',
+          popularBadge: 'POPOLARE',
+          lifetimeBadge: 'A VITA',
+          comparisonTitle: 'Tabella Comparativa Dettagliata',
+          comparisonSubtitle: 'Confronta tutte le funzionalità delle edizioni di Bird Academy a colpo d\'occhio.',
+          free: {
+            name: 'COMMUNITY',
+            price: '0 €',
+            period: 'Gratuito per sempre',
+            desc: 'Per iniziare a gestire un piccolo allevamento.',
+            btn: 'Scarica gratis',
+            f1: 'Fino a 50 uccelli gestiti e anelli',
+            f2: 'Monitoraggio base gabbie e covate',
+            f3: 'Database biologico integrato',
+            f4: 'Assistente IA (10 query/giorno)',
+            not1: 'Calcolo consanguineità di Wright',
+            not2: 'Motore Bird Intelligence completo'
+          },
+          premium: {
+            name: 'PASSION / PREMIUM',
+            price: '49 €',
+            period: 'Licenza Standard Annuale',
+            desc: 'Per allevatori appassionati che cercano un controllo genetico e sanitario esteso.',
+            btn: 'Ottieni Licenza Passion',
+            f1: 'Tutte le funzionalità Community incluse',
+            f2: 'Uccelli e voliere illimitati',
+            f3: 'Calcolatore di consanguineità di Wright',
+            f4: 'Contesto completo dell\'allevamento nell\'IA (100 req/d)',
+            f5: 'Cartella clinica dettagliata e promemoria',
+            f6: 'Attivazione su 3 dispositivi contemporanei',
+            not1: 'Punteggio globale Bird Intelligence'
+          },
+          pro: {
+            name: 'ENTERPRISE / PRO',
+            price: '119 €',
+            period: 'Licenza Completa Annuale',
+            desc: 'La soluzione totale per allevatori da competizione, club e grandi allevamenti.',
+            btn: 'Ottieni Licenza Enterprise',
+            f1: 'Tutte le funzionalità Passion incluse',
+            f2: 'Bird Intelligence completo (Punteggi e Avvisi)',
+            f3: 'Genealogia profonda e simulatore di accoppiamento',
+            f4: 'Assistente IA locale senza limiti di quota',
+            f5: 'Generazione report e passaporti biologici PDF',
+            f6: 'Attivazione su 5 dispositivi e Supporto Prioritario'
+          },
+          lifetime: {
+            name: 'ENTERPRISE LIFETIME',
+            price: '249 €',
+            period: 'Pagamento unico a vita',
+            desc: 'Investimento definitivo e sovrano per il tuo allevamento senza rinnovi.',
+            btn: 'Ottieni accesso a vita',
+            f1: 'Tutte le funzionalità Enterprise a vita',
+            f2: 'Aggiornamenti futuri inclusi',
+            f3: '5 dispositivi attivati contemporaneamente',
+            f4: 'Bird Intelligence e IA illimitata',
+            f5: 'Supporto prioritario garantito in 24h'
+          }
+        },
+        download: {
+          badge: 'Distribuzione Ufficiale Certificata',
+          title: 'Scarica Bird Academy',
+          subtitle: 'Applicazione nativa veloce e sicura. Si installa in 2 minuti, 100% offline da subito.',
+          winInstTitle: 'Windows (Installer Consigliato)',
+          winInstDesc: 'Pacchetto di installazione completo per Windows 10 e 11 (64 bit) con aggiornamenti automatici.',
+          winInstBtn: 'Scarica per Windows (Installer .exe)',
+          winPortTitle: 'Windows (Versione Portatile)',
+          winPortDesc: 'Eseguibile senza installazione, ideale per chiavetta USB.',
+          winPortBtn: 'Scarica versione portatile (.zip)',
+          androidTitle: 'Android (Pacchetto APK)',
+          androidDesc: 'Pacchetto di installazione diretta per tablet e smartphone Android (8.0+).',
+          androidBtn: 'Scarica APK Android (.apk)',
+          shaToggle: 'Verifica integrità dei file (SHA-256)',
+          shaDesc: 'Confronta il checksum del file scaricato con il valore ufficiale certificato:',
+          copyBtn: 'Copia',
+          copiedMsg: 'Copiato!',
+          certUtilTip: 'Comando PowerShell: CertUtil -hashfile BirdAcademy-Setup.exe SHA256'
+        },
+        support: {
+          badge: 'Centro di Supporto Avian Precision',
+          title: 'Supporto e Assistenza Clienti',
+          subtitle: 'Il nostro team tecnico e ornitologico è a tua completa disposizione.',
+          trustBadge: '⚡ Risposta garantita in < 24 ore lavorative',
+          trustTitle: 'Impegno di Qualità e Riservatezza',
+          trust1Title: 'Documentazione e Guide Complete',
+          trust1Desc: 'Accedi a guide illustrate per l\'installazione, l\'importazione e la genealogia.',
+          trust2Title: 'Privacy Garantita',
+          trust2Desc: 'I tuoi dati di contatto e i tuoi messaggi rimangono strettamente confidenziali.',
+          trust3Title: 'Supporto Specializzato in Avicoltura',
+          trust3Desc: 'Assistenza tecnica fornita da appassionati che conoscono le esigenze dell\'allevamento.',
+          formName: 'Nome e Cognome',
+          formEmail: 'Indirizzo Email',
+          formCategory: 'Categoria richiesta',
+          formSubject: 'Oggetto',
+          formMsg: 'Descrizione dettagliata',
+          formSubmit: 'Invia Richiesta',
+          formSuccess: 'Il tuo messaggio è stato inviato con successo. Ti risponderemo entro 24 ore lavorative.'
+        },
+        faq: {
+          badge: 'FAQ',
+          title: 'Domande Frequenti',
+          subtitle: 'Risposte chiare sul funzionamento offline, le licenze e la sicurezza.',
+          catAll: 'Tutte',
+          catLicensing: 'Licenze e Attivazione',
+          catGenetics: 'Genetica e Allevamento',
+          catSecurity: 'Sicurezza e Dati',
+          q1: 'Bird Academy richiede una connessione a Internet?',
+          a1: 'No. Il software è progettato con architettura offline-first. Tutti i record e i modelli di IA vengono eseguiti localmente sul tuo PC.',
+          q2: 'Dove sono archiviati i miei dati?',
+          a2: 'Esclusivamente sul disco locale del tuo computer o nella memoria Android in un database SQLite protetto.',
+          q3: 'Cos\'è il coefficiente di consanguineità di Wright?',
+          a3: 'È la formula scientifica standard che calcola la probabilità di geni identici per discendenza, proteggendo gli accoppiamenti.',
+          q4: 'I miei dati vengono conservati se cambio edizione?',
+          a4: 'Sì, al 100%. Il tuo database locale rimane intatto durante l\'attivazione di licenze superiori.',
+          q5: 'Come funziona l\'attivazione LMSE?',
+          a5: 'Ricevi un pacchetto con file .lmse e codice QR per attivare la tua edizione localmente in 1 clic.'
+        },
+        footer: {
+          rights: '© 2026 Bird Academy — Identità Avian Precision. Tutti i diritti riservati.',
+          disclaimer: 'Software professionale indipendente progettato secondo gli standard biologici dell\'ornitologia.',
+          techContact: 'Supporto Tecnico Certificato:',
+          versionTag: 'Versione Stabile 1.4.2'
+        }
+      }
+    };
+  </script>
+
+  <!-- ========================================== -->
+  <!-- HEADER & NAVIGATION COMPONENT              -->
+  <!-- ========================================== -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-bordercolor shadow-sm transition-all duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Brand Logo with Avian Precision Official Full Asset -->
+        <a href="#home" class="flex items-center gap-3.5 group focus-visible:outline-none" aria-label="Bird Academy Home">
+          <img
+            src="../public/assets/images/logo-full.png"
+            alt="Bird Academy"
+            class="h-9 md:h-10 w-auto object-contain"
+            onerror="this.onerror=null; this.src='/assets/images/logo-full.png';"
+          />
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden lg:flex items-center gap-7" aria-label="Navigation Principale">
+          <a href="#features" data-i18n="nav.features" class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Fonctionnalités</a>
+          <a href="#security" data-i18n="nav.security" class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Sécurité & Tech</a>
+          <a href="#pricing" data-i18n="nav.pricing" class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Éditions & Tarifs</a>
+          <a href="#support" data-i18n="nav.support" class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">Support & Contact</a>
+          <a href="#faq" data-i18n="nav.faq" class="text-sm font-semibold text-slate-700 hover:text-primary transition-colors">FAQ</a>
+        </nav>
+
+        <!-- Action & Language Selector -->
+        <div class="hidden sm:flex items-center gap-4">
+          <!-- Language Selector -->
+          <div class="relative">
+            <label for="langSelect" class="sr-only">Choisir la langue</label>
+            <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-slate-50 hover:bg-slate-100 border border-slate-300 text-darktext text-xs font-bold rounded-xl px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer transition">
+              <option value="fr">🇫🇷 FR</option>
+              <option value="en">🇬🇧 EN</option>
+              <option value="ar">🇸🇦 AR</option>
+              <option value="es">🇪🇸 ES</option>
+              <option value="it">🇮🇹 IT</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center px-2.5 pointer-events-none text-slate-500">
+              <i class="fa-solid fa-chevron-down text-[10px]"></i>
+            </div>
+          </div>
+
+          <!-- Indigo CTA Button -->
+          <a href="#pricing" data-i18n="nav.ctaLicense" class="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-shield-halved text-accent text-xs"></i>
+            <span>Obtenir une Licence</span>
+          </a>
+        </div>
+
+        <!-- Mobile Menu Toggle Button (TopAppBar) -->
+        <div class="flex items-center gap-2 lg:hidden">
+          <select id="mobileLangSelect" onchange="changeLanguage(this.value)" class="bg-slate-50 border border-slate-300 text-xs font-bold rounded-lg px-2.5 py-1.5 text-darktext" aria-label="Langue">
+            <option value="fr">FR</option>
+            <option value="en">EN</option>
+            <option value="ar">AR</option>
+            <option value="es">ES</option>
+            <option value="it">IT</option>
+          </select>
+          <button id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Ouvrir le menu" aria-expanded="false" class="p-2.5 rounded-xl text-darktext hover:bg-slate-100 focus:outline-none">
+            <i class="fa-solid fa-bars text-xl"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Navigation -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-white border-b border-bordercolor px-6 pt-3 pb-6 space-y-3 shadow-lg">
+      <a href="#features" onclick="toggleMobileMenu()" data-i18n="nav.features" class="block py-2 text-sm font-semibold text-slate-800 hover:text-primary">Fonctionnalités</a>
+      <a href="#security" onclick="toggleMobileMenu()" data-i18n="nav.security" class="block py-2 text-sm font-semibold text-slate-800 hover:text-primary">Sécurité & Technologie</a>
+      <a href="#pricing" onclick="toggleMobileMenu()" data-i18n="nav.pricing" class="block py-2 text-sm font-semibold text-slate-800 hover:text-primary">Éditions & Tarifs</a>
+      <a href="#support" onclick="toggleMobileMenu()" data-i18n="nav.support" class="block py-2 text-sm font-semibold text-slate-800 hover:text-primary">Support & Contact</a>
+      <a href="#faq" onclick="toggleMobileMenu()" data-i18n="nav.faq" class="block py-2 text-sm font-semibold text-slate-800 hover:text-primary">FAQ</a>
+      <div class="pt-3">
+        <a href="#pricing" onclick="toggleMobileMenu()" data-i18n="nav.ctaLicense" class="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white py-3.5 rounded-xl font-bold text-center text-sm shadow-md">
+          <i class="fa-solid fa-shield-halved text-accent"></i>
+          <span>Obtenir une Licence</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+
+    <!-- ========================================== -->
+    <!-- HERO SECTION (Avian Precision Redesign)   -->
+    <!-- ========================================== -->
+    <section id="home" class="relative pt-12 pb-20 lg:pt-20 lg:pb-28 overflow-hidden bg-gradient-to-b from-white via-bglight to-bglight border-b border-bordercolor">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-4xl mx-auto space-y-7">
+          
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 border border-primary-200 text-primary font-extrabold text-xs tracking-wide shadow-sm">
+            <i class="fa-solid fa-shield-halved text-primary"></i>
+            <span data-i18n="hero.badge">100% Hors-Ligne • Souveraineté Totale des Données</span>
+          </div>
+
+          <!-- Strong Value Proposition Headline -->
+          <h1 data-i18n="hero.title" class="text-3xl sm:text-5xl lg:text-6xl font-black text-darktext tracking-tight leading-[1.12]">
+            Maîtrisez votre élevage avec une précision absolue.
+          </h1>
+
+          <!-- Crisp Subtitle -->
+          <p data-i18n="hero.subtitle" class="text-base sm:text-xl text-mutedtext max-w-3xl mx-auto font-normal leading-relaxed">
+            La suite logicielle avicole professionnelle 100% hors-ligne. Suivi biologique individuel, calculs génétiques déterministes de Wright et souveraineté totale de vos données.
+          </p>
+
+          <!-- CTA Buttons Row -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 pt-2">
+            <a href="#download" class="inline-flex items-center justify-center gap-3 bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-xl font-bold text-base shadow-lg shadow-primary/25 hover:shadow-xl transition-all transform hover:-translate-y-0.5">
+              <i class="fa-solid fa-download"></i>
+              <span data-i18n="hero.ctaDownload">Télécharger pour Windows</span>
+            </a>
+            <a href="#pricing" class="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-darktext border border-slate-300 px-6 py-4 rounded-xl font-bold text-sm shadow-sm hover:shadow transition-all">
+              <span data-i18n="hero.ctaPricing">Comparer les Éditions</span>
+              <i class="fa-solid fa-arrow-right text-xs ml-1"></i>
+            </a>
+          </div>
+
+          <!-- Trust Micro-Badges -->
+          <div class="pt-2 flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs font-semibold text-mutedtext">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-circle-check text-primary"></i>
+              <span data-i18n="hero.trust1">Sans carte bancaire</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-circle-check text-primary"></i>
+              <span data-i18n="hero.trust2">Fonctionne 100% hors-ligne</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-circle-check text-primary"></i>
+              <span data-i18n="hero.trust3">Données chiffrées locales</span>
+            </div>
+          </div>
+
+          <!-- Modern Dashboard Preview Showcase -->
+          <div class="pt-8 max-w-5xl mx-auto">
+            <div class="relative rounded-3xl bg-white border border-bordercolor shadow-2xl p-6 sm:p-8 space-y-6 text-start">
+              
+              <!-- Window Header -->
+              <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-3.5 h-3.5 rounded-full bg-rose-500 inline-block"></span>
+                  <span class="w-3.5 h-3.5 rounded-full bg-accent inline-block"></span>
+                  <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 inline-block"></span>
+                  <span class="text-xs font-bold text-slate-500 ml-2 font-mono">Bird Academy Enterprise — Avian Precision Core</span>
+                </div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-50 text-primary border border-primary-200">
+                  <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                  Mode Autonome Actif (SQLite)
+                </span>
+              </div>
+
+              <!-- Metrics Grid -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="p-4 rounded-2xl bg-bglight border border-slate-200/80">
+                  <div class="text-xs font-semibold text-mutedtext">Cheptel Actif</div>
+                  <div class="text-2xl font-black text-darktext mt-1">48 <span class="text-xs font-normal text-mutedtext">Oiseaux</span></div>
+                  <div class="text-[11px] font-bold text-primary mt-1">✓ 100% Bagués</div>
+                </div>
+                <div class="p-4 rounded-2xl bg-bglight border border-slate-200/80">
+                  <div class="text-xs font-semibold text-mutedtext">Couples en Ponte</div>
+                  <div class="text-2xl font-black text-darktext mt-1">12 <span class="text-xs font-normal text-mutedtext">Couples</span></div>
+                  <div class="text-[11px] font-bold text-accent-dark mt-1">● 96% Fertilité</div>
+                </div>
+                <div class="p-4 rounded-2xl bg-bglight border border-slate-200/80">
+                  <div class="text-xs font-semibold text-mutedtext">Consanguinité Wright</div>
+                  <div class="text-2xl font-black text-primary mt-1">0.00%</div>
+                  <div class="text-[11px] font-bold text-emerald-600 mt-1">Sécurité Optimale</div>
+                </div>
+                <div class="p-4 rounded-2xl bg-bglight border border-slate-200/80">
+                  <div class="text-xs font-semibold text-mutedtext">Licence LMSE</div>
+                  <div class="text-2xl font-black text-darktext mt-1">Scellée</div>
+                  <div class="text-[11px] font-bold text-indigo-600 mt-1">Signatures ECDSA</div>
+                </div>
+              </div>
+
+              <!-- Insight Banner -->
+              <div class="p-4 rounded-2xl bg-primary-50/60 border border-primary-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-microchip"></i>
+                  </div>
+                  <div>
+                    <strong class="text-primary block font-bold">Bird Intelligence Index (94%)</strong>
+                    <span class="text-slate-700">Prochaine ponte Cage B-04 dans 48h. Mirage 6 œufs certifiés fécondés.</span>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 bg-white rounded-lg text-primary font-bold border border-primary-200 text-[11px] shrink-0">
+                  Calculateur Déterministe
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SECTION SÉCURITÉ (3 Colonnes Minimalistes) -->
+    <!-- ========================================== -->
+    <section id="security" class="py-20 bg-white border-b border-bordercolor">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+        
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span data-i18n="security.tag" class="text-xs font-black text-primary tracking-widest uppercase bg-primary-50 px-3.5 py-1 rounded-full">
+            Architecture & Souveraineté
+          </span>
+          <h2 data-i18n="security.title" class="text-2xl sm:text-4xl font-extrabold text-darktext tracking-tight">
+            Sécurité & Technologie : Votre Élevage en Toute Souveraineté
+          </h2>
+          <p data-i18n="security.subtitle" class="text-mutedtext text-sm sm:text-base leading-relaxed">
+            Une architecture 100% hors-ligne qui garantit la confidentialité absolue de votre savoir-faire sans aucune dépendance au cloud.
+          </p>
+        </div>
+
+        <!-- 3 Columns Security Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <!-- Column 1: 100% Offline -->
+          <div class="p-8 rounded-3xl bg-bglight border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-primary-100 text-primary flex items-center justify-center text-2xl shadow-sm">
+              <i class="fa-solid fa-hard-drive"></i>
+            </div>
+            <h3 data-i18n="security.card1Title" class="text-lg font-bold text-darktext">100% Hors-Ligne</h3>
+            <p data-i18n="security.card1Desc" class="text-sm text-mutedtext leading-relaxed">
+              Base de données SQLite locale scellée sur votre disque dur. Aucune connexion Internet requise pour le suivi quotidien.
+            </p>
+          </div>
+
+          <!-- Column 2: Chiffrement Local -->
+          <div class="p-8 rounded-3xl bg-bglight border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl shadow-sm">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 data-i18n="security.card2Title" class="text-lg font-bold text-darktext">Chiffrement Local & LMSE</h3>
+            <p data-i18n="security.card2Desc" class="text-sm text-mutedtext leading-relaxed">
+              Validation cryptographique modulaire par signatures numériques ECDSA. Intégrité logicielle inviolable.
+            </p>
+          </div>
+
+          <!-- Column 3: Indépendance Cloud -->
+          <div class="p-8 rounded-3xl bg-bglight border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-accent-light text-accent-dark flex items-center justify-center text-2xl shadow-sm">
+              <i class="fa-solid fa-cloud-slash"></i>
+            </div>
+            <h3 data-i18n="security.card3Title" class="text-lg font-bold text-darktext">Indépendance Cloud Totale</h3>
+            <p data-i18n="security.card3Desc" class="text-sm text-mutedtext leading-relaxed">
+              Zéro télémétrie, zéro serveur tiers. Votre patrimoine avicole et vos fiches généalogiques vous appartiennent exclusivement.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- MODULES MÉTIER / FEATURES SECTION          -->
+    <!-- ========================================== -->
+    <section id="features" class="py-20 bg-bglight border-b border-bordercolor">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+        
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span data-i18n="features.badge" class="text-xs font-black text-primary tracking-widest uppercase bg-primary-50 px-3.5 py-1 rounded-full">
+            Modules Métier Avian Precision
+          </span>
+          <h2 data-i18n="features.title" class="text-2xl sm:text-4xl font-extrabold text-darktext tracking-tight">
+            Une Couverture Fonctionnelle Complète & Scientifique
+          </h2>
+          <p data-i18n="features.subtitle" class="text-mutedtext text-sm sm:text-base leading-relaxed">
+            Chaque aspect de votre élevage est structuré avec rigueur pour optimiser votre sélection et la santé de vos oiseaux.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+          <div class="p-7 rounded-3xl bg-white border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-3.5">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary flex items-center justify-center text-xl font-bold">
+              <i class="fa-solid fa-dove"></i>
+            </div>
+            <h3 data-i18n="features.birds.title" class="text-base font-bold text-darktext">Gestion des Oiseaux & Baguage</h3>
+            <p data-i18n="features.birds.desc" class="text-sm text-mutedtext leading-relaxed">
+              Fiches individuelles détaillées, numéros de bagues officielles, phénotypes, mutations, statuts et passeport biologique.
+            </p>
+          </div>
+
+          <div class="p-7 rounded-3xl bg-white border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-3.5">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary flex items-center justify-center text-xl font-bold">
+              <i class="fa-solid fa-border-all"></i>
+            </div>
+            <h3 data-i18n="features.habitat.title" class="text-base font-bold text-darktext">Habitat, Cages & Volières</h3>
+            <p data-i18n="features.habitat.desc" class="text-sm text-mutedtext leading-relaxed">
+              Organisation spatiale des cages, batteries, volières collectives, zones de quarantaine et d'infirmerie.
+            </p>
+          </div>
+
+          <div class="p-7 rounded-3xl bg-white border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-3.5">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary flex items-center justify-center text-xl font-bold">
+              <i class="fa-solid fa-egg"></i>
+            </div>
+            <h3 data-i18n="features.breeding.title" class="text-base font-bold text-darktext">Reproduction & Nurserie</h3>
+            <p data-i18n="features.breeding.desc" class="text-sm text-mutedtext leading-relaxed">
+              Constitution des couples, suivi des pontes, mirage des œufs, calcul prédictif d'éclosion et élevage à la main (EAM).
+            </p>
+          </div>
+
+          <div class="p-7 rounded-3xl bg-white border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-3.5">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary flex items-center justify-center text-xl font-bold">
+              <i class="fa-solid fa-notes-medical"></i>
+            </div>
+            <h3 data-i18n="features.health.title" class="text-base font-bold text-darktext">Santé & Suivi Sanitaire</h3>
+            <p data-i18n="features.health.desc" class="text-sm text-mutedtext leading-relaxed">
+              Carnet de santé, historique des traitements par lot, posologies vétérinaires, dates de rappel et observations.
+            </p>
+          </div>
+
+          <div class="p-7 rounded-3xl bg-white border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-3.5">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary flex items-center justify-center text-xl font-bold">
+              <i class="fa-solid fa-dna"></i>
+            </div>
+            <h3 data-i18n="features.genetics.title" class="text-base font-bold text-darktext">Génétique & Consanguinité</h3>
+            <p data-i18n="features.genetics.desc" class="text-sm text-mutedtext leading-relaxed">
+              Arbres généalogiques multi-générations, calcul du coefficient de consanguinité de Wright et simulation d'accouplements.
+            </p>
+          </div>
+
+          <div class="p-7 rounded-3xl bg-white border border-bordercolor shadow-soft hover:shadow-md transition-all space-y-3.5">
+            <div class="w-12 h-12 rounded-xl bg-primary-100 text-primary flex items-center justify-center text-xl font-bold">
+              <i class="fa-solid fa-book-atlas"></i>
+            </div>
+            <h3 data-i18n="features.bio.title" class="text-base font-bold text-darktext">Référentiel Biologique</h3>
+            <p data-i18n="features.bio.desc" class="text-sm text-mutedtext leading-relaxed">
+              Base de connaissances intégrée sur les canaris et passereaux : durées d'incubation, constantes et standards officiels.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- PRICING & EDITIONS (4 Columns + Detailed Feature Table)  -->
+    <!-- ======================================================== -->
+    <section id="pricing" class="py-24 bg-white border-b border-bordercolor">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span data-i18n="pricing.badge" class="text-xs font-black text-primary tracking-widest uppercase bg-primary-50 px-3.5 py-1 rounded-full">
+            Tarification Claire & Transparente
+          </span>
+          <h2 data-i18n="pricing.title" class="text-2xl sm:text-4xl font-extrabold text-darktext tracking-tight">
+            Quatre Formules Adaptées à Votre Élevage
+          </h2>
+          <p data-i18n="pricing.subtitle" class="text-mutedtext text-sm sm:text-base leading-relaxed">
+            Activation locale instantanée par licence modulaire LMSE. Zéro abonnement caché.
+          </p>
+        </div>
+
+        <!-- 4 Pricing Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+          
+          <!-- 1. Community Card -->
+          <div class="p-7 rounded-3xl bg-bglight border border-bordercolor flex flex-col justify-between shadow-soft space-y-6">
+            <div class="space-y-4">
+              <div class="space-y-1">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500" data-i18n="pricing.free.name">COMMUNITY</div>
+                <div class="text-3xl font-black text-darktext" data-i18n="pricing.free.price">0 €</div>
+                <div class="text-xs text-primary font-bold" data-i18n="pricing.free.period">Gratuit pour toujours</div>
+                <p class="text-xs text-mutedtext pt-1 leading-relaxed" data-i18n="pricing.free.desc">Pour démarrer et gérer un petit cheptel en toute simplicité.</p>
+              </div>
+
+              <ul class="space-y-2.5 text-xs text-slate-800 pt-3 border-t border-slate-200">
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.free.f1">Jusqu'à 50 oiseaux gérés & baguage</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.free.f2">Suivi basique des cages et nichées</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.free.f3">Référentiel biologique avicole intégré</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.free.f4">Assistant IA (quota local de 10 req/jour)</span>
+                </li>
+                <li class="flex items-start gap-2 text-slate-400">
+                  <i class="fa-solid fa-minus text-slate-300 mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.free.not1">Calcul de consanguinité de Wright</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pt-2">
+              <a href="#download" data-i18n="pricing.free.btn" class="w-full block py-3 rounded-xl bg-white hover:bg-slate-100 text-darktext border border-slate-300 font-bold text-center text-xs transition">
+                Télécharger gratuitement
+              </a>
+            </div>
+          </div>
+
+          <!-- 2. Passion / Premium Card (FEATURED) -->
+          <div class="relative transform lg:scale-105 z-10 p-7 rounded-3xl bg-white border-2 border-primary shadow-featured flex flex-col justify-between space-y-6">
+            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-accent text-darktext font-black text-[10px] uppercase tracking-widest px-3.5 py-1 rounded-full shadow-md flex items-center gap-1 whitespace-nowrap">
+              <i class="fa-solid fa-star text-darktext text-xs"></i>
+              <span data-i18n="pricing.popularBadge">POPULAIRE</span>
+            </div>
+
+            <div class="space-y-4 pt-1">
+              <div class="space-y-1">
+                <div class="text-xs font-bold uppercase tracking-wider text-primary" data-i18n="pricing.premium.name">PASSION / PREMIUM</div>
+                <div class="text-3xl sm:text-4xl font-black text-primary" data-i18n="pricing.premium.price">49 €</div>
+                <div class="text-xs text-primary font-bold" data-i18n="pricing.premium.period">Licence Standard Annuelle</div>
+                <p class="text-xs text-slate-700 font-medium pt-1 leading-relaxed" data-i18n="pricing.premium.desc">Pour les éleveurs passionnés souhaitant un suivi génétique, sanitaire et biologique étendu.</p>
+              </div>
+
+              <ul class="space-y-2.5 text-xs text-slate-900 pt-3 border-t border-primary-100 font-medium">
+                <li class="flex items-start gap-2 font-bold">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.premium.f1">Toutes les fonctionnalités Community incluses</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.premium.f2">Nombre d'oiseaux & volières illimité</span>
+                </li>
+                <li class="flex items-start gap-2 font-bold text-primary">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.premium.f3">Calculateur de consanguinité de Wright</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.premium.f4">Contexte élevage complet dans l'IA (100 req/j)</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.premium.f5">Historique sanitaire détaillé & rappels</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.premium.f6">Activation sur 3 appareils simultanés</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pt-2">
+              <a href="#download" data-i18n="pricing.premium.btn" class="w-full block py-3.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-center text-xs shadow-md shadow-primary/25 transition">
+                Obtenir la licence Passion
+              </a>
+            </div>
+          </div>
+
+          <!-- 3. Enterprise / Pro Card -->
+          <div class="p-7 rounded-3xl bg-bglight border border-bordercolor flex flex-col justify-between shadow-soft space-y-6">
+            <div class="space-y-4">
+              <div class="space-y-1">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500" data-i18n="pricing.pro.name">ENTERPRISE / PRO</div>
+                <div class="text-3xl font-black text-darktext" data-i18n="pricing.pro.price">119 €</div>
+                <div class="text-xs text-primary font-bold" data-i18n="pricing.pro.period">Licence Complète Annuelle</div>
+                <p class="text-xs text-mutedtext pt-1 leading-relaxed" data-i18n="pricing.pro.desc">La solution complète pour les grands élevages, concours et clubs avicoles.</p>
+              </div>
+
+              <ul class="space-y-2.5 text-xs text-slate-800 pt-3 border-t border-slate-200">
+                <li class="flex items-start gap-2 font-bold">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.pro.f1">Toutes les fonctionnalités Passion incluses</span>
+                </li>
+                <li class="flex items-start gap-2 font-bold text-primary">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.pro.f2">Moteur Bird Intelligence complet (Scores & Alertes)</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.pro.f3">Généalogie profonde & simulation d'accouplements</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.pro.f4">Assistant IA local sans restriction de quota</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.pro.f5">Génération de rapports et passeports PDF</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.pro.f6">Activation sur 5 appareils & Support prioritaire</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pt-2">
+              <a href="#download" data-i18n="pricing.pro.btn" class="w-full block py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-center text-xs shadow-sm transition">
+                Obtenir la licence Enterprise
+              </a>
+            </div>
+          </div>
+
+          <!-- 4. Lifetime Card -->
+          <div class="p-7 rounded-3xl bg-bglight border border-bordercolor flex flex-col justify-between shadow-soft space-y-6">
+            <div class="space-y-4">
+              <div class="space-y-1">
+                <div class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-accent-dark bg-accent-light px-2 py-0.5 rounded">
+                  <i class="fa-solid fa-infinity"></i>
+                  <span data-i18n="pricing.lifetimeBadge">À VIE</span>
+                </div>
+                <div class="text-3xl font-black text-darktext mt-1" data-i18n="pricing.lifetime.price">249 €</div>
+                <div class="text-xs text-primary font-bold" data-i18n="pricing.lifetime.period">Paiement unique à vie</div>
+                <p class="text-xs text-mutedtext pt-1 leading-relaxed" data-i18n="pricing.lifetime.desc">Investissement souverain et définitif pour votre élevage sans renouvellement.</p>
+              </div>
+
+              <ul class="space-y-2.5 text-xs text-slate-800 pt-3 border-t border-slate-200">
+                <li class="flex items-start gap-2 font-bold text-darktext">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.lifetime.f1">Toutes les fonctionnalités Enterprise à vie</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.lifetime.f2">Mises à jour majeures incluses sans surcoût</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.lifetime.f3">5 appareils activés en simultané</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.lifetime.f4">Moteur Bird Intelligence & IA illimitée</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <i class="fa-solid fa-circle-check text-primary mt-0.5 shrink-0"></i>
+                  <span data-i18n="pricing.lifetime.f5">Support VIP dédié sous 24h ouvrées</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pt-2">
+              <a href="#download" data-i18n="pricing.lifetime.btn" class="w-full block py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-center text-xs shadow-md transition">
+                Obtenir l'accès à vie
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Detailed Feature Comparison Table (Under Cards) -->
+        <div class="space-y-6 pt-8">
+          <div class="text-center space-y-1">
+            <h3 data-i18n="pricing.comparisonTitle" class="text-xl sm:text-2xl font-bold text-darktext">Tableau Comparatif des Fonctionnalités</h3>
+            <p data-i18n="pricing.comparisonSubtitle" class="text-xs sm:text-sm text-mutedtext">Visualisez en un clin d'œil les capacités exactes de chaque édition de Bird Academy.</p>
+          </div>
+
+          <div class="overflow-x-auto rounded-3xl border border-bordercolor bg-white shadow-soft">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="border-b border-bordercolor bg-bglight">
+                  <th class="py-4 px-6 font-bold text-slate-800 w-2/5">Fonctionnalité Métier</th>
+                  <th class="py-4 px-4 font-bold text-slate-600 text-center w-[15%]">Community</th>
+                  <th class="py-4 px-4 font-bold text-primary text-center w-[15%] bg-primary-50">Passion</th>
+                  <th class="py-4 px-4 font-bold text-slate-800 text-center w-[15%]">Enterprise</th>
+                  <th class="py-4 px-4 font-bold text-accent-dark text-center w-[15%]">Lifetime</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-bordercolor">
+                <tr class="hover:bg-slate-50">
+                  <td class="py-3.5 px-6 font-medium text-slate-800">Nombre d'oiseaux gérés</td>
+                  <td class="py-3.5 px-4 text-center text-slate-600">50 max</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-primary bg-primary-50/50">Illimité</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-slate-800">Illimité</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-accent-dark">Illimité</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="py-3.5 px-6 font-medium text-slate-800">Calculateur de Consanguinité de Wright</td>
+                  <td class="py-3.5 px-4 text-center text-slate-300"><i class="fa-solid fa-minus"></i></td>
+                  <td class="py-3.5 px-4 text-center text-primary font-bold bg-primary-50/50"><i class="fa-solid fa-check"></i> Inclus</td>
+                  <td class="py-3.5 px-4 text-center text-slate-800 font-bold"><i class="fa-solid fa-check"></i> Avancé</td>
+                  <td class="py-3.5 px-4 text-center text-accent-dark font-bold"><i class="fa-solid fa-check"></i> Avancé</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="py-3.5 px-6 font-medium text-slate-800">Moteur Bird Intelligence (Alertes & Scores)</td>
+                  <td class="py-3.5 px-4 text-center text-slate-300"><i class="fa-solid fa-minus"></i></td>
+                  <td class="py-3.5 px-4 text-center text-slate-300 bg-primary-50/50"><i class="fa-solid fa-minus"></i></td>
+                  <td class="py-3.5 px-4 text-center text-emerald-600 font-bold"><i class="fa-solid fa-check"></i> Complet</td>
+                  <td class="py-3.5 px-4 text-center text-emerald-600 font-bold"><i class="fa-solid fa-check"></i> Complet</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="py-3.5 px-6 font-medium text-slate-800">Assistant IA Local Décentralisé</td>
+                  <td class="py-3.5 px-4 text-center text-slate-600">10 req/j</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-primary bg-primary-50/50">100 req/j</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-slate-800">Illimité</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-accent-dark">Illimité</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="py-3.5 px-6 font-medium text-slate-800">Appareils simultanés autorisés</td>
+                  <td class="py-3.5 px-4 text-center text-slate-600">1 poste</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-primary bg-primary-50/50">3 postes</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-slate-800">5 postes</td>
+                  <td class="py-3.5 px-4 text-center font-bold text-accent-dark">5 postes</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="py-3.5 px-6 font-medium text-slate-800">Passeports Biologiques & Rapports PDF</td>
+                  <td class="py-3.5 px-4 text-center text-slate-300"><i class="fa-solid fa-minus"></i></td>
+                  <td class="py-3.5 px-4 text-center text-primary bg-primary-50/50"><i class="fa-solid fa-check"></i> Standard</td>
+                  <td class="py-3.5 px-4 text-center text-slate-800 font-bold"><i class="fa-solid fa-check"></i> Illimité</td>
+                  <td class="py-3.5 px-4 text-center text-accent-dark font-bold"><i class="fa-solid fa-check"></i> Illimité</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="py-3.5 px-6 font-medium text-slate-800">Architecture 100% Hors-Ligne</td>
+                  <td class="py-3.5 px-4 text-center text-emerald-600 font-bold"><i class="fa-solid fa-check"></i></td>
+                  <td class="py-3.5 px-4 text-center text-emerald-600 font-bold bg-primary-50/50"><i class="fa-solid fa-check"></i></td>
+                  <td class="py-3.5 px-4 text-center text-emerald-600 font-bold"><i class="fa-solid fa-check"></i></td>
+                  <td class="py-3.5 px-4 text-center text-emerald-600 font-bold"><i class="fa-solid fa-check"></i></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- DOWNLOAD & ACTIVATION SECTION              -->
+    <!-- ========================================== -->
+    <section id="download" class="py-20 bg-bglight border-b border-bordercolor">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span data-i18n="download.badge" class="text-xs font-black text-primary tracking-widest uppercase bg-primary-50 px-3.5 py-1 rounded-full">
+            Distribution Officielle Certifiée
+          </span>
+          <h2 data-i18n="download.title" class="text-2xl sm:text-4xl font-extrabold text-darktext tracking-tight">
+            Télécharger Bird Academy
+          </h2>
+          <p data-i18n="download.subtitle" class="text-mutedtext text-sm sm:text-base leading-relaxed">
+            Application native rapide et sécurisée. Installation en moins de 2 minutes, fonctionne immédiatement 100% hors-ligne.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+          
+          <!-- 1. Windows Installer (PRIMARY CTA) -->
+          <div class="p-8 rounded-3xl bg-white border-2 border-primary shadow-featured flex flex-col justify-between space-y-6 relative">
+            <div class="absolute -top-3.5 right-6 bg-primary text-white text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+              Recommandé
+            </div>
+            <div class="space-y-4">
+              <div class="w-14 h-14 rounded-2xl bg-primary-100 text-primary flex items-center justify-center text-2xl">
+                <i class="fa-brands fa-windows"></i>
+              </div>
+              <div>
+                <h3 data-i18n="download.winInstTitle" class="text-lg font-bold text-darktext">Windows (Installateur Recommandé)</h3>
+                <p data-i18n="download.winInstDesc" class="text-xs sm:text-sm text-mutedtext mt-1.5 leading-relaxed">
+                  Package d'installation complet pour Windows 10 & 11 (64-bit) avec mises à jour automatiques.
+                </p>
+              </div>
+              <div class="text-xs text-slate-500 font-mono space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <div>Version : <strong>1.4.2-stable (x64)</strong></div>
+                <div>Taille : <strong>111.88 MB</strong></div>
+              </div>
+            </div>
+
+            <button type="button" id="btnWinInstaller" onclick="triggerDownload('windowsInstaller')" class="w-full py-4 px-4 bg-primary hover:bg-primary-dark text-white font-bold text-sm rounded-xl shadow-md shadow-primary/25 hover:shadow-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer">
+              <i class="fa-solid fa-download"></i>
+              <span data-i18n="download.winInstBtn">Télécharger pour Windows (Installateur .exe)</span>
+            </button>
+          </div>
+
+          <!-- 2. Windows Portable -->
+          <div class="p-8 rounded-3xl bg-white border border-bordercolor shadow-soft flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-file-zipper"></i>
+              </div>
+              <div>
+                <h3 data-i18n="download.winPortTitle" class="text-lg font-bold text-darktext">Windows (Version Portable)</h3>
+                <p data-i18n="download.winPortDesc" class="text-xs sm:text-sm text-mutedtext mt-1.5 leading-relaxed">
+                  Exécutable autonome sans installation requise, idéal pour clé USB.
+                </p>
+              </div>
+              <div class="text-xs text-slate-500 font-mono space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <div>Version : <strong>1.4.2-portable</strong></div>
+                <div>Taille : <strong>111.24 MB</strong></div>
+              </div>
+            </div>
+
+            <button type="button" id="btnWinPortable" onclick="triggerDownload('windowsPortable')" class="w-full py-3.5 px-4 bg-slate-100 hover:bg-slate-200 text-darktext border border-slate-300 font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-download text-xs text-slate-500"></i>
+              <span data-i18n="download.winPortBtn">Télécharger la version portable (.zip)</span>
+            </button>
+          </div>
+
+          <!-- 3. Android APK -->
+          <div class="p-8 rounded-3xl bg-white border border-bordercolor shadow-soft flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-2xl">
+                <i class="fa-brands fa-android"></i>
+              </div>
+              <div>
+                <h3 data-i18n="download.androidTitle" class="text-lg font-bold text-darktext">Android (Package APK)</h3>
+                <p data-i18n="download.androidDesc" class="text-xs sm:text-sm text-mutedtext mt-1.5 leading-relaxed">
+                  Package d'installation directe pour tablettes et smartphones Android (8.0+).
+                </p>
+              </div>
+              <div class="text-xs text-slate-500 font-mono space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <div>Version : <strong>1.4.2 (ARM64)</strong></div>
+                <div>Taille : <strong>4.95 MB</strong></div>
+              </div>
+            </div>
+
+            <button type="button" id="btnAndroidApk" onclick="triggerDownload('androidApk')" class="w-full py-3.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-download text-xs"></i>
+              <span data-i18n="download.androidBtn">Télécharger l'APK Android (.apk)</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Collapsible SHA-256 Drawer -->
+        <div class="max-w-3xl mx-auto pt-2 text-center">
+          <button 
+            type="button" 
+            id="toggleShaBtn"
+            onclick="toggleShaDrawer()" 
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold border border-slate-300 transition-colors cursor-pointer"
+            aria-expanded="false"
+            aria-controls="shaDrawer"
+          >
+            <i class="fa-solid fa-fingerprint text-primary text-sm"></i>
+            <span data-i18n="download.shaToggle">Vérifier l'intégrité des fichiers (Empreintes SHA-256)</span>
+            <i id="shaChevron" class="fa-solid fa-chevron-down text-[10px] ml-1 transition-transform"></i>
+          </button>
+
+          <div id="shaDrawer" class="hidden mt-6 text-start p-6 rounded-2xl bg-slate-900 text-white border border-slate-800 space-y-4">
+            <p data-i18n="download.shaDesc" class="text-xs text-slate-400 font-sans">
+              Comparez l'empreinte cryptographique de votre fichier téléchargé avec la valeur officielle scellée :
+            </p>
+            
+            <div class="space-y-3 font-mono text-xs">
+              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <div class="text-[11px] text-slate-400 font-sans font-bold">Windows Setup (exe)</div>
+                  <div class="text-accent text-[11px] break-all select-all">1E965BCAA4C07EEBCEC64D248A2568B91F5B1F7E28146C29187EA675708E4813</div>
+                </div>
+                <button type="button" onclick="copyHash('1E965BCAA4C07EEBCEC64D248A2568B91F5B1F7E28146C29187EA675708E4813', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs shrink-0 cursor-pointer">
+                  <i class="fa-solid fa-copy mr-1"></i> Copier
+                </button>
+              </div>
+
+              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <div class="text-[11px] text-slate-400 font-sans font-bold">Windows Portable (zip)</div>
+                  <div class="text-accent text-[11px] break-all select-all">1701FB75AF19280E0A346B6F3525609516E0E801177916480E1ECB8311479A92</div>
+                </div>
+                <button type="button" onclick="copyHash('1701FB75AF19280E0A346B6F3525609516E0E801177916480E1ECB8311479A92', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs shrink-0 cursor-pointer">
+                  <i class="fa-solid fa-copy mr-1"></i> Copier
+                </button>
+              </div>
+
+              <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <div class="text-[11px] text-slate-400 font-sans font-bold">Android Package (apk)</div>
+                  <div class="text-accent text-[11px] break-all select-all">8C2ACE49FA73191AB90B26615BBDD2CE591D67D16051496FE995ABC668498AC9</div>
+                </div>
+                <button type="button" onclick="copyHash('8C2ACE49FA73191AB90B26615BBDD2CE591D67D16051496FE995ABC668498AC9', this)" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs shrink-0 cursor-pointer">
+                  <i class="fa-solid fa-copy mr-1"></i> Copier
+                </button>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-slate-400 font-sans pt-1">
+              💡 <span data-i18n="download.certUtilTip">Commande PowerShell : CertUtil -hashfile BirdAcademy-Setup.exe SHA256</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- CENTRE DE SUPPORT (Double Colonne & Encart de Confiance) -->
+    <!-- ======================================================== -->
+    <section id="support" class="py-20 bg-white border-b border-bordercolor">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+        
+        <div class="text-center max-w-3xl mx-auto space-y-3">
+          <span data-i18n="support.badge" class="text-xs font-black text-primary tracking-widest uppercase bg-primary-50 px-3.5 py-1 rounded-full">
+            Centre de Support Avian Precision
+          </span>
+          <h2 data-i18n="support.title" class="text-2xl sm:text-4xl font-extrabold text-darktext tracking-tight">
+            Assistance Technique & Accompagnement
+          </h2>
+          <p data-i18n="support.subtitle" class="text-mutedtext text-sm sm:text-base leading-relaxed">
+            Une équipe spécialisée en zootechnie et technologie avicole à votre écoute.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          
+          <!-- Left Column: Trust & Reassurance Block -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="p-8 rounded-3xl bg-bglight border border-bordercolor shadow-soft space-y-5">
+              
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent-light text-accent-dark text-xs font-black border border-accent/40">
+                <i class="fa-solid fa-clock-rotate-left text-xs"></i>
+                <span data-i18n="support.trustBadge">⚡ Temps de réponse garanti < 24h ouvrées</span>
+              </div>
+
+              <h3 data-i18n="support.trustTitle" class="text-lg font-bold text-darktext">
+                Engagement de Service & Confidentialité
+              </h3>
+
+              <ul class="space-y-4 text-sm text-slate-700">
+                <li class="flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-primary-100 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                    <i class="fa-solid fa-book-open text-sm"></i>
+                  </div>
+                  <div>
+                    <strong data-i18n="support.trust1Title" class="text-darktext font-bold block">Documentation & Guides Pratiques</strong>
+                    <span data-i18n="support.trust1Desc" class="text-xs text-mutedtext">Accédez aux fiches d'installation, tutoriels de baguage et protocoles génétiques.</span>
+                  </div>
+                </li>
+
+                <li class="flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-primary-100 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                    <i class="fa-solid fa-shield-halved text-sm"></i>
+                  </div>
+                  <div>
+                    <strong data-i18n="support.trust2Title" class="text-darktext font-bold block">Confidentialité Respectée</strong>
+                    <span data-i18n="support.trust2Desc" class="text-xs text-mutedtext">Vos coordonnées et messages restent strictement confidentiels sans démarchage.</span>
+                  </div>
+                </li>
+
+                <li class="flex items-start gap-3">
+                  <div class="w-9 h-9 rounded-xl bg-primary-100 text-primary flex items-center justify-center shrink-0 mt-0.5">
+                    <i class="fa-solid fa-user-gear text-sm"></i>
+                  </div>
+                  <div>
+                    <strong data-i18n="support.trust3Title" class="text-darktext font-bold block">Assistance Dédiée Aviculture</strong>
+                    <span data-i18n="support.trust3Desc" class="text-xs text-mutedtext">Support assuré par des passionnés qui comprennent les réalités du terrain.</span>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="pt-3 border-t border-slate-200">
+                <div class="text-xs text-mutedtext">Email direct du support :</div>
+                <div class="text-sm font-mono font-bold text-primary">contact@birdacademy.internal</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Dual Column Contact Form -->
+          <div class="lg:col-span-7">
+            <form id="contactForm" onsubmit="handleContactSubmit(event)" class="p-8 sm:p-10 rounded-3xl bg-white border border-bordercolor shadow-soft space-y-5">
+              
+              <div id="formSuccessAlert" class="hidden p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm font-semibold flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+                <span data-i18n="support.formSuccess">Votre message a été transmis avec succès. Notre équipe vous répondra sous 24h ouvrées.</span>
+              </div>
+
+              <!-- Double Column Contact Inputs -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="space-y-1.5">
+                  <label for="contactName" data-i18n="support.formName" class="text-xs font-bold text-slate-800 block">Votre Nom complet *</label>
+                  <input type="text" id="contactName" required placeholder="Ex: Jean Dupont" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-bglight transition">
+                </div>
+
+                <div class="space-y-1.5">
+                  <label for="contactEmail" data-i18n="support.formEmail" class="text-xs font-bold text-slate-800 block">Votre Adresse Email *</label>
+                  <input type="email" id="contactEmail" required placeholder="Ex: jean@exemple.fr" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-bglight transition">
+                </div>
+              </div>
+
+              <!-- Subject & Category -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div class="space-y-1.5">
+                  <label for="contactCategory" data-i18n="support.formCategory" class="text-xs font-bold text-slate-800 block">Catégorie de la demande *</label>
+                  <select id="contactCategory" required class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-bglight transition">
+                    <option value="licensing">Licences & Activation</option>
+                    <option value="genetics">Génétique & Zootechnie</option>
+                    <option value="security">Sécurité & Données</option>
+                    <option value="other">Autre demande</option>
+                  </select>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label for="contactSubject" data-i18n="support.formSubject" class="text-xs font-bold text-slate-800 block">Objet du message *</label>
+                  <input type="text" id="contactSubject" required placeholder="Ex: Question sur la consanguinité de Wright" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-bglight transition">
+                </div>
+              </div>
+
+              <div class="space-y-1.5">
+                <label for="contactMessage" data-i18n="support.formMsg" class="text-xs font-bold text-slate-800 block">Description détaillée *</label>
+                <textarea id="contactMessage" rows="4" required placeholder="Expliquez en détail votre besoin ou question..." class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-bglight transition"></textarea>
+              </div>
+
+              <button type="submit" class="w-full py-4 bg-primary hover:bg-primary-dark text-white font-bold text-sm rounded-xl shadow-md shadow-primary/20 hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span data-i18n="support.formSubmit">Envoyer ma demande</span>
+              </button>
+
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- FAQ ACCORDION SECTION (Filterable & 800px Width)        -->
+    <!-- ======================================================== -->
+    <section id="faq" class="py-20 bg-bglight">
+      <div class="max-w-[800px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        
+        <div class="text-center space-y-3">
+          <span data-i18n="faq.badge" class="text-xs font-black text-primary tracking-widest uppercase bg-primary-50 px-3.5 py-1 rounded-full">
+            Foire Aux Questions
+          </span>
+          <h2 data-i18n="faq.title" class="text-2xl sm:text-4xl font-extrabold text-darktext tracking-tight">
+            Questions Fréquemment Posées
+          </h2>
+          <p data-i18n="faq.subtitle" class="text-mutedtext text-sm sm:text-base leading-relaxed">
+            Retrouvez toutes les réponses claires sur le fonctionnement, les licences et la sécurité de Bird Academy.
+          </p>
+        </div>
+
+        <!-- Filter Category Tabs -->
+        <div class="flex flex-wrap items-center justify-center gap-2 pb-2">
+          <button type="button" onclick="filterFaq('all', this)" class="faq-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-primary text-white shadow-sm transition">
+            <span data-i18n="faq.catAll">Toutes</span>
+          </button>
+          <button type="button" onclick="filterFaq('security', this)" class="faq-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition">
+            <span data-i18n="faq.catSecurity">Sécurité & Données</span>
+          </button>
+          <button type="button" onclick="filterFaq('licensing', this)" class="faq-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition">
+            <span data-i18n="faq.catLicensing">Licences & Activation</span>
+          </button>
+          <button type="button" onclick="filterFaq('genetics', this)" class="faq-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition">
+            <span data-i18n="faq.catGenetics">Génétique & Zootechnie</span>
+          </button>
+        </div>
+
+        <!-- Accordion List -->
+        <div class="space-y-4">
+          
+          <!-- FAQ 1 (Offline / Security) -->
+          <div class="faq-card border border-bordercolor rounded-2xl overflow-hidden shadow-sm transition-all hover:border-slate-300 bg-white" data-faq-cat="security">
+            <button 
+              type="button"
+              onclick="toggleFaq(1)" 
+              class="w-full flex items-center justify-between p-5 sm:p-6 text-start font-bold text-darktext text-sm sm:text-base bg-white hover:bg-slate-50 transition-colors"
+              aria-expanded="false"
+              aria-controls="faq-content-1"
+            >
+              <span data-i18n="faq.q1">Bird Academy nécessite-t-elle une connexion Internet ?</span>
+              <i id="faq-icon-1" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform duration-200 shrink-0 ml-3"></i>
+            </button>
+            <div id="faq-content-1" class="hidden p-5 sm:p-6 text-sm text-slate-700 bg-bglight leading-relaxed border-t border-bordercolor">
+              <span data-i18n="faq.a1">Non. Bird Academy est conçue selon l'architecture offline-first. Vos données, fiches d'oiseaux, calculs génétiques et IA s'exécutent localement sur votre appareil sans aucune connexion requise.</span>
+            </div>
+          </div>
+
+          <!-- FAQ 2 (Data / Security) -->
+          <div class="faq-card border border-bordercolor rounded-2xl overflow-hidden shadow-sm transition-all hover:border-slate-300 bg-white" data-faq-cat="security">
+            <button 
+              type="button"
+              onclick="toggleFaq(2)" 
+              class="w-full flex items-center justify-between p-5 sm:p-6 text-start font-bold text-darktext text-sm sm:text-base bg-white hover:bg-slate-50 transition-colors"
+              aria-expanded="false"
+              aria-controls="faq-content-2"
+            >
+              <span data-i18n="faq.q2">Où sont stockées les données de mes oiseaux et de mon élevage ?</span>
+              <i id="faq-icon-2" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform duration-200 shrink-0 ml-3"></i>
+            </button>
+            <div id="faq-content-2" class="hidden p-5 sm:p-6 text-sm text-slate-700 bg-bglight leading-relaxed border-t border-bordercolor">
+              <span data-i18n="faq.a2">Vos données résident exclusivement sur le disque dur de votre ordinateur ou la mémoire locale de votre appareil Android dans une base de données SQLite scellée. Aucune donnée n'est envoyée dans le cloud.</span>
+            </div>
+          </div>
+
+          <!-- FAQ 3 (Genetics) -->
+          <div class="faq-card border border-bordercolor rounded-2xl overflow-hidden shadow-sm transition-all hover:border-slate-300 bg-white" data-faq-cat="genetics">
+            <button 
+              type="button"
+              onclick="toggleFaq(3)" 
+              class="w-full flex items-center justify-between p-5 sm:p-6 text-start font-bold text-darktext text-sm sm:text-base bg-white hover:bg-slate-50 transition-colors"
+              aria-expanded="false"
+              aria-controls="faq-content-3"
+            >
+              <span data-i18n="faq.q3">Qu'est-ce que le calcul de consanguinité de Wright ?</span>
+              <i id="faq-icon-3" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform duration-200 shrink-0 ml-3"></i>
+            </button>
+            <div id="faq-content-3" class="hidden p-5 sm:p-6 text-sm text-slate-700 bg-bglight leading-relaxed border-t border-bordercolor">
+              <span data-i18n="faq.a3">C'est la méthode scientifique zootechnique standardisée qui calcule avec exactitude le coefficient de parenté entre reproducteurs pour sécuriser vos accouplements et préserver la vitalité génétique de votre cheptel.</span>
+            </div>
+          </div>
+
+          <!-- FAQ 4 (Licensing) -->
+          <div class="faq-card border border-bordercolor rounded-2xl overflow-hidden shadow-sm transition-all hover:border-slate-300 bg-white" data-faq-cat="licensing">
+            <button 
+              type="button"
+              onclick="toggleFaq(4)" 
+              class="w-full flex items-center justify-between p-5 sm:p-6 text-start font-bold text-darktext text-sm sm:text-base bg-white hover:bg-slate-50 transition-colors"
+              aria-expanded="false"
+              aria-controls="faq-content-4"
+            >
+              <span data-i18n="faq.q4">Mes données d'élevage sont-elles conservées si je change d'édition ?</span>
+              <i id="faq-icon-4" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform duration-200 shrink-0 ml-3"></i>
+            </button>
+            <div id="faq-content-4" class="hidden p-5 sm:p-6 text-sm text-slate-700 bg-bglight leading-relaxed border-t border-bordercolor">
+              <span data-i18n="faq.a4">Oui, à 100%. Le système de licence modulaire LMSE débloque instantanément les fonctionnalités PREMIUM ou PRO sur votre base locale sans modifier ni altérer vos historiques.</span>
+            </div>
+          </div>
+
+          <!-- FAQ 5 (Licensing) -->
+          <div class="faq-card border border-bordercolor rounded-2xl overflow-hidden shadow-sm transition-all hover:border-slate-300 bg-white" data-faq-cat="licensing">
+            <button 
+              type="button"
+              onclick="toggleFaq(5)" 
+              class="w-full flex items-center justify-between p-5 sm:p-6 text-start font-bold text-darktext text-sm sm:text-base bg-white hover:bg-slate-50 transition-colors"
+              aria-expanded="false"
+              aria-controls="faq-content-5"
+            >
+              <span data-i18n="faq.q5">Comment fonctionne l'activation par licence LMSE ?</span>
+              <i id="faq-icon-5" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform duration-200 shrink-0 ml-3"></i>
+            </button>
+            <div id="faq-content-5" class="hidden p-5 sm:p-6 text-sm text-slate-700 bg-bglight leading-relaxed border-t border-bordercolor">
+              <span data-i18n="faq.a5">Lors de votre commande, vous recevez un kit de licence chiffré comprenant un fichier .lmse, une clé textuelle et un QR code. L'activation se fait localement en 1 clic sans compte cloud.</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- FOOTER COMPONENT                           -->
+  <!-- ========================================== -->
+  <footer class="bg-slate-900 text-white py-14 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
+        
+        <!-- Brand Info -->
+        <div class="space-y-4 md:col-span-2">
+          <div class="flex items-center gap-3">
+            <img
+              src="/assets/images/logo-icon.png"
+              alt="Bird Academy"
+              class="w-9 h-9 object-contain inline-block"
+              onerror="this.onerror=null; this.src='../public/assets/images/logo-icon.png';"
+            />
+            <div>
+              <span class="text-xl font-bold tracking-tight block">Bird Academy</span>
+              <span class="text-[10px] font-mono text-accent uppercase tracking-widest">AVIAN PRECISION • BREEDING ERP</span>
+            </div>
+          </div>
+          <p data-i18n="footer.disclaimer" class="text-sm text-slate-400 max-w-md leading-relaxed">
+            Logiciel professionnel indépendant conçu selon les normes zootechniques et les standards biologiques avicoles.
+          </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold text-slate-300 uppercase tracking-widest">Navigation</div>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><a href="#features" class="hover:text-white transition-colors">Fonctionnalités</a></li>
+            <li><a href="#security" class="hover:text-white transition-colors">Sécurité & Technologie</a></li>
+            <li><a href="#pricing" class="hover:text-white transition-colors">Éditions & Tarifs</a></li>
+            <li><a href="#download" class="hover:text-white transition-colors">Téléchargement</a></li>
+            <li><a href="#support" class="hover:text-white transition-colors">Support</a></li>
+            <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+          </ul>
+        </div>
+
+        <!-- Support Info -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold text-slate-300 uppercase tracking-widest">Support & Contact</div>
+          <div class="text-sm text-slate-400 space-y-1">
+            <div data-i18n="footer.techContact">Support technique certifié :</div>
+            <div class="font-mono text-accent font-bold" id="footerSupportEmail">contact@birdacademy.internal</div>
+            <div class="text-xs text-slate-500 pt-1">⚡ Temps de réponse < 24h ouvrées</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Copyright & Version -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div data-i18n="footer.rights">© 2026 Bird Academy — Identité Avian Precision. Tous droits réservés.</div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span data-i18n="footer.versionTag">Version Stable 1.4.2</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- MOBILE BOTTOM NAVIGATION BAR (Avian Precision Tactile)  -->
+  <!-- ======================================================== -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-bordercolor px-2 py-2 flex items-center justify-around shadow-2xl" aria-label="Navigation Mobile Tactile">
+    <a href="#home" class="flex flex-col items-center gap-1 text-slate-600 hover:text-primary py-1 px-3 rounded-xl transition text-center focus-visible:outline-none">
+      <i class="fa-solid fa-dove text-base"></i>
+      <span class="text-[10px] font-bold">Oiseaux</span>
+    </a>
+    <a href="#features" class="flex flex-col items-center gap-1 text-slate-600 hover:text-primary py-1 px-3 rounded-xl transition text-center focus-visible:outline-none">
+      <i class="fa-solid fa-border-all text-base"></i>
+      <span class="text-[10px] font-bold">Suivi</span>
+    </a>
+    <a href="#pricing" class="flex flex-col items-center gap-1 text-primary py-1 px-3 rounded-xl transition text-center focus-visible:outline-none">
+      <i class="fa-solid fa-dna text-base text-primary"></i>
+      <span class="text-[10px] font-extrabold text-primary">Génétique</span>
+    </a>
+    <a href="#support" class="flex flex-col items-center gap-1 text-slate-600 hover:text-primary py-1 px-3 rounded-xl transition text-center focus-visible:outline-none">
+      <i class="fa-solid fa-user-shield text-base"></i>
+      <span class="text-[10px] font-bold">Profil</span>
+    </a>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- RUNTIME CONTROLLER JAVASCRIPT              -->
+  <!-- ========================================== -->
+  <script>
+    // i18n Translation Engine
+    function updateDOM(locale) {
+      const data = window.I18N[locale];
+      if (!data) return;
+
+      // Update HTML direction and language attributes (TC-WEB-013 for Arabic RTL)
+      document.documentElement.lang = locale;
+      document.documentElement.dir = data.dir || 'ltr';
+
+      // Update elements with data-i18n attribute
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const keys = key.split('.');
+        let val = data;
+        for (const k of keys) {
+          if (val && val[k] !== undefined) {
+            val = val[k];
+          } else {
+            val = null;
+            break;
+          }
+        }
+        if (val !== null && val !== undefined) {
+          el.textContent = val;
+        }
+      });
+    }
+
+    function changeLanguage(locale) {
+      window.SITE_CONFIG.currentLocale = locale;
+      const desktopSelect = document.getElementById('langSelect');
+      const mobileSelect = document.getElementById('mobileLangSelect');
+      if (desktopSelect) desktopSelect.value = locale;
+      if (mobileSelect) mobileSelect.value = locale;
+      updateDOM(locale);
+    }
+
+    // Mobile Menu Drawer Toggle
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const btn = document.getElementById('mobileMenuBtn');
+      if (!menu || !btn) return;
+      const isHidden = menu.classList.contains('hidden');
+      if (isHidden) {
+        menu.classList.remove('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        menu.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    // FAQ Filter Logic
+    function filterFaq(category, btnElement) {
+      document.querySelectorAll('.faq-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+      });
+      if (btnElement) {
+        btnElement.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-300');
+        btnElement.classList.add('bg-primary', 'text-white');
+      }
+
+      document.querySelectorAll('.faq-card').forEach(card => {
+        const cat = card.getAttribute('data-faq-cat');
+        if (category === 'all' || cat === category) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // FAQ Accordion Toggle
+    function toggleFaq(id) {
+      const content = document.getElementById(`faq-content-${id}`);
+      const icon = document.getElementById(`faq-icon-${id}`);
+      if (!content || !icon) return;
+      
+      const isHidden = content.classList.contains('hidden');
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        content.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    // SHA-256 Drawer Toggle
+    function toggleShaDrawer() {
+      const drawer = document.getElementById('shaDrawer');
+      const chevron = document.getElementById('shaChevron');
+      const btn = document.getElementById('toggleShaBtn');
+      if (!drawer || !chevron) return;
+
+      const isHidden = drawer.classList.contains('hidden');
+      if (isHidden) {
+        drawer.classList.remove('hidden');
+        chevron.classList.add('rotate-180');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+      } else {
+        drawer.classList.add('hidden');
+        chevron.classList.remove('rotate-180');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    // Copy Hash to Clipboard
+    function copyHash(hash, btnElement) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(hash).then(() => {
+          const origHtml = btnElement.innerHTML;
+          btnElement.innerHTML = '<i class="fa-solid fa-check text-accent mr-1"></i> Copié !';
+          setTimeout(() => {
+            btnElement.innerHTML = origHtml;
+          }, 2000);
+        });
+      }
+    }
+
+    // Configurable Download Trigger
+    function triggerDownload(type) {
+      const url = window.SITE_CONFIG.downloads[type];
+      if (url) {
+        console.log(`[BIRD ACADEMY - AVIAN PRECISION] Téléchargement déclenché vers : ${url}`);
+        window.open(url, '_blank');
+      }
+    }
+
+    // Contact Form Handler
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      const successAlert = document.getElementById('formSuccessAlert');
+      if (successAlert) {
+        successAlert.classList.remove('hidden');
+        document.getElementById('contactMessage').value = '';
+        setTimeout(() => {
+          successAlert.classList.add('hidden');
+        }, 5000);
+      }
+    }
+
+    // Initial startup
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sync Support Email from config
+      const emailEl = document.getElementById('footerSupportEmail');
+      if (emailEl) emailEl.textContent = window.SITE_CONFIG.supportEmail;
+
+      // Apply initial FR language
+      updateDOM('fr');
+    });
+  </script>
+</body>
+</html>

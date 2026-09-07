@@ -1,0 +1,6 @@
+{
+  "name": "Bird Academy",
+  "description": "Application complète de gestion et de suivi pour l'élevage d'oiseaux domestiques (cheptel, couples, reproductions, pontes, santé, dépenses et ventes).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

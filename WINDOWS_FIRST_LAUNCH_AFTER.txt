@@ -1,0 +1,22 @@
+﻿==================================================================
+ BIRD ACADEMY ENTERPRISE -- SNAPSHOT APRES RESET QA (CLEAN STATE) 
+ Date: 2026-08-21 23:22:22
+==================================================================
+
+1. CHEMINS USERDATA PURGES :
+  - Target Canonical (%APPDATA%\Bird Academy Enterprise): Present=False
+  - Legacy 1 (%APPDATA%\react-example): Present=False
+  - Legacy 2 (%APPDATA%\Bird Academy): Present=False
+
+2. ETAT DU NOUVEAU CYCLE FIRST LAUNCH :
+  - Licence active dans localStorage : Absente (0)
+  - wizard_completed dans localStorage : Absent (False)
+  - Base de donnees eleveur : Vierge (0 oiseaux, 0 cages, 0 couples)
+
+3. PROCESSUS BIRD ACADEMY ACTIFS :
+  - Aucun processus actif (0)
+
+4. EMPLACEMENT DE LA SAUVEGARDE QA :
+  - C:\Users\PC\AppData\Local\Temp\BirdAcademy_QA_Backup_20260821_232222
+
+==================================================================

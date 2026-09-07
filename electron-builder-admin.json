@@ -1,0 +1,33 @@
+{
+  "appId": "com.birdacademy.admin",
+  "productName": "Bird Academy - Admin Center",
+  "directories": {
+    "output": "release-admin"
+  },
+  "files": [
+    "dist/**/*",
+    "dist_admin/**/*",
+    "electron-main.cjs"
+  ],
+  "win": {
+    "target": [
+      "nsis",
+      "portable"
+    ],
+    "icon": "build/icons/icon-admin.ico",
+    "executableName": "Bird-Academy-Admin"
+  },
+  "nsis": {
+    "oneClick": true,
+    "perMachine": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": false,
+    "deleteAppDataOnUninstall": false,
+    "installerIcon": "build/icons/icon-admin.ico",
+    "uninstallerIcon": "build/icons/icon-admin.ico",
+    "include": "packaging/installer-admin.nsh"
+  },
+  "extraMetadata": {
+    "name": "bird-academy-admin"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "appId": "com.birdacademy.breeder",
+  "productName": "Bird Academy - Avian ERP",
+  "directories": {
+    "output": "release-user"
+  },
+  "files": [
+    "dist/**/*",
+    "dist_user/**/*",
+    "electron-main.cjs"
+  ],
+  "win": {
+    "target": [
+      "nsis",
+      "portable"
+    ],
+    "icon": "build/icons/icon-user.ico",
+    "executableName": "Bird-Academy-User"
+  },
+  "nsis": {
+    "oneClick": true,
+    "perMachine": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": false,
+    "deleteAppDataOnUninstall": false,
+    "installerIcon": "build/icons/icon-user.ico",
+    "uninstallerIcon": "build/icons/icon-user.ico",
+    "include": "packaging/installer.nsh"
+  },
+  "extraMetadata": {
+    "name": "bird-academy-user"
+  }
+}
