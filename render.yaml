@@ -21,8 +21,8 @@ services:
         value: production
       # Server-side secrets (Configured in Render dashboard, NEVER in repository)
       - key: LMSE_PRIVATE_SIGNING_KEY
-        generateValue: false # Set manually in Render Dashboard
+        sync: false
       - key: LMSE_SEED_SECRET
-        generateValue: false # Set manually in Render Dashboard
+        sync: false
     healthCheckPath: /api/health
     autoDeploy: true
