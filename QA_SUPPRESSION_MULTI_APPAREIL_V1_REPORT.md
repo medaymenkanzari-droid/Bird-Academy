@@ -270,9 +270,7 @@ Pour une future version majeure V2.x (si le produit décide d'étendre son offre
 
 ## 25. CONCLUSION ET VERDICT FINAL
 
-==================================================  
-VERDICT FINAL : SUCCÈS TOTAL — CONFORME V1.X  
-==================================================  
+### VERDICT FINAL : SUCCÈS TOTAL — CONFORME V1.X
 
 - Statut de la mission : VALIDÉ  
 - Modèle d'installation : 100% Single-Device  
@@ -283,5 +281,4 @@ VERDICT FINAL : SUCCÈS TOTAL — CONFORME V1.X
 - Tests dédiés : 38/38 Réussis (100%)  
 - Tests de non-régression : 120/120 Réussis (100%)  
 - Build de production : Succès  
-- Prêt pour production : OUI  
-==================================================  
+- Prêt pour production : OUI

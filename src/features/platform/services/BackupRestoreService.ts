@@ -16,6 +16,7 @@ import { ActivityLogger, EventType } from '../../../storage/ActivityLogger';
 import { BackupEncryptionError, BackupEncryptionService } from './BackupEncryptionService';
 import { BackupCompressionService } from './BackupCompressionService';
 import { BackupDataRegistry, ExtendedBackupData } from './BackupDataRegistry';
+import { BUILD_VERSION_NAME } from '../../../config/appMode';
 
 interface RestoreSnapshot {
   birds: ReturnType<typeof BirdRepository.getAll>;
@@ -33,7 +34,33 @@ interface RestoreSnapshot {
 
 export class BackupRestoreService {
   private static HISTORY_KEY = 'platform_backup_history';
-  private static APP_VERSION = '1.2';
+  
+  /**
+   * Version officielle du schéma / format de fichier de sauvegarde.
+   * Note : distinct de la version applicative (BUILD_VERSION_NAME = '1.3.6-RC4').
+   */
+  public static readonly BACKUP_SCHEMA_VERSION = '1.2';
+
+  /**
+   * @deprecated Utiliser BACKUP_SCHEMA_VERSION pour le format de sauvegarde ou BUILD_VERSION_NAME pour l'application.
+   */
+  public static get APP_VERSION(): string {
+    return this.BACKUP_SCHEMA_VERSION;
+  }
+
+  /**
+   * Retourne la version officielle du schéma de sauvegarde
+   */
+  static getBackupSchemaVersion(): string {
+    return this.BACKUP_SCHEMA_VERSION;
+  }
+
+  /**
+   * Retourne la version officielle de l'application
+   */
+  static getApplicationVersion(): string {
+    return BUILD_VERSION_NAME;
+  }
 
   static getBackupHistory(): BackupHistoryEntry[] {
     return appStorage.getItem<BackupHistoryEntry[]>(this.HISTORY_KEY, []);
@@ -55,6 +82,8 @@ export class BackupRestoreService {
       const exportAll = type === 'full';
       rawDb.__backup = {
         schema: 'bird-academy-backup',
+        schemaVersion: this.BACKUP_SCHEMA_VERSION,
+        appVersion: BUILD_VERSION_NAME,
         type,
         includedTables: exportAll
           ? ['birds', 'cages', 'couples', 'repro', 'sante', 'alim', 'finance']
@@ -105,7 +134,7 @@ export class BackupRestoreService {
         size,
         checksum,
         comments: comments || (type === 'full' ? 'Sauvegarde totale manuelle' : 'Sauvegarde sélective'),
-        version: this.APP_VERSION,
+        version: this.BACKUP_SCHEMA_VERSION,
         type,
         tables: exportAll ? ['all'] : selectedTables,
         isEncrypted: !!options.encrypt,
@@ -202,9 +231,9 @@ export class BackupRestoreService {
       }
 
       // Check version compatibility
-      if (fileVersion !== this.APP_VERSION) {
-        issues.push(`Version divergente : fichier v${fileVersion} importé vers plateforme v${this.APP_VERSION}.`);
-        if (parseFloat(fileVersion) > parseFloat(this.APP_VERSION)) {
+      if (fileVersion !== this.BACKUP_SCHEMA_VERSION) {
+        issues.push(`Version divergente : fichier schéma v${fileVersion} importé vers plateforme (schéma supporté : v${this.BACKUP_SCHEMA_VERSION}).`);
+        if (parseFloat(fileVersion) > parseFloat(this.BACKUP_SCHEMA_VERSION)) {
           isCompatible = false;
           issues.push("Incompatibilité critique : Impossible d'importer une sauvegarde d'une version ultérieure.");
         }

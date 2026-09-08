@@ -286,8 +286,7 @@ export class WebOrderCheckoutService {
     const checksumHash = await CryptoService.sha256(`LMSE-${tag}-${s1}-${s2}`);
     const s3 = checksumHash.slice(0, 4).toUpperCase();
     const licenseKey = `LMSE-${tag}-${s1}-${s2}-${s3}`;
-
-    const maxDevices = offer.maxDevices || (offer.tier === 'PRO' ? 25 : (offer.tier === 'PREMIUM' ? 5 : 3));
+    const maxDevices = offer.maxDevices || 1;
     const tierFeatureTag = `tier:${offer.tier.toLowerCase()}`;
     const baseFeatures = (offer.features && offer.features.length > 0)
       ? offer.features

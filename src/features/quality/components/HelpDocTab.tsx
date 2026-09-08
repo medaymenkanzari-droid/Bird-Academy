@@ -3,27 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
+import { Language } from '../../../utils/translations';
 import { Search, Book, Shield, Library, HelpCircle, FileText, Sparkles } from 'lucide-react';
+import { DocItem, HelpDocUiLabels, HELP_DOC_TRANSLATIONS, HELP_DOC_UI_LABELS } from '../help/helpDocTranslations';
 
-interface DocItem {
-  id: string;
-  category: 'user' | 'admin' | 'biology' | 'faq';
-  title: string;
-  subtitle: string;
-  content: string;
-  tags: string[];
-}
+export type { DocItem };
 
-export const HelpDocTab: React.FC = () => {
-  const { t } = useLanguage();
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeCategory, setActiveCategory] = useState<'all' | 'user' | 'admin' | 'biology' | 'faq'>('all');
-  const [selectedDocId, setSelectedDocId] = useState<string | null>('user-1');
-
-  const docDatabase: DocItem[] = [
-    // 1. Guide Utilisateur
+export const FRENCH_DOC_DATABASE: DocItem[] = [
+  // 1. Guide Utilisateur
     {
       id: 'user-1',
       category: 'user',
@@ -142,14 +131,13 @@ Avantages :
       id: 'admin-license',
       category: 'admin',
       title: "Licence Logicielle & Mentions Légales",
-      subtitle: "Licence open source Apache-2.0 & Droits",
-      content: `Bird Academy v1.0 Gold Master est distribué sous la licence libre et open source Apache-2.0.
+      subtitle: "Conditions de Licence & Droits d'Utilisation",
+      content: `Bird Academy est distribué selon les conditions de licence applicables à votre offre commerciale.
 
-SPDX-License-Identifier: Apache-2.0
-Copyright © 2026 Bird Academy. All rights reserved.
+Copyright © 2026 Bird Academy. Tous droits réservés.
 
-Vous êtes libre d'utiliser, distribuer, et modifier ce logiciel pour votre élevage personnel ou professionnel, sous réserve de conserver l'avis de copyright original. L'application est fournie "en l'état", sans garantie d'aucune sorte. Tous les algorithmes biologiques et calculs de Wright ont été validés selon les normes scientifiques en vigueur.`,
-      tags: ['licence', 'apache', 'open-source', 'spdx', 'copyright']
+L'utilisation du logiciel s'effectue dans le strict respect des droits conférés par votre édition (mode natif gratuit sans licence ou licence commerciale payante mono-appareil). Les données d'élevage demeurent la propriété exclusive de l'éleveur et sont stockées localement sur son appareil. L'application est fournie "en l'état". Tous les algorithmes biologiques et calculs de Wright ont été validés selon les normes scientifiques en vigueur.`,
+      tags: ['licence', 'mentions-legales', 'proprietaire', 'droits', 'copyright']
     },
 
     // 3. Glossaire Biologique
@@ -286,6 +274,36 @@ R: Oui. L'algorithme résout de manière récursive la parenté sur l'ensemble d
     }
   ];
 
+export const HELP_DOC_DATABASE: Record<Language, DocItem[]> = {
+  fr: FRENCH_DOC_DATABASE,
+  ...HELP_DOC_TRANSLATIONS
+};
+
+const getCategoryLabel = (category: string, ui: HelpDocUiLabels): string => {
+  switch (category) {
+    case 'all': return ui.allCategory;
+    case 'user': return ui.userCategory;
+    case 'admin': return ui.adminCategory;
+    case 'biology': return ui.biologyCategory;
+    case 'faq': return ui.faqCategory;
+    default: return category;
+  }
+};
+
+export const HelpDocTab: React.FC = () => {
+  const { language, isRtl } = useLanguage();
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'user' | 'admin' | 'biology' | 'faq'>('all');
+  const [selectedDocId, setSelectedDocId] = useState<string | null>('user-1');
+
+  const docDatabase = useMemo(() => {
+    return HELP_DOC_DATABASE[language] || FRENCH_DOC_DATABASE;
+  }, [language]);
+
+  const uiLabels = useMemo(() => {
+    return HELP_DOC_UI_LABELS[language] || HELP_DOC_UI_LABELS.fr;
+  }, [language]);
+
   // Filtering based on search query and category
   const filteredDocs = docDatabase.filter(doc => {
     const matchesCategory = activeCategory === 'all' || doc.category === activeCategory;
@@ -300,31 +318,31 @@ R: Oui. L'algorithme résout de manière récursive la parenté sur l'ensemble d
   const selectedDoc = docDatabase.find(d => d.id === selectedDocId) || filteredDocs[0];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans" id="help-doc-center">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans" id="help-doc-center" dir={isRtl ? 'rtl' : 'ltr'}>
       
       {/* Left Column: Search & List */}
       <div className="md:col-span-1 space-y-4">
         
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-4 top-3 w-4 h-4 text-gray-400" />
+          <Search className={`absolute ${isRtl ? 'right-4' : 'left-4'} top-3 w-4 h-4 text-gray-400`} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Rechercher un guide, FAQ, glossaire..."
-            className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl text-xs focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-100"
+            placeholder={uiLabels.searchPlaceholder}
+            className={`w-full ${isRtl ? 'pr-10 pl-4 text-right' : 'pl-10 pr-4 text-left'} py-2.5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl text-xs focus:ring-2 focus:ring-indigo-500 text-gray-800 dark:text-gray-100`}
           />
         </div>
 
         {/* Category Selector Buttons */}
         <div className="flex flex-wrap gap-1.5 bg-gray-50 dark:bg-gray-900/50 p-1 rounded-2xl border border-gray-100 dark:border-gray-800/80">
           {[
-            { id: 'all', label: 'Tous', icon: FileText },
-            { id: 'user', label: 'Guide User', icon: Book },
-            { id: 'admin', label: 'Admin', icon: Shield },
-            { id: 'biology', label: 'Glossaire', icon: Library },
-            { id: 'faq', label: 'FAQ', icon: HelpCircle }
+            { id: 'all', label: uiLabels.allCategory, icon: FileText },
+            { id: 'user', label: uiLabels.userCategory, icon: Book },
+            { id: 'admin', label: uiLabels.adminCategory, icon: Shield },
+            { id: 'biology', label: uiLabels.biologyCategory, icon: Library },
+            { id: 'faq', label: uiLabels.faqCategory, icon: HelpCircle }
           ].map(cat => {
             const Icon = cat.icon;
             const isSel = activeCategory === cat.id;
@@ -348,7 +366,7 @@ R: Oui. L'algorithme résout de manière récursive la parenté sur l'ensemble d
         <div className="space-y-2 max-h-[450px] overflow-y-auto pr-1">
           {filteredDocs.length === 0 ? (
             <div className="p-8 text-center text-xs text-gray-400">
-              Aucun document ne correspond à votre recherche.
+              {uiLabels.noResults}
             </div>
           ) : (
             filteredDocs.map(doc => {
@@ -357,9 +375,9 @@ R: Oui. L'algorithme résout de manière récursive la parenté sur l'ensemble d
                 <button
                   key={doc.id}
                   onClick={() => setSelectedDocId(doc.id)}
-                  className={`w-full text-left p-4 rounded-2xl border cursor-pointer transition ${isSel ? 'border-indigo-600 bg-indigo-50/30 dark:bg-indigo-950/10' : 'border-gray-100 dark:border-gray-800/80 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+                  className={`w-full ${isRtl ? 'text-right' : 'text-left'} p-4 rounded-2xl border cursor-pointer transition ${isSel ? 'border-indigo-600 bg-indigo-50/30 dark:bg-indigo-950/10' : 'border-gray-100 dark:border-gray-800/80 hover:bg-gray-50 dark:hover:bg-gray-800'}`}
                 >
-                  <span className="block text-xxs font-bold text-indigo-500 uppercase tracking-wider">{doc.category}</span>
+                  <span className="block text-xxs font-bold text-indigo-500 uppercase tracking-wider">{getCategoryLabel(doc.category, uiLabels)}</span>
                   <span className="block text-xs font-bold text-gray-800 dark:text-gray-200 mt-1">{doc.title}</span>
                   <span className="block text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 truncate">{doc.subtitle}</span>
                 </button>
@@ -378,11 +396,11 @@ R: Oui. L'algorithme résout de manière récursive la parenté sur l'ensemble d
               {/* Category tag */}
               <div className="flex items-center justify-between">
                 <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-full text-xxs font-extrabold uppercase tracking-widest">
-                  {selectedDoc.category}
+                  {getCategoryLabel(selectedDoc.category, uiLabels)}
                 </span>
                 
                 <span className="text-[10px] text-gray-400 font-mono">
-                  DOC-ID: {selectedDoc.id}
+                  {uiLabels.docIdPrefix}: {selectedDoc.id}
                 </span>
               </div>
 
@@ -416,7 +434,7 @@ R: Oui. L'algorithme résout de manière récursive la parenté sur l'ensemble d
           <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl border border-gray-100 dark:border-gray-700 min-h-[350px] flex items-center justify-center text-center">
             <div className="space-y-2 text-gray-400">
               <Library className="w-8 h-8 mx-auto" />
-              <p className="text-xs font-bold">Sélectionnez un document d'aide</p>
+              <p className="text-xs font-bold">{uiLabels.selectDocPrompt}</p>
             </div>
           </div>
         )}
@@ -425,3 +443,4 @@ R: Oui. L'algorithme résout de manière récursive la parenté sur l'ensemble d
     </div>
   );
 };
+

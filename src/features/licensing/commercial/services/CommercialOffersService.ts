@@ -76,7 +76,7 @@ export class CommercialOffersService {
       durationDays: 365,
       price: 49.00,
       currency: 'EUR',
-      maxDevices: 3,
+      maxDevices: 1,
       aiDailyQuota: 100,
       capabilities: [
         'BIRD_VIEW',
@@ -118,6 +118,7 @@ export class CommercialOffersService {
         'Traitements par lot & alertes de santé',
         'Gestion financière & bilans complets',
         'Assistant IA 100 requêtes/jour',
+        'Licence mono-appareil (données 100% locales)',
       ],
       status: 'ACTIVE',
       version: '1.3.6',
@@ -136,7 +137,7 @@ export class CommercialOffersService {
       durationDays: 365,
       price: 119.00,
       currency: 'EUR',
-      maxDevices: 5,
+      maxDevices: 1,
       aiDailyQuota: null, // Unlimited
       capabilities: [
         'BIRD_VIEW',
@@ -203,7 +204,7 @@ export class CommercialOffersService {
       durationDays: null, // Permanent
       price: 249.00,
       currency: 'EUR',
-      maxDevices: 5,
+      maxDevices: 1,
       aiDailyQuota: null,
       capabilities: [
         'BIRD_VIEW',

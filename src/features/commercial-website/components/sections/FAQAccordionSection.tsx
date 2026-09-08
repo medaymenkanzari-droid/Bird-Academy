@@ -42,7 +42,7 @@ export const FAQ_ITEMS: (FAQItem & { categoryType: 'licensing' | 'genetics' | 's
     category: 'pricing',
     categoryType: 'licensing',
     questionKey: 'Quelle est la différence principale entre les éditions FREE, PREMIUM et PRO ?',
-    answerKey: 'L\'édition FREE permet de gérer jusqu\'à 50 oiseaux avec les fonctions de base. PREMIUM débloque un nombre illimité d\'oiseaux, le calcul de consanguinité de Wright et 100 requêtes IA/jour sur 3 appareils. PRO offre le moteur Bird Intelligence expert complet, l\'IA illimitée et 5 postes.',
+    answerKey: 'L\'édition FREE permet de gérer jusqu\'à 50 oiseaux avec les fonctions de base. PREMIUM débloque un nombre illimité d\'oiseaux, le calcul de consanguinité de Wright et 100 requêtes IA/jour sur 1 appareil. PRO offre le moteur Bird Intelligence expert complet, l\'IA illimitée et une licence mono-appareil.',
   },
   {
     id: 'faq-upgrade',

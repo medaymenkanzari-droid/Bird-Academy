@@ -27,7 +27,7 @@ export const FULL_FAQ_ITEMS: FAQItem[] = [
     id: 'faq-pricing-1',
     category: 'pricing',
     questionKey: 'Quels sont les tarifs officiels de Bird Academy ?',
-    answerKey: 'FREE Community est 100% gratuit pour toujours (jusqu\'à 20 oiseaux). PREMIUM est à 49,00 € / an (oiseaux illimités, Wright, 3 appareils). PRO est à 119,00 € / an (Bird Intelligence complet, 5 appareils). PRO À VIE est à 249,00 € (licence perpétuelle sans renouvellement).',
+    answerKey: 'FREE Community est 100% gratuit pour toujours (jusqu\'à 20 oiseaux). PREMIUM est à 49,00 € / an (oiseaux illimités, Wright, licence mono-appareil). PRO est à 119,00 € / an (Bird Intelligence complet, licence mono-appareil). PRO À VIE est à 249,00 € (licence perpétuelle sans renouvellement).',
   },
   {
     id: 'faq-pricing-2',
@@ -51,7 +51,7 @@ export const FULL_FAQ_ITEMS: FAQItem[] = [
     id: 'faq-licensing-3',
     category: 'licensing',
     questionKey: 'Puis-je changer d\'ordinateur ou formater mon PC ?',
-    answerKey: 'Oui, votre package de livraison 5 fichiers vous permet de réactiver votre licence sur votre nouvel ordinateur en respectant le quota d\'appareils de votre édition.',
+    answerKey: 'Oui. Les licences Bird Academy sont mono-appareil (1 appareil dédié, données 100% locales). Pour changer de PC, exportez simplement une sauvegarde locale au format JSON sur clé USB et restaurez-la sur votre nouvel appareil avec votre licence.',
   },
   {
     id: 'faq-ai-1',

@@ -31,7 +31,7 @@ export const LicenseCreationModal: React.FC<LicenseCreationModalProps> = ({ isOp
   const [holderEmail, setHolderEmail] = useState('');
   const [type, setType] = useState<LicenseType>('commercial');
   const [durationDays, setDurationDays] = useState<string>('365');
-  const [maxDevices, setMaxDevices] = useState<string>('5');
+  const [maxDevices, setMaxDevices] = useState<string>('1');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,9 +63,9 @@ export const LicenseCreationModal: React.FC<LicenseCreationModalProps> = ({ isOp
   };
 
   const typeOptions = [
-    { value: 'beta', label: `${t('betaLabel')} (90 jours, 2 appareils)` },
-    { value: 'commercial', label: `${t('commercialLabel')} (365 jours, 3 appareils)` },
-    { value: 'permanent', label: `${t('permanentLabel')} (Illimitée, 5 appareils)` },
+    { value: 'beta', label: `${t('betaLabel')} (90 jours, 1 appareil)` },
+    { value: 'commercial', label: `${t('commercialLabel')} (365 jours, 1 appareil)` },
+    { value: 'permanent', label: `${t('permanentLabel')} (Illimitée, 1 appareil)` },
     { value: 'temporary', label: `${t('temporaryLabel')} (30 jours, 1 appareil)` },
     { value: 'enterprise', label: `${t('enterpriseLabel')} (365 jours, 25 appareils)` },
     { value: 'association', label: `${t('associationLabel')} (365 jours, 10 appareils)` },

@@ -65,7 +65,7 @@ export const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({ offer, quant
           </span>
           <span className="inline-flex items-center gap-1 bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
             <Monitor className="w-3 h-3 text-emerald-500" />
-            {offer.maxDevices} poste(s)
+            {offer.maxDevices} poste (Mono-appareil)
           </span>
         </div>
       </div>

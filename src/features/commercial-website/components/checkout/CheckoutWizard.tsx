@@ -197,7 +197,7 @@ export const CheckoutWizard: React.FC<CheckoutWizardProps> = ({
                     <p className="text-xs text-slate-500 dark:text-slate-400">{off.description}</p>
                   </div>
                   <div className="text-[11px] text-slate-400">
-                    {off.period} • {off.offer.maxDevices} appareils
+                    {off.period} • {off.offer.maxDevices} appareil
                   </div>
                 </div>
               );

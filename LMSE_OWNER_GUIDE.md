@@ -102,7 +102,7 @@ Une licence LMSE est un **titre de propriété numérique sécurisé**. Elle agi
 
 ### Explication pas à pas des étapes :
 
-1. **Création** : Dans votre espace administrateur, vous cliquez sur "Générer une Licence". Vous choisissez la formule (ex: Commerciale 1 an, 3 appareils). Le système fabrique instantanément une clé unique (ex: `LMSE-COMM-A1B2-C3D4-E5F6`).
+1. **Création** : Dans votre espace administrateur, vous cliquez sur "Générer une Licence". Vous choisissez la formule (ex: Commerciale 1 an, 1 appareil). Le système fabrique instantanément une clé unique (ex: `LMSE-COMM-A1B2-C3D4-E5F6`).
 2. **Distribution** : Vous envoyez cette clé à votre client suite à son paiement.
 3. **Activation** : Le client ouvre Bird Academy sur son téléphone ou PC, entre son nom et la clé. Le LMSE vérifie la clé, prend l'empreinte de l'appareil et valide l'accès.
 4. **Utilisation** : L'éleveur utilise l'application sans aucune gêne. Le LMSE vérifie automatiquement en arrière-plan que tout est en ordre.
@@ -118,9 +118,9 @@ Le LMSE intègre nativement **7 formules de licences** adaptées à tous les pro
 
 | Type de Licence | Public Cible | Durée de Validité | Quota Appareils | Fonctionnalités & Limitations |
 | :--- | :--- | :--- | :---: | :--- |
-| **Bêta Privée (`beta`)** | Testeurs, éleveurs partenaires | 30 à 90 jours | 2 appareils | Accès complet aux nouveautés, module de retours d'expérience intégré. Expire automatiquement. |
-| **Commerciale (`commercial`)** | Éleveurs amateurs & passionnés | 1 an (365 jours) | 3 appareils | Gestion complète d'élevage, pedigrees, statistiques, suivi sanitaire, exports PDF. |
-| **Permanente (`permanent`)** | Clients Premium & VIP | Illimitée (Vie) | 5 appareils | Aucun coût récurrent, mises à jour à vie, accès prioritaire. |
+| **Bêta Privée (`beta`)** | Testeurs, éleveurs partenaires | 30 à 90 jours | 1 appareil | Accès complet aux nouveautés, module de retours d'expérience intégré. Expire automatiquement. |
+| **Commerciale (`commercial`)** | Éleveurs amateurs & passionnés | 1 an (365 jours) | 1 appareil | Licence mono-appareil. Gestion complète d'élevage, pedigrees, statistiques, suivi sanitaire, exports PDF. |
+| **Permanente (`permanent`)** | Clients Premium & VIP | Illimitée (Vie) | 1 appareil | Licence mono-appareil à vie. Aucun coût récurrent, mises à jour à vie, accès prioritaire. |
 | **Temporaire (`temporary`)** | Découverte, concours, salons | 7 à 90 jours | 1 appareil | Idéal pour faire tester l'application lors d'expositions ou de foires d'élevage. |
 | **Enterprise (`enterprise`)** | Grandes fermes, centres d'élevage | 1 an ou sur-mesure | 25 appareils | Multi-utilisateurs, journal d'audit étendu, gestion illimitée de cages et volières, support prioritaire. |
 | **Association (`association`)** | Clubs ornithologiques, amicales | 1 an (365 jours) | 10 appareils | Registre des membres du club, gestionnaire d'expositions et de concours ornithologiques. |
@@ -140,11 +140,8 @@ L'activation est l'acte par lequel un appareil donné est **officiellement ratta
        | --- 1. Saisie de la Clé ------------> |                                 |
        |    (ex: LMSE-COMM-A1B2...)          |                                 |
        |                                     |                                 |
-       |                                     | --- 2. Vérification syntaxe --> |
-       |                                     |        & empreinte appareil     |
-       |                                     |                                 |
        |                                     | --- 3. Contrôle des quotas ---> |
-       |                                     |        (ex: 1/3 appareils)      |
+       |                                     |        (ex: 1/1 appareil)       |
        |                                     |                                 |
        | <--- 4. Confirmation Accès -------- | <--- 5. Enregistrement Succès -- |
        |      "Licence Active & Intègre"     |        dans le registre          |
@@ -153,10 +150,10 @@ L'activation est l'acte par lequel un appareil donné est **officiellement ratta
 ### Que se passe-t-il exactement lors de l'activation ?
 
 1. **Vérification de la syntaxe** : Le LMSE vérifie que la clé respecte l'empreinte officielle `LMSE-[TYPE]-[SÉCTION1]-[SECTION2]-[CHECKSUM]`. Si un caractère est mal tapé, l'application signale immédiatement une erreur d'écriture.
-2. **Identification de l'appareil** : Le LMSE calcule l'empreinte unique de l'appareil (sans collecter de données personnelles).
-3. **Contrôle de capacité** : Le LMSE vérifie si le nombre d'appareils déjà rattachés à cette clé n'a pas atteint la limite autorisée.
-4. **Signature numérique** : Le LMSE scelle la licence localement avec une signature cryptographique infalsifiable.
-5. **Confirmation** : L'écran d'activation se ferme et l'utilisateur accède directement à l'ensemble des fonctionnalités de son offre.
+2. **Reconnaissance de l'empreinte** : Le système extrait l'identifiant matériel de l'appareil (ex: `DEV-WINDOWS-8A3F91B2`).
+3. **Contrôle du quota d'appareils** : Le LMSE vérifie que la limite `maxDevices` n'est pas atteinte. En V1.x, chaque licence commerciale est mono-appareil (`maxDevices: 1`).
+4. **Scellement cryptographique** : Le LMSE chiffre localement les données d'activation avec sa signature ECDSA.
+5. **Déverrouillage instantané** : L'éleveur accède immédiatement à ses fonctionnalités.
 
 ---
 
@@ -171,21 +168,20 @@ Chaque ordinateur, tablette ou smartphone possède une "signature matérielle" c
 ### Exemples Concrets de Gestion de Quotas :
 
 ```
-EXEMPLE 1 : Licence Commerciale (Limite : 3 appareils)
+EXEMPLE 1 : Licence Commerciale Mono-Appareil (Limite : 1 appareil)
 -----------------------------------------------------------------
-Appareil 1 : Ordinateur du bureau d'élevage (PC-Windows)   --> ACCEPTÉ (1/3)
-Appareil 2 : Smartphone personnel (Android)                --> ACCEPTÉ (2/3)
-Appareil 3 : Tablette de la volière (iPad)                --> ACCEPTÉ (3/3)
+Appareil 1 : Ordinateur d'élevage (PC-Windows)             --> ACCEPTÉ (1/1)
 -----------------------------------------------------------------
-Appareil 4 : Smartphone d'un ami éleveur                  --> REFUSÉ (Quota atteint !)
+Appareil 2 : Second ordinateur ou tablette                 --> REFUSÉ (DEVICE_LIMIT_EXCEEDED)
 ```
 
 ### Que faire si le client change de matériel ?
 
-Le LMSE est souple et moderne. Si votre client achète un nouveau téléphone ou remplace son PC tombé en panne :
-- Depuis le Centre d'Administration, vous pouvez en un clic **désactiver l'ancien appareil**.
-- L'emplacement de licence est immédiatement libéré.
-- Le client peut aussitôt activer son nouvel appareil sans avoir à racheter de licence.
+Les données d'élevage sont stockées localement sur l'appareil. Pour transférer son élevage vers un nouvel appareil :
+1. Sur l'ancien appareil : Exporter une sauvegarde complète scellée (fichier `.json`).
+2. Transférer le fichier (ex: clé USB) vers le nouvel appareil.
+3. Si l'ancien appareil n'est plus utilisé : depuis le Centre d'Administration, désassocier l'ancien appareil pour libérer l'emplacement.
+4. Sur le nouvel appareil : Activer la licence et restaurer la sauvegarde. L'éleveur retrouve 100% de ses oiseaux sans perte.
 
 ---
 
@@ -343,7 +339,7 @@ Voici le guide d'action immédiate pour répondre aux demandes fréquentes de vo
 - **Action** : Même procédure que le Cas 1. Supprimez l'ancien PC du registre d'activation du client pour libérer son emplacement.
 
 ### Cas 3 : "Je souhaite utiliser Bird Academy sur mon PC portable en plus de mon PC fixe"
-- **Action** : Vérifiez le quota du client. Si sa licence autorise 3 appareils et qu'il n'en a activé qu'un seul, dites-lui simplement d'entrer la même clé sur son PC portable. Si sa licence est de 1 seul appareil, proposez-lui un surclassement vers la formule Commerciale 3 appareils.
+- **Action** : En V1.x, le produit fonctionne selon la règle stricte : **1 licence = 1 appareil (Single Device)**. Aucune synchronisation automatique inter-appareils n'existe. Les données d'élevage sont stockées localement sur l'appareil. Pour transférer son élevage vers un autre appareil, l'éleveur doit utiliser la fonction d'export de sauvegarde (JSON) puis la restaurer sur le nouvel appareil. S'il souhaite gérer deux élevages simultanés sur deux postes, il doit acquérir une seconde licence.
 
 ### Cas 4 : "Je n'ai pas Internet dans ma volière"
 - **Action** : Dites au client d'aller dans la fenêtre d'activation, onglet "Activation Hors Ligne". Demandez-lui de vous lire son "Code Défi". Entrez-le dans votre espace administrateur pour obtenir le "Code de Réponse" et donnez-lui par SMS.
@@ -358,7 +354,7 @@ Voici le guide d'action immédiate pour répondre aux demandes fréquentes de vo
 
 ## 12. POLITIQUE COMMERCIALE RECOMMANDÉE
 
-Pour maximiser vos revenus tout en offrant des formules attractives, voici la grille commerciale standard recommandée pour Bird Academy Enterprise :
+Pour rentabiliser rapidement le développement de Bird Academy Enterprise tout en restant accessible aux éleveurs passionnés, voici une stratégie tarifaire simple et très efficace :
 
 ```
 +-----------------------------------------------------------------------------------+
@@ -366,13 +362,13 @@ Pour maximiser vos revenus tout en offrant des formules attractives, voici la gr
 +-----------------------------------------------------------------------------------+
 | OFFRE                   | PRIX SUGGÉRÉ     | DURÉE    | QUOTA APPAREILS | USAGE   |
 +-------------------------+------------------+----------+-----------------+---------+
-| Découverte Bêta         | GRATUIT          | 30 jours | 2 appareils     | Test    |
-| Éleveur Amateur         | 49 € / an        | 1 an     | 2 appareils     | Passion |
-| Éleveur Passion Pro     | 79 € / an        | 1 an     | 3 appareils     | Élevage |
+| Découverte Bêta         | GRATUIT          | 30 jours | 1 appareil      | Test    |
+| Éleveur Amateur         | 49 € / an        | 1 an     | 1 appareil      | Passion |
+| Éleveur Passion Pro     | 79 € / an        | 1 an     | 1 appareil      | Élevage |
 | Pack Association / Club | 199 € / an       | 1 an     | 10 appareils    | Clubs   |
 | Clinique Vétérinaire    | 349 € / an       | 1 an     | 15 appareils    | Santé   |
 | Licence Enterprise      | 599 € / an       | 1 an     | 25 appareils    | Fermes  |
-| Licence VIP Permanente  | 299 € une fois   | À vie    | 5 appareils     | Premium |
+| Licence VIP Permanente  | 299 € une fois   | À vie    | 1 appareil      | Premium |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -381,10 +377,10 @@ Pour maximiser vos revenus tout en offrant des formules attractives, voici la gr
 ## 13. FOIRE AUX QUESTIONS (FAQ) — 40 QUESTIONS / RÉPONSES
 
 #### Q1 : Une personne peut-elle utiliser la même clé sur deux ordinateurs en même temps ?
-**Réponse** : Oui, à condition que le quota d'appareils de sa licence autorise au moins 2 appareils (ex: Licence Commerciale ou Enterprise).
+**Réponse** : Non. En V1.x, toutes les offres grand public (Premium, PRO Annual, PRO Lifetime) sont strictement mono-appareil (1 seul poste). Une activation sur un second équipement sera bloquée avec le code `DEVICE_LIMIT_EXCEEDED`. Seuls les contrats sur-mesure (ex: Enterprise 25 postes) permettent plusieurs postes.
 
 #### Q2 : Que se passe-t-il si un client donne sa clé à un ami ?
-**Réponse** : L'ami pourra l'activer uniquement s'il reste des emplacements libres sur la licence. Si la limite est de 2 appareils et que le client utilise déjà ses 2 appareils, l'ami recevra le message d'erreur : "Limite maximale d'appareils atteinte".
+**Réponse** : L'ami recevra immédiatement une erreur de quota dépassé car la licence est déjà scellée à l'empreinte de l'ordinateur du titulaire.
 
 #### Q3 : Le client doit-il être connecté à Internet en permanence pour utiliser l'application ?
 **Réponse** : Absolument pas. Bird Academy Enterprise est conçue pour fonctionner à 100% hors ligne. Une seule vérification initiale ou une activation offline suffit.
@@ -483,7 +479,7 @@ Pour maximiser vos revenus tout en offrant des formules attractives, voici la gr
 **Réponse** : Oui, le système est parfaitement compatible iOS.
 
 #### Q35 : Le client peut-il voir combien d'appareils il a déjà activés ?
-**Réponse** : Oui, l'onglet "Statut de Licence" de l'application lui indique par exemple : "2 / 3 appareils enregistrés".
+**Réponse** : Oui, en V1.x chaque licence commerciale est mono-appareil, et l'application confirme l'activation sur le poste actuel ("1 / 1 appareil enregistré").
 
 #### Q36 : Comment empêcher la réutilisation d'un code de réponse hors ligne ?
 **Réponse** : Ce code est calculé de manière unique pour cet appareil spécifique et ne peut fonctionner sur aucun autre équipement.

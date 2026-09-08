@@ -625,7 +625,7 @@ export class LmseBackendServer {
           holderEmail: customerEmail ? String(customerEmail).trim() : undefined,
           type: licenseType,
           durationDays: durationDays !== undefined ? durationDays : (tier === 'PRO' ? 365 : 365),
-          maxDevices: maxDevices || (tier === 'PRO' ? 25 : (tier === 'PREMIUM' ? 5 : 3)),
+          maxDevices: maxDevices || 1,
           customFeatures,
           metadata: {
             isCommercialWeb: true,

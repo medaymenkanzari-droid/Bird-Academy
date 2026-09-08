@@ -502,14 +502,14 @@ L'activation s'effectue par liaison matérielle :
    - `LICENSE_REQUIRED` -> Déclencher l'écran d'activation uniquement lors de l'accès à un module payant (Premium/Pro) ou lors d'une mise à niveau volontaire.
 
 ### LATER (Moyen Terme) :
-2. **Portail de self-service pour changement de machine :** Permettre au client de révoquer son ancien appareil par lien sécurisé reçu par email.
-3. **Paiement Stripe Webhooks directs :** Raccorder le webhook Stripe directement sur `lmseServer.ts` pour automatiser les réconciliations de paiement.
+1. **Portail de self-service pour changement de machine :** Permettre au client de révoquer son ancien appareil par lien sécurisé reçu par email.
+2. **Paiement Stripe Webhooks directs :** Raccorder le webhook Stripe directement sur `lmseServer.ts` pour automatiser les réconciliations de paiement.
 
 ### OPTIONAL (Optionnel) :
-4. **Export comptable FEC / CSV :** Module d'export comptable normalisé des commandes web.
+1. **Export comptable FEC / CSV :** Module d'export comptable normalisé des commandes web.
 
 ### DO NOT CHANGE (Sécurité Intacte) :
-5. **Toutes les barrières de sécurité existantes :** `LMSE_PRIVATE_SIGNING_KEY`, `assertAdminContext()`, validation cryptographique locale hors-ligne, détection d'anti-rollback d'horloge.
+1. **Toutes les barrières de sécurité existantes :** `LMSE_PRIVATE_SIGNING_KEY`, `assertAdminContext()`, validation cryptographique locale hors-ligne, détection d'anti-rollback d'horloge.
 
 ---
 

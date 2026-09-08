@@ -137,4 +137,3 @@ La mission **DEPLOY-TEST-002** a validé l'ensemble des 30 points de contrôle d
 - `npm run verify:user-bundle` : **PASS (0 clé privée, 0 fuite admin)**.
 - `npm test` : **829/829 PASS**.
 - Rapport complet : [`QA_DEPLOY_TEST_002_REPORT.md`](file:///d:/app%20canaris/28+/QA_DEPLOY_TEST_002_REPORT.md).
-
