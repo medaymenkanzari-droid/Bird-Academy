@@ -22,6 +22,7 @@ import { LicenseType } from '../features/licensing/types/licensing';
 import { AdminRole, isAdminRole } from '../config/appMode';
 import { AdminUserRepository } from './repositories/AdminUserRepository';
 import { PasswordCrypto } from './utils/passwordCrypto';
+import { CommercialPaymentService } from './services/CommercialPaymentService';
 
 export interface AuditServerLog {
   id: string;
@@ -38,10 +39,12 @@ export interface AuditServerLog {
 export class LmseBackendServer {
   private repository: ILicenseRepository;
   private auditLogs: AuditServerLog[] = [];
+  public commercialPaymentService: CommercialPaymentService;
   public app: Express;
 
   constructor(repository?: ILicenseRepository) {
     this.repository = repository || new FileLicenseRepository();
+    this.commercialPaymentService = new CommercialPaymentService(this.repository);
     this.app = express();
     this.setupMiddleware();
     this.setupRoutes();
@@ -655,6 +658,129 @@ export class LmseBackendServer {
         return res.status(201).json({ success: true, license });
       } catch (err: any) {
         return res.status(500).json({ error: 'ISSUANCE_FAILED', message: err.message });
+      }
+    });
+
+    // ==========================================
+    // 2b. COMMERCIAL ORDERS & SANDBOX PAYMENT GATEWAY
+    // ==========================================
+
+    // POST /api/commercial/orders/checkout — Initialize Sandbox Checkout Session
+    this.app.post('/api/commercial/orders/checkout', userLimiter, async (req: Request, res: Response) => {
+      try {
+        const checkoutData = await this.commercialPaymentService.createCheckout(req.body || {});
+        return res.status(201).json({ success: true, ...checkoutData });
+      } catch (err: any) {
+        const status = err.message.includes('NOT_FOUND') ? 404 : 400;
+        return res.status(status).json({ error: 'CHECKOUT_FAILED', message: err.message });
+      }
+    });
+
+    // POST /api/commercial/orders/:orderId/verify — Server-side Payment Verification
+    this.app.post('/api/commercial/orders/:orderId/verify', userLimiter, async (req: Request, res: Response) => {
+      try {
+        const { orderId } = req.params;
+        const { paymentId } = req.body || {};
+        const order = this.commercialPaymentService.getOrder(orderId);
+        if (!order) {
+          return res.status(404).json({ error: 'NOT_FOUND', message: `Commande ${orderId} introuvable.` });
+        }
+
+        if (order.status === 'PAYMENT_PENDING') {
+          order.status = 'PAID';
+          order.paymentId = paymentId || `pay_verified_${Date.now()}`;
+          order.paidAt = new Date().toISOString();
+          await this.commercialPaymentService.fulfillOrderWithLicense(order);
+        }
+
+        return res.json({ success: true, order });
+      } catch (err: any) {
+        return res.status(400).json({ error: 'VERIFICATION_FAILED', message: err.message });
+      }
+    });
+
+    // POST /api/commercial/webhooks/payment — Cryptographically Signed Sandbox Webhook
+    this.app.post('/api/commercial/webhooks/payment', async (req: Request, res: Response) => {
+      try {
+        const signature = (req.headers['x-payment-signature'] as string) || (req.headers['stripe-signature'] as string) || '';
+        const result = await this.commercialPaymentService.handleWebhook(req.body, signature);
+
+        this.recordAudit({
+          who: req.body?.customerEmail || 'PAYMENT_GATEWAY',
+          role: 'WEBHOOK_PROCESSOR',
+          action: 'PAYMENT_WEBHOOK_PROCESSED',
+          target: req.body?.orderId || 'UNKNOWN',
+          ip: (req.headers['x-forwarded-for'] as string) || req.ip || '127.0.0.1',
+          result: 'SUCCESS',
+          details: `Webhook validé pour commande ${req.body?.orderId} (Idempotent: ${result.idempotentReplay ? 'OUI' : 'NON'}).`,
+        });
+
+        return res.json({ ...result });
+      } catch (err: any) {
+        const status = err.message.includes('SIGNATURE') ? 401 : 400;
+        return res.status(status).json({ error: 'WEBHOOK_FAILED', message: err.message });
+      }
+    });
+
+    // GET /api/commercial/orders/:orderId — Query Order Status
+    this.app.get('/api/commercial/orders/:orderId', userLimiter, (req: Request, res: Response) => {
+      const order = this.commercialPaymentService.getOrder(req.params.orderId);
+      if (!order) {
+        return res.status(404).json({ error: 'NOT_FOUND', message: 'Commande introuvable.' });
+      }
+      return res.json({ success: true, order });
+    });
+
+    // GET /api/commercial/orders/:orderId/delivery — Retrieve Delivery Package
+    this.app.get('/api/commercial/orders/:orderId/delivery', userLimiter, (req: Request, res: Response) => {
+      const order = this.commercialPaymentService.getOrder(req.params.orderId);
+      if (!order) {
+        return res.status(404).json({ error: 'NOT_FOUND', message: 'Commande introuvable.' });
+      }
+      if (!order.deliveryPackage) {
+        return res.status(404).json({ error: 'DELIVERY_NOT_READY', message: 'Kit de livraison non disponible ou paiement en attente.' });
+      }
+      return res.json({ success: true, deliveryPackage: order.deliveryPackage });
+    });
+
+    // POST /api/commercial/orders/:orderId/cancel — Cancel Order before payment
+    this.app.post('/api/commercial/orders/:orderId/cancel', userLimiter, (req: Request, res: Response) => {
+      try {
+        const order = this.commercialPaymentService.cancelOrder(req.params.orderId, req.body?.reason);
+        return res.json({ success: true, order });
+      } catch (err: any) {
+        return res.status(400).json({ error: 'CANCELLATION_FAILED', message: err.message });
+      }
+    });
+
+    // POST /api/commercial/orders/:orderId/refund — Refund Order & Revoke License
+    this.app.post('/api/commercial/orders/:orderId/refund', userLimiter, async (req: Request, res: Response) => {
+      try {
+        const order = await this.commercialPaymentService.refundOrder(req.params.orderId, req.body?.reason);
+
+        this.recordAudit({
+          who: order.customerEmail || 'ADMIN',
+          role: 'COMMERCIAL_REFUND',
+          action: 'ORDER_REFUNDED',
+          target: order.orderId,
+          ip: (req.headers['x-forwarded-for'] as string) || req.ip || '127.0.0.1',
+          result: 'SUCCESS',
+          details: `Remboursement de la commande ${order.orderId} et révocation de la licence associée.`,
+        });
+
+        return res.json({ success: true, order });
+      } catch (err: any) {
+        return res.status(400).json({ error: 'REFUND_FAILED', message: err.message });
+      }
+    });
+
+    // POST /api/commercial/orders/:orderId/retry-delivery — Retry Failed Delivery
+    this.app.post('/api/commercial/orders/:orderId/retry-delivery', userLimiter, async (req: Request, res: Response) => {
+      try {
+        const order = await this.commercialPaymentService.retryDelivery(req.params.orderId);
+        return res.json({ success: true, order });
+      } catch (err: any) {
+        return res.status(400).json({ error: 'RETRY_FAILED', message: err.message });
       }
     });
 

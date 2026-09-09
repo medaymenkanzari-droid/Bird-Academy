@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bird Academy Enterprise — LMSE Owner Guide</title>
   <style>
     @page {
@@ -175,7 +176,7 @@
 <li><strong class="list-num"><a href="#14-glossaire-illustré-des-termes-du-lmse">Glossaire illustré des termes du LMSE</a></strong></li>
 <li><strong class="list-num"><a href="#15-10-scénarios-de-la-vie-réelle-illustrés">10 Scénarios de la vie réelle illustrés</a></strong></li>
 <li><strong class="list-num"><a href="#16-conclusion--déploiement-international">Conclusion & Déploiement International</a></strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">1. POURQUOI LE LMSE EXISTE</h2>
 <p class="paragraph">Bienvenue dans le manuel officiel de gestion du <strong>LMSE (License Management System Enterprise)</strong>.</p>
@@ -241,7 +242,7 @@
 <li><strong class="list-num"><strong>Expiration</strong> : Quand la durée touche à sa fin (par exemple au bout de 365 jours), l'application prévient le client 14 jours avant. À la date exacte, si aucun renouvellement n'est effectué, l'accès est suspendu poliment.</strong></li>
 <li><strong class="list-num"><strong>Renouvellement</strong> : Dès réception du paiement de renouvellement, la date d'expiration est repoussée, et le client repart pour un an.</strong></li>
 <li><strong class="list-num"><strong>Révocation</strong> : En cas de litige, de paiement rejeté ou de tentative de fraude, vous cliquez sur "Révoquer". La licence est immédiatement blacklistée et bloquée sur tous les appareils du client.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">3. LES DIFFÉRENTS TYPES DE LICENCES</h2>
 <p class="paragraph">Le LMSE intègre nativement <strong>7 formules de licences</strong> adaptées à tous les profils d'utilisateurs de Bird Academy Enterprise :</p>
@@ -271,7 +272,7 @@
 <li><strong class="list-num"><strong>Contrôle de capacité</strong> : Le LMSE vérifie si le quota `maxDevices` n'est pas dépassé. En V1.x, chaque licence commerciale est mono-appareil (1 appareil).</strong></li>
 <li><strong class="list-num"><strong>Signature numérique</strong> : Le LMSE scelle la licence localement avec une signature cryptographique ECDSA SHA-256 infalsifiable.</strong></li>
 <li><strong class="list-num"><strong>Confirmation</strong> : L'écran d'activation se ferme et l'utilisateur accède directement à l'ensemble des fonctionnalités de son offre.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">5. APPAREILS AUTORISÉS & GESTION DES QUOTAS</h2>
 <p class="paragraph">Le contrôle des appareils est l'un des piliers les plus puissants du LMSE pour empêcher le partage abusif de clés.</p>
@@ -290,7 +291,7 @@ Appareil 2 : Second équipement                             --&gt; REFUSÉ (DEVI
 <ul class="custom-list"><li>Depuis le Centre d'Administration, vous pouvez en un clic <strong>désactiver l'ancien appareil</strong>.</li>
 <li>L'emplacement de licence est immédiatement libéré.</li>
 <li>Le client peut aussitôt activer son nouvel appareil sans avoir à racheter de licence.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">6. LES VÉRIFICATIONS AUTOMATIQUES EN ARRIÈRE-PLAN</h2>
 <p class="paragraph">Une fois la licence activée, le client n'a plus besoin d'entrer sa clé au quotidien. Le LMSE travaille en arrière-plan, de manière transparente et invisible, en effectuant <strong>5 contrôles de sécurité automatisés</strong> :</p>
@@ -311,7 +312,7 @@ Appareil 2 : Second équipement                             --&gt; REFUSÉ (DEVI
 <li><strong class="list-num"><strong>Contrôle d'Intégrité de Payload</strong> : S'assure que le nom du titulaire, les fonctionnalités débloquées et le quota d'appareils n'ont pas été falsifiés.</strong></li>
 <li><strong class="list-num"><strong>Protection Anti-Rollback d'Horloge</strong> : Empêche un utilisateur malveillant de reculer la date de son ordinateur de 2 ans pour tricher sur l'expiration. Le LMSE conserve un marqueur de temps infalsifiable. Si l'horloge système repart dans le passé, l'application bloque l'accès et signale la fraude.</strong></li>
 <li><strong class="list-num"><strong>Vérification d'Accréditation d'Appareil</strong> : Confirme que l'application s'exécute bien sur un matériel autorisé.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">7. LE MODE HORS LIGNE (OFFLINE ACTIVATION)</h2>
 <p class="paragraph">De nombreux élevages et volières sont situés dans des zones rurales ou des bâtiments métalliques isolés où l'accès à Internet est faible ou inexistant. Le LMSE intègre un <strong>protocole d'activation hors ligne complet</strong>.</p>
@@ -338,7 +339,7 @@ Appareil 2 : Second équipement                             --&gt; REFUSÉ (DEVI
 <h3 class="subsection-title">Limites et sécurité du mode hors ligne :</h3>
 <ul class="custom-list"><li>Le Code de Réponse calculé est <strong>unique pour cet appareil précis</strong> et cette clé précise. Il ne fonctionnera sur aucun autre téléphone ni aucun autre PC.</li>
 <li>Une fois activée hors ligne, l'application fonctionne à 100% sans jamais nécessiter la moindre connexion réseau.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">8. LE RÔLE DU PROPRIÉTAIRE & DE L'ADMINISTRATEUR</h2>
 <p class="paragraph">En tant que propriétaire de Bird Academy Enterprise, vous disposez des droits d'administration totaux sur le LMSE.</p>
@@ -374,7 +375,7 @@ Appareil 2 : Second équipement                             --&gt; REFUSÉ (DEVI
 <li>Licences proches de l'expiration (action commerciale à mener !)</li>
 <li>Licences révoquées ou expirées</li>
 <li>Nombre total d'appareils connectés à travers le monde.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">2. Onglet "Gestion des Licences" (Licenses List)</h3>
 <p class="paragraph">Votre registre client complet. Vous pouvez filtrer par type (Commercial, Vétérinaire, etc.), chercher un éleveur par son nom, consulter ses dates de validité et gérer ses accès.</p>
 <h3 class="subsection-title">3. Onglet "Appareils Enregistrés" (Device Registry)</h3>
@@ -411,22 +412,22 @@ Appareil 2 : Second équipement                             --&gt; REFUSÉ (DEVI
 <p class="paragraph">Voici le guide d'action immédiate pour répondre aux demandes fréquentes de vos clients :</p>
 <h3 class="subsection-title">Cas 1 : "J'ai changé de téléphone portable"</h3>
 <ul class="custom-list"><li><strong>Action</strong> : Ouvrez le Centre d'Administration > Onglet Appareils. Recherchez le nom du client, repérez son ancien téléphone et cliquez sur <strong>Désassocier</strong>. Dites au client d'entrer sa clé sur son nouveau téléphone.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Cas 2 : "Mon PC est tombé en panne, j'en ai acheté un nouveau"</h3>
 <ul class="custom-list"><li><strong>Action</strong> : Même procédure que le Cas 1. Supprimez l'ancien PC du registre d'activation du client pour libérer son emplacement.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Cas 3 : "Je souhaite utiliser Bird Academy sur mon PC portable en plus de mon PC fixe"</h3>
 <ul class="custom-list"><li><strong>Action</strong> : En V1.x, le produit fonctionne selon la règle stricte : <strong>1 licence = 1 appareil (Single Device)</strong>. Aucune synchronisation automatique inter-appareils n'existe. Les données d'élevage sont stockées localement sur l'appareil. Pour transférer son élevage vers un autre appareil, l'éleveur doit utiliser la fonction d'export de sauvegarde (JSON) puis la restaurer sur le nouvel appareil. S'il souhaite gérer deux élevages distincts sur deux postes en parallèle, il doit acquérir une seconde licence.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Cas 4 : "Je n'ai pas Internet dans ma volière"</h3>
 <ul class="custom-list"><li><strong>Action</strong> : Dites au client d'aller dans la fenêtre d'activation, onglet "Activation Hors Ligne". Demandez-lui de vous lire son "Code Défi". Entrez-le dans votre espace administrateur pour obtenir le "Code de Réponse" et donnez-lui par SMS.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Cas 5 : "J'ai perdu ma clé de licence"</h3>
 <ul class="custom-list"><li><strong>Action</strong> : Allez dans le Centre d'Administration > Onglet Licences. Tapez le nom ou l'email du client. Retrouvez sa clé d'origine et renvoyez-lui par email ou WhatsApp.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Cas 6 : "Un client a fait opposition sur son paiement bancaire"</h3>
 <ul class="custom-list"><li><strong>Action</strong> : Recherchez la licence du client et cliquez sur <strong>Révoquer</strong>. La licence est immédiatement coupée. Prochaine fois que le client ouvre l'application, l'accès sera verrouillé.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">12. POLITIQUE COMMERCIALE RECOMMANDÉE</h2>
 <p class="paragraph">Pour rentabiliser rapidement le développement de Bird Academy Enterprise tout en restant accessible aux éleveurs passionnés, voici une stratégie tarifaire simple et très efficace :</p>
@@ -541,7 +542,7 @@ Appareil 2 : Second équipement                             --&gt; REFUSÉ (DEVI
 <li><strong>Révocation</strong> : Action d'invalider et de placer sur liste noire une clé de licence en cas d'impayé ou d'utilisation frauduleuse.</li>
 <li><strong>RTL (Right-To-Left)</strong> : Support de l'affichage de droite à gauche pour la langue Arabe.</li>
 <li><strong>SHA-256 (Secure Hash Algorithm)</strong> : Algorithme de hachage cryptographique permettant d'apposer une signature numérique infalsifiable sur les licences.</li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">15. 10 SCÉNARIOS DE LA VIE RÉELLE ILLUSTRÉS</h2>
 <h3 class="subsection-title">Scénario 1 : Mohamed, éleveur amateur de canaris</h3>
@@ -550,56 +551,56 @@ Appareil 2 : Second équipement                             --&gt; REFUSÉ (DEVI
 <li><strong class="list-num">Il ouvre l'application sur son PC fixe et entre sa clé. L'application valide (1/2 appareils).</strong></li>
 <li><strong class="list-num">Le lendemain, il installe Bird Academy sur son smartphone Android et entre la même clé. L'activation réussit (2/2 appareils).</strong></li>
 <li><strong class="list-num">Mohamed gère l'ensemble de ses accouplements et pedigrees en toute sérénité.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 2 : Jean-Pierre, président d'un club ornithologique</h3>
 <ul class="custom-list"><li><strong class="list-num">L'association souscrit à l'offre "Pack Association" (10 appareils).</strong></li>
 <li><strong class="list-num">Jean-Pierre distribue la clé du club aux 5 membres du bureau.</strong></li>
 <li><strong class="list-num">Chaque membre active l'application sur son propre téléphone.</strong></li>
 <li><strong class="list-num">Le club gère l'exposition annuelle et le registre des bagues des adhérents.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 3 : Dr. Sarah, vétérinaire aviaire</h3>
 <ul class="custom-list"><li><strong class="list-num">La clinique du Dr. Sarah achète la licence "Vétérinaire Pro".</strong></li>
 <li><strong class="list-num">Elle active la clé sur ses 3 tablettes d'examen et les 2 PC de la clinique.</strong></li>
 <li><strong class="list-num">Le module Vétérinaire débloque les fiches d'examens cliniques, les ordonnances et le moteur de suivi pathologique.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 4 : Thomas perd son smartphone à la volière</h3>
 <ul class="custom-list"><li><strong class="list-num">Thomas fait tomber son téléphone dans l'eau et doit en acheter un nouveau.</strong></li>
 <li><strong class="list-num">Il vous contacte par WhatsApp : "J'ai changé de téléphone, ma clé m'indique quota atteint".</strong></li>
 <li><strong class="list-num">Vous ouvrez votre Centre d'Administration, trouvez Thomas et supprimez son ancien téléphone en 1 clic.</strong></li>
 <li><strong class="list-num">Thomas active son nouveau smartphone immédiatement.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 5 : Renouvellement annuel d'une ferme d'élevage</h3>
 <ul class="custom-list"><li><strong class="list-num">La ferme "Exotic Birds Enterprise" a une licence arrivant à échéance dans 14 jours.</strong></li>
 <li><strong class="list-num">L'application affiche un message invitant le responsable à renouveler.</strong></li>
 <li><strong class="list-num">Le responsable règle le renouvellement annuel.</strong></li>
 <li><strong class="list-num">Vous repoussez la date d'expiration de 365 jours dans votre tableau de bord. La ferme continue son activité sans interruption.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 6 : Annulation de paiement suspecte</h3>
 <ul class="custom-list"><li><strong class="list-num">Un utilisateur achète une licence puis fait opposition injustifiée auprès de sa banque.</strong></li>
 <li><strong class="list-num">Vous recherchez la licence concernée dans le tableau de bord LMSE et cliquez sur <strong>Révoquer</strong>.</strong></li>
 <li><strong class="list-num">Lors de l'ouverture suivante de l'application chez l'utilisateur, l'accès est bloqué avec le message : "Licence révoquée".</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 7 : Activation dans une volière sans réseau Internet</h3>
 <ul class="custom-list"><li><strong class="list-num">Marc a son élevage dans un bâtiment isolé en montagne sans aucune connexion Internet.</strong></li>
 <li><strong class="list-num">Il clique sur "Activation Hors Ligne" et vous dicte son "Code Défi" par téléphone.</strong></li>
 <li><strong class="list-num">Vous entrez le code dans votre Centre d'Administration et lui donnez le "Code de Réponse".</strong></li>
 <li><strong class="list-num">Marc valide le code. Bird Academy est définitivement activée hors ligne sur son PC.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 8 : Définition d'une période d'essai pour un salon ornithologique</h3>
 <ul class="custom-list"><li><strong class="list-num">Lors du Mondial Ornithologique, vous distribuez des dépliants avec une clé Bêta de 30 jours.</strong></li>
 <li><strong class="list-num">200 éleveurs installent l'application et testent toutes les fonctionnalités gratuitement.</strong></li>
 <li><strong class="list-num">Au bout de 30 jours, 45 éleveurs convertissent leur essai en achetant une licence commerciale annuelle.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 9 : Un éleveur tente de modifier l'heure de son PC</h3>
 <ul class="custom-list"><li><strong class="list-num">Un utilisateur tente de reculer l'horloge de son PC de 6 mois pour prolonger sa licence expirée.</strong></li>
 <li><strong class="list-num">Le système anti-rollback du LMSE détecte le saut temporel négatif.</strong></li>
 <li><strong class="list-num">L'application suspend immédiatement l'accès avec le message d'alerte : "Modification d'horloge système détectée".</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <h3 class="subsection-title">Scénario 10 : Sauvegarde préventive de la base de clients</h3>
 <ul class="custom-list"><li><strong class="list-num">Chaque fin de mois, vous allez dans l'onglet "Import / Export" du Centre d'Administration.</strong></li>
 <li><strong class="list-num">Vous cliquez sur "Exporter les Licences (JSON)".</strong></li>
 <li><strong class="list-num">Vous téléchargez le fichier de sauvegarde et le conservez en lieu sûr sur un disque externe ou un cloud sécurisé.</strong></li>
-<p class="paragraph"></ul></p>
+</ul>
 <hr class="divider" />
 <h2 class="section-title">16. CONCLUSION & DÉPLOIEMENT INTERNATIONAL</h2>
 <p class="paragraph">Le <strong>License Management System Enterprise (LMSE)</strong> est le moteur stratégique de valorisation et de protection de Bird Academy Enterprise.</p>
@@ -608,7 +609,8 @@ Appareil 2 : Second équipement                             --&gt; REFUSÉ (DEVI
 <li><strong>Vous maîtrisez à 100% votre parc d'utilisateurs et vos abonnements.</strong></li>
 <li><strong>Vous disposez d'un système traduit en 5 langues et adapté au marché mondial.</strong></li>
 <li><strong>Vous pouvez déployer votre logiciel en toute confiance auprès des particuliers, des clubs, des professionnels et des vétérinaires.</strong></li>
-<p class="paragraph"></ul> Le LMSE v1.0 est désormais <strong>homologué, certifié Enterprise Certified et prêt pour la commercialisation globale</strong>.</p>
+</ul>
+<p class="paragraph">Le LMSE v1.0 est désormais <strong>homologué, certifié Enterprise Certified et prêt pour la commercialisation globale</strong>.</p>
 <hr class="divider" />
 <p class="paragraph"><em>Bird Academy Enterprise — Manuel du Propriétaire LMSE v1.0 — Document Officiel</em></p>
 

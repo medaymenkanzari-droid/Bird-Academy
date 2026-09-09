@@ -328,9 +328,9 @@ Toutes les suites de régression majeures ont été exécutées et validées san
 | `src/features/commercial-website/components/sections/FAQAccordionSection.tsx` | Nettoyage de `faq-free-vs-pro` (remplacement 3 appareils / 5 postes par 1 appareil) | Cohérence FAQ accordéon d'accueil | Nul (Documentation UI) |
 | `src/features/commercial-website/components/checkout/CheckoutWizard.tsx` | Remplacement du pluriel `{maxDevices} appareils` par le singulier | Précision grammaticale Single Device | Nul (Affichage) |
 | `src/features/commercial-website/components/checkout/OrderSummaryCard.tsx` | Affichage `{maxDevices} poste (Mono-appareil)` | Clarification du récapitulatif de commande | Nul (Affichage) |
-| `src/features/commercial-website/services/WebOrderCheckoutService.ts` | Fallback `maxDevices = offer.maxDevices || 1` et définition de `licenseKey` | Robustesse checkout et cohérence | Nul (Typage & sécurité) |
+| `src/features/commercial-website/services/WebOrderCheckoutService.ts` | Fallback `maxDevices = offer.maxDevices \|\| 1` et définition de `licenseKey` | Robustesse checkout et cohérence | Nul (Typage & sécurité) |
 | `src/features/licensing/components/LicenseCreationModal.tsx` | Valeur par défaut `maxDevices: 1` et libellés mono-appareil | Cohérence modale d'administration de licences | Nul (Admin UI) |
-| `src/server/lmseServer.ts` | Fallback `maxDevices: maxDevices || 1` dans `/api/commercial/checkout` | Garantie backend Single Device | Nul (Backend safeguard) |
+| `src/server/lmseServer.ts` | Fallback `maxDevices: maxDevices \|\| 1` dans `/api/commercial/checkout` | Garantie backend Single Device | Nul (Backend safeguard) |
 | `site web/site-bird-academy.html` | Remplacement des mentions 3/5 postes dans les cartes de prix et le tableau comparatif | Cohérence site commercial statique | Nul (HTML/Marketing) |
 | `LMSE_OWNER_GUIDE.md` | Alignement des quotas d'offres conseillées, FAQ et cas d'assistance sur 1 appareil | Cohérence guide propriétaire administrateur | Nul (Documentation) |
 | `LMSE_OWNER_GUIDE.html` | Version HTML du guide propriétaire alignée sur 1 appareil | Cohérence guide propriétaire administrateur | Nul (Documentation) |

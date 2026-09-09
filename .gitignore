@@ -19,6 +19,7 @@ coverage/
 # Packaging & Release Artifacts
 /Release/
 /release*/
+/Bird-Academy-Enterprise-*/
 *.exe
 *.msi
 *.zip

@@ -376,124 +376,124 @@ Pour rentabiliser rapidement le développement de Bird Academy Enterprise tout e
 
 ## 13. FOIRE AUX QUESTIONS (FAQ) — 40 QUESTIONS / RÉPONSES
 
-#### Q1 : Une personne peut-elle utiliser la même clé sur deux ordinateurs en même temps ?
+### Q1 : Une personne peut-elle utiliser la même clé sur deux ordinateurs en même temps ?
 **Réponse** : Non. En V1.x, toutes les offres grand public (Premium, PRO Annual, PRO Lifetime) sont strictement mono-appareil (1 seul poste). Une activation sur un second équipement sera bloquée avec le code `DEVICE_LIMIT_EXCEEDED`. Seuls les contrats sur-mesure (ex: Enterprise 25 postes) permettent plusieurs postes.
 
-#### Q2 : Que se passe-t-il si un client donne sa clé à un ami ?
+### Q2 : Que se passe-t-il si un client donne sa clé à un ami ?
 **Réponse** : L'ami recevra immédiatement une erreur de quota dépassé car la licence est déjà scellée à l'empreinte de l'ordinateur du titulaire.
 
-#### Q3 : Le client doit-il être connecté à Internet en permanence pour utiliser l'application ?
+### Q3 : Le client doit-il être connecté à Internet en permanence pour utiliser l'application ?
 **Réponse** : Absolument pas. Bird Academy Enterprise est conçue pour fonctionner à 100% hors ligne. Une seule vérification initiale ou une activation offline suffit.
 
-#### Q4 : Puis-je modifier la durée d'une licence après sa création ?
+### Q4 : Puis-je modifier la durée d'une licence après sa création ?
 **Réponse** : Oui. Vous pouvez renouveler ou repousser la date d'expiration d'une licence depuis le Centre d'Administration.
 
-#### Q5 : Comment savoir si un client tente de pirater la clé ?
+### Q5 : Comment savoir si un client tente de pirater la clé ?
 **Réponse** : L'onglet "Journal d'Audit" consigne toutes les tentatives infructueuses, modifications d'horloge ou falsifications de signature.
 
-#### Q6 : Qu'est-ce qu'une clé révoquée ?
+### Q6 : Qu'est-ce qu'une clé révoquée ?
 **Réponse** : C'est une clé qui a été placée sur liste noire suite à un litige ou un impayé. Elle ne peut plus jamais être activée sur aucun appareil.
 
-#### Q7 : Est-il possible de transférer une licence d'un client A à un client B ?
+### Q7 : Est-il possible de transférer une licence d'un client A à un client B ?
 **Réponse** : Oui. Vous pouvez changer le nom du titulaire dans le registre d'administration et réinitialiser la liste de ses appareils.
 
-#### Q8 : Que se passe-t-il à la fin des 30 jours de la période d'essai bêta ?
+### Q8 : Que se passe-t-il à la fin des 30 jours de la période d'essai bêta ?
 **Réponse** : L'application affiche poliment un écran indiquant que la période d'essai est terminée et invite l'utilisateur à saisir une clé commerciale pour continuer.
 
-#### Q9 : Les données d'élevage du client sont-elles perdues lors de l'expiration de la licence ?
+### Q9 : Les données d'élevage du client sont-elles perdues lors de l'expiration de la licence ?
 **Réponse** : Non, jamais ! Les données d'oiseaux, de cages et de génétique restent précieusement conservées sur l'appareil. Dès que le client saisit sa nouvelle clé, il retrouve l'intégralité de son élevage intact.
 
-#### Q10 : Le LMSE ralentit-il l'application ?
+### Q10 : Le LMSE ralentit-il l'application ?
 **Réponse** : Non. Les vérifications cryptographiques du LMSE prennent moins de 5 millisecondes, ce qui est totalement imperceptible pour l'utilisateur.
 
-#### Q11 : Puis-je créer une licence valable seulement 7 jours pour un événement commercial ?
+### Q11 : Puis-je créer une licence valable seulement 7 jours pour un événement commercial ?
 **Réponse** : Oui, vous pouvez choisir la durée exacte en jours lors de la création d'une licence temporaire.
 
-#### Q12 : Comment réagir si un client prétend que sa clé ne fonctionne pas ?
+### Q12 : Comment réagir si un client prétend que sa clé ne fonctionne pas ?
 **Réponse** : Vérifiez dans le registre d'administration si la clé est bien saisie sans faute de frappe et si son quota d'appareils n'est pas saturé.
 
-#### Q13 : Qu'est-ce que l'empreinte matérielle (Device Fingerprint) ?
+### Q13 : Qu'est-ce que l'empreinte matérielle (Device Fingerprint) ?
 **Réponse** : C'est la signature numérique anonyme de l'appareil (PC ou téléphone) qui permet d'identifier l'équipement sans connaître la vie privée du client.
 
-#### Q14 : Le client peut-il reculer la date de son ordinateur pour tricher sur la durée ?
+### Q14 : Le client peut-il reculer la date de son ordinateur pour tricher sur la durée ?
 **Réponse** : Non. Le LMSE intègre un système anti-rollback qui détecte tout retour dans le passé de l'horloge et bloque l'application en cas de manipulation.
 
-#### Q15 : Puis-je réactiver une licence qui a été révoquée par erreur ?
+### Q15 : Puis-je réactiver une licence qui a été révoquée par erreur ?
 **Réponse** : Oui, vous pouvez retirer une clé de la liste de révocation dans l'espace d'administration.
 
-#### Q16 : Combien d'appareils puis-je autoriser au maximum sur une licence Enterprise ?
+### Q16 : Combien d'appareils puis-je autoriser au maximum sur une licence Enterprise ?
 **Réponse** : Par défaut 25 appareils, mais vous pouvez personnaliser ce chiffre selon le contrat conclu avec la ferme d'élevage.
 
-#### Q17 : Un client sur smartphone Android peut-il réinstaller l'APK autant de fois qu'il veut ?
+### Q17 : Un client sur smartphone Android peut-il réinstaller l'APK autant de fois qu'il veut ?
 **Réponse** : Oui, tant qu'il s'agit du même téléphone, le LMSE le reconnaît grâce à son empreinte et réactive l'accès instantanément.
 
-#### Q18 : La licence Vétérinaire donne-t-elle accès à des fonctionnalités spécifiques ?
+### Q18 : La licence Vétérinaire donne-t-elle accès à des fonctionnalités spécifiques ?
 **Réponse** : Oui, elle débloque le module Vétérinaire Pro (ordonnances, fiches cliniques, consultations).
 
-#### Q19 : Que signifie le statut "Altérée / Suspendue" ?
+### Q19 : Que signifie le statut "Altérée / Suspendue" ?
 **Réponse** : Cela indique que quelqu'un a tenté de modifier manuellement le fichier de licence. Le système s'est automatiquement verrouillé par sécurité.
 
-#### Q20 : Puis-je exporter l'ensemble de mes clients et licences sur un fichier Excel ou JSON ?
+### Q20 : Puis-je exporter l'ensemble de mes clients et licences sur un fichier Excel ou JSON ?
 **Réponse** : Oui, l'onglet "Import / Export" permet de télécharger toute votre base de données de licences en un clic.
 
-#### Q21 : Le client reçoit-il un avertissement avant l'expiration de sa licence ?
+### Q21 : Le client reçoit-il un avertissement avant l'expiration de sa licence ?
 **Réponse** : Oui, un rappel discret s'affiche 14 jours avant l'échéance dans l'application.
 
-#### Q22 : Que se passe-t-il si j'installe une sauvegarde de la base d'administration sur un nouveau serveur ?
+### Q22 : Que se passe-t-il si j'installe une sauvegarde de la base d'administration sur un nouveau serveur ?
 **Réponse** : Toutes vos licences, clients et historiques sont instantanément restaurés.
 
-#### Q23 : Le système gère-t-il le format de clé en majuscules et minuscules ?
+### Q23 : Le système gère-t-il le format de clé en majuscules et minuscules ?
 **Réponse** : Oui, le LMSE nettoie automatiquement les espaces et convertit les lettres en majuscules pour éviter les erreurs de saisie.
 
-#### Q24 : Est-il possible d'accorder une licence à vie à un partenaire VIP ?
+### Q24 : Est-il possible d'accorder une licence à vie à un partenaire VIP ?
 **Réponse** : Oui, en choisissant le type "Permanente", la licence n'a aucune date d'expiration.
 
-#### Q25 : Comment fonctionne la clé pour une association ou un club ornithologique ?
+### Q25 : Comment fonctionne la clé pour une association ou un club ornithologique ?
 **Réponse** : L'association reçoit une clé "Association" autorisant par exemple 10 appareils pour les membres de son bureau.
 
-#### Q26 : Un client peut-il utiliser sa licence sur Windows ET sur Android en même temps ?
+### Q26 : Un client peut-il utiliser sa licence sur Windows ET sur Android en même temps ?
 **Réponse** : Oui, le LMSE est 100% multi-plateforme.
 
-#### Q27 : Que contient le code de défi de l'activation hors ligne ?
+### Q27 : Que contient le code de défi de l'activation hors ligne ?
 **Réponse** : C'est une suite de 16 caractères cryptés combinant la clé et l'empreinte de l'appareil hors ligne.
 
-#### Q28 : Est-il possible de bloquer temporairement un éleveur sans supprimer sa licence ?
+### Q28 : Est-il possible de bloquer temporairement un éleveur sans supprimer sa licence ?
 **Réponse** : Oui, en faisant passer son statut en "Suspendu".
 
-#### Q29 : Les sauvegardes d'élevage du client sont-elles protégées par le LMSE ?
+### Q29 : Les sauvegardes d'élevage du client sont-elles protégées par le LMSE ?
 **Réponse** : Oui, le système d'intégrité garantit que les sauvegardes d'élevage ne peuvent pas être corrompues.
 
-#### Q30 : Que faire si le fichier de licence local est effacé par un nettoyeur de disque ?
+### Q30 : Que faire si le fichier de licence local est effacé par un nettoyeur de disque ?
 **Réponse** : L'application bascule automatiquement sur la licence d'essai bêta et le client peut ressaisir sa clé principale en 5 secondes.
 
-#### Q31 : La licence commerciale autorise-t-elle la gestion de plusieurs espèces d'oiseaux ?
+### Q31 : La licence commerciale autorise-t-elle la gestion de plusieurs espèces d'oiseaux ?
 **Réponse** : Oui, la licence commerciale donne accès à l'ensemble des espèces (Canaris, Perruches, Exotiques, etc.).
 
-#### Q32 : Combien de temps prend la génération d'une clé de licence ?
+### Q32 : Combien de temps prend la génération d'une clé de licence ?
 **Réponse** : La génération est instantanée (moins d'une seconde).
 
-#### Q33 : Peut-on personnaliser les fonctionnalités d'une licence pour un client spécifique ?
+### Q33 : Peut-on personnaliser les fonctionnalités d'une licence pour un client spécifique ?
 **Réponse** : Oui, lors de la création vous pouvez cocher ou décocher des modules spécifiques.
 
-#### Q34 : Le LMSE fonctionne-t-il sur tablette iPad et iPhone ?
+### Q34 : Le LMSE fonctionne-t-il sur tablette iPad et iPhone ?
 **Réponse** : Oui, le système est parfaitement compatible iOS.
 
-#### Q35 : Le client peut-il voir combien d'appareils il a déjà activés ?
+### Q35 : Le client peut-il voir combien d'appareils il a déjà activés ?
 **Réponse** : Oui, en V1.x chaque licence commerciale est mono-appareil, et l'application confirme l'activation sur le poste actuel ("1 / 1 appareil enregistré").
 
-#### Q36 : Comment empêcher la réutilisation d'un code de réponse hors ligne ?
+### Q36 : Comment empêcher la réutilisation d'un code de réponse hors ligne ?
 **Réponse** : Ce code est calculé de manière unique pour cet appareil spécifique et ne peut fonctionner sur aucun autre équipement.
 
-#### Q37 : Peut-on envoyer une clé de licence par SMS ou WhatsApp ?
+### Q37 : Peut-on envoyer une clé de licence par SMS ou WhatsApp ?
 **Réponse** : Absolument, le format de la clé est court et très facile à copier-coller.
 
-#### Q38 : Le LMSE consomme-t-il de la batterie sur smartphone ?
+### Q38 : Le LMSE consomme-t-il de la batterie sur smartphone ?
 **Réponse** : Non, son impact énergétique est nul car il s'exécute uniquement au lancement et lors des actions clés.
 
-#### Q39 : Quel est le format d'une clé de licence LMSE ?
+### Q39 : Quel est le format d'une clé de licence LMSE ?
 **Réponse** : Elle se présente sous la forme de 5 blocs séparés par des tirets : `LMSE-COMM-A1B2-C3D4-E5F6`.
 
-#### Q40 : Le LMSE est-il certifié pour la commercialisation internationale de Bird Academy Enterprise ?
+### Q40 : Le LMSE est-il certifié pour la commercialisation internationale de Bird Academy Enterprise ?
 **Réponse** : Oui, le système est officiellement homologué, certifié **Enterprise Grade** et traduit en 5 langues (Français, Anglais, Arabe, Espagnol, Italien).
 
 ---

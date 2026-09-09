@@ -27,6 +27,7 @@ export interface LicenseDeliveryPackage {
   generatedAt: string;
   files: DeliveryPackageFile[];
   totalSizeBytes: number;
+  zipBuffer?: Uint8Array;
 }
 
 export type DeliveryPackage = LicenseDeliveryPackage;

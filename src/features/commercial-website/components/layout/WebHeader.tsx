@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useWebLanguage } from '../../i18n';
 import { WebRoute } from '../../types';
 import { LanguageSelector } from './LanguageSelector';
@@ -24,8 +25,16 @@ export interface WebHeaderProps {
 export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, onOpenApp }) => {
   const { t, isRtl } = useWebLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const mobileDrawerRef = useRef<HTMLElement>(null);
   const mobileMenuBtnRef = useRef<HTMLButtonElement>(null);
+  const [headerHeight, setHeaderHeight] = useState(88);
+
+  useEffect(() => {
+    if (headerRef.current) {
+      setHeaderHeight(headerRef.current.offsetHeight);
+    }
+  }, [mobileMenuOpen]);
 
   // Keyboard accessibility and focus trap for mobile drawer
   useEffect(() => {
@@ -67,6 +76,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
 
   return (
     <header 
+      ref={headerRef}
       className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-800 transition-colors shadow-sm"
       dir={isRtl ? 'rtl' : 'ltr'}
       data-testid="web-header"
@@ -177,15 +187,17 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
 
       </div>
 
-      {/* Accessible Mobile Nav Drawer */}
-      {mobileMenuOpen && (
+      {/* Accessible Mobile Nav Drawer rendered via Portal to avoid backdrop-blur containment */}
+      {mobileMenuOpen && typeof document !== 'undefined' && createPortal(
         <aside 
           id="mobile-nav-drawer"
           ref={mobileDrawerRef}
           role="dialog"
           aria-modal="true"
           aria-label="Navigation principale mobile"
-          className="lg:hidden fixed inset-x-0 top-20 bottom-0 bg-white/98 dark:bg-slate-900/98 backdrop-blur-lg z-50 p-6 flex flex-col justify-between overflow-y-auto border-t border-slate-200 dark:border-slate-800 transition-all duration-300"
+          style={{ top: `${headerHeight}px` }}
+          className="lg:hidden fixed inset-x-0 bottom-0 bg-white/98 dark:bg-slate-900/98 z-[9999] p-6 flex flex-col justify-between overflow-y-auto border-t border-slate-200 dark:border-slate-800 shadow-2xl transition-all duration-300"
+          dir={isRtl ? 'rtl' : 'ltr'}
           data-testid="mobile-nav-drawer"
         >
           <div className="space-y-4">
@@ -238,7 +250,8 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
               </button>
             </div>
           </div>
-        </aside>
+        </aside>,
+        document.body
       )}
     </header>
   );

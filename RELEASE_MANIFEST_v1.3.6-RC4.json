@@ -1,0 +1,35 @@
+{
+  "product": "Bird Academy Enterprise — Volière Manager",
+  "version": "1.3.6-RC4",
+  "buildId": "BA-V1.3.6-RC4",
+  "buildCode": 17,
+  "backupSchemaVersion": "1.2",
+  "pwaPluginVersion": "1.3.0",
+  "releaseStatus": "FROZEN",
+  "releaseGate": "GO",
+  "gitCommit": "8b8736380bd7580676af689f59ade38a42093095",
+  "gitTag": "v1.3.6-RC4",
+  "buildTimestamp": "2026-09-08T17:20:14.762Z",
+  "packageFilename": "Bird-Academy-Enterprise-v1.3.6-RC4.zip",
+  "packageSize": 7395404,
+  "packageSha256": "7296d222303649a9f60de6e8064b52904124814bd4dc38a892528fe3b3324248",
+  "tests": {
+    "finalGate": 144,
+    "global": 829,
+    "suitesCount": 60,
+    "status": "100% PASS"
+  },
+  "environment": {
+    "node": "v24.19.0",
+    "npm": "11.17.0",
+    "os": "Windows_NT win32 x64",
+    "vite": "6.4.3",
+    "typescript": "5.8.3"
+  },
+  "securityAudit": {
+    "privateKeysExposed": 0,
+    "adminEndpointsInUserBundle": 0,
+    "realUserDataPresent": 0,
+    "commercialContradictions": 0
+  }
+}

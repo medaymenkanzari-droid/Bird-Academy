@@ -60,6 +60,41 @@ export interface PaymentProvider {
     orderId: string,
     customerDetails: { name: string; email: string; country?: string }
   ): Promise<PaymentProviderResult>;
+  createCheckout?(order: {
+    orderId: string;
+    amount: number;
+    currency: string;
+    customerName: string;
+    customerEmail?: string;
+    offerId: string;
+  }): Promise<{ checkoutSessionId: string; paymentUrl: string; status: string }>;
+  verifyPayment?(
+    orderId: string,
+    paymentId?: string
+  ): Promise<{
+    status: 'PAID' | 'FAILED' | 'PENDING';
+    transactionId?: string;
+    paidAmount?: number;
+    currency?: string;
+    errorMessage?: string;
+  }>;
+  handleWebhook?(
+    payload: any,
+    signature: string
+  ): Promise<{
+    verified: boolean;
+    eventType: string;
+    orderId: string;
+    paymentId: string;
+    amount: number;
+    currency: string;
+    error?: string;
+  }>;
+  refundPayment?(
+    orderId: string,
+    paymentId: string,
+    reason?: string
+  ): Promise<{ refunded: boolean; refundId: string; refundedAmount: number }>;
 }
 
 export interface DownloadArtifact {
