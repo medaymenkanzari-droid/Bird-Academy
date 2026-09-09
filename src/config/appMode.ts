@@ -9,10 +9,10 @@ export type UserRole = 'beta_tester' | 'breeder' | 'veterinarian' | 'association
 export type AdminRole = 'super_admin' | 'admin' | 'support' | 'auditor';
 export type SystemRole = UserRole | AdminRole;
 
-export const BUILD_ID = "BA-V1.3.6-RC4";
-export const BUILD_VERSION_NAME = "1.3.6-RC4";
-export const BUILD_VERSION_CODE = 17;
-export const BUILD_RELEASE_CHANNEL = "Pre-External QA (Windows-PreExternalUX-Fix-01)";
+export const BUILD_ID = "BA-V1.3.6-RC5";
+export const BUILD_VERSION_NAME = "1.3.6-RC5";
+export const BUILD_VERSION_CODE = 18;
+export const BUILD_RELEASE_CHANNEL = "Pre-External QA (SingleDevice-Checkout-RC5)";
 
 export const ADMIN_ROLES: AdminRole[] = ['super_admin', 'admin', 'support', 'auditor'];
 export const USER_ROLES: UserRole[] = ['beta_tester', 'breeder', 'veterinarian', 'association', 'commercial'];

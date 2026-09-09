@@ -255,7 +255,7 @@ export default function Parametres({
 
           <div className="p-3 bg-slate-800/60 rounded-xl border border-slate-700/60 space-y-1">
             <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">{lt('maxDevicesLabel')} / {lt('devicesUsedLabel')}</span>
-            <span className="font-bold text-slate-100 flex items-center gap-1.5"><Monitor className="w-3.5 h-3.5 text-indigo-400" /> {activeLicense?.activations?.length || 1} / {activeLicense?.policy?.maxDevices || 3} {lt('devicesUnit')}</span>
+            <span className="font-bold text-slate-100 flex items-center gap-1.5"><Monitor className="w-3.5 h-3.5 text-indigo-400" /> {activeLicense?.activations?.length || 1} / {activeLicense?.policy?.maxDevices || 1} {lt('devicesUnit')}</span>
           </div>
 
           <div className="p-3 bg-slate-800/60 rounded-xl border border-slate-700/60 space-y-1">
@@ -531,13 +531,13 @@ export default function Parametres({
           <div className="space-y-3 text-slate-600 dark:text-slate-300">
             <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
               <span className="font-medium text-slate-500 dark:text-slate-400">{t('sysInfoAppVersion')}</span>
-              <span className="font-mono text-slate-800 dark:text-slate-200 font-bold">{BUILD_VERSION_NAME || '1.3.6-RC4'}</span>
+              <span className="font-mono text-slate-800 dark:text-slate-200 font-bold">{BUILD_VERSION_NAME || '1.3.6-RC5'}</span>
             </div>
 
             <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
               <span className="font-medium text-slate-500 dark:text-slate-400">{t('sysInfoReleaseChannel')}</span>
               <span className="font-semibold text-slate-800 dark:text-slate-200 text-right text-[11px]">
-                {BUILD_RELEASE_CHANNEL || 'Pre-External QA (Windows-PreExternalUX-Fix-01)'}
+                {BUILD_RELEASE_CHANNEL || 'Pre-External QA (SingleDevice-Checkout-RC5)'}
               </span>
             </div>
             
@@ -621,7 +621,7 @@ export default function Parametres({
 
           <div className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-300 space-y-1">
             <div>
-              <span className="font-bold">Bird Academy Enterprise — Volière Manager</span> ({BUILD_VERSION_NAME || '1.3.6-RC4'})
+              <span className="font-bold">Bird Academy Enterprise — Volière Manager</span> ({BUILD_VERSION_NAME || '1.3.6-RC5'})
             </div>
             <div className="text-slate-500 dark:text-slate-400">
               {t('aboutEthicalCommitment')}

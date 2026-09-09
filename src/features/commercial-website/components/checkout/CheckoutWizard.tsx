@@ -64,7 +64,7 @@ export const CheckoutWizard: React.FC<CheckoutWizardProps> = ({
       price: 49.00,
       currency: 'EUR',
       durationDays: 365,
-      maxDevices: 3,
+      maxDevices: 1,
       aiDailyQuota: 100,
       capabilities: [],
       features: [],

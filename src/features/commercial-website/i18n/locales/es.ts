@@ -322,6 +322,7 @@ export const es = {
     subtotal: 'Subtotal',
     tax: 'Impuestos',
     total: 'Monto Total',
+    deviceBadge: '1 dispositivo (Mono-puesto)',
     
     paymentTitle: 'Método de Pago',
     paymentDemoNotice: 'Modo Demostración Activo: Puede validar el pedido de inmediato para generar y descargar un kit de licencia de prueba.',

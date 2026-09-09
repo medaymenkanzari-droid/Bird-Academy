@@ -109,7 +109,7 @@ export const CommercialOffersCatalog: React.FC<CommercialOffersCatalogProps> = (
                   </div>
                   <div className="text-xs text-slate-500 flex items-center gap-1">
                     <Laptop className="w-3.5 h-3.5 text-slate-400" />
-                    <span>{offer.maxDevices} poste(s)</span>
+                    <span>{offer.maxDevices} appareil (Mono-poste)</span>
                   </div>
                 </div>
 

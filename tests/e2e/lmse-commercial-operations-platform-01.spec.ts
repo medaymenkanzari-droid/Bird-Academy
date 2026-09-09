@@ -381,10 +381,10 @@ test.describe('LMSE Commercial Operations Platform — Comprehensive E2E Tests',
       await page.locator('button:has-text("Annuler")').click();
     });
 
-    test('TC-E2E-OPS-017: Multi-device limits displayed per offer (1 device Free, 3 devices Premium, 5 devices Pro)', async ({ page }) => {
-      await expect(page.locator('[data-testid="offer-card-OFFER-FREE-COMMUNITY"]')).toContainText('1 poste(s)');
-      await expect(page.locator('[data-testid="offer-card-OFFER-PREMIUM-ANNUAL-2026"]')).toContainText('3 poste(s)');
-      await expect(page.locator('[data-testid="offer-card-OFFER-PRO-ENTERPRISE-ANNUAL-2026"]')).toContainText('5 poste(s)');
+    test('TC-E2E-OPS-017: Single-device limits displayed per offer (1 appareil Mono-poste for all tiers)', async ({ page }) => {
+      await expect(page.locator('[data-testid="offer-card-OFFER-FREE-COMMUNITY"]')).toContainText('1 appareil (Mono-poste)');
+      await expect(page.locator('[data-testid="offer-card-OFFER-PREMIUM-ANNUAL-2026"]')).toContainText('1 appareil (Mono-poste)');
+      await expect(page.locator('[data-testid="offer-card-OFFER-PRO-ENTERPRISE-ANNUAL-2026"]')).toContainText('1 appareil (Mono-poste)');
     });
 
     test('TC-E2E-OPS-018: Validity duration clearly stated (30 jours, 365 jours, Permanente)', async ({ page }) => {

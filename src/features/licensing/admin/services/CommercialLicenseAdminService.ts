@@ -121,7 +121,7 @@ export class CommercialLicenseAdminService {
       holderName: existing.holderName,
       holderEmail: existing.holderEmail,
       durationDays: values.durationDays,
-      maxDevices: existing.policy?.maxDevices || 3,
+      maxDevices: existing.policy?.maxDevices || 1,
       customFeatures: existing.policy?.features || [],
       notes: `Renouvellement de la licence ${existing.id}. ${values.notes || ''}`.trim(),
     });
@@ -163,7 +163,7 @@ export class CommercialLicenseAdminService {
       holderName: values.holderName || oldLic.holderName,
       holderEmail: values.holderEmail || oldLic.holderEmail,
       durationDays: values.durationDays,
-      maxDevices: oldLic.policy?.maxDevices || 3,
+      maxDevices: oldLic.policy?.maxDevices || 1,
       customFeatures: [],
       notes: `Remplacement de la licence ${oldLic.id}. Raison: ${values.reason}`,
     });

@@ -333,6 +333,7 @@ export const fr = {
     subtotal: 'Sous-total',
     tax: 'Taxes',
     total: 'Montant Total',
+    deviceBadge: '1 appareil (Mono-poste)',
     
     paymentTitle: 'Mode de Paiement',
     paymentDemoNotice: 'Mode Démonstration Actif : Vous pouvez valider la commande immédiatement pour générer et télécharger votre package de licence test.',

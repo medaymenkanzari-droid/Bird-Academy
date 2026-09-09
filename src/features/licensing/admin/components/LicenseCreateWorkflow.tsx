@@ -319,7 +319,7 @@ export const LicenseCreateWorkflow: React.FC<LicenseCreateWorkflowProps> = ({
                 </div>
                 <div className="text-right">
                   <span className="text-xs text-slate-400 block">Produit & Version :</span>
-                  <span className="font-bold text-xs text-amber-400">Bird Academy Enterprise v1.3.6-RC4</span>
+                  <span className="font-bold text-xs text-amber-400">Bird Academy Enterprise v1.3.6-RC5</span>
                 </div>
               </div>
 

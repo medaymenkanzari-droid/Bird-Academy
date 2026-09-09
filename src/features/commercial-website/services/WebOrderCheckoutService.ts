@@ -353,7 +353,7 @@ export class WebOrderCheckoutService {
       : null;
 
     const licenseType: LicenseType = (offer.licenseType as LicenseType) || (offer.tier === 'PRO' ? 'enterprise' : 'commercial');
-    const maxDevices = offer.maxDevices || 3;
+    const maxDevices = offer.maxDevices || 1;
     const tierFeatureTag = `tier:${offer.tier.toLowerCase()}`;
     const features = Array.from(new Set([...(offer.features || ['core', 'unlimited_birds']), tierFeatureTag]));
 
@@ -568,7 +568,7 @@ export class WebOrderCheckoutService {
       issuedAt: nowIso,
       expiresAt,
       policy: {
-        maxDevices: offer.maxDevices || 3,
+        maxDevices: offer.maxDevices || 1,
         allowOfflineActivation: true,
         allowTransfer: true,
         features: offer.features || ['core', 'tier:premium'],

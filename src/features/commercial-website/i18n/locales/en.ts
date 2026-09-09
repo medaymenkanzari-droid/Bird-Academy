@@ -322,6 +322,7 @@ export const en = {
     subtotal: 'Subtotal',
     tax: 'Taxes',
     total: 'Total Amount',
+    deviceBadge: '1 device (Single-device)',
     
     paymentTitle: 'Payment Method',
     paymentDemoNotice: 'Demo Mode Active: You can complete this order immediately to generate and download a sample license package.',

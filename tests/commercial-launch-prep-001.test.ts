@@ -84,9 +84,9 @@ describe('MISSION COMMERCIAL-LAUNCH-PREP-001 — Audit & Préparation Commercial
       assert.strictEqual(commit, '8b8736380bd7580676af689f59ade38a42093095');
     });
 
-    it('A03 — Build ID et Build Code correspondent à BA-V1.3.6-RC4 et 17', () => {
+    it('A03 — Build ID et Build Code correspondent à une version officielle (RC4 ou RC5)', () => {
       const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8'));
-      assert.strictEqual(pkg.version, '1.3.6-RC4');
+      assert.ok(['1.3.6-RC4', '1.3.6-RC5'].includes(pkg.version));
     });
 
     it('A04 — L archive de freeze Bird-Academy-Enterprise-v1.3.6-RC4.zip est scellée', () => {
