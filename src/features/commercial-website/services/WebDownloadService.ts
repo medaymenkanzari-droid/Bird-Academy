@@ -106,7 +106,7 @@ export class WebDownloadService {
   }
 
   public static readonly GITHUB_REPO = 'medaymenkanzari-droid/Bird-Academy';
-  public static readonly DEFAULT_RELEASE_TAG = 'v1.3.6-RC4';
+  public static readonly DEFAULT_RELEASE_TAG = 'v1.3.6-RC5';
 
   /**
    * Constructs the official GitHub Release direct download URL for a binary asset
