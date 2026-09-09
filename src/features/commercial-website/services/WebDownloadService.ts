@@ -105,6 +105,34 @@ export class WebDownloadService {
     return this.getInstance().getArtifactByFilename(filename);
   }
 
+  public static readonly GITHUB_REPO = 'medaymenkanzari-droid/Bird-Academy';
+  public static readonly DEFAULT_RELEASE_TAG = 'v1.3.6-RC4';
+
+  /**
+   * Constructs the official GitHub Release direct download URL for a binary asset
+   */
+  public static getGitHubReleaseUrl(filename: string, tag: string = this.DEFAULT_RELEASE_TAG): string {
+    return `https://github.com/${this.GITHUB_REPO}/releases/download/${tag}/${filename}`;
+  }
+
+  /**
+   * Resolves the download URL according to deployment environment:
+   * - If VITE_DOWNLOAD_BASE_URL is configured, prefix the filename.
+   * - If filename is an external binary (.exe, .apk), route to GitHub Release.
+   * - Otherwise fallback to local relative route (/downloads/filename).
+   */
+  public static getPublicDownloadUrl(filename: string, tag: string = this.DEFAULT_RELEASE_TAG): string {
+    const envBase = (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_DOWNLOAD_BASE_URL) || '';
+    if (envBase) {
+      return `${envBase.replace(/\/$/, '')}/${filename}`;
+    }
+    const isBinary = filename.endsWith('.exe') || filename.endsWith('.apk');
+    if (isBinary) {
+      return this.getGitHubReleaseUrl(filename, tag);
+    }
+    return `/downloads/${filename}`;
+  }
+
   public static getSha256VerificationInstructions(filename: string): string {
     return `PowerShell: Get-FileHash -Path .\\${filename} -Algorithm SHA256`;
   }

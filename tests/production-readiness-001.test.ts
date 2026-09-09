@@ -119,6 +119,8 @@ describe('MISSION PRODUCTION-READINESS-001 — Audit & Préparation Production (
         'src/components/Parametres.tsx',
         'src/config/appMode.ts',
         'src/features/licensing/admin/components/LicenseCreateWorkflow.tsx',
+        'src/features/commercial-website/services/WebDownloadService.ts',
+        'src/features/commercial-website/pages/WebDownloadCenterPage.tsx',
       ]);
       const unexpected = diffFiles.filter(f => f.startsWith('src/') && !documentedFixes.has(f));
       assert.strictEqual(unexpected.length, 0, 'Le code applicatif ne doit avoir aucune modification non documentée');

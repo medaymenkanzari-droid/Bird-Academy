@@ -1,0 +1,74 @@
+{
+  "product": "Bird Academy Enterprise — Volière Manager",
+  "version": "1.3.6-RC5",
+  "buildId": "BA-V1.3.6-RC5",
+  "buildCode": 18,
+  "binarySourceRelease": "v1.3.6-RC4",
+  "distributionChannel": "GitHub Releases",
+  "repository": "https://github.com/medaymenkanzari-droid/Bird-Academy",
+  "generatedAt": "2026-09-09T18:00:00.000Z",
+  "binaries": [
+    {
+      "filename": "Bird-Academy-User-Windows-Setup.exe",
+      "name": "Bird Academy pour Windows (Installateur Setup)",
+      "platform": "windows",
+      "architecture": "x86 (i386 PE executable)",
+      "installerType": "NSIS",
+      "size": 117318317,
+      "sizeMB": "111.88 MB",
+      "sha256": "1E965BCAA4C07EEBCEC64D248A2568B91F5B1F7E28146C29187EA675708E4813",
+      "source": "dist_binaries/Bird-Academy-User-Windows-Setup.exe",
+      "downloadUrl": "https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/v1.3.6-RC4/Bird-Academy-User-Windows-Setup.exe",
+      "minOsVersion": "Windows 10 / 11 (64-bit)",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "Bird-Academy-User.exe",
+      "name": "Bird Academy pour Windows (Édition Portable)",
+      "platform": "windows",
+      "architecture": "x86 (i386 PE executable)",
+      "installerType": "NSIS Portable",
+      "size": 116643591,
+      "sizeMB": "111.24 MB",
+      "sha256": "1701FB75AF19280E0A346B6F3525609516E0E801177916480E1ECB8311479A92",
+      "source": "dist_binaries/Bird-Academy-User.exe",
+      "downloadUrl": "https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/v1.3.6-RC4/Bird-Academy-User.exe",
+      "minOsVersion": "Windows 10 / 11 (64-bit)",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "Bird-Academy-User.apk",
+      "name": "Bird Academy pour Android (Package APK)",
+      "platform": "android",
+      "architecture": "ARM64 / ARMv7",
+      "installerType": "APK (Android Package Archive)",
+      "size": 5187830,
+      "sizeMB": "4.95 MB",
+      "sha256": "8C2ACE49FA73191AB90B26615BBDD2CE591D67D16051496FE995ABC668498AC9",
+      "source": "dist_binaries/Bird-Academy-User.apk",
+      "downloadUrl": "https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/v1.3.6-RC4/Bird-Academy-User.apk",
+      "minOsVersion": "Android 10+ (API 29+)",
+      "status": "VERIFIED"
+    }
+  ],
+  "documentation": [
+    {
+      "filename": "LMSE_OWNER_GUIDE.pdf",
+      "name": "Manuel Utilisateur & Guide d'Activation (PDF)",
+      "platform": "documentation",
+      "size": 428378,
+      "sizeMB": "0.41 MB",
+      "sha256": "42C1418C7B4DF75394B2C12D141E730E83DBE3416A58279A39A7C19E2D46D618",
+      "source": "public/downloads/LMSE_OWNER_GUIDE.pdf",
+      "downloadUrl": "/downloads/LMSE_OWNER_GUIDE.pdf",
+      "status": "VERIFIED"
+    }
+  ],
+  "invariants": {
+    "gitClassicTracked": false,
+    "gitLfsRequired": false,
+    "paymentLive": "DISABLED",
+    "publicCommercialSales": "CLOSED",
+    "singleDevice": true
+  }
+}
