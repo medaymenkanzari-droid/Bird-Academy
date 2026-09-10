@@ -1,17 +1,60 @@
 {
   "product": "Bird Academy Enterprise — Volière Manager",
-  "version": "1.3.6-RC5",
+  "applicationVersion": "1.3.6",
+  "releaseCandidate": "v1.3.6-RC5",
   "buildId": "BA-V1.3.6-RC5",
   "buildCode": 18,
   "previousRelease": "v1.3.6-RC4",
   "previousCommit": "8b8736380bd7580676af689f59ade38a42093095",
-  "releaseStatus": "FROZEN",
-  "releaseGate": "GO",
+  "gitCommitHead": "9bdef33b068392a6e20ab9c9bd4bd81c286b9aa4",
   "gitTag": "v1.3.6-RC5",
-  "buildTimestamp": "2026-09-09T16:49:27.520Z",
+  "gitTagCommit": "7776a1dcdb774e9620b7cc0f370798a4df49f25c",
+  "gitStatus": "DIVERGENT (HEAD != tag commit; working tree contains uncommitted files; tag kept intact per user instructions)",
+  "releaseStatus": "RC5 NOT FREEZABLE",
+  "releaseGate": "BLOCKED (Git Tag Divergence)",
+  "buildTimestamp": "2026-09-09T23:51:40.909Z",
   "packageFilename": "Bird-Academy-Enterprise-v1.3.6-RC5.zip",
-  "packageSize": 7317642,
-  "packageSha256": "92D1F057335FDBD6E1126662E92CCFF79FCB683F1D269B706C6EDC9933F6D419",
+  "packageSize": 7591170,
+  "packageSha256": "0B0D444EF19EA13252C284069E8A1D21F08F20F2780505FDED23429BDCAE7228",
+  "environment": {
+    "node": "v24.19.0",
+    "npm": "11.17.0",
+    "os": "Windows_NT win32 x64",
+    "vite": "6.4.3",
+    "typescript": "5.8.3",
+    "pwaVersion": "1.3.0",
+    "backupSchemaVersion": "1.2"
+  },
+  "artifacts": [
+    {
+      "filename": "Bird-Academy-User-Windows-Setup.exe",
+      "size": 117318317,
+      "sizeMB": "111.88 MB",
+      "sha256": "1E965BCAA4C07EEBCEC64D248A2568B91F5B1F7E28146C29187EA675708E4813",
+      "source": "dist_binaries/Bird-Academy-User-Windows-Setup.exe"
+    },
+    {
+      "filename": "Bird-Academy-User.exe",
+      "size": 116643591,
+      "sizeMB": "111.24 MB",
+      "sha256": "1701FB75AF19280E0A346B6F3525609516E0E801177916480E1ECB8311479A92",
+      "source": "dist_binaries/Bird-Academy-User.exe"
+    },
+    {
+      "filename": "Bird-Academy-User.apk",
+      "size": 5187830,
+      "sizeMB": "4.95 MB",
+      "sha256": "8C2ACE49FA73191AB90B26615BBDD2CE591D67D16051496FE995ABC668498AC9",
+      "source": "dist_binaries/Bird-Academy-User.apk"
+    },
+    {
+      "filename": "LMSE_OWNER_GUIDE.pdf",
+      "size": 428378,
+      "sizeMB": "0.41 MB",
+      "sha256": "42C1418C7B4DF75394B2C12D141E730E83DBE3416A58279A39A7C19E2D46D618",
+      "source": "public/downloads/LMSE_OWNER_GUIDE.pdf"
+    }
+  ],
   "singleDevicePolicy": {
     "maxDevices": 1,
     "free": 1,
@@ -21,24 +64,29 @@
     "contradictionsEliminated": true
   },
   "tests": {
-    "dedicatedCheckoutFix": 197,
-    "checkoutConsistency002": 154,
-    "globalSuitesCount": 60,
-    "globalTestsTotal": 829,
-    "status": "100% PASS"
+    "dedicatedReleaseFreeze": 98,
+    "dedicatedInstallerDistribution": 94,
+    "playwrightE2E": 14,
+    "historicalRegressionsCount": 1274,
+    "globalTestsCount": 829,
+    "typeScriptResult": "0 ERRORS",
+    "bundleAuditResult": "PASS (Zero administrative leak)",
+    "buildResult": "SUCCESS (dist/ generated)",
+    "overallStatus": "100% PASS"
   },
-  "environment": {
-    "node": "v24.19.0",
-    "npm": "11.17.0",
-    "os": "Windows_NT win32 x64",
-    "vite": "6.4.3",
-    "typescript": "5.8.3"
-  },
-  "securityAudit": {
-    "privateKeysExposed": 0,
-    "adminEndpointsInUserBundle": 0,
-    "breedingDataFirewall": "STRICT_ISOLATION_PASS",
+  "invariants": {
     "paymentLive": "DISABLED",
-    "publicSales": "CLOSED"
-  }
+    "publicCommercialSales": "CLOSED",
+    "singleDevice": true,
+    "breedingDataCloudSync": false,
+    "breedingDataNetworkTransfer": 0
+  },
+  "findings": [
+    {
+      "id": "FINDING-GIT-001",
+      "severity": "BLOCKER",
+      "title": "Git Tag Divergence (HEAD != v1.3.6-RC5)",
+      "detail": "The tag v1.3.6-RC5 points to commit 7776a1d, while qualification HEAD is at 9bdef33 with additional uncommitted qualification files. The tag was kept intact without git tag -f per strict instructions. RC5 is non-freezable until the tag and HEAD are officially synchronized."
+    }
+  ]
 }

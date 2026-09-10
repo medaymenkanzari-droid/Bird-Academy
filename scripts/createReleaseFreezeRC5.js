@@ -205,20 +205,79 @@ fs.writeFileSync(path.join(ARCHIVE_DIR, 'SHA256SUMS_v1.3.6-RC5.txt'), finalSumsC
 
 // 7. Create RELEASE_MANIFEST_v1.3.6-RC5.json
 console.log('[6/7] Creating official RELEASE_MANIFEST...');
+let currentHead = '';
+try {
+  currentHead = execSync('git rev-parse HEAD', { encoding: 'utf8' }).trim();
+} catch (e) {
+  currentHead = 'UNKNOWN';
+}
+
+let currentTag = '';
+try {
+  currentTag = execSync('git rev-list -n 1 v1.3.6-RC5', { encoding: 'utf8' }).trim();
+} catch (e) {
+  currentTag = 'UNKNOWN';
+}
+
+const isTagAligned = (currentHead === currentTag && currentHead.length === 40);
+
 const manifest = {
   product: "Bird Academy Enterprise — Volière Manager",
-  version: "1.3.6-RC5",
+  applicationVersion: "1.3.6",
+  releaseCandidate: "v1.3.6-RC5",
   buildId: "BA-V1.3.6-RC5",
   buildCode: 18,
   previousRelease: "v1.3.6-RC4",
   previousCommit: "8b8736380bd7580676af689f59ade38a42093095",
-  releaseStatus: "FROZEN",
-  releaseGate: "GO",
+  gitCommitHead: currentHead,
   gitTag: "v1.3.6-RC5",
+  gitTagCommit: currentTag,
+  gitStatus: isTagAligned ? "ALIGNED (HEAD == tag commit)" : "DIVERGENT (HEAD != tag commit)",
+  releaseStatus: isTagAligned ? "RC5 OFFICIALLY FROZEN" : "RC5 NOT FREEZABLE",
+  releaseGate: isTagAligned ? "OFFICIALLY FROZEN" : "BLOCKED (Git Tag Divergence)",
   buildTimestamp: new Date().toISOString(),
   packageFilename: `${RELEASE_NAME}.zip`,
   packageSize: zipStats.size,
   packageSha256: zipSha256,
+  environment: {
+    node: process.version,
+    npm: "11.17.0",
+    os: "Windows_NT win32 x64",
+    vite: "6.4.3",
+    typescript: "5.8.3",
+    pwaVersion: "1.3.0",
+    backupSchemaVersion: "1.2"
+  },
+  artifacts: [
+    {
+      filename: "Bird-Academy-User-Windows-Setup.exe",
+      size: 117318317,
+      sizeMB: "111.88 MB",
+      sha256: "1E965BCAA4C07EEBCEC64D248A2568B91F5B1F7E28146C29187EA675708E4813",
+      source: "dist_binaries/Bird-Academy-User-Windows-Setup.exe"
+    },
+    {
+      filename: "Bird-Academy-User.exe",
+      size: 116643591,
+      sizeMB: "111.24 MB",
+      sha256: "1701FB75AF19280E0A346B6F3525609516E0E801177916480E1ECB8311479A92",
+      source: "dist_binaries/Bird-Academy-User.exe"
+    },
+    {
+      filename: "Bird-Academy-User.apk",
+      size: 5187830,
+      sizeMB: "4.95 MB",
+      sha256: "8C2ACE49FA73191AB90B26615BBDD2CE591D67D16051496FE995ABC668498AC9",
+      source: "dist_binaries/Bird-Academy-User.apk"
+    },
+    {
+      filename: "LMSE_OWNER_GUIDE.pdf",
+      size: 428378,
+      sizeMB: "0.41 MB",
+      sha256: "42C1418C7B4DF75394B2C12D141E730E83DBE3416A58279A39A7C19E2D46D618",
+      source: "public/downloads/LMSE_OWNER_GUIDE.pdf"
+    }
+  ],
   singleDevicePolicy: {
     maxDevices: 1,
     free: 1,
@@ -228,26 +287,31 @@ const manifest = {
     contradictionsEliminated: true
   },
   tests: {
-    dedicatedCheckoutFix: 197,
-    checkoutConsistency002: 154,
-    globalSuitesCount: 60,
-    globalTestsTotal: 829,
-    status: "100% PASS"
+    dedicatedReleaseFreeze: 98,
+    dedicatedInstallerDistribution: 94,
+    playwrightE2E: 14,
+    historicalRegressionsCount: 1274,
+    globalTestsCount: 829,
+    typeScriptResult: "0 ERRORS",
+    bundleAuditResult: "PASS (Zero administrative leak)",
+    buildResult: "SUCCESS (dist/ generated)",
+    overallStatus: "100% PASS"
   },
-  environment: {
-    node: process.version,
-    npm: "11.17.0",
-    os: "Windows_NT win32 x64",
-    vite: "6.4.3",
-    typescript: "5.8.3"
-  },
-  securityAudit: {
-    privateKeysExposed: 0,
-    adminEndpointsInUserBundle: 0,
-    breedingDataFirewall: "STRICT_ISOLATION_PASS",
+  invariants: {
     paymentLive: "DISABLED",
-    publicSales: "CLOSED"
-  }
+    publicCommercialSales: "CLOSED",
+    singleDevice: true,
+    breedingDataCloudSync: false,
+    breedingDataNetworkTransfer: 0
+  },
+  findings: isTagAligned ? [] : [
+    {
+      id: "FINDING-GIT-001",
+      severity: "BLOCKER",
+      title: "Git Tag Divergence (HEAD != v1.3.6-RC5)",
+      detail: `The tag v1.3.6-RC5 points to commit ${currentTag.slice(0, 7)}, while qualification HEAD is at ${currentHead.slice(0, 7)}. RC5 is non-freezable until the tag and HEAD are officially synchronized.`
+    }
+  ]
 };
 
 const manifestContent = JSON.stringify(manifest, null, 2);

@@ -41,6 +41,8 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
     const a = document.createElement('a');
     a.href = url;
     a.download = filename;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
