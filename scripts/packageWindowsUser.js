@@ -43,7 +43,7 @@ execSync('node scripts/generateBrandIcons.js', { stdio: 'inherit', cwd: ROOT_DIR
 // 1. BUILD BIRD ACADEMY USER BUNDLE
 // ----------------------------------------------------------------------
 console.log('\n[2/4] Compilation Web Utilisateur (Vite outDir: dist)...');
-execSync('npm run build:user', { stdio: 'inherit', cwd: ROOT_DIR });
+execSync('npm run build:user:beta', { stdio: 'inherit', cwd: ROOT_DIR });
 
 // ----------------------------------------------------------------------
 // 2. VERIFY USER BUNDLE INTEGRITY
@@ -67,11 +67,12 @@ if (fs.existsSync(OUTPUT_BUILD_DIR)) {
 fs.rmSync(path.join(ROOT_DIR, 'dist'), { recursive: true, force: true });
 fs.cpSync(path.join(ROOT_DIR, 'dist_user'), path.join(ROOT_DIR, 'dist'), { recursive: true });
 
-// Ensure package.json name is set to bird-academy-user so electron-builder uses %LOCALAPPDATA%\Programs\bird-academy-user
+// Ensure package.json name is set to bird-academy-user and dependencies are empty for electron-builder
 const pkgPath = path.join(ROOT_DIR, 'package.json');
 const originalPkgContent = fs.readFileSync(pkgPath, 'utf8');
 const pkgObj = JSON.parse(originalPkgContent);
 pkgObj.name = 'bird-academy-user';
+pkgObj.dependencies = {};
 fs.writeFileSync(pkgPath, JSON.stringify(pkgObj, null, 2), 'utf8');
 
 try {
@@ -109,12 +110,20 @@ for (const file of files) {
 
 const finalSetup = path.join(RELEASE_DIR, 'Bird-Academy-Avian-ERP-Setup.exe');
 const finalPortable = path.join(RELEASE_DIR, 'Bird-Academy-User.exe');
+const binDir = path.join(ROOT_DIR, 'dist_binaries');
+ensureDir(binDir);
+const binSetup = path.join(binDir, 'Bird-Academy-User-Windows-Setup.exe');
+const binPortable = path.join(binDir, 'Bird-Academy-User.exe');
 
 if (setupSource) {
   fs.copyFileSync(setupSource, finalSetup);
+  fs.copyFileSync(setupSource, binSetup);
+  console.log(`  📦 Copié vers dist_binaries: ${binSetup}`);
 }
 if (portableSource) {
   fs.copyFileSync(portableSource, finalPortable);
+  fs.copyFileSync(portableSource, binPortable);
+  console.log(`  📦 Copié vers dist_binaries: ${binPortable}`);
 }
 
 const shaLines = [];

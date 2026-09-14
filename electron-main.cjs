@@ -42,6 +42,7 @@ function determineIsAdmin() {
 }
 
 const isAdmin = determineIsAdmin();
+const isQaMode = process.argv.includes('--qa-mode') || process.argv.some(arg => typeof arg === 'string' && arg.startsWith('--qa-mode')) || process.env.QA_MODE === '1';
 
 app.name = isAdmin ? ADMIN_CANONICAL_NAME : APP_CANONICAL_NAME;
 
@@ -49,6 +50,7 @@ console.log('================================================================');
 console.log(`[RUNTIME-INIT] Executable Path : "${process.execPath}"`);
 console.log(`[RUNTIME-INIT] Detected Mode   : ${isAdmin ? 'ADMIN' : 'USER'}`);
 console.log(`[RUNTIME-INIT] Canonical Name  : "${app.name}"`);
+console.log(`[RUNTIME-INIT] QA Mode Active  : ${isQaMode ? 'YES (--qa-mode)' : 'NO'}`);
 console.log('================================================================');
 
 // ----------------------------------------------------------------------
@@ -194,6 +196,8 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       webSecurity: true,
+      preload: path.join(__dirname, 'preload.cjs'),
+      additionalArguments: isQaMode ? ['--qa-mode'] : []
     }
   });
 

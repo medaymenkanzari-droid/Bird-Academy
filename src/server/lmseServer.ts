@@ -8,6 +8,7 @@
 import express, { Request, Response, Express } from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import { AdminAuthService } from './middleware/adminAuth';
 import { RateLimiter } from './middleware/rateLimiter';
 import { LicenseGenerator } from '../features/licensing/engines/LicenseGenerator';
@@ -787,7 +788,9 @@ export class LmseBackendServer {
     // ==========================================
     // 3. OFFICIAL DOWNLOAD ARTIFACTS (/downloads/*)
     // ==========================================
-    this.app.get('/downloads/:filename', (req: Request, res: Response) => {
+    const fileHashCache = new Map<string, { mtimeMs: number; size: number; sha256: string }>();
+
+    this.app.get('/downloads/:filename', async (req: Request, res: Response) => {
       const rawParam = req.params.filename || '';
       const filename = path.basename(decodeURIComponent(rawParam));
       if (!filename || filename === '.' || filename === '..') {
@@ -795,36 +798,101 @@ export class LmseBackendServer {
       }
 
       const rootDir = process.cwd();
-      const candidates = [
-        path.join(rootDir, filename),
-        path.join(rootDir, 'Release', 'Release-2026-Multilingual', filename),
-        path.join(rootDir, 'Release', filename),
-        path.join(rootDir, 'public', 'downloads', filename),
-      ];
 
-      if (filename === 'Bird-Academy-User-Windows-Setup.exe') {
-        candidates.push(
-          path.join(rootDir, 'Release', 'Release-2026-Multilingual', 'Bird-Academy-Avian-ERP-Setup.exe'),
-          path.join(rootDir, 'Release', 'Bird-Academy-Avian-ERP-Setup.exe')
-        );
-      }
-      if (filename === 'Bird-Academy-User.apk') {
-        candidates.push(
-          path.join(rootDir, 'Release', 'Release-2026-Multilingual', 'Bird-Academy-User.apk'),
-          path.join(rootDir, 'Release', 'Bird-Academy-User-Release.apk')
-        );
+      // Table stricte des artefacts officiels validés pour RC6 (avec SHA-256 et taille attendus)
+      const RC6_DOWNLOAD_REGISTRY: Record<string, {
+        expectedSha256: string;
+        expectedSize: number;
+        candidatePaths: string[];
+      }> = {
+        'Bird-Academy-User-Windows-Setup.exe': {
+          expectedSha256: '746F6D99CF91802686D21A2F7632945730B96F2225B756AD2BF27B27B815754B',
+          expectedSize: 112731374,
+          candidatePaths: [
+            path.join(rootDir, 'dist_binaries', 'Bird-Academy-User-Windows-Setup.exe'),
+            path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'Release', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
+          ],
+        },
+        'Bird-Academy-User.exe': {
+          expectedSha256: 'EDDD283D2A212B7A0155B32FC8CA7B188E28C3ED0874C509DDE395DAAD37E1BE',
+          expectedSize: 111233160,
+          candidatePaths: [
+            path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.exe'),
+            path.join(rootDir, 'release', 'Bird-Academy-User.exe'),
+            path.join(rootDir, 'Release', 'Bird-Academy-User.exe'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.exe'),
+          ],
+        },
+        'Bird-Academy-User.apk': {
+          expectedSha256: '061CF531C7DE55465C093874ABF9C649CA3830659EFDE1443E2F8C911E4717DB',
+          expectedSize: 12043947,
+          candidatePaths: [
+            path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.apk'),
+            path.join(rootDir, 'Bird-Academy-User.apk'),
+            path.join(rootDir, 'release', 'Bird-Academy-User.apk'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.apk'),
+          ],
+        },
+        'LMSE_OWNER_GUIDE.pdf': {
+          expectedSha256: '42C1418C7B4DF75394B2C12D141E730E83DBE3416A58279A39A7C19E2D46D618',
+          expectedSize: 428378,
+          candidatePaths: [
+            path.join(rootDir, 'public', 'downloads', 'LMSE_OWNER_GUIDE.pdf'),
+            path.join(rootDir, 'dist_binaries', 'LMSE_OWNER_GUIDE.pdf'),
+            path.join(rootDir, 'LMSE_OWNER_GUIDE.pdf'),
+          ],
+        },
+      };
+
+      const artifactConfig = RC6_DOWNLOAD_REGISTRY[filename];
+      if (!artifactConfig) {
+        return res.status(404).json({ error: 'NOT_FOUND', message: 'Artefact introuvable.' });
       }
 
       let targetPath: string | null = null;
-      for (const cand of candidates) {
-        if (fs.existsSync(cand) && fs.statSync(cand).isFile()) {
-          targetPath = cand;
-          break;
+      for (const cand of artifactConfig.candidatePaths) {
+        if (!fs.existsSync(cand)) continue;
+        try {
+          const stat = fs.statSync(cand);
+          if (!stat.isFile() || stat.size !== artifactConfig.expectedSize) continue;
+
+          // Vérification d'intégrité cryptographique SHA-256 avec cache mtime
+          const cached = fileHashCache.get(cand);
+          let computedSha256: string;
+          if (cached && cached.mtimeMs === stat.mtimeMs && cached.size === stat.size) {
+            computedSha256 = cached.sha256;
+          } else {
+            computedSha256 = await new Promise<string>((resolve, reject) => {
+              const hash = crypto.createHash('sha256');
+              const stream = fs.createReadStream(cand);
+              stream.on('data', (chunk) => hash.update(chunk));
+              stream.on('end', () => resolve(hash.digest('hex').toUpperCase()));
+              stream.on('error', reject);
+            });
+            fileHashCache.set(cand, {
+              mtimeMs: stat.mtimeMs,
+              size: stat.size,
+              sha256: computedSha256,
+            });
+          }
+
+          if (computedSha256 === artifactConfig.expectedSha256) {
+            targetPath = cand;
+            break;
+          } else {
+            console.error(`[LMSE_DOWNLOAD_SECURITY] Hash mismatch for candidate of ${filename}. Expected: ${artifactConfig.expectedSha256}, got: ${computedSha256}`);
+          }
+        } catch (err: any) {
+          console.error(`[LMSE_DOWNLOAD_SECURITY] Verification error on ${cand}:`, err.message);
         }
       }
 
       if (!targetPath) {
-        return res.status(404).json({ error: 'NOT_FOUND', message: `Artefact ${filename} introuvable.` });
+        console.error(`[LMSE_DOWNLOAD_SECURITY] Integrity verification failed for ${filename}: No valid RC6 candidate found matching official SHA-256.`);
+        // Message propre sans fuite d'informations internes (chemins système, stack trace)
+        return res.status(500).json({ error: 'INTEGRITY_CHECK_FAILED', message: "Échec de vérification d'intégrité de l'artefact." });
       }
 
       const stat = fs.statSync(targetPath);
@@ -839,6 +907,7 @@ export class LmseBackendServer {
       res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
       res.setHeader('Cache-Control', 'public, max-age=3600');
       res.setHeader('Accept-Ranges', 'bytes');
+      res.setHeader('ETag', `"${artifactConfig.expectedSha256}"`);
 
       const stream = fs.createReadStream(targetPath);
       stream.pipe(res);

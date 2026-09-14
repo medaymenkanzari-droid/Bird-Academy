@@ -156,9 +156,6 @@ export class MigrationManager {
         const canonicalValue = localStorage.getItem(canonicalKey);
         if (canonicalValue === null) {
           localStorage.setItem(canonicalKey, historicalValue);
-          localStorage.removeItem(historicalKey);
-        } else if (canonicalValue === historicalValue) {
-          localStorage.removeItem(historicalKey);
         }
       });
     } catch (e) {

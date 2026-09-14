@@ -251,6 +251,11 @@ export interface TranslationDict {
   labelGender: string;
   labelColor: string;
   labelBirthDate: string;
+  qaResetTestEnvironment: string;
+  qaResetConfirmTitle: string;
+  qaResetConfirmDesc: string;
+  qaResetConfirmPrompt: string;
+  qaResetConfirmAction: string;
 }
 
 export const TRANSLATIONS: Record<Language, TranslationDict> = {
@@ -891,6 +896,11 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     sysInfoNetwork: "Connectivité réseau",
     sysInfoOfflineIsolated: "100% Hors-ligne (Isolé)",
     sysInfoLicenseStatus: "Statut de licence",
+    qaResetTestEnvironment: "🧪 Réinitialiser l'environnement de test",
+    qaResetConfirmTitle: "Réinitialiser l'environnement de test ?",
+    qaResetConfirmDesc: "Cette action supprimera uniquement les données de licence et de test QA.\nVos oiseaux et vos données d'élevage seront conservés.",
+    qaResetConfirmPrompt: "Continuer ?",
+    qaResetConfirmAction: "Réinitialiser",
   },
   en: {
     dashboard: "Dashboard",
@@ -1529,6 +1539,11 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     sysInfoNetwork: "Network Connectivity",
     sysInfoOfflineIsolated: "100% Offline (Isolated)",
     sysInfoLicenseStatus: "License Status",
+    qaResetTestEnvironment: "🧪 Reset test environment",
+    qaResetConfirmTitle: "Reset test environment?",
+    qaResetConfirmDesc: "This action will only delete license and QA test data.\nYour birds and breeding data will be preserved.",
+    qaResetConfirmPrompt: "Continue?",
+    qaResetConfirmAction: "Reset",
   },
   ar: {
     dashboard: "لوحة التحكم",
@@ -2167,6 +2182,11 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     sysInfoNetwork: "الاتصال بالشبكة",
     sysInfoOfflineIsolated: "100% بدون إنترنت (معزول)",
     sysInfoLicenseStatus: "حالة الترخيص",
+    qaResetTestEnvironment: "🧪 إعادة تعيين بيئة الاختبار",
+    qaResetConfirmTitle: "إعادة تعيين بيئة الاختبار؟",
+    qaResetConfirmDesc: "سيؤدي هذا الإجراء إلى حذف بيانات الترخيص واختبار ضمان الجودة فقط.\nسيتم الاحتفاظ بطيورك وبيانات التربية بالكامل.",
+    qaResetConfirmPrompt: "متابعة؟",
+    qaResetConfirmAction: "إعادة تعيين",
   },
   es: {
     dashboard: "Tablero de control",
@@ -2799,6 +2819,11 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     sysInfoNetwork: "Conectividad de red",
     sysInfoOfflineIsolated: "100% Fuera de línea (Aislado)",
     sysInfoLicenseStatus: "Estado de la licencia",
+    qaResetTestEnvironment: "🧪 Restablecer el entorno de prueba",
+    qaResetConfirmTitle: "¿Restablecer el entorno de prueba?",
+    qaResetConfirmDesc: "Esta acción solo eliminará los datos de licencia y pruebas de QA.\nSus aves y datos de cría se conservarán.",
+    qaResetConfirmPrompt: "¿Continuar?",
+    qaResetConfirmAction: "Restablecer",
   },
   it: {
     dashboard: "Pannello di Controllo",
@@ -3437,6 +3462,11 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     sysInfoNetwork: "Connettività di rete",
     sysInfoOfflineIsolated: "100% Offline (Isolato)",
     sysInfoLicenseStatus: "Stato della licenza",
+    qaResetTestEnvironment: "🧪 Reimposta l'ambiente di test",
+    qaResetConfirmTitle: "Reimpostare l'ambiente di test?",
+    qaResetConfirmDesc: "Questa azione eliminerà solo i dati di licenza e i test QA.\nI tuoi uccelli e i dati di allevamento saranno conservati.",
+    qaResetConfirmPrompt: "Continuare?",
+    qaResetConfirmAction: "Reimposta",
   }
 };
 

@@ -9,10 +9,23 @@ export type UserRole = 'beta_tester' | 'breeder' | 'veterinarian' | 'association
 export type AdminRole = 'super_admin' | 'admin' | 'support' | 'auditor';
 export type SystemRole = UserRole | AdminRole;
 
-export const BUILD_ID = "BA-V1.3.6-RC5";
-export const BUILD_VERSION_NAME = "1.3.6-RC5";
-export const BUILD_VERSION_CODE = 18;
-export const BUILD_RELEASE_CHANNEL = "Pre-External QA (SingleDevice-Checkout-RC5)";
+export const BUILD_ID = "BA-V1.3.6-RC6";
+export const BUILD_VERSION_NAME = "1.3.6-RC6";
+export const BUILD_VERSION_CODE = 20;
+export const BUILD_RELEASE_CHANNEL = "Pre-External QA (RC6 Public Distribution)";
+
+/**
+ * Checks if the current execution environment is an explicit Electron QA session.
+ * Active ONLY when running in Electron desktop runtime with the explicit '--qa-mode' flag passed.
+ * Strictly returns false in web browsers (Chrome, Edge, Firefox) and in Electron without '--qa-mode'.
+ */
+export function isQaMode(): boolean {
+  const win = typeof window !== 'undefined' ? window : ((typeof globalThis !== 'undefined') ? (globalThis as any) : null);
+  if (win?.electron) {
+    return win.electron.isElectron === true && win.electron.qaMode === true;
+  }
+  return false;
+}
 
 export const ADMIN_ROLES: AdminRole[] = ['super_admin', 'admin', 'support', 'auditor'];
 export const USER_ROLES: UserRole[] = ['beta_tester', 'breeder', 'veterinarian', 'association', 'commercial'];
@@ -52,11 +65,25 @@ export function isAdminBuild(): boolean {
 }
 
 export function isDevEnvironment(): boolean {
-  const metaDev = (import.meta as any)?.env?.DEV;
-  if (typeof metaDev === 'boolean') return metaDev;
-  const metaMode = (import.meta as any)?.env?.MODE;
-  if (metaMode) return metaMode !== 'production';
-  return typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production';
+  try {
+    const metaEnv = (typeof import.meta !== 'undefined' && (import.meta as any)?.env) ? (import.meta as any).env : null;
+    if (metaEnv?.DEV === true) return true;
+    if (metaEnv?.MODE && metaEnv.MODE !== 'production') return true;
+  } catch {}
+
+  if (typeof process !== 'undefined') {
+    return process.env?.NODE_ENV !== 'production';
+  }
+
+  if (typeof window !== 'undefined') {
+    if ((window as any).__QA_DEV_ENV__ === true) return true;
+    const host = window.location?.hostname;
+    if (host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host === '::1') {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 /**

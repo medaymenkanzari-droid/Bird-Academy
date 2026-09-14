@@ -11,7 +11,8 @@ import { useSubscription } from '../../features/subscription/hooks/useSubscripti
 import { TierBadge } from '../../features/subscription/components/TierBadge';
 import { NotificationPopover } from './NotificationPopover';
 import { NotificationService } from '../../features/platform/services/NotificationService';
-import { isDevEnvironment } from '../../config/appMode';
+import { isQaMode } from '../../config/appMode';
+import { QaResetModal } from '../../features/licensing/components/QaResetModal';
 
 export interface DesktopTopBarProps {
   currentTab: string;
@@ -38,6 +39,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
     return false;
   });
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isQaResetModalOpen, setIsQaResetModalOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState<number>(() => NotificationService.getUnreadCount());
   const bellButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -173,20 +175,23 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
 
         {/* License & Tier Status Badges */}
         <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800">
-          {isDevEnvironment() && (
-            <button
-              type="button"
-              data-testid="topbar-qa-reset-btn"
-              onClick={async () => {
-                if (typeof window !== 'undefined' && (window as any).__QA_RESET_LICENSE__) {
-                  await (window as any).__QA_RESET_LICENSE__();
-                }
-              }}
-              title="🧪 QA/Dev : Réinitialiser la licence locale"
-              className="text-[10px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 px-2 py-1 rounded-lg cursor-pointer transition-all flex items-center gap-1"
-            >
-              <span>🧪 Reset QA</span>
-            </button>
+          {isQaMode() && (
+            <>
+              <button
+                type="button"
+                data-testid="topbar-qa-reset-btn"
+                aria-label="QA controls"
+                onClick={() => setIsQaResetModalOpen(true)}
+                title={t('qaResetTestEnvironment') || "🧪 Réinitialiser l'environnement de test"}
+                className="text-[10px] font-mono font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded-lg cursor-pointer transition-all flex items-center gap-1"
+              >
+                <span>{t('qaResetTestEnvironment') || "🧪 Réinitialiser l'environnement de test"}</span>
+              </button>
+              <QaResetModal
+                isOpen={isQaResetModalOpen}
+                onClose={() => setIsQaResetModalOpen(false)}
+              />
+            </>
           )}
           <button
             type="button"

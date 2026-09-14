@@ -73,8 +73,8 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 </p>
               </div>
               <div className="text-xs text-slate-500 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div>Version : <strong>1.4.2-stable (x64)</strong></div>
-                <div>Taille : <strong>111.88 MB</strong></div>
+                <div>Version : <strong>1.3.6-RC6 (x64)</strong></div>
+                <div>Taille : <strong>107.51 MB</strong></div>
               </div>
             </div>
 
@@ -104,8 +104,8 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 </p>
               </div>
               <div className="text-xs text-slate-500 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div>Version : <strong>1.4.2-portable</strong></div>
-                <div>Taille : <strong>111.24 MB</strong></div>
+                <div>Version : <strong>1.3.6-RC6 (portable)</strong></div>
+                <div>Taille : <strong>106.08 MB</strong></div>
               </div>
             </div>
 
@@ -135,8 +135,8 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 </p>
               </div>
               <div className="text-xs text-slate-500 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div>Version : <strong>1.4.2 (ARM64)</strong></div>
-                <div>Taille : <strong>4.95 MB</strong></div>
+                <div>Version : <strong>1.3.6-RC6 (ARM64)</strong></div>
+                <div>Taille : <strong>11.49 MB</strong></div>
               </div>
             </div>
 

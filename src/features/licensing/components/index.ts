@@ -8,3 +8,4 @@ export * from './LicenseActivationModal';
 export * from './FirstLaunchActivationScreen';
 export * from './QrCodeScannerModal';
 export * from './LicenseBootGuard';
+export * from './QaResetModal';

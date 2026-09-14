@@ -25,7 +25,8 @@ import {
 import { Key, ShieldCheck, CheckCircle2, AlertCircle, Cpu, Wifi, WifiOff, ArrowRight, Copy, Check, Upload, QrCode, FileText } from 'lucide-react';
 import { QrCodeScannerModal } from './QrCodeScannerModal';
 import { motion, AnimatePresence } from 'motion/react';
-import { isDevEnvironment } from '../../../config/appMode';
+import { isQaMode } from '../../../config/appMode';
+import { QaResetModal } from './QaResetModal';
 
 export interface FirstLaunchActivationScreenProps {
   onActivationSuccess: () => void;
@@ -36,6 +37,7 @@ export const FirstLaunchActivationScreen: React.FC<FirstLaunchActivationScreenPr
   const { activeLicense, validation, refresh, activateKey, resetLicenseForQA } = useLicensing();
 
   const [method, setMethod] = useState<'key' | 'file' | 'qr'>('file');
+  const [isQaResetModalOpen, setIsQaResetModalOpen] = useState(false);
   const [licenseKey, setLicenseKey] = useState('');
   const [holderName, setHolderName] = useState('');
   const [qrContent, setQrContent] = useState('');
@@ -713,23 +715,21 @@ export const FirstLaunchActivationScreen: React.FC<FirstLaunchActivationScreenPr
       {/* Bottom Footer */}
       <footer className="w-full max-w-5xl mx-auto text-center py-4 text-xs text-slate-500 border-t border-slate-800/40 mt-6 flex flex-col items-center gap-2">
         <span>Bird Academy Enterprise © {new Date().getFullYear()} — License Protection LMSE (Offline Beta)</span>
-        {isDevEnvironment() && (
-          <button
-            type="button"
-            data-testid="qa-reset-license-btn"
-            onClick={async () => {
-              await resetLicenseForQA();
-              setAlert({
-                type: 'info',
-                title: 'Reset QA Effectué',
-                message: 'L\'état de licence local a été réinitialisé. Aucune donnée d\'élevage n\'a été affectée.',
-              });
-              setMode('input');
-            }}
-            className="text-[11px] text-amber-400/80 hover:text-amber-300 font-mono underline cursor-pointer bg-amber-950/30 border border-amber-800/40 px-3 py-1 rounded-full"
-          >
-            🧪 Mode QA/Dev : Réinitialiser l'état de licence locale
-          </button>
+        {isQaMode() && (
+          <>
+            <button
+              type="button"
+              data-testid="qa-reset-license-btn"
+              onClick={() => setIsQaResetModalOpen(true)}
+              className="text-[11px] text-amber-400/80 hover:text-amber-300 font-mono underline cursor-pointer bg-amber-950/30 border border-amber-800/40 px-3 py-1 rounded-full"
+            >
+              {t('qaResetTestEnvironment') || "🧪 Réinitialiser l'environnement de test"}
+            </button>
+            <QaResetModal
+              isOpen={isQaResetModalOpen}
+              onClose={() => setIsQaResetModalOpen(false)}
+            />
+          </>
         )}
       </footer>
     </div>

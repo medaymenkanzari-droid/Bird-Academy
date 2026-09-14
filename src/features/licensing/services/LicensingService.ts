@@ -18,7 +18,7 @@ import { IntegrityVerificationEngine, IntegrityCheckResult } from '../engines/In
 import { LicenseAuditEngine } from '../engines/LicenseAuditEngine';
 import { OfflineBetaValidator } from './OfflineBetaValidator';
 
-import { assertAdminContext, isDevEnvironment } from '../../../config/appMode';
+import { assertAdminContext, isDevEnvironment, isQaMode } from '../../../config/appMode';
 import { LmseConfigService } from '../../../config/lmseConfig';
 
 export class LicensingService {
@@ -555,28 +555,40 @@ export class LicensingService {
   }
 
   /**
-   * QA / DEV EXCLUSIVE: Resets local client license state to allow testing B-011 security scenarios.
+   * Official QA / DEV allow-list of keys permitted to be removed during test environment reset.
+   * STRICT POLICY (MISSION QA-FREE-CLEAN-001):
+   * Global storage clear is strictly forbidden. Only these 7 keys may be deleted.
+   */
+  public static readonly QA_ALLOWED_KEYS = [
+    'bird_academy_lmse_active_license',
+    'bird_academy_lmse_all_licenses',
+    'bird_academy_lmse_revocation_list',
+    'bird_academy_lmse_audit_logs',
+    'bird_academy_lmse_last_known_timestamp',
+    'bird_academy_subscription_tier_override',
+    'bird_academy_assistant_tier_override',
+  ] as const;
+
+  /**
+   * QA / DEV EXCLUSIVE: Resets local client license state to allow testing B-011 and QA-FREE-CLEAN-001 scenarios.
    * - Restores first-launch unactivated state
    * - Preserves 100% of breeding data (birds, couples, cages, etc.)
+   * - Preserves 100% of user preferences (language, theme, currency)
    * - Leaves LMSE backend server untouched
    * - Blocked in strict production environments
    */
   public async resetLocalLicenseStateForQA(): Promise<void> {
-    if (!isDevEnvironment()) {
-      throw new Error('[SECURITY] QA license reset is strictly disabled in production builds.');
+    if (!isDevEnvironment() && !isQaMode()) {
+      throw new Error('[SECURITY] QA license reset is strictly disabled in production builds without --qa-mode.');
     }
     await this.repository.clearActiveLicense();
     const storage = (typeof window !== 'undefined' && window.localStorage)
       ? window.localStorage
       : ((typeof globalThis !== 'undefined' && (globalThis as any).localStorage) ? (globalThis as any).localStorage : null);
     if (storage) {
-      storage.removeItem('bird_academy_lmse_active_license');
-      storage.removeItem('bird_academy_lmse_all_licenses');
-      storage.removeItem('bird_academy_lmse_revocation_list');
-      storage.removeItem('bird_academy_lmse_audit_logs');
-      storage.removeItem('bird_academy_lmse_last_known_timestamp');
-      storage.removeItem('bird_academy_subscription_tier_override');
-      storage.removeItem('bird_academy_assistant_tier_override');
+      for (const key of LicensingService.QA_ALLOWED_KEYS) {
+        storage.removeItem(key);
+      }
     }
   }
 }

@@ -65,7 +65,7 @@ test.describe('Bird Academy Web Foundation Test Suite — Identité Avian Precis
     const toggleBtn = page.locator('#toggleShaBtn');
     await toggleBtn.click();
     await expect(shaDrawer).toBeVisible();
-    await expect(shaDrawer).toContainText('1E965BCAA4C07EEBCEC64D248A2568B91F5B1F7E28146C29187EA675708E4813');
+    await expect(shaDrawer).toContainText('746F6D99CF91802686D21A2F7632945730B96F2225B756AD2BF27B27B815754B');
   });
 
   test('TC-WEB-007: Encart de Rassurance Support < 24h & Formulaire double colonne', async ({ page }) => {

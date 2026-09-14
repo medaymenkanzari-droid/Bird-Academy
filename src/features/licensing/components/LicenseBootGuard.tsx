@@ -18,19 +18,67 @@ export interface LicenseBootGuardProps {
   children: ReactNode;
 }
 
+/**
+ * Deterministic check for installed native application runtime (Android Capacitor APK / Desktop Electron / Tauri).
+ * STRICT POLICY (ANDROID-FREE-001 Directive #1):
+ * Under NO circumstances should an Android browser user-agent alone qualify as native.
+ * Chrome/Firefox/Safari on Android MUST remain recognized as WEB and render the Commercial Website.
+ */
+export function isNativeRuntime(): boolean {
+  if (typeof window === 'undefined') return false;
+
+  // 1. Capacitor native app runtime check (Official Capacitor Bridge)
+  const cap = (window as any).Capacitor;
+  if (cap && typeof cap === 'object') {
+    // Check if running on native device platform (android/ios, NOT 'web')
+    if (typeof cap.isNativePlatform === 'function' && cap.isNativePlatform() === true) {
+      return true;
+    }
+    if (typeof cap.getPlatform === 'function') {
+      const platform = cap.getPlatform();
+      if (platform === 'android' || platform === 'ios') {
+        return true;
+      }
+    }
+  }
+
+  // 2. Capacitor custom scheme protocol check (Capacitor Android WebViews load under capacitor://localhost)
+  if (typeof window.location !== 'undefined' && window.location.protocol === 'capacitor:') {
+    return true;
+  }
+
+  // 3. Native injected Android JavaScript bridge if present
+  if (typeof (window as any).Android === 'object' && (window as any).Android !== null) {
+    return true;
+  }
+
+  // 4. Desktop packaged runtime check (Electron context bridge / Tauri)
+  const electronBridge = (window as any).electron;
+  if (electronBridge && (typeof electronBridge === 'object' || electronBridge === true)) {
+    return true;
+  }
+  if (Boolean((window as any).__TAURI__)) {
+    return true;
+  }
+
+  // Default: Pure Web browser (including Chrome Android, Safari iOS, desktop browsers) -> FALSE
+  return false;
+}
+
 export const LicenseBootGuard: React.FC<LicenseBootGuardProps> = ({ children }) => {
   const { licenseState, loading, validation, activeLicense, refresh } = useLicensing();
   const timestamp = new Date().toISOString();
   const isLicensed = licenseState === 'LICENSE_VALID';
 
-  // Check if user explicitly asked for the Breeding Application
-  const isExplicitAppView = typeof window !== 'undefined' && (
+  // Check if running inside installed native app OR user explicitly asked for the Breeding Application
+  const isNative = isNativeRuntime();
+  const isExplicitAppView = isNative || (typeof window !== 'undefined' && (
     window.location.search.includes('view=app') ||
     window.location.search.includes('mode=app') ||
     window.location.hash === '#app'
-  );
+  ));
 
-  // If not explicitly viewing the application, default to Commercial Website
+  // If not explicitly viewing the application and not in a native app, default to Commercial Website
   if (!isExplicitAppView) {
     return (
       <CommercialWebsiteApp 

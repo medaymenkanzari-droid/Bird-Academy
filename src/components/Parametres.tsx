@@ -18,10 +18,11 @@ import { translateLicensing } from '../features/licensing/translations/licensing
 import { BirdRepository } from '../features/birds/repositories/BirdRepository';
 import { HabitatRepository } from '../features/habitat/repositories/HabitatRepository';
 import { BreedingRepository } from '../features/breeding/repositories/BreedingRepository';
-import { BUILD_VERSION_NAME, BUILD_RELEASE_CHANNEL } from '../config/appMode';
+import { BUILD_VERSION_NAME, BUILD_RELEASE_CHANNEL, isDevEnvironment, isQaMode } from '../config/appMode';
 import { SpeciesProfileService } from '../features/species/services/SpeciesProfileService';
 import { SPECIES_REGISTRY, getSpeciesById } from '../data/speciesRegistry';
 import { SpeciesBadge } from './design-system';
+import { QaResetModal } from '../features/licensing/components/QaResetModal';
 
 interface ParametresProps {
   onExportBackup: () => void;
@@ -40,6 +41,7 @@ export default function Parametres({
   const { activeLicense, validation } = useLicensing();
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isQaResetModalOpen, setIsQaResetModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Species Profile Management state
@@ -488,6 +490,23 @@ export default function Parametres({
               >
                 {t('clearDatabase')}
               </button>
+
+              {isQaMode() && (
+                <>
+                  <button
+                    type="button"
+                    data-testid="parametres-qa-reset-btn"
+                    onClick={() => setIsQaResetModalOpen(true)}
+                    className="flex items-center justify-center gap-1.5 border border-amber-400/80 hover:bg-amber-50 dark:border-amber-700/80 dark:hover:bg-amber-950/30 text-amber-700 dark:text-amber-300 font-bold py-2 px-3.5 rounded-xl text-xs cursor-pointer transition-colors"
+                  >
+                    <span>{t('qaResetTestEnvironment') || "🧪 Réinitialiser l'environnement de test"}</span>
+                  </button>
+                  <QaResetModal
+                    isOpen={isQaResetModalOpen}
+                    onClose={() => setIsQaResetModalOpen(false)}
+                  />
+                </>
+              )}
             </div>
 
             {/* Demo Data Generator Access Card */}
@@ -531,13 +550,13 @@ export default function Parametres({
           <div className="space-y-3 text-slate-600 dark:text-slate-300">
             <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
               <span className="font-medium text-slate-500 dark:text-slate-400">{t('sysInfoAppVersion')}</span>
-              <span className="font-mono text-slate-800 dark:text-slate-200 font-bold">{BUILD_VERSION_NAME || '1.3.6-RC5'}</span>
+              <span className="font-mono text-slate-800 dark:text-slate-200 font-bold">{BUILD_VERSION_NAME || '1.3.6-RC6'}</span>
             </div>
 
             <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
               <span className="font-medium text-slate-500 dark:text-slate-400">{t('sysInfoReleaseChannel')}</span>
               <span className="font-semibold text-slate-800 dark:text-slate-200 text-right text-[11px]">
-                {BUILD_RELEASE_CHANNEL || 'Pre-External QA (SingleDevice-Checkout-RC5)'}
+                {BUILD_RELEASE_CHANNEL || 'Pre-External QA (Android-Free-Native-RC6)'}
               </span>
             </div>
             
@@ -621,7 +640,7 @@ export default function Parametres({
 
           <div className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-300 space-y-1">
             <div>
-              <span className="font-bold">Bird Academy Enterprise — Volière Manager</span> ({BUILD_VERSION_NAME || '1.3.6-RC5'})
+              <span className="font-bold">Bird Academy Enterprise — Volière Manager</span> ({BUILD_VERSION_NAME || '1.3.6-RC6'})
             </div>
             <div className="text-slate-500 dark:text-slate-400">
               {t('aboutEthicalCommitment')}

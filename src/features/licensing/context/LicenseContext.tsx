@@ -10,7 +10,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { License, LicenseValidationResult } from '../types/licensing';
 import { LicensingService } from '../services/LicensingService';
-import { BUILD_ID, isDevEnvironment } from '../../../config/appMode';
+import { BUILD_ID, isDevEnvironment, isQaMode } from '../../../config/appMode';
 
 export type LicenseState = 'INITIALIZING' | 'LICENSE_CHECKING' | 'LICENSE_REQUIRED' | 'LICENSE_VALID' | 'LICENSE_INVALID';
 
@@ -72,12 +72,14 @@ export const LicenseProvider: React.FC<LicenseProviderProps> = ({ children }) =>
   }, [refresh]);
 
   useEffect(() => {
-    if (isDevEnvironment() && typeof window !== 'undefined') {
-      (window as any).__QA_RESET_LICENSE__ = async () => {
-        console.log('[QA DEV TOOLS] Resetting local client license state...');
+    if ((isDevEnvironment() || isQaMode()) && typeof window !== 'undefined') {
+      const runQaReset = async () => {
+        console.log('[QA DEV TOOLS] Resetting local client license & test overrides (QA-FREE-CLEAN-001)...');
         await resetLicenseForQA();
-        console.log('[QA DEV TOOLS] Local license reset completed! Returned to FirstLaunchActivationScreen.');
+        console.log('[QA DEV TOOLS] Test environment reset completed! Active license is null, native FREE mode active.');
       };
+      (window as any).__QA_RESET_LICENSE__ = runQaReset;
+      (window as any).__QA_RESET_TEST_ENVIRONMENT__ = runQaReset;
 
       if (window.location.search.includes('qa_reset_license=true') || window.location.search.includes('reset_license=1')) {
         const url = new URL(window.location.href);

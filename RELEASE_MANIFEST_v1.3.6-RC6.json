@@ -1,0 +1,78 @@
+{
+  "product": "Bird Academy Enterprise — Volière Manager",
+  "applicationVersion": "1.3.6-RC6",
+  "releaseCandidate": "v1.3.6-RC6",
+  "buildId": "BA-V1.3.6-RC6",
+  "buildCode": 19,
+  "previousRelease": "v1.3.6-RC5",
+  "previousCommit": "24ca2e0604d1a47f47872a384c4d688e4532ed64",
+  "distributionChannel": "GitHub Releases",
+  "repository": "https://github.com/medaymenkanzari-droid/Bird-Academy",
+  "releaseDate": "2026-09-11",
+  "releaseStatus": "QUALIFIED FOR PUBLIC RELEASE (RC6 RELEASE AUDIT PASS)",
+  "releaseGate": "CONTROLLED PRE-RELEASE",
+  "artifacts": [
+    {
+      "filename": "Bird-Academy-User-Windows-Setup.exe",
+      "name": "Bird Academy pour Windows (Installateur Setup)",
+      "platform": "windows",
+      "architecture": "x64 (64-bit)",
+      "installerType": "NSIS",
+      "sizeBytes": 112731374,
+      "sizeMB": "107.51 MB",
+      "sha256": "746F6D99CF91802686D21A2F7632945730B96F2225B756AD2BF27B27B815754B",
+      "minOsVersion": "Windows 10 / 11 (64-bit)",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "Bird-Academy-User.exe",
+      "name": "Bird Academy pour Windows (Édition Portable)",
+      "platform": "windows",
+      "architecture": "x64 (64-bit)",
+      "installerType": "NSIS Portable",
+      "sizeBytes": 111233160,
+      "sizeMB": "106.08 MB",
+      "sha256": "EDDD283D2A212B7A0155B32FC8CA7B188E28C3ED0874C509DDE395DAAD37E1BE",
+      "minOsVersion": "Windows 10 / 11 (64-bit)",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "Bird-Academy-User.apk",
+      "name": "Bird Academy pour Android (Package APK)",
+      "platform": "android",
+      "architecture": "ARM64 / ARMv7",
+      "installerType": "APK (Android Package Archive)",
+      "sizeBytes": 12043947,
+      "sizeMB": "11.49 MB",
+      "sha256": "061CF531C7DE55465C093874ABF9C649CA3830659EFDE1443E2F8C911E4717DB",
+      "minOsVersion": "Android 10+ (API 29+)",
+      "status": "VERIFIED"
+    },
+    {
+      "filename": "LMSE_OWNER_GUIDE.pdf",
+      "name": "Manuel Utilisateur & Guide d'Activation (PDF)",
+      "platform": "documentation",
+      "sizeBytes": 428378,
+      "sizeMB": "0.41 MB",
+      "sha256": "42C1418C7B4DF75394B2C12D141E730E83DBE3416A58279A39A7C19E2D46D618",
+      "status": "VERIFIED"
+    }
+  ],
+  "singleDevicePolicy": {
+    "maxDevices": 1,
+    "free": 1,
+    "premium": 1,
+    "proAnnual": 1,
+    "proLifetime": 1,
+    "contradictionsEliminated": true
+  },
+  "invariants": {
+    "paymentLive": "CLOSED",
+    "publicCommercialSales": "CLOSED",
+    "singleDevice": true,
+    "breedingDataCloudSync": false,
+    "breedingDataNetworkTransfer": 0,
+    "freeModeEnabled": true,
+    "firstLaunchActivationScreenAbsent": true
+  }
+}
