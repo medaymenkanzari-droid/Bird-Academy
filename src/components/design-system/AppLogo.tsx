@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { brandAssets } from '../../config/brandAssets';
 
 export interface AppLogoProps {
   className?: string;
@@ -16,7 +17,7 @@ export interface AppLogoProps {
 
 /**
  * Bird Academy Official Brand Header / Logo Lockup
- * Renders the new modern blue & gold shield icon (/assets/images/logo-icon.png)
+ * Renders the official brand icon (brandAssets.logoIcon)
  * alongside the bold typography & subline.
  */
 export const AppLogo: React.FC<AppLogoProps> = ({
@@ -58,7 +59,7 @@ export const AppLogo: React.FC<AppLogoProps> = ({
       aria-label="Bird Academy Avian ERP"
     >
       <img
-        src="/assets/images/logo-icon.png"
+        src={brandAssets.logoIcon}
         alt="Bird Academy"
         className={`${iconDimensions[size]} object-contain inline-block shrink-0`}
       />

@@ -27,6 +27,7 @@ import { QrCodeScannerModal } from './QrCodeScannerModal';
 import { motion, AnimatePresence } from 'motion/react';
 import { isQaMode } from '../../../config/appMode';
 import { QaResetModal } from './QaResetModal';
+import { brandAssets } from '../../../config/brandAssets';
 
 export interface FirstLaunchActivationScreenProps {
   onActivationSuccess: () => void;
@@ -322,7 +323,7 @@ export const FirstLaunchActivationScreen: React.FC<FirstLaunchActivationScreenPr
       {/* Top Header Bar */}
       <header className="w-full max-w-5xl mx-auto flex items-center justify-between py-4 border-b border-slate-800/60 mb-6">
         <div className="flex items-center gap-3">
-          <img src="/assets/images/logo-icon.png" alt="Bird Academy" className="w-9 h-9 object-contain inline-block" />
+          <img src={brandAssets.logoIcon} alt="Bird Academy" className="w-9 h-9 object-contain inline-block" />
           <div className="flex flex-col justify-center leading-tight">
             <span className="tracking-tight font-black uppercase font-sans text-base text-white">
               Bird Academy

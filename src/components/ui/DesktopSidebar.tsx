@@ -10,6 +10,7 @@ import { AppLogo, AppIcon } from '../design-system';
 import { LicenseStatusBadge } from '../../features/licensing/components/LicenseStatusBadge';
 import { useSubscription } from '../../features/subscription/hooks/useSubscription';
 import { TierBadge } from '../../features/subscription/components/TierBadge';
+import { brandAssets } from '../../config/brandAssets';
 
 export interface NavigationItem {
   id: string;
@@ -105,7 +106,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2.5">
                 <img
-                  src="/assets/images/logo-icon.png"
+                  src={brandAssets.logoIcon}
                   alt="Bird Academy"
                   className="w-8 h-8 object-contain inline-block"
                 />
@@ -131,7 +132,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
           ) : (
             <div className="flex flex-col items-center w-full gap-2">
               <img
-                src="/assets/images/logo-icon.png"
+                src={brandAssets.logoIcon}
                 alt="Bird Academy"
                 className="w-9 h-9 object-contain"
               />

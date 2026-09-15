@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { brandAssets } from '../../config/brandAssets';
 
 export interface AppIconProps {
   className?: string;
@@ -14,7 +15,7 @@ export interface AppIconProps {
 
 /**
  * Bird Academy Official Brand Emblem
- * Renders the new brand icon mark /assets/images/logo-icon.png
+ * Renders the official brand icon mark (brandAssets.logoIcon)
  */
 export const AppIcon: React.FC<AppIconProps> = ({
   className = 'w-9 h-9',
@@ -27,15 +28,15 @@ export const AppIcon: React.FC<AppIconProps> = ({
   return (
     <img
       id={id}
-      src="/assets/images/logo-icon.png"
+      src={brandAssets.logoIcon}
       alt="Bird Academy"
       className={`${className} object-contain inline-block`}
       style={style}
       aria-label="Bird Academy Avian ERP Logo"
       onError={(e) => {
-        // Fallback to SVG if needed
-        if (e.currentTarget.src.includes('logo-icon.png')) {
-          e.currentTarget.src = '/icon.svg';
+        // Fallback to official brand SVG if PNG fails
+        if (!e.currentTarget.src.includes('logo-icon.svg')) {
+          e.currentTarget.src = brandAssets.logoIconSvg;
         }
       }}
     />

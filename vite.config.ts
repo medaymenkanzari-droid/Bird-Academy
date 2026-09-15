@@ -116,7 +116,13 @@ export default defineConfig(() => {
       lmseAdminBackendPlugin(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['icon.svg', 'icon-192.png', 'icon-512.png', 'demo-bird.svg'],
+        includeAssets: [
+          'assets/images/public_assets_images_bird_academy/icon.png',
+          'assets/images/public_assets_images_bird_academy/logo-icon.svg',
+          'assets/images/public_assets_images_bird_academy/apple-touch-icon.png',
+          'assets/images/public_assets_images_bird_academy/favicon.ico',
+          'demo-bird.svg'
+        ],
         workbox: {
           cleanupOutdatedCaches: true,
           clientsClaim: true,
@@ -142,13 +148,13 @@ export default defineConfig(() => {
           categories: ["productivity", "utilities"],
           icons: [
             {
-              src: "icon-192.png",
-              sizes: "192x192",
+              src: "assets/images/public_assets_images_bird_academy/apple-touch-icon.png",
+              sizes: "180x180",
               type: "image/png",
               purpose: "any maskable"
             },
             {
-              src: "icon-512.png",
+              src: "assets/images/public_assets_images_bird_academy/icon.png",
               sizes: "512x512",
               type: "image/png",
               purpose: "any maskable"

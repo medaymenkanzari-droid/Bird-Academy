@@ -180,9 +180,29 @@ function resolveEntryFilePath(isAdminMode) {
 function createWindow() {
   const title = isAdmin ? "Bird Academy Admin Center" : "Bird Academy Enterprise";
 
-  const appIconPath = isAdmin
-    ? (fs.existsSync(path.join(__dirname, 'build', 'icons', 'icon-admin.png')) ? path.join(__dirname, 'build', 'icons', 'icon-admin.png') : undefined)
-    : (fs.existsSync(path.join(__dirname, 'public', 'assets', 'images', 'icon.png')) ? path.join(__dirname, 'public', 'assets', 'images', 'icon.png') : path.join(__dirname, 'build', 'icons', 'icon-user.png'));
+  const userIconCandidates = [
+    path.join(__dirname, 'dist_user', 'assets', 'images', 'public_assets_images_bird_academy', 'icon.png'),
+    path.join(__dirname, 'dist', 'assets', 'images', 'public_assets_images_bird_academy', 'icon.png'),
+    path.join(__dirname, 'public', 'assets', 'images', 'public_assets_images_bird_academy', 'icon.png'),
+    path.join(__dirname, 'build', 'icons', 'icon-user.png'),
+    path.join(process.resourcesPath || '', 'app.asar', 'dist_user', 'assets', 'images', 'public_assets_images_bird_academy', 'icon.png'),
+    path.join(process.resourcesPath || '', 'app.asar', 'dist', 'assets', 'images', 'public_assets_images_bird_academy', 'icon.png')
+  ];
+
+  let appIconPath = undefined;
+  if (isAdmin) {
+    const adminCandidates = [
+      path.join(__dirname, 'build', 'icons', 'icon-admin.png'),
+      path.join(__dirname, 'dist_admin', 'assets', 'images', 'public_assets_images_bird_academy', 'icon.png')
+    ];
+    appIconPath = adminCandidates.find(p => {
+      try { return fs.existsSync(p); } catch (e) { return false; }
+    });
+  } else {
+    appIconPath = userIconCandidates.find(p => {
+      try { return fs.existsSync(p); } catch (e) { return false; }
+    });
+  }
 
   mainWindow = new BrowserWindow({
     width: 1280,

@@ -18,7 +18,12 @@ test('VitePWA remains the only manifest and service-worker generator', () => {
 });
 
 test('all mandatory install and demo assets are packaged locally', () => {
-  ['icon.svg', 'icon-192.png', 'icon-512.png', 'demo-bird.svg'].forEach(asset => {
+  [
+    'assets/images/public_assets_images_bird_academy/logo-icon.svg',
+    'assets/images/public_assets_images_bird_academy/apple-touch-icon.png',
+    'assets/images/public_assets_images_bird_academy/icon.png',
+    'demo-bird.svg'
+  ].forEach(asset => {
     assert.equal(existsSync(projectFile(`public/${asset}`)), true, asset);
   });
 

@@ -13,6 +13,7 @@ import { FirstLaunchActivationScreen } from './FirstLaunchActivationScreen';
 import { BrandLogoIcon } from '../../../components/design-system';
 import { BUILD_ID } from '../../../config/appMode';
 import { CommercialWebsiteApp } from '../../commercial-website/CommercialWebsiteApp';
+import { brandAssets } from '../../../config/brandAssets';
 
 export interface LicenseBootGuardProps {
   children: ReactNode;
@@ -97,7 +98,7 @@ export const LicenseBootGuard: React.FC<LicenseBootGuardProps> = ({ children }) 
   if (licenseState === 'INITIALIZING' || licenseState === 'LICENSE_CHECKING') {
     return (
       <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-8 space-y-4 font-mono">
-        <img src="/assets/images/logo-icon.png" alt="Bird Academy" className="w-16 h-16 animate-pulse object-contain" />
+        <img src={brandAssets.logoIcon} alt="Bird Academy" className="w-16 h-16 animate-pulse object-contain" />
         <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
           Vérification de la licence en cours...
         </span>

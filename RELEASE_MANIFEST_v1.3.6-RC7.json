@@ -1,0 +1,49 @@
+{
+  "release": "v1.3.6-RC7",
+  "version": "1.3.6-RC7",
+  "buildId": "BA-V1.3.6-RC7",
+  "versionCode": 20,
+  "commit": "82a425bc1243c3940fcf340eee95651de3f0545e",
+  "branch": "main",
+  "releaseChannel": "Pre-External QA (RC7 Brand Assets Distribution)",
+  "buildTimestamp": "2026-09-15T21:17:08.446Z",
+  "electronVersion": "43.3.0",
+  "viteVersion": "6.2.3",
+  "paymentState": {
+    "live": false,
+    "commercialSales": "closed"
+  },
+  "licensingState": {
+    "freeModeNative": true,
+    "offlineFirst": true,
+    "singleDevice": true,
+    "privateKeyExposed": false
+  },
+  "artifacts": {
+    "windowsSetup": {
+      "filename": "Bird-Academy-User-Windows-Setup.exe",
+      "sizeBytes": 106800570,
+      "sha256": "364E51644260C05BE9290DA3907B46D11A2E88EE2B2F10C60CA8F160B0B8395D"
+    },
+    "windowsPortable": {
+      "filename": "Bird-Academy-User.exe",
+      "sizeBytes": 106462030,
+      "sha256": "739831904381FF08A643300C445C7D2457EFBA583C41EF3CB746D5C0664F563D"
+    },
+    "androidApk": {
+      "filename": "Bird-Academy-User.apk",
+      "sizeBytes": 9916814,
+      "sha256": "20AD96A27742B4A013FB13774EFFEB716A5E4672509F279AB7D60292251D4F63"
+    },
+    "ownerGuidePdf": {
+      "filename": "LMSE_OWNER_GUIDE.pdf",
+      "sizeBytes": 428378,
+      "sha256": "42C1418C7B4DF75394B2C12D141E730E83DBE3416A58279A39A7C19E2D46D618"
+    }
+  },
+  "brandAssets": {
+    "officialAssetsCount": 12,
+    "oldAssetsCount": 0,
+    "sourceDirectory": "public/assets/images/public_assets_images_bird_academy"
+  }
+}

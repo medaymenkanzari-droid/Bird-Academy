@@ -15,6 +15,7 @@ import {
   Menu, X, ShieldCheck, Download, Sparkles, 
   HelpCircle, LifeBuoy, Key, User, ShoppingBag, ArrowRight, ArrowLeft, Bird, ExternalLink
 } from 'lucide-react';
+import { brandAssets } from '../../../../config/brandAssets';
 
 export interface WebHeaderProps {
   currentRoute: WebRoute;
@@ -92,12 +93,12 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
           aria-label="Bird Academy Home"
         >
           <img
-            src="/assets/images/logo-full.png"
+            src={brandAssets.logoFull}
             alt="Bird Academy"
             className="h-12 md:h-14 w-auto object-contain block dark:hidden"
           />
           <img
-            src="/assets/images/logo-full-dark.png"
+            src={brandAssets.logoFullDark}
             alt="Bird Academy"
             className="h-12 md:h-14 w-auto object-contain hidden dark:block"
           />

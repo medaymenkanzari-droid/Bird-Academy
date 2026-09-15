@@ -1,4 +1,5 @@
 import React from 'react';
+import { brandAssets } from '../../config/brandAssets';
 
 export const BrandLogoIcon: React.FC<{ 
   className?: string; 
@@ -11,7 +12,7 @@ export const BrandLogoIcon: React.FC<{
 }) => {
   return (
     <img
-      src="/assets/images/logo-icon.png"
+      src={brandAssets.logoIcon}
       alt="Bird Academy"
       className={`${className} object-contain rounded-md select-none`}
       id="bird-academy-vector-symbol"

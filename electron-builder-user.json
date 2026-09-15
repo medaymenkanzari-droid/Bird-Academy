@@ -29,6 +29,7 @@
     "include": "packaging/installer.nsh"
   },
   "extraMetadata": {
-    "name": "bird-academy-user"
+    "name": "bird-academy-user",
+    "version": "1.3.6-RC7"
   }
 }

@@ -10,6 +10,7 @@ import { useWebLanguage } from '../../i18n';
 import { WebRoute } from '../../types';
 import { ShieldCheck, HardDrive, Lock, Heart } from 'lucide-react';
 import { LanguageSelector } from './LanguageSelector';
+import { brandAssets } from '../../../../config/brandAssets';
 
 export interface WebFooterProps {
   onNavigate: (route: WebRoute) => void;
@@ -33,7 +34,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
               <img
-                src="/assets/images/logo-icon.png"
+                src={brandAssets.logoIcon}
                 alt="Bird Academy"
                 className="h-10 w-10 object-contain"
               />

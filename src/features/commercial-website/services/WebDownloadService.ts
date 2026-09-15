@@ -24,11 +24,11 @@ export class WebDownloadService {
       platform: 'windows',
       name: 'Bird Academy pour Windows (Installateur Setup)',
       filename: 'Bird-Academy-User-Windows-Setup.exe',
-      version: '1.3.6-RC6',
-      sizeBytes: 112731374,
-      sizeMB: '107.51 MB',
-      sha256: '746F6D99CF91802686D21A2F7632945730B96F2225B756AD2BF27B27B815754B',
-      releaseDate: '2026-09-11',
+      version: '1.3.6-RC7',
+      sizeBytes: 106800570,
+      sizeMB: '101.85 MB',
+      sha256: '364E51644260C05BE9290DA3907B46D11A2E88EE2B2F10C60CA8F160B0B8395D',
+      releaseDate: '2026-09-15',
       downloadUrl: '/downloads/Bird-Academy-User-Windows-Setup.exe',
       architecture: 'x64 (64-bit)',
       minOsVersion: 'Windows 10 / 11 (64-bit)',
@@ -39,11 +39,11 @@ export class WebDownloadService {
       platform: 'windows',
       name: 'Bird Academy pour Windows (Édition Portable)',
       filename: 'Bird-Academy-User.exe',
-      version: '1.3.6-RC6',
-      sizeBytes: 111233160,
-      sizeMB: '106.08 MB',
-      sha256: 'EDDD283D2A212B7A0155B32FC8CA7B188E28C3ED0874C509DDE395DAAD37E1BE',
-      releaseDate: '2026-09-11',
+      version: '1.3.6-RC7',
+      sizeBytes: 106462030,
+      sizeMB: '101.53 MB',
+      sha256: '739831904381FF08A643300C445C7D2457EFBA583C41EF3CB746D5C0664F563D',
+      releaseDate: '2026-09-15',
       downloadUrl: '/downloads/Bird-Academy-User.exe',
       architecture: 'x64 (64-bit)',
       minOsVersion: 'Windows 10 / 11 (64-bit)',
@@ -54,11 +54,11 @@ export class WebDownloadService {
       platform: 'android',
       name: 'Bird Academy pour Android (Package APK)',
       filename: 'Bird-Academy-User.apk',
-      version: '1.3.6-RC6',
-      sizeBytes: 12043947,
-      sizeMB: '11.49 MB',
-      sha256: '061CF531C7DE55465C093874ABF9C649CA3830659EFDE1443E2F8C911E4717DB',
-      releaseDate: '2026-09-11',
+      version: '1.3.6-RC7',
+      sizeBytes: 9916814,
+      sizeMB: '9.46 MB',
+      sha256: '20AD96A27742B4A013FB13774EFFEB716A5E4672509F279AB7D60292251D4F63',
+      releaseDate: '2026-09-15',
       downloadUrl: '/downloads/Bird-Academy-User.apk',
       architecture: 'ARM64 / ARMv7',
       minOsVersion: 'Android 10+ (API 29+)',
@@ -73,10 +73,12 @@ export class WebDownloadService {
       sizeBytes: 428378,
       sizeMB: '0.41 MB',
       sha256: '42C1418C7B4DF75394B2C12D141E730E83DBE3416A58279A39A7C19E2D46D618',
-      releaseDate: '2026-08-30',
+      releaseDate: '2026-09-11',
       downloadUrl: '/downloads/LMSE_OWNER_GUIDE.pdf',
+      architecture: 'Universel (PDF)',
+      minOsVersion: 'Tous systèmes',
       isAvailable: true,
-      descriptionKey: 'downloadPage.docsDesc',
+      descriptionKey: 'downloadPage.docDesc',
     },
   ];
 
@@ -106,7 +108,7 @@ export class WebDownloadService {
   }
 
   public static readonly GITHUB_REPO = 'medaymenkanzari-droid/Bird-Academy';
-  public static readonly DEFAULT_RELEASE_TAG = 'v1.3.6-RC6';
+  public static readonly DEFAULT_RELEASE_TAG = 'v1.3.6-RC7';
 
   /**
    * Constructs the official GitHub Release direct download URL for a binary asset
