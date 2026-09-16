@@ -54,7 +54,7 @@ console.log(`[RUNTIME-INIT] QA Mode Active  : ${isQaMode ? 'YES (--qa-mode)' : '
 console.log('================================================================');
 
 // ----------------------------------------------------------------------
-// SINGLE INSTANCE LOCK & CLEAN APPLICATION LIFECYCLE
+// SINGLE INSTANCE LOCK, CUSTOM PROTOCOL & APPLICATION LIFECYCLE
 // ----------------------------------------------------------------------
 const gotTheLock = app.requestSingleInstanceLock();
 let mainWindow = null;
@@ -64,13 +64,48 @@ if (!gotTheLock) {
   console.log('[LIFECYCLE] Another instance is already running. Quitting cleanly.');
   app.quit();
 } else {
+  // Register custom protocol for native application deep linking (birdacademy://open)
+  if (!isAdmin) {
+    if (process.defaultApp) {
+      if (process.argv.length >= 2) {
+        app.setAsDefaultProtocolClient('birdacademy', process.execPath, [path.resolve(process.argv[1])]);
+      }
+    } else {
+      app.setAsDefaultProtocolClient('birdacademy');
+    }
+    console.log('[PROTOCOL-CLIENT] Registered default protocol client: "birdacademy"');
+  }
+
   app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Intercept and validate protocol URL if triggered via deep link
+    const protocolUrl = commandLine.find(arg => typeof arg === 'string' && arg.startsWith('birdacademy://'));
+    if (protocolUrl) {
+      // Strict regex validation against injection or unauthorized actions
+      const isValid = /^birdacademy:\/\/open(\/[a-zA-Z0-9_\-]+)*$/.test(protocolUrl);
+      if (isValid) {
+        console.log(`[PROTOCOL-LAUNCH] Validated second-instance protocol URL: "${protocolUrl}"`);
+      } else {
+        console.warn(`[PROTOCOL-SECURITY] Rejected unauthorized second-instance protocol argument: "${protocolUrl}"`);
+      }
+    }
+
     // Focus existing window if user attempts to launch a second instance
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
       mainWindow.focus();
     }
   });
+
+  // Check cold start protocol activation
+  const coldStartProto = process.argv.find(arg => typeof arg === 'string' && arg.startsWith('birdacademy://'));
+  if (coldStartProto) {
+    const isValid = /^birdacademy:\/\/open(\/[a-zA-Z0-9_\-]+)*$/.test(coldStartProto);
+    if (isValid) {
+      console.log(`[PROTOCOL-LAUNCH] Cold-start protocol activation: "${coldStartProto}"`);
+    } else {
+      console.warn(`[PROTOCOL-SECURITY] Rejected unauthorized cold-start protocol argument: "${coldStartProto}"`);
+    }
+  }
 
   // Perform setup and migration BEFORE creating any BrowserWindow or loading web preferences
   setupUserDataAndMigration();

@@ -13,7 +13,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { CurrencySelector } from './CurrencySelector';
 import { 
   Menu, X, ShieldCheck, Download, Sparkles, 
-  HelpCircle, LifeBuoy, Key, User, ShoppingBag, ArrowRight, ArrowLeft, Bird, ExternalLink
+  HelpCircle, LifeBuoy, Key, User, ShoppingBag, ArrowRight, ArrowLeft, Bird, ExternalLink, Loader2
 } from 'lucide-react';
 import { brandAssets } from '../../../../config/brandAssets';
 
@@ -21,9 +21,10 @@ export interface WebHeaderProps {
   currentRoute: WebRoute;
   onNavigate: (route: WebRoute) => void;
   onOpenApp?: () => void;
+  isLaunchingApp?: boolean;
 }
 
-export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, onOpenApp }) => {
+export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, onOpenApp, isLaunchingApp = false }) => {
   const { t, isRtl } = useWebLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -143,17 +144,29 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
             <User className="w-4 h-4" />
           </button>
 
-          {/* Direct link to User Application */}
+          {/* Direct link to Native User Application */}
           {onOpenApp && (
             <button
               type="button"
               onClick={onOpenApp}
-              className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer"
-              title="Accéder à l'application d'élevage"
+              disabled={isLaunchingApp}
+              className={`px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer ${
+                isLaunchingApp ? 'opacity-80 cursor-wait' : ''
+              }`}
+              title={t('appLaunch.openApp')}
               data-testid="header-btn-open-app"
             >
-              <Bird className="w-4 h-4" />
-              <span>Ouvrir l'App</span>
+              {isLaunchingApp ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>{t('appLaunch.opening')}</span>
+                </>
+              ) : (
+                <>
+                  <Bird className="w-4 h-4" />
+                  <span>{t('appLaunch.openApp')}</span>
+                </>
+              )}
             </button>
           )}
 
@@ -233,11 +246,23 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
                     setMobileMenuOpen(false);
                     onOpenApp();
                   }}
-                  className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  disabled={isLaunchingApp}
+                  className={`w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer ${
+                    isLaunchingApp ? 'opacity-80 cursor-wait' : ''
+                  }`}
                   data-testid="mobile-drawer-btn-open-app"
                 >
-                  <Bird className="w-4 h-4" />
-                  <span>Ouvrir l'App Élevage</span>
+                  {isLaunchingApp ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>{t('appLaunch.openingApp')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Bird className="w-4 h-4" />
+                      <span>{t('appLaunch.openBreedingApp')}</span>
+                    </>
+                  )}
                 </button>
               )}
               <button

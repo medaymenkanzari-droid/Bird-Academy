@@ -449,6 +449,31 @@ export const en = {
     copyright: '© 2026 Bird Academy Enterprise. All rights reserved.',
   },
 
+  // App Launch Deep Linking & Fallback
+  appLaunch: {
+    openApp: "Open App",
+    openBreedingApp: "Open Breeding App",
+    opening: "Opening…",
+    openingApp: "Opening application…",
+    titleWinNotDetected: "Windows Application Not Detected",
+    titleAndroidNotDetected: "Android Application Not Detected",
+    titleGeneric: "Access Bird Academy Enterprise",
+    recommendedBadge: "Native Installation Recommended",
+    descWin: "Bird Academy Enterprise is not yet installed on your Windows PC or could not be launched automatically.",
+    descAndroid: "The Bird Academy mobile application is not yet installed on your Android device or could not be launched automatically.",
+    descGeneric: "To enjoy all sovereign, 100% offline breeding features, install the native app on Windows or Android.",
+    nativeBenefitsTitle: "Native Application Benefits:",
+    benefitOffline: "100% Offline (no internet connection required)",
+    benefitStorage: "Sovereign local storage of your breeding data",
+    benefitPerformance: "Maximum performance and automatic backups",
+    downloadWinSetup: "Download for Windows (Setup Installer)",
+    downloadAndroidApk: "Download Android APK Package",
+    downloadGeneric: "Go to Download Center",
+    continueWeb: "Continue with Web version in browser",
+    viewAllDownloads: "View all releases (Portable, LMSE Guide...)",
+    closeDialog: "Close dialog",
+  },
+
   common: {
     loading: 'Loading...',
     back: 'Back',

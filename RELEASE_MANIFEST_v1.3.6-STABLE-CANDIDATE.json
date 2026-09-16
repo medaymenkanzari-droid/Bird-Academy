@@ -1,0 +1,47 @@
+{
+  "product": "Bird Academy Enterprise — Volière Manager",
+  "version": "1.3.6",
+  "buildId": "BA-V1.3.6",
+  "versionCode": 21,
+  "platform": "Windows (x64), Android (ARM64/x86_64)",
+  "releaseChannel": "stable-candidate",
+  "buildDate": "2026-09-16T02:52:39.141Z",
+  "baseCommit": "8220ebefe470d3b7d36af4ab110e1041f55ebc29",
+  "paymentState": {
+    "live": false,
+    "commercialSales": "closed"
+  },
+  "licensingState": {
+    "freeModeNative": true,
+    "offlineFirst": true,
+    "singleDevice": true,
+    "privateKeyExposed": false
+  },
+  "artifacts": {
+    "windowsSetup": {
+      "filename": "Bird-Academy-User-Windows-Setup.exe",
+      "sizeBytes": 126065908,
+      "sha256": "C06E0DA7CBDBE4ED41FCAB7228C460B7B29FE1DCD6E11D99A08FF5B226CC507A"
+    },
+    "windowsPortable": {
+      "filename": "Bird-Academy-User.exe",
+      "sizeBytes": 125727387,
+      "sha256": "737AECCA069DEA37C9704D55FCA5A453ACF6CE7E98D4704BD20647242D5A4ED2"
+    },
+    "androidApk": {
+      "filename": "Bird-Academy-User.apk",
+      "sizeBytes": 9922498,
+      "sha256": "BDFDB4A4AAA7FA20DC82652ACD1F10E7A508FB34AB984CFF689E72B41FDF490F"
+    },
+    "ownerGuidePdf": {
+      "filename": "LMSE_OWNER_GUIDE.pdf",
+      "sizeBytes": 428378,
+      "sha256": "42C1418C7B4DF75394B2C12D141E730E83DBE3416A58279A39A7C19E2D46D618"
+    }
+  },
+  "brandAssets": {
+    "officialAssetsCount": 12,
+    "oldAssetsCount": 0,
+    "sourceDirectory": "public/assets/images/public_assets_images_bird_academy"
+  }
+}

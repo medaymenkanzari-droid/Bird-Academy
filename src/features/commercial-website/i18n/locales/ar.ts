@@ -449,6 +449,31 @@ export const ar = {
     copyright: '© 2026 Bird Academy Enterprise. جميع الحقوق محفوظة.',
   },
 
+  // App Launch Deep Linking & Fallback
+  appLaunch: {
+    openApp: "فتح التطبيق",
+    openBreedingApp: "فتح تطبيق التربية",
+    opening: "جارٍ الفتح…",
+    openingApp: "جارٍ فتح التطبيق…",
+    titleWinNotDetected: "لم يتم اكتشاف تطبيق Windows",
+    titleAndroidNotDetected: "لم يتم اكتشاف تطبيق Android",
+    titleGeneric: "الوصول إلى Bird Academy Enterprise",
+    recommendedBadge: "يوصى بالتثبيت الأصلي",
+    descWin: "تطبيق Bird Academy Enterprise غير مثبت بعد على جهاز Windows الخاص بك أو تعذر فتحه تلقائيًا.",
+    descAndroid: "تطبيق Bird Academy للأجهزة المحمولة غير مثبت بعد على جهاز Android الخاص بك أو تعذر تشغيله تلقائيًا.",
+    descGeneric: "للاستفادة من جميع ميزات التربية السيادية المتوفرة بنسبة 100٪ في وضع عدم الاتصال، قم بتثبيت التطبيق الأصلي على Windows أو Android.",
+    nativeBenefitsTitle: "مزايا التطبيق الأصلي:",
+    benefitOffline: "100٪ بدون اتصال (لا يلزم الاتصال بالإنترنت)",
+    benefitStorage: "تخزين محلي سيادي لبيانات تربيتك",
+    benefitPerformance: "أقصى أداء ونسخ احتياطي تلقائي",
+    downloadWinSetup: "تنزيل لنظام Windows (برنامج التثبيت)",
+    downloadAndroidApk: "تنزيل حزمة APK لنظام Android",
+    downloadGeneric: "الذهاب إلى مركز التنزيل",
+    continueWeb: "المتابعة باستخدام إصدار الويب في المتصفح",
+    viewAllDownloads: "عرض جميع الإصدارات (نسخة محمولة، دليل LMSE...)",
+    closeDialog: "إغلاق مربع الحوار",
+  },
+
   common: {
     loading: 'جارٍ التحميل...',
     back: 'رجوع',

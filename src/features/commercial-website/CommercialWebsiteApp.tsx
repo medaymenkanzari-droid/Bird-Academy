@@ -24,6 +24,8 @@ import { WebSupportPage } from './pages/WebSupportPage';
 import { WebAccountPage } from './pages/WebAccountPage';
 
 import { ComponentErrorBoundary } from '../../components/ComponentErrorBoundary';
+import { AppLaunchService, ClientPlatform } from './services/AppLaunchService';
+import { AppLaunchFallbackModal } from './components/dialogs/AppLaunchFallbackModal';
 
 export interface CommercialWebsiteAppProps {
   initialRoute?: WebRoute;
@@ -88,6 +90,39 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
   });
 
   const [routeParam, setRouteParam] = useState<string | undefined>(undefined);
+  const [isLaunchingApp, setIsLaunchingApp] = useState(false);
+  const [fallbackModalOpen, setFallbackModalOpen] = useState(false);
+  const [fallbackPlatform, setFallbackPlatform] = useState<ClientPlatform>('windows');
+  const [fallbackDownloadUrl, setFallbackDownloadUrl] = useState('');
+  const [fallbackFilename, setFallbackFilename] = useState('');
+
+  const handleOpenApp = () => {
+    if (onOpenApp) {
+      onOpenApp();
+      return;
+    }
+
+    if (isLaunchingApp) return;
+    setIsLaunchingApp(true);
+
+    AppLaunchService.getInstance().launchNativeApp({
+      onStatusChange: (status) => {
+        if (status === 'idle' || status === 'launched') {
+          setIsLaunchingApp(false);
+        }
+      },
+      onFallback: (platform, downloadUrl, filename) => {
+        setIsLaunchingApp(false);
+        setFallbackPlatform(platform);
+        setFallbackDownloadUrl(downloadUrl);
+        setFallbackFilename(filename);
+        setFallbackModalOpen(true);
+      },
+      onSuccess: () => {
+        setIsLaunchingApp(false);
+      }
+    });
+  };
 
   // Sync hash routing
   useEffect(() => {
@@ -143,7 +178,12 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
       data-testid="commercial-website-app"
     >
       {/* Top Header */}
-      <WebHeader currentRoute={currentRoute} onNavigate={handleNavigate} onOpenApp={onOpenApp} />
+      <WebHeader
+        currentRoute={currentRoute}
+        onNavigate={handleNavigate}
+        onOpenApp={handleOpenApp}
+        isLaunchingApp={isLaunchingApp}
+      />
 
       {/* Main Content Area Protected by ErrorBoundary */}
       <main className="flex-1">
@@ -176,6 +216,25 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
 
       {/* Footer */}
       <WebFooter onNavigate={handleNavigate} />
+
+      {/* App Launch Graceful Fallback Modal */}
+      <AppLaunchFallbackModal
+        isOpen={fallbackModalOpen}
+        platform={fallbackPlatform}
+        downloadUrl={fallbackDownloadUrl}
+        filename={fallbackFilename}
+        onClose={() => setFallbackModalOpen(false)}
+        onContinueWeb={() => {
+          setFallbackModalOpen(false);
+          if (typeof window !== 'undefined') {
+            window.location.search = '?view=app';
+          }
+        }}
+        onNavigateToDownloads={() => {
+          setFallbackModalOpen(false);
+          handleNavigate('download');
+        }}
+      />
     </div>
   );
 };

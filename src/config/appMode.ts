@@ -9,10 +9,10 @@ export type UserRole = 'beta_tester' | 'breeder' | 'veterinarian' | 'association
 export type AdminRole = 'super_admin' | 'admin' | 'support' | 'auditor';
 export type SystemRole = UserRole | AdminRole;
 
-export const BUILD_ID = "BA-V1.3.6-RC7";
-export const BUILD_VERSION_NAME = "1.3.6-RC7";
-export const BUILD_VERSION_CODE = 20;
-export const BUILD_RELEASE_CHANNEL = "Pre-External QA (RC7 Brand Assets Distribution)";
+export const BUILD_ID = "BA-V1.3.6";
+export const BUILD_VERSION_NAME = "1.3.6";
+export const BUILD_VERSION_CODE = 21;
+export const BUILD_RELEASE_CHANNEL = "Stable Candidate";
 
 /**
  * Checks if the current execution environment is an explicit Electron QA session.

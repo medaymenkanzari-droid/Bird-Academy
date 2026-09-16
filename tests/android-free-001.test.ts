@@ -558,7 +558,7 @@ describe('MISSION ANDROID-FREE-001 — Diagnostic & Correction Mode FREE sur APK
     });
 
     it('R02: Version Build ID est alignée sur RC6 ou QA-FREE-CLEAN-001', () => {
-      const validBuildIds = ['BA-V1.3.6-RC6', 'BA-V1.3.6-QA-FREE-CLEAN-001'];
+      const validBuildIds = ['BA-V1.3.6', 'BA-V1.3.6-RC7', 'BA-V1.3.6-RC6', 'BA-V1.3.6-QA-FREE-CLEAN-001'];
       assert.ok(validBuildIds.includes(BUILD_ID));
     });
   });

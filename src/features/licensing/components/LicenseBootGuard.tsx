@@ -81,15 +81,7 @@ export const LicenseBootGuard: React.FC<LicenseBootGuardProps> = ({ children }) 
 
   // If not explicitly viewing the application and not in a native app, default to Commercial Website
   if (!isExplicitAppView) {
-    return (
-      <CommercialWebsiteApp 
-        onOpenApp={() => {
-          if (typeof window !== 'undefined') {
-            window.location.search = '?view=app';
-          }
-        }} 
-      />
-    );
+    return <CommercialWebsiteApp />;
   }
 
   console.log(`[BOOT-08] LicenseBootGuard render: BUILD_ID=${BUILD_ID} | time=${timestamp} | licenseState=${licenseState} | isLicensed=${isLicensed} | loading=${loading} | valCode=${validation?.code || 'NONE'}`);
