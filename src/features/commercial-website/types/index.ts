@@ -25,6 +25,7 @@ export type WebRoute =
   | 'order-confirmation'
   | 'orders'
   | 'download'
+  | 'download-doc'
   | 'license'
   | 'faq'
   | 'support'

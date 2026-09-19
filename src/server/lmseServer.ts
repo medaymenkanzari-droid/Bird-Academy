@@ -846,8 +846,8 @@ export class LmseBackendServer {
         },
       };
 
-      // Support des documents Markdown officiels du Kit Testeur
-      if (filename.endsWith('.md')) {
+      // Support des documents Markdown & PDF officiels du Kit Testeur
+      if (filename.endsWith('.md') || filename.endsWith('.pdf')) {
         const docCandidates = [
           path.join(rootDir, 'public', 'downloads', filename),
           path.join(rootDir, 'dist', 'downloads', filename),
@@ -856,7 +856,10 @@ export class LmseBackendServer {
         for (const cand of docCandidates) {
           if (fs.existsSync(cand) && fs.statSync(cand).isFile()) {
             const stat = fs.statSync(cand);
-            res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+            const contentType = filename.endsWith('.pdf') 
+              ? 'application/pdf' 
+              : 'text/markdown; charset=utf-8';
+            res.setHeader('Content-Type', contentType);
             res.setHeader('Content-Length', stat.size);
             res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
             res.setHeader('Cache-Control', 'public, max-age=3600');

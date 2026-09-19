@@ -22,6 +22,7 @@ import { WebLicenseGuidePage } from './pages/WebLicenseGuidePage';
 import { WebFAQPage } from './pages/WebFAQPage';
 import { WebSupportPage } from './pages/WebSupportPage';
 import { WebAccountPage } from './pages/WebAccountPage';
+import { WebDocumentReaderPage } from './pages/WebDocumentReaderPage';
 
 import { ComponentErrorBoundary } from '../../components/ComponentErrorBoundary';
 import { AppLaunchService, ClientPlatform } from './services/AppLaunchService';
@@ -43,19 +44,31 @@ const VALID_ROUTES: WebRoute[] = [
   'order-confirmation',
   'orders',
   'download',
+  'download-doc',
   'license',
   'faq',
   'support',
   'account',
 ];
 
-const normalizeRoute = (raw: string | undefined): WebRoute => {
-  if (!raw) return 'home';
-  const clean = raw.replace(/^#+/, '').replace(/^\/+/, '').split('?')[0].split('&')[0] as WebRoute;
-  if (VALID_ROUTES.includes(clean)) {
-    return clean;
+interface ResolvedRoute {
+  route: WebRoute;
+  param?: string;
+}
+
+const normalizeRoute = (raw: string | undefined): ResolvedRoute => {
+  if (!raw) return { route: 'home' };
+  const clean = raw.replace(/^#+/, '').replace(/^\/+/, '').split('?')[0].split('&')[0];
+  
+  if (clean.startsWith('download/kit/') || clean.startsWith('kit/')) {
+    const docId = clean.replace(/^download\/kit\//, '').replace(/^kit\//, '');
+    return { route: 'download-doc', param: docId };
   }
-  return 'home';
+
+  if (VALID_ROUTES.includes(clean as WebRoute)) {
+    return { route: clean as WebRoute };
+  }
+  return { route: 'home' };
 };
 
 const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
@@ -68,11 +81,12 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
       const hash = window.location.hash;
       if (hash && hash !== '#') {
         const parsed = normalizeRoute(hash);
-        if (parsed !== 'home' || hash === '#home' || hash === '#/home') {
-          return parsed;
+        if (parsed.route !== 'home' || hash === '#home' || hash === '#/home') {
+          return parsed.route;
         }
       }
       const path = window.location.pathname;
+      if (path.startsWith('/download/kit/')) return 'download-doc';
       if (path === '/products') return 'products';
       if (path === '/products/free') return 'product-free';
       if (path === '/products/premium') return 'product-premium';
@@ -86,10 +100,24 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
       if (path === '/support') return 'support';
       if (path === '/account') return 'account';
     }
-    return normalizeRoute(initialRoute);
+    return normalizeRoute(initialRoute).route;
   });
 
-  const [routeParam, setRouteParam] = useState<string | undefined>(undefined);
+  const [routeParam, setRouteParam] = useState<string | undefined>(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash && hash !== '#') {
+        const parsed = normalizeRoute(hash);
+        if (parsed.param) return parsed.param;
+      }
+      const path = window.location.pathname;
+      if (path.startsWith('/download/kit/')) {
+        return path.replace('/download/kit/', '');
+      }
+    }
+    return undefined;
+  });
+
   const [isLaunchingApp, setIsLaunchingApp] = useState(false);
   const [fallbackModalOpen, setFallbackModalOpen] = useState(false);
   const [fallbackPlatform, setFallbackPlatform] = useState<ClientPlatform>('windows');
@@ -130,7 +158,10 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
       const rawHash = window.location.hash;
       if (rawHash) {
         const resolved = normalizeRoute(rawHash);
-        setCurrentRoute(resolved);
+        setCurrentRoute(resolved.route);
+        if (resolved.param) {
+          setRouteParam(resolved.param);
+        }
       }
     };
     window.addEventListener('hashchange', handleHashChange);
@@ -150,6 +181,7 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
       'order-confirmation': 'Suivi de Commande & Livraison — Bird Academy Enterprise',
       orders: 'Mes Commandes — Bird Academy Enterprise',
       download: 'Centre de Téléchargement Multiplateforme — Bird Academy Enterprise',
+      'download-doc': 'Lecteur de Document de Recette — Bird Academy Enterprise',
       license: 'Guide d\'Activation & Licences LMSE — Bird Academy Enterprise',
       faq: 'Foire Aux Questions (FAQ) — Bird Academy Enterprise',
       support: 'Support & Assistance Client — Bird Academy Enterprise',
@@ -162,11 +194,21 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
   }, [currentRoute]);
 
   const handleNavigate = (route: WebRoute, param?: string) => {
-    const cleanRoute = normalizeRoute(route);
-    setCurrentRoute(cleanRoute);
-    setRouteParam(param);
+    if (route === 'download-doc' && param) {
+      setCurrentRoute('download-doc');
+      setRouteParam(param);
+      if (typeof window !== 'undefined') {
+        window.location.hash = `download/kit/${param}`;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+
+    const clean = normalizeRoute(route);
+    setCurrentRoute(clean.route);
+    setRouteParam(param || clean.param);
     if (typeof window !== 'undefined') {
-      window.location.hash = cleanRoute;
+      window.location.hash = clean.route;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -207,6 +249,9 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
             <WebOrderConfirmationPage orderId={routeParam} onNavigate={handleNavigate} />
           )}
           {currentRoute === 'download' && <WebDownloadCenterPage onNavigate={handleNavigate} />}
+          {currentRoute === 'download-doc' && (
+            <WebDocumentReaderPage docId={routeParam} onNavigate={handleNavigate} />
+          )}
           {currentRoute === 'license' && <WebLicenseGuidePage onNavigate={handleNavigate} />}
           {currentRoute === 'faq' && <WebFAQPage />}
           {currentRoute === 'support' && <WebSupportPage />}
