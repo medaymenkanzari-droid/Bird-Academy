@@ -15,7 +15,6 @@ import {
   Menu, X, ShieldCheck, Download, Sparkles, 
   HelpCircle, LifeBuoy, Key, User, ShoppingBag, ArrowRight, ArrowLeft, Bird, ExternalLink, Loader2
 } from 'lucide-react';
-import { brandAssets } from '../../../../config/brandAssets';
 
 export interface WebHeaderProps {
   currentRoute: WebRoute;
@@ -85,30 +84,36 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[5.5rem] py-2 flex items-center justify-between gap-4">
         
-        {/* Brand Logo with Official Full Image Asset & ENTERPRISE Badge */}
+        {/* 1. Bloc Marque (Logo + Titre + Badge ENTERPRISE) */}
         <button
           type="button"
           onClick={() => handleLinkClick('home')}
-          className="flex items-center gap-2.5 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
+          className="flex items-center gap-3 mr-8 shrink-0 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
           data-testid="header-brand-logo"
           aria-label="Bird Academy Enterprise Home"
         >
           <img
-            src={brandAssets.logoFull}
+            src="/bird-academy-logo.svg"
             alt="Bird Academy"
-            className="h-10 sm:h-12 md:h-14 w-auto object-contain block dark:hidden"
+            className="h-10 w-auto object-contain"
           />
-          <img
-            src={brandAssets.logoFullDark}
-            alt="Bird Academy"
-            className="h-10 sm:h-12 md:h-14 w-auto object-contain hidden dark:block"
-          />
-          <span 
-            className="inline-flex items-center px-2 py-0.5 text-[10px] font-black tracking-widest bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700 rounded-md shadow-xs uppercase select-none"
-            data-testid="header-enterprise-badge"
-          >
-            ENTERPRISE
-          </span>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold tracking-tight text-slate-900 dark:text-white text-lg leading-tight">
+                BIRD ACADEMY
+              </span>
+              {/* Badge ENTERPRISE avec espacement autonome */}
+              <span 
+                className="px-2 py-0.5 text-[11px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700 rounded-md shadow-xs select-none"
+                data-testid="header-enterprise-badge"
+              >
+                ENTERPRISE
+              </span>
+            </div>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+              Logiciel d'Élevage 100% Hors-Ligne
+            </span>
+          </div>
         </button>
 
         {/* Desktop Navigation Links */}
