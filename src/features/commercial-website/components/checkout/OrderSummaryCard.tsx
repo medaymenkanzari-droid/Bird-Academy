@@ -73,15 +73,17 @@ export const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({ offer, quant
       <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-2 text-xs">
         <div className="flex justify-between text-slate-600 dark:text-slate-400">
           <span>{t('checkout.subtotal')}</span>
-          <span>{formatPrice(subtotalEur)}</span>
+          <span>{offer.tier === 'FREE' ? (t('pricing.freePrice') || 'Gratuit') : (t('pricing.pricePending') || 'Tarif en préparation')}</span>
         </div>
         <div className="flex justify-between text-slate-600 dark:text-slate-400">
           <span>{t('checkout.tax')}</span>
-          <span>{formatPrice(taxEur)} (Incluses)</span>
+          <span>—</span>
         </div>
         <div className="border-t border-slate-200 dark:border-slate-700 pt-2 flex justify-between font-black text-sm text-slate-900 dark:text-white">
           <span>{t('checkout.total')}</span>
-          <span className="text-indigo-600 dark:text-indigo-400">{formatPrice(totalEur)}</span>
+          <span className="text-indigo-600 dark:text-indigo-400">
+            {offer.tier === 'FREE' ? (t('pricing.freePrice') || 'Gratuit') : (t('pricing.pricePending') || 'Tarif en préparation')}
+          </span>
         </div>
       </div>
     </div>

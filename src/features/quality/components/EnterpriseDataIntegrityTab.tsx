@@ -19,6 +19,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { MOTION_VARIANTS } from '../../../theme';
 import { AppTable } from '../../../components/design-system';
+import { printDocument } from '../../../utils/printUtils';
 
 export const EnterpriseDataIntegrityTab: React.FC = () => {
   const { language } = useLanguage();
@@ -550,18 +551,18 @@ export const EnterpriseDataIntegrityTab: React.FC = () => {
       {/* 8. Printable/Downloadable Executive Summary Report (Requirement 13) */}
       <AnimatePresence>
         {showPrintReport && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs print:static print:inset-auto print:p-0 print:bg-transparent print:backdrop-blur-none">
             
             {/* Modal Box */}
-            <div className="bg-white text-gray-900 w-full max-w-3xl h-[85vh] rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col justify-between">
+            <div className="bg-white text-gray-900 w-full max-w-3xl h-[85vh] rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col justify-between print:h-auto print:max-w-none print:shadow-none print:border-none print:overflow-visible">
               
-              <div className="px-6 py-4 bg-slate-100 border-b border-gray-200 flex items-center justify-between">
+              <div className="px-6 py-4 bg-slate-100 border-b border-gray-200 flex items-center justify-between print:hidden">
                 <span className="text-xs font-black uppercase text-indigo-900 tracking-wider">
                   Rapport Professionnel d'Intégrité (Certification)
                 </span>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => window.print()}
+                    onClick={() => printDocument('printable-report-area')}
                     className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xxs font-bold uppercase tracking-wider py-1.5 px-3 rounded-lg transition duration-100 cursor-pointer"
                   >
                     <Printer className="w-3.5 h-3.5" />
@@ -577,7 +578,7 @@ export const EnterpriseDataIntegrityTab: React.FC = () => {
               </div>
 
               {/* Printable Area with Page Breaks */}
-              <div className="p-8 overflow-y-auto flex-1 font-sans space-y-6 text-xs text-gray-800" id="printable-report-area">
+              <div className="printable-area p-8 overflow-y-auto flex-1 font-sans space-y-6 text-xs text-gray-800 print:p-0 print:overflow-visible print:h-auto print:max-h-none" id="printable-report-area">
                 
                 {/* Executive Cover Header */}
                 <div className="text-center space-y-2 pb-6 border-b border-gray-200">
@@ -703,7 +704,7 @@ export const EnterpriseDataIntegrityTab: React.FC = () => {
 
               </div>
 
-              <div className="px-6 py-3 bg-slate-100 border-t border-gray-200 text-center text-[10px] text-gray-500">
+              <div className="px-6 py-3 bg-slate-100 border-t border-gray-200 text-center text-[10px] text-gray-500 print:hidden">
                 Bird Academy Enterprise • Rapport d'audit Sprint 17
               </div>
               

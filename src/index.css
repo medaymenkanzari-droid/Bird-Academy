@@ -204,17 +204,23 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   #printable-area,
-  #printable-area * {
-    visibility: visible !important;
-  }
-
+  #printable-area *,
   .printable-area,
-  .printable-area * {
+  .printable-area *,
+  #transfer-cert-a4-sheet,
+  #transfer-cert-a4-sheet *,
+  #printable-report-area,
+  #printable-report-area *,
+  [data-printing="true"],
+  [data-printing="true"] * {
     visibility: visible !important;
   }
 
   #printable-area,
-  .printable-area {
+  .printable-area,
+  #transfer-cert-a4-sheet,
+  #printable-report-area,
+  [data-printing="true"] {
     position: absolute !important;
     inset: 0 auto auto 0 !important;
     width: 100% !important;
@@ -228,7 +234,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   #printable-area *,
-  .printable-area * {
+  .printable-area *,
+  #transfer-cert-a4-sheet *,
+  #printable-report-area *,
+  [data-printing="true"] * {
     color: #111827 !important;
     box-shadow: none !important;
     text-shadow: none !important;
@@ -248,6 +257,35 @@ h1, h2, h3, h4, h5, h6 {
   th {
     background-color: #f3f4f6 !important;
     font-weight: bold !important;
+  }
+
+  /* Unconstrain all scrollable containers inside printable areas */
+  #printable-area [class*="max-h-"],
+  #printable-area [class*="overflow-y-"],
+  #printable-area .overflow-y-auto,
+  #printable-area .overflow-hidden,
+  .printable-area [class*="max-h-"],
+  .printable-area [class*="overflow-y-"],
+  .printable-area .overflow-y-auto,
+  .printable-area .overflow-hidden,
+  #printable-report-area,
+  #printable-report-area [class*="max-h-"],
+  #printable-report-area [class*="overflow-y-"],
+  #printable-report-area .overflow-y-auto,
+  #printable-report-area .overflow-hidden,
+  #transfer-cert-a4-sheet,
+  #transfer-cert-a4-sheet [class*="max-h-"],
+  #transfer-cert-a4-sheet [class*="overflow-y-"],
+  #transfer-cert-a4-sheet .overflow-y-auto,
+  #transfer-cert-a4-sheet .overflow-hidden,
+  [data-printing="true"],
+  [data-printing="true"] [class*="max-h-"],
+  [data-printing="true"] [class*="overflow-y-"],
+  [data-printing="true"] .overflow-y-auto,
+  [data-printing="true"] .overflow-hidden {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 }
 

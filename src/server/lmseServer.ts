@@ -846,6 +846,26 @@ export class LmseBackendServer {
         },
       };
 
+      // Support des documents Markdown officiels du Kit Testeur
+      if (filename.endsWith('.md')) {
+        const docCandidates = [
+          path.join(rootDir, 'public', 'downloads', filename),
+          path.join(rootDir, 'dist', 'downloads', filename),
+          path.join(rootDir, filename),
+        ];
+        for (const cand of docCandidates) {
+          if (fs.existsSync(cand) && fs.statSync(cand).isFile()) {
+            const stat = fs.statSync(cand);
+            res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+            res.setHeader('Content-Length', stat.size);
+            res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+            res.setHeader('Cache-Control', 'public, max-age=3600');
+            return fs.createReadStream(cand).pipe(res);
+          }
+        }
+        return res.status(404).json({ error: 'NOT_FOUND', message: 'Document introuvable.' });
+      }
+
       const artifactConfig = RC6_DOWNLOAD_REGISTRY[filename];
       if (!artifactConfig) {
         return res.status(404).json({ error: 'NOT_FOUND', message: 'Artefact introuvable.' });
@@ -890,6 +910,12 @@ export class LmseBackendServer {
       }
 
       if (!targetPath) {
+        // En environnement cloud distant (Render) où les gros binaires compilés (.exe/.apk) ne sont pas stockés dans Git,
+        // redirection sécurisée vers la release GitHub officielle
+        if (filename.endsWith('.exe') || filename.endsWith('.apk')) {
+          const githubAssetUrl = `https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/v1.3.6/${filename}`;
+          return res.redirect(302, githubAssetUrl);
+        }
         console.error(`[LMSE_DOWNLOAD_SECURITY] Integrity verification failed for ${filename}: No valid RC6 candidate found matching official SHA-256.`);
         // Message propre sans fuite d'informations internes (chemins système, stack trace)
         return res.status(500).json({ error: 'INTEGRITY_CHECK_FAILED', message: "Échec de vérification d'intégrité de l'artefact." });

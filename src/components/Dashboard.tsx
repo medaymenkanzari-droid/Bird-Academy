@@ -386,13 +386,14 @@ export default function Dashboard({
             <div className="space-y-3 mt-4">
               <button
                 onClick={onQuickAddCanari}
+                data-testid="dashboard-quick-add-bird-btn"
                 className="w-full flex items-center justify-between p-3.5 bg-blue-50/80 hover:bg-blue-100/80 dark:bg-slate-800/80 dark:hover:bg-slate-750 text-slate-900 dark:text-white font-semibold rounded-xl border border-blue-100 dark:border-slate-700 transition-colors text-left cursor-pointer min-h-[48px]"
               >
                 <div className="flex items-center gap-2.5">
                   <div className="p-2 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg">
                     <Bird className="w-4.5 h-4.5" />
                   </div>
-                  <span className="text-sm font-bold">{t('addCanary')}</span>
+                  <span data-testid="dashboard-quick-add-bird-label" className="text-sm font-bold">{t('addBird')}</span>
                 </div>
                 <Plus className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               </button>

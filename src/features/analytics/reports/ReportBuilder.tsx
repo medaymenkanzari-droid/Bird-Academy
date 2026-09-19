@@ -244,7 +244,7 @@ export const ReportBuilder: React.FC<ReportBuilderProps> = ({ filters }) => {
           },
           {
             title: pdfTrans.dssSection,
-            textLines: dssRecommendations.slice(0, 5),
+            textLines: dssRecommendations,
           },
         ],
       };

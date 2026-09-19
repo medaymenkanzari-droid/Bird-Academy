@@ -102,20 +102,23 @@ export function useLocalizedOffers() {
       icon = Zap;
       color = 'indigo';
       detailsRoute = 'product-premium';
-      ctaRoute = 'checkout';
+      ctaRoute = 'product-premium';
     } else if (key === 'proAnnual') {
       icon = Crown;
       color = 'amber';
       detailsRoute = 'product-pro';
-      ctaRoute = 'checkout';
+      ctaRoute = 'product-pro';
     } else if (key === 'proLifetime') {
       icon = Infinity;
       color = 'amber';
       detailsRoute = 'product-pro';
-      ctaRoute = 'checkout';
+      ctaRoute = 'product-pro';
     }
 
-    const priceFormatted = formatPrice(offer.price);
+    const isFree = key === 'free' || offer.tier === 'FREE';
+    const priceFormatted = isFree
+      ? (t('pricing.freePrice') || 'Gratuit')
+      : (t('pricing.pricePending') || 'Tarif en préparation');
     const convertedPriceValue = convertPrice(offer.price);
 
     return {

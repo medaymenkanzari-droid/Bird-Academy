@@ -29,7 +29,7 @@ export const WebPricingPage: React.FC<WebPricingPageProps> = ({ onNavigate }) =>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
           <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-medium">
             <Coins className="w-4 h-4 text-indigo-500" />
-            <span>Tous les tarifs indiqués sont fermes et sans frais cachés.</span>
+            <span>{t('pricing.pricingNotice') || 'Offres commerciales en cours de préparation — Les grilles tarifaires définitives seront publiées prochainement.'}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-slate-500 font-medium">Devise :</span>

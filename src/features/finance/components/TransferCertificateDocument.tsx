@@ -213,7 +213,7 @@ PRIX DE CESSION     : ${formatCurrency(sale.prix)}
         
         <div 
           id="transfer-cert-a4-sheet"
-          className="w-full max-w-[210mm] min-h-[297mm] bg-white text-slate-900 p-8 sm:p-12 shadow-2xl rounded-none sm:rounded-2xl border border-slate-300 font-sans text-xs space-y-6 relative overflow-hidden print:p-0 print:border-none print:shadow-none print:m-0"
+          className="printable-area w-full max-w-[210mm] min-h-[297mm] bg-white text-slate-900 p-8 sm:p-12 shadow-2xl rounded-none sm:rounded-2xl border border-slate-300 font-sans text-xs space-y-6 relative overflow-hidden print:p-6 print:border-none print:shadow-none print:m-0 print:max-w-none"
         >
           
           {/* Subtle Guilloche Watermark Emblem */}

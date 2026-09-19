@@ -102,17 +102,18 @@ export class ExportService {
           return;
         }
         const headers = Object.keys(rows[0]);
-        csvStr += headers.join(',') + '\n';
+        csvStr += headers.join(';') + '\n';
         rows.forEach((row: any) => {
           const values = headers.map(header => {
             const val = row[header];
-            return typeof val === 'string' ? `"${val.replace(/"/g, '""')}"` : val;
+            if (val === null || val === undefined) return '""';
+            return typeof val === 'string' ? `"${val.replace(/"/g, '""')}"` : `"${val}"`;
           });
-          csvStr += values.join(',') + '\n';
+          csvStr += values.join(';') + '\n';
         });
         csvStr += '\n';
       });
-      this.downloadBlob(csvStr, `birdacademy_export_${stamp}.csv`, 'text/csv');
+      this.downloadBlob('\uFEFF' + csvStr, `birdacademy_export_${stamp}.csv`, 'text/csv;charset=utf-8;');
     } 
     else if (options.format === 'excel') {
       // Excel-friendly tab-separated CSV format

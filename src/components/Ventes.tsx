@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Plus, TrendingUp, Check, X, ShieldAlert, Coins, Calendar, Download, Printer, User, FileText } from 'lucide-react';
+import { Plus, TrendingUp, Check, X, ShieldAlert, Coins, Calendar, Download, Printer, User, FileText, FileDown } from 'lucide-react';
 import { Vente, Canari } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { FinanceService } from '../features/finance/services/FinanceService';
@@ -160,7 +160,7 @@ export default function VentesComponent({
     const rows = ventes.map(v => {
       const bird = canaris.find(c => c.id === v.canari_id);
       const bague = bird?.bague || t('noRing') || 'Sans bague';
-      const nom = bird?.nom || t('canary') || 'Canari';
+      const nom = bird?.nom || t('bird') || 'Oiseau';
       return `${v.id};"${nom}";"${bague}";${formatCurrency(v.prix, userCurrency)};${v.date};"${(formatLocalizedBuyer(v.acheteur, t) || '').replace(/"/g, '""')}";"${(formatLocalizedSaleDescription(v.description, t) || '').replace(/"/g, '""')}"`;
     }).join("\n");
 
@@ -175,8 +175,14 @@ export default function VentesComponent({
     URL.revokeObjectURL(url);
   };
 
-  const handlePrint = async () => {
+  const handlePrintDOM = () => {
     printDocument('printable-area');
+  };
+
+  const handleExportPDF = async () => {
+    const reportInputCount = ventes.length;
+    console.log(`[Ventes] Exporting PDF with ${reportInputCount} sales`);
+
     await exportDocumentAsPDF({
       title: t('ventesTitle') || 'Rapport des Ventes & Cessions',
       subtitle: t('sales.pdfSub') || t('ventesSub'),
@@ -216,6 +222,9 @@ export default function VentesComponent({
     });
   };
 
+  // Backward compatibility alias
+  const handlePrint = handlePrintDOM;
+
   return (
     <div id="printable-area" className="space-y-6">
       {/* Header */}
@@ -227,10 +236,19 @@ export default function VentesComponent({
         
         <div className="flex flex-wrap gap-2 print:hidden">
           <button
-            onClick={handlePrint}
+            onClick={handlePrintDOM}
             className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold px-4 py-2 rounded-xl transition-colors text-sm cursor-pointer border border-slate-200 dark:border-slate-700"
+            title={t('print') || 'Imprimer'}
           >
-            <Printer className="w-4 h-4" /> {t('sales.printPdf')}
+            <Printer className="w-4 h-4" /> {t('print') || 'Imprimer'}
+          </button>
+
+          <button
+            onClick={handleExportPDF}
+            className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold px-4 py-2 rounded-xl transition-colors text-sm cursor-pointer border border-slate-200 dark:border-slate-700"
+            title="Télécharger le PDF"
+          >
+            <FileDown className="w-4 h-4" /> Télécharger le PDF
           </button>
 
           <button

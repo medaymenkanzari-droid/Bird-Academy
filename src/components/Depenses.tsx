@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, TrendingDown, Check, X, ShieldAlert, CreditCard, Calendar, Download, Printer } from 'lucide-react';
+import { Plus, TrendingDown, Check, X, ShieldAlert, CreditCard, Calendar, Download, Printer, FileDown } from 'lucide-react';
 import { Depense } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { formatCurrency } from '../utils/currencyFormatter';
@@ -159,8 +159,13 @@ export default function Depenses({
     URL.revokeObjectURL(url);
   };
 
-  const handlePrint = async () => {
+  const handlePrintDOM = () => {
     printDocument('printable-area');
+  };
+
+  const handleExportPDF = async () => {
+    const reportInputCount = depenses.length;
+    console.log(`[Depenses] Exporting PDF with ${reportInputCount} expenses`);
 
     await exportDocumentAsPDF({
       title: t('expenses.pdfTitle'),
@@ -196,6 +201,9 @@ export default function Depenses({
     });
   };
 
+  // Backward compatibility alias
+  const handlePrint = handlePrintDOM;
+
   return (
     <div id="printable-area" className="space-y-6">
       {/* Header */}
@@ -207,10 +215,18 @@ export default function Depenses({
         
         <div className="flex flex-wrap gap-2 print:hidden">
           <button
-            onClick={handlePrint}
+            onClick={handlePrintDOM}
             className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold px-4 py-2 rounded-xl transition-colors text-sm cursor-pointer border border-slate-200 dark:border-slate-700"
+            title={t('print') || 'Imprimer'}
           >
-            <Printer className="w-4 h-4" /> {t('expenses.printPdf')}
+            <Printer className="w-4 h-4" /> {t('print') || 'Imprimer'}
+          </button>
+          <button
+            onClick={handleExportPDF}
+            className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold px-4 py-2 rounded-xl transition-colors text-sm cursor-pointer border border-slate-200 dark:border-slate-700"
+            title="Télécharger le PDF"
+          >
+            <FileDown className="w-4 h-4" /> Télécharger le PDF
           </button>
           <button
             onClick={exportToCSV}

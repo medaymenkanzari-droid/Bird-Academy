@@ -23,10 +23,11 @@ function downloadArtifactsPlugin() {
 
       const rootDir = configDirectory;
       const candidates = [
+        path.join(rootDir, 'dist_binaries', filename),
+        path.join(rootDir, 'public', 'downloads', filename),
         path.join(rootDir, filename),
         path.join(rootDir, 'Release', 'Release-2026-Multilingual', filename),
         path.join(rootDir, 'Release', filename),
-        path.join(rootDir, 'public', 'downloads', filename),
       ];
 
       if (filename === 'Bird-Academy-User-Windows-Setup.exe') {
@@ -63,6 +64,7 @@ function downloadArtifactsPlugin() {
       else if (filename.endsWith('.apk')) contentType = 'application/vnd.android.package-archive';
       else if (filename.endsWith('.pdf')) contentType = 'application/pdf';
       else if (filename.endsWith('.zip')) contentType = 'application/zip';
+      else if (filename.endsWith('.md')) contentType = 'text/markdown; charset=utf-8';
 
       res.statusCode = 200;
       res.setHeader('Content-Type', contentType);
@@ -169,12 +171,14 @@ export default defineConfig(() => {
       },
     },
     build: {
+      chunkSizeWarningLimit: 1500,
       rollupOptions: {
         input: process.env.VITE_APP_MODE === 'admin' 
           ? path.resolve(configDirectory, 'admin.html')
           : path.resolve(configDirectory, 'index.html'),
         output: {
           manualChunks(id) {
+            if (id.includes('node_modules/recharts')) return 'charts-vendor';
             if (id.includes('node_modules/lucide-react')) return 'icons-vendor';
             if (id.includes('node_modules/motion')) return 'motion-vendor';
           },

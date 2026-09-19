@@ -88,7 +88,7 @@ export const WebProductDetailPage: React.FC<WebProductDetailPageProps> = ({ tier
               data-testid="product-detail-lifetime-cta"
             >
               <ShoppingBag className="w-4 h-4" />
-              <span>{lifetimeOffer.ctaLabel} ({lifetimeOffer.priceFormatted})</span>
+              <span>{lifetimeOffer.ctaLabel}</span>
             </button>
           )}
 

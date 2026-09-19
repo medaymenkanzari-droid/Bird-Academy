@@ -98,10 +98,11 @@ export interface PaymentProvider {
 }
 
 export interface DownloadArtifact {
-  platform: 'windows' | 'android' | 'documentation';
+  platform: 'windows' | 'android' | 'documentation' | 'kit';
   name: string;
   filename: string;
   version: string;
+  buildId?: string;
   sizeBytes: number;
   sizeMB: string;
   sha256: string;
@@ -111,6 +112,8 @@ export interface DownloadArtifact {
   minOsVersion?: string;
   isAvailable: boolean;
   descriptionKey: string;
+  warning?: string;
+  isTestDistribution?: boolean;
 }
 
 export interface SupportTicketSubmission {

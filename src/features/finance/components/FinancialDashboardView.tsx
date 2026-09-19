@@ -153,17 +153,26 @@ export const FinancialDashboardView: React.FC<FinancialDashboardViewProps> = ({
   };
 
   const handleExportCSV = () => {
-    const headers = 'Type,Reference,Date,Categorie,Tiers_ou_Bague,Description,Montant\n';
-    const rows = unifiedTransactions.map(t => 
-      `"${t.type === 'sale' ? 'Vente' : 'Dépense'}","${t.reference}","${t.date}","${t.category}","${t.linkedBird?.bague || t.partyName}","${t.description.replace(/"/g, '""')}","${t.amount}"`
-    ).join('\n');
+    const headers = 'Type;Reference;Date;Categorie;Tiers_ou_Bague;Description;Montant\n';
+    const rows = unifiedTransactions.map(t => {
+      const typeLabel = t.type === 'sale' ? 'Vente' : 'Dépense';
+      const ref = (t.reference || '').replace(/"/g, '""');
+      const date = (t.date || '').replace(/"/g, '""');
+      const cat = (t.category || '').replace(/"/g, '""');
+      const party = (t.linkedBird?.bague || t.partyName || '').replace(/"/g, '""');
+      const desc = (t.description || '').replace(/"/g, '""');
+      const amt = t.amount !== undefined ? `${t.amount}` : '0';
+      return `"${typeLabel}";"${ref}";"${date}";"${cat}";"${party}";"${desc}";"${amt}"`;
+    }).join('\n');
 
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob(['\uFEFF' + headers + rows], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = `Bilan_Financier_Elevage_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
 

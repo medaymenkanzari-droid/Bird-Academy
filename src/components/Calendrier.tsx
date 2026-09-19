@@ -241,7 +241,7 @@ export default function CalendrierComponent({
                     title: 'Liste des Événements',
                     table: {
                       headers: ['Date', 'Catégorie', 'Événement'],
-                      rows: monthEvents.slice(0, 30),
+                      rows: monthEvents,
                     },
                   },
                 ],
