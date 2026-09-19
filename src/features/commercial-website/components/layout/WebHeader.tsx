@@ -85,24 +85,30 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[5.5rem] py-2 flex items-center justify-between gap-4">
         
-        {/* Brand Logo with Official Full Image Asset */}
+        {/* Brand Logo with Official Full Image Asset & ENTERPRISE Badge */}
         <button
           type="button"
           onClick={() => handleLinkClick('home')}
-          className="flex items-center cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
+          className="flex items-center gap-2.5 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
           data-testid="header-brand-logo"
-          aria-label="Bird Academy Home"
+          aria-label="Bird Academy Enterprise Home"
         >
           <img
             src={brandAssets.logoFull}
             alt="Bird Academy"
-            className="h-12 md:h-14 w-auto object-contain block dark:hidden"
+            className="h-10 sm:h-12 md:h-14 w-auto object-contain block dark:hidden"
           />
           <img
             src={brandAssets.logoFullDark}
             alt="Bird Academy"
-            className="h-12 md:h-14 w-auto object-contain hidden dark:block"
+            className="h-10 sm:h-12 md:h-14 w-auto object-contain hidden dark:block"
           />
+          <span 
+            className="inline-flex items-center px-2 py-0.5 text-[10px] font-black tracking-widest bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700 rounded-md shadow-xs uppercase select-none"
+            data-testid="header-enterprise-badge"
+          >
+            ENTERPRISE
+          </span>
         </button>
 
         {/* Desktop Navigation Links */}

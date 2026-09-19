@@ -11,6 +11,7 @@ import { WebLocale, WebRoute } from './types';
 import { WebLanguageProvider, useWebLanguage } from './i18n';
 import { WebHeader } from './components/layout/WebHeader';
 import { WebFooter } from './components/layout/WebFooter';
+import { WebMobileBottomNav } from './components/layout/WebMobileBottomNav';
 import { WebLandingPage } from './pages/WebLandingPage';
 import { WebProductsPage } from './pages/WebProductsPage';
 import { WebProductDetailPage } from './pages/WebProductDetailPage';
@@ -228,7 +229,7 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
       />
 
       {/* Main Content Area Protected by ErrorBoundary */}
-      <main className="flex-1">
+      <main className="flex-1 pb-16 md:pb-0">
         <ComponentErrorBoundary moduleName={`Site Commercial (${currentRoute})`}>
           {currentRoute === 'home' && <WebLandingPage onNavigate={handleNavigate} />}
           {currentRoute === 'products' && <WebProductsPage onNavigate={handleNavigate} />}
@@ -261,6 +262,9 @@ const CommercialWebsiteContent: React.FC<CommercialWebsiteAppProps> = ({
 
       {/* Footer */}
       <WebFooter onNavigate={handleNavigate} />
+
+      {/* Mobile Bottom Navigation Bar (Fixed 4 Tabs) */}
+      <WebMobileBottomNav currentRoute={currentRoute} onNavigate={handleNavigate} />
 
       {/* App Launch Graceful Fallback Modal */}
       <AppLaunchFallbackModal

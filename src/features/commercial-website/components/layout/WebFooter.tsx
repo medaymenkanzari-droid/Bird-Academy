@@ -58,7 +58,11 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 Données Locales Souveraines
               </span>
               <span className="inline-flex items-center gap-1 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg text-slate-300">
-                <Lock className="w-3.5 h-3.5 text-indigo-400" />
+                <Lock className="w-3.5 h-3.5 text-amber-400" />
+                Chiffrement Local AES-256
+              </span>
+              <span className="inline-flex items-center gap-1 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg text-slate-300">
+                <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
                 Signatures ECDSA LMSE
               </span>
             </div>

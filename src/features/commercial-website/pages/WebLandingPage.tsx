@@ -2,13 +2,15 @@
  * @license
  * SPDX-License-Identifier: Apache-2.0
  * 
- * BIRD ACADEMY COMMERCIAL WEBSITE — LANDING PAGE
+ * BIRD ACADEMY COMMERCIAL WEBSITE — LANDING PAGE (AVIAN PRECISION IMMERSIVE EDITION)
  */
 
 import React from 'react';
 import { WebRoute } from '../types';
 import { HeroSection } from '../components/sections/HeroSection';
 import { ProblemSolutionSection } from '../components/sections/ProblemSolutionSection';
+import { ExpertTestimonialSection } from '../components/sections/ExpertTestimonialSection';
+import { CoreEnginesGridSection } from '../components/sections/CoreEnginesGridSection';
 import { OfflineGuaranteeSection } from '../components/sections/OfflineGuaranteeSection';
 import { FeaturesGridSection } from '../components/sections/FeaturesGridSection';
 import { PricingCardsSection } from '../components/sections/PricingCardsSection';
@@ -18,6 +20,7 @@ import { AIAssistantSection } from '../components/sections/AIAssistantSection';
 import { SecurityArchitectureSection } from '../components/sections/SecurityArchitectureSection';
 import { DownloadSection } from '../components/sections/DownloadSection';
 import { FAQAccordionSection } from '../components/sections/FAQAccordionSection';
+import { FinalEngagementCtaSection } from '../components/sections/FinalEngagementCtaSection';
 import { SupportContactSection } from '../components/sections/SupportContactSection';
 
 export interface WebLandingPageProps {
@@ -27,40 +30,49 @@ export interface WebLandingPageProps {
 export const WebLandingPage: React.FC<WebLandingPageProps> = ({ onNavigate }) => {
   return (
     <div className="space-y-0" data-testid="web-landing-page">
-      {/* 1. Hero Section */}
+      {/* 1. Hero Split-Screen Showcase */}
       <HeroSection onNavigate={onNavigate} />
 
-      {/* 2. Problem & Solution Section */}
+      {/* 2. Problem & Solution Section (Du Carnet Papier à l'Excellence Avicole) */}
       <ProblemSolutionSection />
 
-      {/* 3. 100% Offline-First Guarantee Section */}
+      {/* 3. Expert Testimonial (Jean-Marc Valenti & Volière Moderne) */}
+      <ExpertTestimonialSection />
+
+      {/* 4. The 4 Pillar Technological Engines */}
+      <CoreEnginesGridSection />
+
+      {/* 5. 100% Offline-First Guarantee Section */}
       <OfflineGuaranteeSection />
 
-      {/* 4. Core Features Grid */}
+      {/* 6. Comprehensive Features Grid */}
       <FeaturesGridSection />
 
-      {/* 5. Pricing Cards */}
+      {/* 7. Pricing Cards (Tarif en préparation / FREE) */}
       <PricingCardsSection onNavigate={onNavigate} />
 
-      {/* 6. Comparison Table Matrix */}
+      {/* 8. Comparison Table Matrix */}
       <ComparisonTableSection />
 
-      {/* 7. Bird Intelligence Deterministic Engine */}
+      {/* 9. Bird Intelligence Deterministic Engine */}
       <BirdIntelligenceSection />
 
-      {/* 8. Local AI Assistant */}
+      {/* 10. Local AI Assistant */}
       <AIAssistantSection />
 
-      {/* 9. Cryptographic Security & LMSE */}
+      {/* 11. Cryptographic Security & LMSE */}
       <SecurityArchitectureSection />
 
-      {/* 10. Multi-Platform Download Summary */}
+      {/* 12. Multi-Platform Download Summary */}
       <DownloadSection onNavigate={onNavigate} />
 
-      {/* 11. FAQ Accordion */}
+      {/* 13. FAQ Accordion */}
       <FAQAccordionSection onNavigate={onNavigate} />
 
-      {/* 12. Support & Contact */}
+      {/* 14. Final Engagement CTA Banner */}
+      <FinalEngagementCtaSection onNavigate={onNavigate} />
+
+      {/* 15. Support & Contact */}
       <SupportContactSection />
     </div>
   );
