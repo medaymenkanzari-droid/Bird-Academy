@@ -80,7 +80,7 @@ export function calculateCageOccupancy(
 
   const isOverpopulated = capacity > 0 ? count > capacity : false;
 
-  if (process.env.DEBUG_HABITAT) {
+  if (typeof process !== 'undefined' && process.env?.DEBUG_HABITAT) {
     console.log(`[CAGE-DATA-06] calculateCageOccupancy for cageId=${cage.id}: capacity=${capacity}, presentBirds=${count}, occupancyPercentage=${occupancyPercentage}%`);
   }
 

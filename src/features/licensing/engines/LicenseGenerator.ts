@@ -26,6 +26,7 @@ export class LicenseGenerator {
     enterprise: 'ENTP',
     association: 'ASSO',
     veterinary: 'VETE',
+    test: 'TEST',
   };
 
   private static DEFAULT_DEVICE_LIMITS: Record<LicenseType, number> = {
@@ -36,6 +37,7 @@ export class LicenseGenerator {
     enterprise: 25,
     association: 10,
     veterinary: 15,
+    test: 1,
   };
 
   private static DEFAULT_FEATURES: Record<LicenseType, string[]> = {
@@ -46,13 +48,14 @@ export class LicenseGenerator {
     enterprise: ['core', 'unlimited_birds', 'pedigree', 'statistics', 'export_pdf', 'multi_user', 'audit_trail', 'priority_support', 'unlimited_cages'],
     association: ['core', 'unlimited_birds', 'pedigree', 'member_registry', 'exhibition_manager', 'export_pdf'],
     veterinary: ['core', 'unlimited_birds', 'health_pro', 'prescriptions', 'clinical_history', 'diagnostic_engine'],
+    test: ['core', 'unlimited_birds', 'pedigree', 'statistics', 'export_pdf', 'test_period'],
   };
 
   /**
    * Generates a complete, cryptographically signed License object and key string
    */
   static async generateLicense(options: GenerateLicenseOptions): Promise<License> {
-    if (!options.metadata?.isAutoTrial) {
+    if (!options.metadata?.isAutoTrial && options.type !== 'test' && !options.metadata?.isPublicTest) {
       assertAdminContext();
     }
     const id = `lic_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
@@ -60,7 +63,12 @@ export class LicenseGenerator {
     const issuedAt = now.toISOString();
 
     let expiresAt: string | null = null;
-    if (options.type !== 'permanent' && options.durationDays !== null) {
+    if (options.type === 'test') {
+      // 30 days maximum strict cap for TEST licenses
+      const days = Math.min(options.durationDays ?? 30, 30);
+      const expDate = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+      expiresAt = expDate.toISOString();
+    } else if (options.type !== 'permanent' && options.durationDays !== null) {
       const days = options.durationDays ?? (options.type === 'beta' ? 90 : 365);
       const expDate = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
       expiresAt = expDate.toISOString();
@@ -97,7 +105,10 @@ export class LicenseGenerator {
       revocationReason: null,
       checksum,
       signature,
-      metadata: options.metadata || {},
+      metadata: {
+        ...(options.type === 'test' ? { tier: options.metadata?.tier || 'PRO' } : {}),
+        ...(options.metadata || {}),
+      },
     };
   }
 

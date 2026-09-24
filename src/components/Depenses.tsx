@@ -167,6 +167,10 @@ export default function Depenses({
     const reportInputCount = depenses.length;
     console.log(`[Depenses] Exporting PDF with ${reportInputCount} expenses`);
 
+    const formattedTotal = totalExpenses.toFixed(2);
+    const totalRowLabel = t('expenses.totalRowLabel') || (currentLanguage === 'ar' ? 'المجموع' : 'TOTAL');
+    const opCountShort = t('expenses.opCountShort') || (currentLanguage === 'ar' ? 'عملية' : currentLanguage === 'en' ? 'operations' : 'opérations');
+
     await exportDocumentAsPDF({
       title: t('expenses.pdfTitle'),
       subtitle: t('expenses.pdfSub'),
@@ -176,7 +180,7 @@ export default function Depenses({
         {
           title: t('expenses.secOverview'),
           metrics: [
-            { label: t('expenses.totalExpenses'), value: `${totalExpenses} ${userCurrency}` },
+            { label: t('expenses.totalExpenses'), value: `${formattedTotal} ${userCurrency}` },
             { label: t('expenses.opCount'), value: `${depenses.length}` },
           ],
         },
@@ -189,12 +193,20 @@ export default function Depenses({
               t('expenses.headerAmount', { currency: userCurrency }),
               t('expenses.headerDescription')
             ],
+            columnWidths: [75, 105, 85, 250.28],
+            alignments: ['left', 'left', 'right', 'left'],
             rows: depenses.map(d => [
               d.date || '',
               t(`expenses.categories.${normalizeExpenseCategory(d.categorie)}`),
-              `${d.montant || 0} ${userCurrency}`,
+              `${(Number(d.montant) || 0).toFixed(2)} ${userCurrency}`,
               getLocalizedExpenseDescription(d.description, t) || '-'
             ]),
+            footerRow: [
+              totalRowLabel,
+              `${depenses.length} ${opCountShort}`,
+              `${formattedTotal} ${userCurrency}`,
+              ''
+            ]
           },
         },
       ],

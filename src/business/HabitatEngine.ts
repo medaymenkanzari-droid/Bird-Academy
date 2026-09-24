@@ -155,7 +155,7 @@ export class HabitatEngine {
     const tauxOccupation = capaciteTotale > 0 ? Math.round((oiseauxPresents / capaciteTotale) * 100) : 0;
     const isOverloaded = oiseauxPresents > capaciteTotale;
 
-    if (process.env.DEBUG_HABITAT) {
+    if (typeof process !== 'undefined' && process.env?.DEBUG_HABITAT) {
       console.log(`[CAGE-DATA-03] Calculated stats for ${entityType}:${entityId}: present=${oiseauxPresents}, cap=${capaciteTotale}, occ=${tauxOccupation}%`);
     }
 

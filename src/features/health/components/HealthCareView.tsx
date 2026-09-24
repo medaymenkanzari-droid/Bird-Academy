@@ -19,6 +19,7 @@ import { PassportDataService } from '../../birds/services/PassportDataService';
 import { HealthService } from '../services/HealthService';
 import { BirdService } from '../../birds/services/BirdService';
 import { AppButton, AppBadge, AppModal, AppInput, AppSelect } from '../../../components/design-system';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export interface HealthCareViewProps {
   bird: Canari;
@@ -37,6 +38,7 @@ export const HealthCareView: React.FC<HealthCareViewProps> = ({
   onRefreshHealth,
   className = ''
 }) => {
+  const { t, isRtl } = useLanguage();
   // Local state for records & bird
   const [currentBird, setCurrentBird] = useState<Canari>(bird);
   const [records, setRecords] = useState<Sante[]>(() => {
@@ -415,7 +417,7 @@ export const HealthCareView: React.FC<HealthCareViewProps> = ({
         >
           <form onSubmit={handleAddSoinSubmit} className="space-y-4">
             <AppSelect
-              label="Catégorie *"
+              label={t('healthCategoryRequired')}
               value={formCategory}
               onChange={(e: any) => setFormCategory(e.target.value)}
               options={[
@@ -427,7 +429,7 @@ export const HealthCareView: React.FC<HealthCareViewProps> = ({
             />
 
             <AppInput
-              label="Nom du traitement / Médicament *"
+              label={t('healthTreatmentNameRequired')}
               value={formTreatment}
               onChange={(e) => setFormTreatment(e.target.value)}
               placeholder="ex. Vermifuge Panacur"
@@ -436,7 +438,7 @@ export const HealthCareView: React.FC<HealthCareViewProps> = ({
 
             <div className="grid grid-cols-2 gap-3">
               <AppInput
-                label="Date"
+                label={t('dateLabel')}
                 type="date"
                 value={formDate}
                 onChange={(e) => setFormDate(e.target.value)}
@@ -492,7 +494,7 @@ export const HealthCareView: React.FC<HealthCareViewProps> = ({
             />
 
             <AppInput
-              label="Date de la pesée"
+              label={t('healthWeightDate')}
               type="date"
               value={formWeightDate}
               onChange={(e) => setFormWeightDate(e.target.value)}

@@ -11,10 +11,14 @@ import { CalendarEvent, PlatformNotification } from '../../platform/types';
 import { appStorage } from '../../../storage';
 import { SPECIES_REGISTRY, getSpeciesById } from '../../../data/speciesRegistry';
 import { SpeciesProfileService } from '../../species/services/SpeciesProfileService';
+import { CapabilityResolver } from '../../subscription/services/CapabilityResolver';
 
 export interface DemoGenerationOptions {
   activeSpecies?: string[];
   activeBreeds?: Record<string, string[]>;
+  requestedBirdCount?: number;
+  targetBirdCount?: number;
+  strictReject?: boolean;
 }
 
 export class DemoDataGenerator {
@@ -29,7 +33,7 @@ export class DemoDataGenerator {
     });
   }
 
-  static generate(size: 'small' | 'medium' | 'large' = 'small', options?: DemoGenerationOptions): {
+  static generate(size: 'small' | 'medium' | 'large' | number = 'small', options?: DemoGenerationOptions): {
     facilities: Facility[];
     zones: Zone[];
     aviaries: Aviary[];
@@ -50,38 +54,57 @@ export class DemoDataGenerator {
     calendarEvents: CalendarEvent[];
     notifications: PlatformNotification[];
   } {
-    // Determine bounds based on size
-    let targetMales = 18;
-    let targetFemales = 18;
-    let targetTotalBirds = 50;
-    let numCages = 6;
-    let numExpenses = 15;
-    let numSales = 10;
-    let numHealth = 10;
-    let numCustomEvents = 6;
-    let numNotifications = 10;
-
-    if (size === 'medium') {
-      targetMales = 110;
-      targetFemales = 110;
-      targetTotalBirds = 300;
-      numCages = 25;
-      numExpenses = 60;
-      numSales = 40;
-      numHealth = 35;
-      numCustomEvents = 25;
-      numNotifications = 30;
+    // 1. Determine requested bird count
+    let requestedBirds = 50;
+    if (typeof size === 'number') {
+      requestedBirds = size;
+    } else if (typeof options?.requestedBirdCount === 'number') {
+      requestedBirds = options.requestedBirdCount;
+    } else if (typeof options?.targetBirdCount === 'number') {
+      requestedBirds = options.targetBirdCount;
+    } else if (size === 'medium') {
+      requestedBirds = 300;
     } else if (size === 'large') {
-      targetMales = 450;
-      targetFemales = 450;
-      targetTotalBirds = 1200;
-      numCages = 100;
-      numExpenses = 200;
-      numSales = 150;
-      numHealth = 110;
-      numCustomEvents = 75;
-      numNotifications = 80;
+      requestedBirds = 1200;
+    } else {
+      requestedBirds = 50;
     }
+
+    // 2. Centralized Entitlement Check & Hard Limits:
+    // In FREE tier, demo generator cannot exceed 20 birds (HARD LIMITED TO CURRENT TIER).
+    const currentTier = CapabilityResolver.getCurrentTierSync();
+    const planLimit = CapabilityResolver.getBirdLimitForCurrentPlan();
+    const canUseDemo = CapabilityResolver.canUseDemoGenerator(currentTier);
+
+    if (options?.strictReject && (currentTier === 'FREE' || !canUseDemo) && requestedBirds > planLimit) {
+      throw new Error(
+        `Génération DEMO dépassant le quota autorisée (${planLimit} oiseaux max en FREE) est strictement bloquée. Tentative: ${requestedBirds} oiseaux.`
+      );
+    }
+
+    const targetTotalBirds = Math.min(requestedBirds, planLimit);
+
+    // 3. Partition generations to build final coherent dataset directly without over-allocation
+    let totalGP = Math.max(2, Math.floor(targetTotalBirds * 0.20));
+    if (totalGP % 2 !== 0) totalGP = Math.max(2, totalGP - 1);
+    if (totalGP >= targetTotalBirds) totalGP = Math.max(0, targetTotalBirds - 2);
+
+    let targetYoung = Math.max(1, Math.floor(targetTotalBirds * 0.25));
+    if (targetTotalBirds <= 2) targetYoung = 0;
+
+    let targetFounders = Math.max(0, targetTotalBirds - totalGP - targetYoung);
+    const slack = targetTotalBirds - (totalGP + targetYoung + targetFounders);
+    targetFounders += slack;
+
+    let targetMales = Math.ceil(targetFounders / 2);
+    let targetFemales = targetFounders - targetMales;
+
+    let numCages = Math.min(25, Math.max(3, Math.ceil(targetTotalBirds / 3)));
+    let numExpenses = Math.min(60, Math.max(5, targetTotalBirds));
+    let numSales = Math.min(40, Math.max(2, Math.floor(targetTotalBirds / 3)));
+    let numHealth = Math.min(35, Math.max(2, Math.floor(targetTotalBirds / 3)));
+    let numCustomEvents = Math.min(25, Math.max(4, Math.floor(targetTotalBirds / 4)));
+    let numNotifications = Math.min(30, Math.max(5, Math.floor(targetTotalBirds / 3)));
 
     // Helper functions for random selection
     const rand = <T>(arr: readonly T[]): T => arr[Math.floor(Math.random() * arr.length)];
@@ -260,7 +283,6 @@ export class DemoDataGenerator {
     // 2.1 GENERATION 1: GRANDPARENTS (Ancestors)
     const gpMales: Canari[] = [];
     const gpFemales: Canari[] = [];
-    const totalGP = Math.ceil((targetMales + targetFemales) * 0.25); // 25% of founders are grandparents
 
     for (let i = 1; i <= totalGP; i++) {
       const sp = rand(species);
@@ -273,6 +295,10 @@ export class DemoDataGenerator {
       const birthYear = rand([2023, 2024]);
       const birthDate = `${birthYear}-${String(randInt(1, 12)).padStart(2, '0')}-${String(randInt(1, 28)).padStart(2, '0')}`;
       const ring = generateUniqueRing(birthYear, 5000 + i);
+
+      const cageIndex = randInt(0, Math.min(4, cages.length - 1));
+      const targetCage = cages[cageIndex];
+      const targetLegacy = legacyCages[cageIndex];
 
       const bird: Canari = {
         id: birdId++,
@@ -287,13 +313,14 @@ export class DemoDataGenerator {
         facteur: fact,
         couleur: `${colBase} ${fact} ${mut}`,
         date_naissance: birthDate,
-        cage_id: legacyCages[randInt(0, 4)].id,
-        cageId: cages[randInt(0, 4)].id,
+        cage_id: targetLegacy?.id || 1,
+        cageId: targetCage?.id || 'cage-repro-1',
         facilityId: 'fac-main',
-        zoneId: cages[randInt(0, 4)].zoneId,
+        zoneId: targetCage?.zoneId || 'zone-repro',
         pere_id: null,
         mere_id: null,
-        archived: i % 15 === 0, // some archived / sold
+        archived: false,
+        isDemo: true,
         photo: getPhotoForSpecies(sp.id),
         photos: [],
         documents: [],
@@ -328,7 +355,6 @@ export class DemoDataGenerator {
     // 2.2 GENERATION 2: PARENTS (Core Breeders)
     const parentsMales: Canari[] = [];
     const parentsFemales: Canari[] = [];
-    const targetFounders = targetMales + targetFemales;
 
     for (let i = 1; i <= targetFounders; i++) {
       const sp = rand(species);
@@ -379,13 +405,14 @@ export class DemoDataGenerator {
         facteur: fact,
         couleur: `${colBase} ${fact} ${mut}`,
         date_naissance: birthDate,
-        cage_id: isQuarantine ? 4 : targetLegacyId,
+        cage_id: isQuarantine && legacyCages.length > 3 ? legacyCages[3].id : targetLegacyId,
         cageId: isQuarantine ? 'cage-quar-1' : targetV2Cage.id,
         facilityId: 'fac-main',
         zoneId: isQuarantine ? 'zone-quar' : targetV2Cage.zoneId,
         pere_id: pereId,
         mere_id: mereId,
         archived: false,
+        isDemo: true,
         photo: getPhotoForSpecies(sp.id),
         photos: [],
         documents: [],
@@ -424,6 +451,7 @@ export class DemoDataGenerator {
           date_creation: '2026-02-15',
           statut: isDissolved ? 'Dissous' : 'Actif'
         };
+        (coup as any).isDemo = true;
         couples.push(coup);
 
         // Create 1 or 2 reproduction seasons for the couples to generate young/chicks
@@ -438,6 +466,7 @@ export class DemoDataGenerator {
               date_debut: r === 0 ? '2026-03-01' : '2026-05-10',
               statut: isClosed ? 'Clôturé' : 'En cours'
             };
+            (repro as any).isDemo = true;
             reproductions.push(repro);
 
             // Clutches (pontes)
@@ -456,9 +485,10 @@ export class DemoDataGenerator {
               eclosions: hatched,
               sevrages: weaned
             };
+            (p as any).isDemo = true;
             pontes.push(p);
 
-            // Create Young birds (Generations 3 & 4)
+            // Create Young birds (Generations 3 & 4) only up to targetTotalBirds
             for (let j = 0; j < hatched; j++) {
               const isWeaned = j < weaned;
               const status = isWeaned ? 'Sevré' : (rand([true, false]) ? 'En sevrage' : 'Décédé');
@@ -471,9 +501,10 @@ export class DemoDataGenerator {
                 statut: status,
                 date_naissance: birthDate
               };
+              (jn as any).isDemo = true;
               jeunes.push(jn);
 
-              if (status !== 'Décédé') {
+              if (status !== 'Décédé' && canaris.length < targetTotalBirds) {
                 // Add to real bird list
                 const youngBird: Canari = {
                   id: birdId++,
@@ -495,6 +526,7 @@ export class DemoDataGenerator {
                   pere_id: male.id,
                   mere_id: female.id,
                   archived: false,
+                  isDemo: true,
                   photo: getPhotoForSpecies(male.espece || 'Canari'),
                   photos: [],
                   documents: [],
@@ -508,25 +540,55 @@ export class DemoDataGenerator {
       }
     }
 
-    // Founders and breeders are created first, so removing only the surplus tail
-    // preserves pair and parent references while respecting the announced profiles.
-    if (canaris.length > targetTotalBirds) {
-      canaris.splice(targetTotalBirds);
+    // Complement young birds if needed to match targetTotalBirds exactly
+    while (canaris.length < targetTotalBirds && couples.length > 0) {
+      const parentCouple = rand(couples);
+      const father = canaris.find(b => b.id === parentCouple.male_id);
+      const mother = canaris.find(b => b.id === parentCouple.femelle_id);
+      const jnId = jeuneIdCounter++;
+      const spId = father?.espece || 'canari';
+      const youngBird: Canari = {
+        id: birdId++,
+        bague: generateUniqueRing(2026, 9000 + jnId),
+        nom: `Fils #${jnId} (${father?.race || 'Canari'})`,
+        sexe: rand(['Mâle', 'Femelle', 'Indéterminé']),
+        espece: spId,
+        categorie: father?.categorie || 'Standard',
+        race: father?.race || 'Classique',
+        mutation: father?.mutation || 'Classique',
+        couleur_base: father?.couleur_base || 'Jaune',
+        facteur: father?.facteur || 'Intensif',
+        couleur: `${father?.couleur_base || 'Jaune'} ${father?.facteur || 'Intensif'}`,
+        date_naissance: '2026-04-10',
+        cage_id: legacyCages[0]?.id || 1,
+        cageId: cages[0]?.id || 'cage-repro-1',
+        facilityId: 'fac-main',
+        zoneId: 'zone-sevrage',
+        pere_id: father?.id || null,
+        mere_id: mother?.id || null,
+        archived: false,
+        isDemo: true,
+        photo: getPhotoForSpecies(spId),
+        photos: [],
+        documents: [],
+        statut_sante: 'Sain'
+      };
+      canaris.push(youngBird);
     }
 
-    // Fix up statuses of birds to represent full range
+    // Fix up statuses of birds without archiving to guarantee exact active count
     canaris.forEach((b, index) => {
-      // Sante States: Sain, Quarantaine, Traitement, Blessé, Décédé
+      b.archived = false;
+      b.isDemo = true;
+      // Sante States: Sain, Quarantaine, Traitement, Blessé
       if (index % 15 === 0) {
         b.statut_sante = 'En traitement';
       } else if (index % 18 === 0) {
         b.statut_sante = 'En quarantaine';
-        b.cage_id = legacyCages[3].id; // Put in quarantine cage
+        const qCage = legacyCages.length > 3 ? legacyCages[3] : legacyCages[legacyCages.length - 1];
+        b.cage_id = qCage?.id || 1;
       } else if (index % 25 === 0) {
         b.statut_sante = 'Blessé';
-      } else if (index % 50 === 0) {
-        b.statut_sante = 'Décédé';
-        b.archived = true;
       } else {
         b.statut_sante = 'Sain';
       }
@@ -739,19 +801,25 @@ export class DemoDataGenerator {
   }
 
   static isDemoActive(): boolean {
-    return localStorage.getItem('bird_academy_demo_active') === 'true';
+    return typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bird_academy_demo_active') === 'true';
   }
 
-  static toggleDemo(active: boolean, size: 'small' | 'medium' | 'large' = 'small', options?: DemoGenerationOptions): void {
-    localStorage.setItem('bird_academy_demo_active', active ? 'true' : 'false');
+  static toggleDemo(active: boolean, size: 'small' | 'medium' | 'large' | number = 'small', options?: DemoGenerationOptions): void {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('bird_academy_demo_active', active ? 'true' : 'false');
+    }
     if (active) {
+      const tier = CapabilityResolver.getCurrentTierSync();
+      const effectiveSize = (tier === 'FREE' && size === 'small') ? 20 : size;
       // Seed data with size and scoped options
-      this.seed(size, options);
+      this.seed(effectiveSize, options);
     }
   }
 
-  static seed(size: 'small' | 'medium' | 'large' = 'small', options?: DemoGenerationOptions): void {
-    const data = this.generate(size, options);
+  static seed(size: 'small' | 'medium' | 'large' | number = 'small', options?: DemoGenerationOptions): void {
+    const tier = CapabilityResolver.getCurrentTierSync();
+    const effectiveSize = (tier === 'FREE' && size === 'small') ? 20 : size;
+    const data = this.generate(effectiveSize, options);
 
     // Save under appropriate demo keys
     localStorage.setItem('demo_ba_facilities', JSON.stringify(data.facilities));

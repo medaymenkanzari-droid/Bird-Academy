@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Bell, Moon, Sun, ChevronRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { Search, Bell, Moon, Sun, ChevronRight, ShieldCheck, Sparkles, MessageSquare } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { LicenseStatusBadge } from '../../features/licensing/components/LicenseStatusBadge';
 import { useSubscription } from '../../features/subscription/hooks/useSubscription';
@@ -13,6 +13,7 @@ import { NotificationPopover } from './NotificationPopover';
 import { NotificationService } from '../../features/platform/services/NotificationService';
 import { isQaMode } from '../../config/appMode';
 import { QaResetModal } from '../../features/licensing/components/QaResetModal';
+import { TesterFeedbackModal } from '../../features/feedback/components/TesterFeedbackModal';
 
 export interface DesktopTopBarProps {
   currentTab: string;
@@ -40,6 +41,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
   });
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isQaResetModalOpen, setIsQaResetModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState<number>(() => NotificationService.getUnreadCount());
   const bellButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -173,6 +175,18 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
           {isDarkMode ? <Sun className="w-4.5 h-4.5 text-amber-400" /> : <Moon className="w-4.5 h-4.5 text-slate-600" />}
         </button>
 
+        {/* Tester Feedback Button */}
+        <button
+          type="button"
+          data-testid="topbar-feedback-btn"
+          onClick={() => setIsFeedbackModalOpen(true)}
+          className="p-2 text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+          title="Faire un retour testeur / Signaler un problème"
+          aria-label="Faire un retour testeur"
+        >
+          <MessageSquare className="w-4.5 h-4.5" />
+        </button>
+
         {/* License & Tier Status Badges */}
         <div className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800">
           {isQaMode() && (
@@ -205,6 +219,12 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
           <LicenseStatusBadge onOpenActivation={onOpenActivationModal} showDetails={false} />
         </div>
       </div>
+
+      <TesterFeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        currentTab={getModuleTitle(currentTab)}
+      />
     </header>
   );
 };

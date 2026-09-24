@@ -11,7 +11,7 @@ import { CalendarEvent, CalendarEventType } from '../types';
 import { Calendar, ChevronLeft, ChevronRight, Plus, Trash2, Tag, Info, ListTodo } from 'lucide-react';
 
 export const CalendarTab: React.FC = () => {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   const [currentDate, setCurrentDate] = useState(() => new Date());
   const [selectedDateStr, setSelectedDateStr] = useState<string>(() => new Date().toISOString().split('T')[0]);
   const [events, setEvents] = useState<CalendarEvent[]>(() => CalendarService.getEvents());
@@ -334,7 +334,7 @@ export const CalendarTab: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[9px] font-black text-slate-400 uppercase">Catégorie</label>
+                  <label className="block text-[9px] font-black text-slate-400 uppercase">{t('category')}</label>
                   <select
                     value={newType}
                     onChange={e => setNewType(e.target.value as any)}

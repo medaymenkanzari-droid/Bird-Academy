@@ -7,6 +7,7 @@ import { Canari } from '../../../types';
 import { appStorage } from '../../../storage';
 import { BirdModel } from '../../../models/Bird';
 import { HabitatRepository } from '../../habitat/repositories/HabitatRepository';
+import { CapabilityResolver } from '../../subscription/services/CapabilityResolver';
 
 export interface BirdFilterCriteria {
   nom?: string;
@@ -50,6 +51,10 @@ export class BirdRepository {
 
   static create(bird: Omit<Canari, 'id'>): Canari {
     const birds = appStorage.getItem<Canari[]>(this.KEY, []);
+    const activeCount = birds.filter(b => !b.archived).length;
+    if (!CapabilityResolver.canCreateBird(activeCount, 1)) {
+      throw new Error("Votre plan gratuit autorise jusqu'à 20 oiseaux.");
+    }
     const nextId = birds.length > 0 ? Math.max(...birds.map(b => b.id)) + 1 : 1;
     const newBird: Canari = {
       ...bird,
@@ -95,7 +100,11 @@ export class BirdRepository {
   static restore(id: number): void {
     const birds = appStorage.getItem<Canari[]>(this.KEY, []);
     const index = birds.findIndex(b => b.id === id);
-    if (index !== -1) {
+    if (index !== -1 && birds[index].archived) {
+      const activeCount = birds.filter(b => !b.archived).length;
+      if (!CapabilityResolver.canCreateBird(activeCount, 1)) {
+        throw new Error("Votre plan gratuit autorise jusqu'à 20 oiseaux.");
+      }
       birds[index].archived = false;
       this.saveAll(birds);
     }

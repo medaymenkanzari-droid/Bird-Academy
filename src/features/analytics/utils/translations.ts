@@ -5,6 +5,7 @@
 
 export const ANALYTICS_TRANSLATIONS: Record<string, Record<string, string>> = {
   fr: {
+    birdNameLabel: "Nom d'oiseau",
     dashboardTitle: "Centre décisionnel et analyses",
     dashboardSubtitle: "Pilotez votre élevage de canaris avec des indicateurs fiables, des prévisions et des analyses de performance.",
     tabExecutive: "Tableau de Bord Exécutif",
@@ -221,6 +222,7 @@ export const ANALYTICS_TRANSLATIONS: Record<string, Record<string, string>> = {
     noRecentActivity: "Aucune activité récente enregistrée.",
   },
   en: {
+    birdNameLabel: "Bird Name",
     dashboardTitle: "Decision Support & Business Analytics",
     dashboardSubtitle: "Pilot your canary breeding system with reliable key metrics, projections, and performance insights.",
     tabExecutive: "Executive Dashboard",
@@ -429,6 +431,7 @@ export const ANALYTICS_TRANSLATIONS: Record<string, Record<string, string>> = {
     noRecentActivity: "No recent activity recorded.",
   },
   ar: {
+    birdNameLabel: "اسم الطائر",
     dashboardTitle: "مركز اتخاذ القرار وتحليلات الأعمال",
     dashboardSubtitle: "قم بإدارة تربية الكناري الخاصة بك بمؤشرات موثوقة وتوقعات وتحليلات الأداء.",
     tabExecutive: "لوحة القيادة التنفيذية",
@@ -637,6 +640,7 @@ export const ANALYTICS_TRANSLATIONS: Record<string, Record<string, string>> = {
     noRecentActivity: "لا توجد أنشطة حديثة مسجلة.",
   },
   es: {
+    birdNameLabel: "Nombre del pájaro",
     dashboardTitle: "Centro de control y análisis",
     dashboardSubtitle: "Gestione su criadero de canarios con indicadores fiables, previsiones y análisis de rendimiento.",
     tabExecutive: "Panel Ejecutivo",
@@ -845,6 +849,7 @@ export const ANALYTICS_TRANSLATIONS: Record<string, Record<string, string>> = {
     noRecentActivity: "No hay actividad reciente registrada.",
   },
   it: {
+    birdNameLabel: "Nome dell'uccello",
     dashboardTitle: "Centro decisionale e analisi",
     dashboardSubtitle: "Pilota il tuo allevamento di canarini con indicatori affidabili, previsioni e analisi di performance.",
     tabExecutive: "Pannello Esecutivo",

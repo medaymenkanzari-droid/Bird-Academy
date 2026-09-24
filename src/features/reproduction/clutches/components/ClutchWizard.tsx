@@ -292,7 +292,7 @@ export default function ClutchWizard({ isOpen, onClose, onSuccess, preSelectedPa
               <div className="bg-slate-50 p-3.5 rounded-xl text-left border border-slate-100 text-xs text-slate-600 space-y-1 max-w-md mx-auto">
                 <div>• Couple cible : <strong>#{selectedPairId}</strong></div>
                 <div>• Nombre d'œufs : <strong>{eggCount}</strong></div>
-                <div>• Date de ponte : <strong>{startDate}</strong></div>
+                <div>{t('wizardSummaryLayingDate')} <strong>{startDate}</strong></div>
                 <div>• Mode d'incubation : <strong className="text-amber-600 font-bold">{t(`incubation${incubationMode.charAt(0).toUpperCase() + incubationMode.slice(1)}`)}</strong></div>
               </div>
             </div>

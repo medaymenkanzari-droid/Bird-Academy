@@ -27,7 +27,8 @@ export const INITIAL_CANARIS: Canari[] = [
     date_naissance: "2025-04-12",
     cage_id: 1,
     pere_id: null,
-    mere_id: null
+    mere_id: null,
+    isDemo: true
   },
   {
     id: 2,
@@ -43,7 +44,8 @@ export const INITIAL_CANARIS: Canari[] = [
     date_naissance: "2025-05-18",
     cage_id: 1,
     pere_id: null,
-    mere_id: null
+    mere_id: null,
+    isDemo: true
   },
   {
     id: 3,
@@ -59,7 +61,8 @@ export const INITIAL_CANARIS: Canari[] = [
     date_naissance: "2025-03-22",
     cage_id: 2,
     pere_id: null,
-    mere_id: null
+    mere_id: null,
+    isDemo: true
   },
   {
     id: 4,
@@ -75,7 +78,8 @@ export const INITIAL_CANARIS: Canari[] = [
     date_naissance: "2025-03-29",
     cage_id: 2,
     pere_id: null,
-    mere_id: null
+    mere_id: null,
+    isDemo: true
   },
   {
     id: 5,
@@ -91,7 +95,8 @@ export const INITIAL_CANARIS: Canari[] = [
     date_naissance: "2026-05-10",
     cage_id: 3,
     pere_id: 1,
-    mere_id: 2
+    mere_id: 2,
+    isDemo: true
   },
   {
     id: 6,
@@ -107,7 +112,8 @@ export const INITIAL_CANARIS: Canari[] = [
     date_naissance: "2024-06-15",
     cage_id: 3,
     pere_id: null,
-    mere_id: null
+    mere_id: null,
+    isDemo: true
   },
   {
     id: 7,
@@ -124,7 +130,8 @@ export const INITIAL_CANARIS: Canari[] = [
     date_naissance: "2025-06-10",
     cage_id: 3,
     pere_id: null,
-    mere_id: null
+    mere_id: null,
+    isDemo: true
   },
   {
     id: 8,
@@ -141,7 +148,8 @@ export const INITIAL_CANARIS: Canari[] = [
     date_naissance: "2026-02-15",
     cage_id: 3,
     pere_id: null,
-    mere_id: null
+    mere_id: null,
+    isDemo: true
   }
 ];
 

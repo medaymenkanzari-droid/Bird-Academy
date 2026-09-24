@@ -77,7 +77,7 @@ export const OrderSummaryCard: React.FC<OrderSummaryCardProps> = ({ offer, quant
         </div>
         <div className="flex justify-between text-slate-600 dark:text-slate-400">
           <span>{t('checkout.tax')}</span>
-          <span>—</span>
+          <span>(Incluses)</span>
         </div>
         <div className="border-t border-slate-200 dark:border-slate-700 pt-2 flex justify-between font-black text-sm text-slate-900 dark:text-white">
           <span>{t('checkout.total')}</span>

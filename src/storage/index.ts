@@ -27,7 +27,7 @@ function isApplicationStorageKey(key: string): boolean {
 
 export class LocalStorageProvider implements IStorageProvider {
   private getPrefixedKey(key: string): string {
-    const isDemo = localStorage.getItem('bird_academy_demo_active') === 'true';
+    const isDemo = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bird_academy_demo_active') === 'true';
     if (!isDemo) return key;
     const systemKeys = [
       'bird_academy_language', 'bird_academy_demo_active', 'db_version', 
@@ -69,7 +69,7 @@ export class LocalStorageProvider implements IStorageProvider {
 
   clear(): void {
     try {
-      const isDemo = localStorage.getItem('bird_academy_demo_active') === 'true';
+      const isDemo = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bird_academy_demo_active') === 'true';
       if (isDemo) {
         // Clear only demo keys
         const keysToRemove: string[] = [];
@@ -84,7 +84,7 @@ export class LocalStorageProvider implements IStorageProvider {
         const keysToRemove: string[] = [];
         for (let i = 0; i < localStorage.length; i++) {
           const key = localStorage.key(i);
-          if (key && isApplicationStorageKey(key)) {
+          if (key && !key.startsWith('demo_') && isApplicationStorageKey(key)) {
             keysToRemove.push(key);
           }
         }

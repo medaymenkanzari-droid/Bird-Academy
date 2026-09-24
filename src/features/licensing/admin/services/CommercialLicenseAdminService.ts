@@ -406,6 +406,7 @@ export class CommercialLicenseAdminService {
       enterprise: 0,
       association: 0,
       veterinary: 0,
+      test: 0,
     };
 
     let totalActivatedDevices = 0;

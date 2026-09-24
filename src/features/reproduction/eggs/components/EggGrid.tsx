@@ -295,7 +295,7 @@ export default function EggGrid({ clutchId, onRefreshClutches }: EggGridProps) {
                 <span className="text-[10px] uppercase font-bold text-slate-400">Métriques de l'œuf</span>
                 <div className="grid grid-cols-2 gap-3 text-xs text-slate-600 mt-2">
                   <div>
-                    <span className="text-slate-400 block">Date de ponte</span>
+                    <span className="text-slate-400 block">{t('eggLayingDateLabel')}</span>
                     <span className="font-bold text-slate-700">{selectedEgg.layingDate}</span>
                   </div>
                   <div>
@@ -386,7 +386,7 @@ export default function EggGrid({ clutchId, onRefreshClutches }: EggGridProps) {
                     <label className="block text-[10px] uppercase font-bold text-slate-500 mb-1">Inspecteur</label>
                     <AppInput
                       type="text"
-                      placeholder="Nom de l'éleveur"
+                      placeholder={t('inspectorPlaceholder')}
                       value={inspector}
                       onChange={(e) => setInspector(e.target.value)}
                     />

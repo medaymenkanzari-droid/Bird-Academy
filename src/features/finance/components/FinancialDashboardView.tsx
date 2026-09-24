@@ -22,6 +22,7 @@ import { RecordTransactionModal } from './RecordTransactionModal';
 import { AppKpiCard, AppButton } from '../../../components/design-system';
 import { formatCurrency } from '../../../utils/currencyFormatter';
 import { exportDocumentAsPDF } from '../../../utils/printUtils';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export interface FinancialDashboardViewProps {
   depenses?: Depense[];
@@ -38,7 +39,7 @@ export const FinancialDashboardView: React.FC<FinancialDashboardViewProps> = ({
   canaris: propCanaris,
   className = ''
 }) => {
-  // Local state for finances & birds
+  const { t, isRtl } = useLanguage();
   const [expenses, setExpenses] = useState<Depense[]>(() => propDepenses || FinanceRepository.getExpenses());
   const [sales, setSales] = useState<Vente[]>(() => propVentes || FinanceRepository.getSales());
   const birds = useMemo(() => propCanaris || BirdRepository.getAll(), [propCanaris]);
@@ -247,7 +248,7 @@ export const FinancialDashboardView: React.FC<FinancialDashboardViewProps> = ({
 
         {/* KPI 2: Total Dépenses */}
         <AppKpiCard
-          title="Total Dépenses d'Exploitation"
+          title={t('totalOperatingExpenses')}
           value={formatCurrency(totalExpenses)}
           subtitle={`${expenses.length} dépense(s) enregistrée(s)`}
           icon={<TrendingDown className="w-5 h-5 text-amber-400" />}
@@ -341,9 +342,9 @@ export const FinancialDashboardView: React.FC<FinancialDashboardViewProps> = ({
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-800 text-3xs font-black uppercase tracking-wider text-slate-400">
-                  <th className="py-3 px-3">Date</th>
+                  <th className="py-3 px-3">{t('dateLabel')}</th>
                   <th className="py-3 px-3">Référence</th>
-                  <th className="py-3 px-3">Type & Catégorie</th>
+                  <th className="py-3 px-3">{t('typeAndCategory')}</th>
                   <th className="py-3 px-3">Sujet / Tiers</th>
                   <th className="py-3 px-3">Intitulé</th>
                   <th className="py-3 px-3 text-right">Montant</th>

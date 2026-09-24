@@ -11,7 +11,7 @@ import { useWebLanguage } from '../../i18n';
 import { WebRoute } from '../../types';
 import { 
   Download, ShieldCheck, ArrowRight, ArrowLeft, CheckCircle2, 
-  Award, Sparkles, Star, Lock, Cpu, HeartPulse, Activity
+  Award, Sparkles, Lock, Cpu, HeartPulse, Activity
 } from 'lucide-react';
 
 export interface HeroSectionProps {
@@ -134,7 +134,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/80 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 group">
                 <img 
                   src="./assets/images/champion-canary.jpg" 
-                  alt="Canari Champion Lipochrome Jaune de Concours Bague FFO-2024-892" 
+                  alt="Canari Lipochrome Jaune Mosaïque - Exemple illustratif de fiche sujet" 
                   className="w-full h-auto aspect-square object-cover object-center transform transition-transform duration-700 group-hover:scale-105"
                   loading="eager"
                   data-testid="hero-champion-canary-image"
@@ -150,12 +150,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                         Canari Lipochrome Jaune Mosaïque
                       </div>
                       <div className="text-[10px] text-slate-600 dark:text-slate-400 font-mono mt-0.5">
-                        Souche de Prestige • Lignée Pure
+                        Exemple Illustratif • Fiche Sujet
                       </div>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 rounded-md text-[10px] font-black bg-[#ffc107]/20 text-amber-900 dark:text-amber-300 border border-[#ffc107]/40">
-                    COM 2024
+                    Critères COM
                   </span>
                 </div>
               </div>
@@ -175,19 +175,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 </div>
               </div>
 
-              {/* Overlaid Badge 2: Top-Right (Standard 94 pts • Médaille d'Or COM) */}
-              <div className="absolute top-8 -right-2 sm:-right-4 p-2.5 sm:p-3 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-amber-300/80 dark:border-amber-700 shadow-xl flex items-center gap-2 transform rotate-2 hover:rotate-0 transition-transform">
-                <div className="flex items-center gap-0.5 text-[#ffc107]">
-                  <Star className="w-4 h-4 fill-[#ffc107]" />
-                  <Star className="w-4 h-4 fill-[#ffc107]" />
-                  <Star className="w-4 h-4 fill-[#ffc107]" />
+              {/* Overlaid Badge 2: Top-Right (Standard scoring example) */}
+              <div className="absolute top-8 -right-2 sm:-right-4 p-2.5 sm:p-3 rounded-2xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200 dark:border-slate-700 shadow-xl flex items-center gap-2 transform rotate-2 hover:rotate-0 transition-transform">
+                <div className="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 flex items-center justify-center shrink-0">
+                  <Award className="w-4 h-4 text-[#ffc107]" />
                 </div>
                 <div className="text-end">
                   <div className="text-xs font-black text-slate-900 dark:text-white leading-none">
-                    94 pts
+                    {t('hero.badgeScore')}
                   </div>
                   <div className="text-[10px] font-bold text-amber-700 dark:text-amber-400">
-                    Médaille d'Or
+                    {t('hero.badgeScoreSub')}
                   </div>
                 </div>
               </div>

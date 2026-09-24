@@ -15,6 +15,7 @@ import {
   Canari, DeplacementRecord, QuarantineRecord, HabitatCage, Zone, 
   Aviary, QuarantineArea, Compartment, Facility 
 } from '../../../types';
+import { CapabilityResolver } from '../../subscription/services/CapabilityResolver';
 
 export interface BirdServiceResponse<T = any> {
   success: boolean;
@@ -155,6 +156,14 @@ export class BirdService {
    * Creates a new bird with validation and activity logging.
    */
   static create(bird: Omit<Canari, 'id'>): BirdServiceResponse<Canari> {
+    if (!CapabilityResolver.canCreateBird()) {
+      const limit = CapabilityResolver.getBirdLimitForCurrentPlan();
+      return {
+        success: false,
+        message: `Limite d'oiseaux atteinte pour le plan actuel (${limit} oiseaux en plan FREE). Passez au plan supérieur.`
+      };
+    }
+
     const preparedBird = BirdEngine.prepareForCreation(bird);
     this.resolveBirdLocation(preparedBird);
     console.log(`[BUG08-RUNTIME-03] Resolved cage: cageId=${preparedBird.cageId}, cage_id=${preparedBird.cage_id}`);
@@ -171,7 +180,15 @@ export class BirdService {
       };
     }
 
-    const added = BirdRepository.create(preparedBird);
+    let added: Canari;
+    try {
+      added = BirdRepository.create(preparedBird);
+    } catch (e: any) {
+      return {
+        success: false,
+        message: e.message || "Erreur lors de la création de l'oiseau."
+      };
+    }
     console.log(`[BUG08-RUNTIME-01] Bird saved: id=${added.id}, bague=${added.bague}`);
     
     // Log birth or acquisition event
@@ -274,14 +291,17 @@ export class BirdService {
       return { success: false, message: "Oiseau introuvable pour la restauration." };
     }
 
-    BirdRepository.restore(id);
-    ActivityLogger.log(
-      EventType.BIRD_RESTORE,
-      `Restauration de l'oiseau : ${target.nom} (${target.bague})`,
-      { id, bague: target.bague }
-    );
-
-    return { success: true };
+    try {
+      BirdRepository.restore(id);
+      ActivityLogger.log(
+        EventType.BIRD_RESTORE,
+        `Restauration de l'oiseau : ${target.nom} (${target.bague})`,
+        { id, bague: target.bague }
+      );
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, message: e.message || "Impossible de restaurer l'oiseau." };
+    }
   }
 
   /**

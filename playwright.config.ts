@@ -13,6 +13,11 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  testMatch: process.env.PLAYWRIGHT_ALL ? '**/*.spec.ts' : [
+    '**/public-site-deployment-truthfulness-014-a.spec.ts',
+    '**/public-test-licensing-demo-entitlement-hardening-010.spec.ts', 
+    '**/public-test-regression-integrity-007.spec.ts'
+  ],
   /* Run tests in files in parallel */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

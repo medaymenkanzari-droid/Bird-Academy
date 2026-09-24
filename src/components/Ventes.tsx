@@ -183,6 +183,10 @@ export default function VentesComponent({
     const reportInputCount = ventes.length;
     console.log(`[Ventes] Exporting PDF with ${reportInputCount} sales`);
 
+    const formattedTotal = totalVentes.toFixed(2);
+    const totalRowLabel = t('sales.totalRowLabel') || (currentLanguage === 'ar' ? 'المجموع' : 'TOTAL');
+    const opCountShort = t('sales.opCountShort') || (currentLanguage === 'ar' ? 'عملية' : currentLanguage === 'en' ? 'operations' : 'opérations');
+
     await exportDocumentAsPDF({
       title: t('ventesTitle') || 'Rapport des Ventes & Cessions',
       subtitle: t('sales.pdfSub') || t('ventesSub'),
@@ -192,7 +196,7 @@ export default function VentesComponent({
         {
           title: t('sales.secSummary'),
           metrics: [
-            { label: t('totalSalesLabel') || 'Total Ventes', value: `${totalVentes} ${userCurrency}` },
+            { label: t('totalSalesLabel') || 'Total Ventes', value: `${formattedTotal} ${userCurrency}` },
             { label: t('sales.birdsTransferred'), value: `${ventes.length}` },
           ],
         },
@@ -206,16 +210,25 @@ export default function VentesComponent({
               t('sales.headerBuyer'),
               t('sales.headerNotes')
             ],
+            columnWidths: [70, 95, 80, 110, 160.28],
+            alignments: ['left', 'left', 'right', 'left', 'left'],
             rows: ventes.map(v => {
               const bird = canaris.find(c => c.id === v.canari_id);
               return [
                 v.date || '',
                 bird ? `${bird.bague} (${bird.nom})` : `#${v.canari_id}`,
-                `${v.prix || 0} ${userCurrency}`,
+                `${(Number(v.prix) || 0).toFixed(2)} ${userCurrency}`,
                 formatLocalizedBuyer(v.acheteur, t) || '-',
                 formatLocalizedSaleDescription(v.description, t) || '-'
               ];
             }),
+            footerRow: [
+              totalRowLabel,
+              `${ventes.length} ${opCountShort}`,
+              `${formattedTotal} ${userCurrency}`,
+              '',
+              ''
+            ]
           },
         },
       ],

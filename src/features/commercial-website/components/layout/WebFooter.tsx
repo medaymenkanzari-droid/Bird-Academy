@@ -190,7 +190,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
           <div className="flex items-center gap-4 text-[11px]">
             <span className="inline-flex items-center gap-1 text-slate-400">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Distribution v1.4.2 Certifiée
+              Distribution v1.3.6 (En Phase de Test)
             </span>
           </div>
         </div>

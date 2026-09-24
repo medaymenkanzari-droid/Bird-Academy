@@ -18,6 +18,7 @@ export class LicenseKey {
     ENTP: 'enterprise',
     ASSO: 'association',
     VETE: 'veterinary',
+    TEST: 'test',
   };
 
   private static REVERSE_MAP: Record<LicenseType, string> = {
@@ -28,6 +29,7 @@ export class LicenseKey {
     enterprise: 'ENTP',
     association: 'ASSO',
     veterinary: 'VETE',
+    test: 'TEST',
   };
 
   constructor(key: string) {

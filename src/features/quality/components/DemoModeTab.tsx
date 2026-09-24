@@ -12,6 +12,7 @@ import {
   Play, Power, RefreshCw, Trash2, Database, ShieldAlert, 
   Check, Info, Sparkles, Server, ChevronRight, Activity, Calendar, Award
 } from 'lucide-react';
+import { CapabilityResolver } from '../../subscription/services/CapabilityResolver';
 
 export const DemoModeTab: React.FC = () => {
   const { t, language } = useLanguage();
@@ -31,7 +32,7 @@ export const DemoModeTab: React.FC = () => {
 
   const loadStats = () => {
     try {
-      const isDemo = localStorage.getItem('bird_academy_demo_active') === 'true';
+      const isDemo = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bird_academy_demo_active') === 'true';
       const prefix = isDemo ? 'demo_' : '';
       
       const birds = JSON.parse(localStorage.getItem(`${prefix}canaris`) || '[]');
@@ -58,9 +59,23 @@ export const DemoModeTab: React.FC = () => {
     loadStats();
   }, [isActive]);
 
+  const currentTier = CapabilityResolver.getCurrentTierSync();
+  const isFreePlan = currentTier === 'FREE' || !CapabilityResolver.canUseDemoGenerator(currentTier);
+  const currentBirdLimit = CapabilityResolver.getBirdLimitForCurrentPlan();
+
   const handleToggle = () => {
     const nextState = !isActive;
     if (nextState) {
+      if (isFreePlan) {
+        alert(
+          language === 'ar'
+            ? 'مولد البيانات التجريبية غير متاح في الباقة المجانية.'
+            : language === 'en'
+            ? 'The DEMO generator is unavailable in the FREE plan.'
+            : 'Le générateur DEMO est indisponible en version GRATUITE (limite 20 oiseaux max).'
+        );
+        return;
+      }
       // Toggle on small by default if no seed is found
       handleGenerate('small');
     } else {
@@ -73,6 +88,17 @@ export const DemoModeTab: React.FC = () => {
   };
 
   const handleGenerate = async (size: 'small' | 'medium' | 'large') => {
+    if (isFreePlan) {
+      alert(
+        language === 'ar'
+          ? 'مولد البيانات التجريبية غير متاح في الباقة المجانية.'
+          : language === 'en'
+          ? 'The DEMO generator is unavailable in the FREE plan.'
+          : 'Le générateur DEMO est indisponible en version GRATUITE (limite 20 oiseaux max).'
+      );
+      return;
+    }
+
     setIsGenerating(true);
     setGenerationSteps([]);
     setSelectedSize(size);
@@ -107,6 +133,7 @@ export const DemoModeTab: React.FC = () => {
   };
 
   const handleResetDemo = () => {
+    if (isFreePlan) return;
     if (window.confirm(t('demo.confirmReset'))) {
       handleGenerate(selectedSize);
     }
@@ -118,12 +145,12 @@ export const DemoModeTab: React.FC = () => {
       id: 'small' as const,
       title: t('demo.presetSmallTitle'),
       subtitle: t('demo.presetSmallSub'),
-      birds: '~50 ' + t('canaris'),
-      males: '18 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles'),
-      females: '18 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles'),
-      young: '8 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') + ' / 6 ' + (language === 'ar' ? 'صغار' : language === 'en' ? 'chicks' : 'oisillons'),
+      birds: isFreePlan ? `${currentBirdLimit} ${t('canaris')} (quota FREE)` : '~50 ' + t('canaris'),
+      males: isFreePlan ? '8 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles') : '18 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles'),
+      females: isFreePlan ? '8 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles') : '18 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles'),
+      young: isFreePlan ? '4 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') : '8 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') + ' / 6 ' + (language === 'ar' ? 'صغار' : language === 'en' ? 'chicks' : 'oisillons'),
       cages: '5 ' + t('cages'),
-      couples: '10 ' + t('couples'),
+      couples: isFreePlan ? '4 ' + t('couples') : '10 ' + t('couples'),
       finance: '15 ' + t('depenses') + ' / 10 ' + t('ventes'),
       complexity: language === 'ar' ? 'منخفضة (فوري)' : language === 'en' ? 'Low (Instant)' : 'Basse (Indexation instantanée)'
     },
@@ -131,12 +158,12 @@ export const DemoModeTab: React.FC = () => {
       id: 'medium' as const,
       title: t('demo.presetMediumTitle'),
       subtitle: t('demo.presetMediumSub'),
-      birds: '~300 ' + t('canaris'),
-      males: '110 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles'),
-      females: '110 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles'),
-      young: '50 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') + ' / 30 ' + (language === 'ar' ? 'صغار' : language === 'en' ? 'chicks' : 'oisillons'),
-      cages: '25 ' + t('cages'),
-      couples: '60 ' + t('couples'),
+      birds: isFreePlan ? `${currentBirdLimit} ${t('canaris')} (quota FREE)` : '~300 ' + t('canaris'),
+      males: isFreePlan ? '8 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles') : '110 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles'),
+      females: isFreePlan ? '8 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles') : '110 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles'),
+      young: isFreePlan ? '4 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') : '50 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') + ' / 30 ' + (language === 'ar' ? 'صغار' : language === 'en' ? 'chicks' : 'oisillons'),
+      cages: isFreePlan ? '5 ' + t('cages') : '25 ' + t('cages'),
+      couples: isFreePlan ? '4 ' + t('couples') : '60 ' + t('couples'),
       finance: '60 ' + t('depenses') + ' / 40 ' + t('ventes'),
       complexity: language === 'ar' ? 'متوسطة (اختبار خفيف)' : language === 'en' ? 'Medium (Light stress-test)' : 'Moyenne (Stress-test léger)'
     },
@@ -144,12 +171,12 @@ export const DemoModeTab: React.FC = () => {
       id: 'large' as const,
       title: t('demo.presetLargeTitle'),
       subtitle: t('demo.presetLargeSub'),
-      birds: '1 200 ' + t('canaris'),
-      males: '450 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles'),
-      females: '450 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles'),
-      young: '200 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') + ' / 100 ' + (language === 'ar' ? 'صغار' : language === 'en' ? 'chicks' : 'oisillons'),
-      cages: '100 ' + t('cages'),
-      couples: '250 ' + t('couples'),
+      birds: isFreePlan ? `${currentBirdLimit} ${t('canaris')} (quota FREE)` : '1 200 ' + t('canaris'),
+      males: isFreePlan ? '8 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles') : '450 ' + (language === 'ar' ? 'ذكور' : language === 'en' ? 'males' : 'mâles'),
+      females: isFreePlan ? '8 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles') : '450 ' + (language === 'ar' ? 'إناث' : language === 'en' ? 'females' : 'femelles'),
+      young: isFreePlan ? '4 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') : '200 ' + (language === 'ar' ? 'فراخ' : language === 'en' ? 'young' : 'jeunes') + ' / 100 ' + (language === 'ar' ? 'صغار' : language === 'en' ? 'chicks' : 'oisillons'),
+      cages: isFreePlan ? '5 ' + t('cages') : '100 ' + t('cages'),
+      couples: isFreePlan ? '4 ' + t('couples') : '250 ' + t('couples'),
       finance: '200 ' + t('depenses') + ' / 150 ' + t('ventes'),
       complexity: language === 'ar' ? 'قصوى (ضغط وفلاتر)' : language === 'en' ? 'Maximum (Stress-test & filters)' : 'Maximale (stress-test & filtres)'
     }
@@ -173,7 +200,15 @@ export const DemoModeTab: React.FC = () => {
 
           <button
             onClick={handleToggle}
-            className={`px-4 py-2.5 rounded-2xl text-xs font-bold inline-flex items-center gap-2 transition cursor-pointer shadow-sm self-start sm:self-center ${isActive ? 'bg-rose-500 text-white hover:bg-rose-600' : 'bg-indigo-600 text-white hover:bg-indigo-700'}`}
+            disabled={isFreePlan && !isActive}
+            data-testid="btn-toggle-demo"
+            className={`px-4 py-2.5 rounded-2xl text-xs font-bold inline-flex items-center gap-2 transition shadow-sm self-start sm:self-center ${
+              isFreePlan && !isActive
+                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed opacity-60'
+                : isActive
+                ? 'bg-rose-500 text-white hover:bg-rose-600 cursor-pointer'
+                : 'bg-indigo-600 text-white hover:bg-indigo-700 cursor-pointer'
+            }`}
           >
             <Power className="w-4 h-4" />
             {isActive ? t('demo.deactivateBtn') : t('demo.activateBtn')}
@@ -188,6 +223,28 @@ export const DemoModeTab: React.FC = () => {
           </span>
         </div>
       </div>
+
+      {/* Free Plan Cap Notice & Locked Banner */}
+      {isFreePlan && (
+        <div data-testid="demo-generator-unavailable-banner" className="p-4 rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-900 dark:text-amber-200 flex items-start gap-3 text-xs shadow-xs animate-fadeIn">
+          <ShieldAlert className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <p className="font-extrabold text-sm text-amber-950 dark:text-amber-100 flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded-full text-xxs font-black uppercase tracking-wider bg-amber-500 text-white">
+                Verrouillé
+              </span>
+              {language === 'ar' ? 'مولد البيانات التجريبية غير متاح في الباقة المجانية (20 طائراً كحد أقصى)' : language === 'en' ? 'DEMO Generator Unavailable in FREE Plan (Max 20 birds)' : 'Générateur DEMO indisponible en formule GRATUITE (20 oiseaux max)'}
+            </p>
+            <p className="text-amber-800 dark:text-amber-300 leading-relaxed">
+              {language === 'ar' 
+                ? 'مولد البيانات التجريبية مخصص لباقات بريميوم وبرو. يرجى الترقية لإلغاء القفل.' 
+                : language === 'en' 
+                ? 'The DEMO generator is restricted to PREMIUM and PRO tiers. Upgrade to unlock demo datasets.' 
+                : "Le générateur DEMO est indisponible en formule GRATUITE (quota strict de 20 oiseaux max). Passez à PREMIUM ou PRO pour débloquer la génération de démonstration."}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Generator Configuration Section */}
       <div className="bg-white dark:bg-gray-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 space-y-6">
@@ -208,8 +265,15 @@ export const DemoModeTab: React.FC = () => {
             return (
               <button
                 key={preset.id}
-                onClick={() => setSelectedSize(preset.id)}
-                className={`p-5 rounded-2xl border text-start flex flex-col justify-between transition cursor-pointer relative overflow-hidden ${isSelected ? 'border-indigo-600 bg-indigo-50/20 dark:bg-indigo-950/20' : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-900'}`}
+                disabled={isFreePlan}
+                onClick={() => !isFreePlan && setSelectedSize(preset.id)}
+                className={`p-5 rounded-2xl border text-start flex flex-col justify-between transition relative overflow-hidden ${
+                  isFreePlan
+                    ? 'opacity-60 cursor-not-allowed border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50'
+                    : isSelected
+                    ? 'border-indigo-600 bg-indigo-50/20 dark:bg-indigo-950/20 cursor-pointer'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-900 cursor-pointer'
+                }`}
               >
                 {isSelected && (
                   <div className="absolute top-2 end-2 bg-indigo-600 text-white rounded-full p-0.5">
@@ -257,15 +321,26 @@ export const DemoModeTab: React.FC = () => {
         <div className="flex justify-end pt-2 border-t border-gray-100 dark:border-gray-800">
           <button
             onClick={() => handleGenerate(selectedSize)}
-            disabled={isGenerating}
-            className={`px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl text-xs inline-flex items-center gap-2 cursor-pointer transition shadow-sm ${isGenerating ? 'opacity-70 cursor-not-allowed' : ''}`}
+            disabled={isFreePlan || isGenerating}
+            data-testid={isFreePlan ? "btn-generate-demo-disabled" : "btn-generate-demo"}
+            className={`px-5 py-3 font-bold rounded-2xl text-xs inline-flex items-center gap-2 transition shadow-sm ${
+              isFreePlan
+                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed opacity-60'
+                : isGenerating
+                ? 'bg-indigo-600 text-white opacity-70 cursor-not-allowed'
+                : 'bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer'
+            }`}
           >
             {isGenerating ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
             ) : (
               <Play className="w-4 h-4" />
             )}
-            {isGenerating ? 'Génération en cours...' : `Générer le jeu de données (${presets.find(p => p.id === selectedSize)?.title})`}
+            {isFreePlan
+              ? 'Générateur DEMO indisponible (Plan GRATUIT)'
+              : isGenerating
+              ? 'Génération en cours...'
+              : `Générer le jeu de données (${presets.find(p => p.id === selectedSize)?.title})`}
           </button>
         </div>
 

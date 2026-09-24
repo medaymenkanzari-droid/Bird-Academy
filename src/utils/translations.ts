@@ -259,10 +259,64 @@ export interface TranslationDict {
   qaResetConfirmDesc: string;
   qaResetConfirmPrompt: string;
   qaResetConfirmAction: string;
+  placeholderOriginalBreeder: string;
+  healthCategoryRequired: string;
+  healthTreatmentNameRequired: string;
+  healthWeightDate: string;
+  batchTreatmentStartDate: string;
+  clinicalObservationDate: string;
+  actCategoryRequired: string;
+  administrationStartDate: string;
+  saleDateLabel: string;
+  buyerNameRequired: string;
+  expenseCategoryRequired: string;
+  expenseDateLabel: string;
+  totalOperatingExpenses: string;
+  typeAndCategory: string;
+  handoverDateLabel: string;
+  birthDateLabel: string;
+  fatherLabelPrefix: string;
+  motherLabelPrefix: string;
+  facilityNameLabel: string;
+  zoneNameLabel: string;
+  cageNameOrNumberLabel: string;
+  compartmentNameLabel: string;
+  hatchDatePrefix: string;
+  caregiverPlaceholder: string;
+  manualProtocolNameLabel: string;
+  total100Percent: string;
+  searchBirdFullPlaceholder: string;
 }
 
 export const TRANSLATIONS: Record<Language, TranslationDict> = {
   fr: {
+    placeholderOriginalBreeder: "Nom de l'éleveur d'origine",
+    healthCategoryRequired: "Catégorie *",
+    healthTreatmentNameRequired: "Nom du traitement / Médicament *",
+    healthWeightDate: "Date de la pesée",
+    batchTreatmentStartDate: "Date de début du traitement",
+    clinicalObservationDate: "Date de l'observation",
+    actCategoryRequired: "Catégorie d'acte *",
+    administrationStartDate: "Date d'administration / Début",
+    saleDateLabel: "Date de la vente",
+    buyerNameRequired: "Nom de l'acquéreur *",
+    expenseCategoryRequired: "Catégorie de dépense *",
+    expenseDateLabel: "Date de la dépense",
+    totalOperatingExpenses: "Total Dépenses d'Exploitation",
+    typeAndCategory: "Type & Catégorie",
+    handoverDateLabel: "Date de remise :",
+    birthDateLabel: "Date Naissance",
+    fatherLabelPrefix: "Père ♂ :",
+    motherLabelPrefix: "Mère ♀ :",
+    facilityNameLabel: "Nom de l'élevage",
+    zoneNameLabel: "Nom de la zone",
+    cageNameOrNumberLabel: "Nom ou Numéro de la cage",
+    compartmentNameLabel: "Nom du Compartiment",
+    hatchDatePrefix: "Date d'éclosion :",
+    caregiverPlaceholder: "Initiales ou nom du soigneur",
+    manualProtocolNameLabel: "Nom du protocole d'élevage manuel",
+    total100Percent: "Total 100%",
+    searchBirdFullPlaceholder: "Rechercher nom, bague, mutation...",
     dashboard: "Tableau de bord",
     canaris: "Oiseaux",
     couples: "Couples",
@@ -647,6 +701,8 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     "expenses.headerCategory": "Catégorie",
     "expenses.headerAmount": "Montant ({currency})",
     "expenses.headerDescription": "Description",
+    "expenses.totalRowLabel": "TOTAL",
+    "expenses.opCountShort": "opérations",
 
     // Sales i18n
     "sales.buyerTypes.amateur_breeder": "Éleveur Amateur",
@@ -908,6 +964,33 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     qaResetConfirmAction: "Réinitialiser",
   },
   en: {
+    placeholderOriginalBreeder: "Original breeder's name",
+    healthCategoryRequired: "Category *",
+    healthTreatmentNameRequired: "Treatment / Medicine Name *",
+    healthWeightDate: "Weighing Date",
+    batchTreatmentStartDate: "Treatment Start Date",
+    clinicalObservationDate: "Observation Date",
+    actCategoryRequired: "Procedure Category *",
+    administrationStartDate: "Administration / Start Date",
+    saleDateLabel: "Sale Date",
+    buyerNameRequired: "Buyer Name *",
+    expenseCategoryRequired: "Expense Category *",
+    expenseDateLabel: "Expense Date",
+    totalOperatingExpenses: "Total Operating Expenses",
+    typeAndCategory: "Type & Category",
+    handoverDateLabel: "Handover Date:",
+    birthDateLabel: "Birth Date",
+    fatherLabelPrefix: "Father ♂:",
+    motherLabelPrefix: "Mother ♀:",
+    facilityNameLabel: "Aviary / Facility Name",
+    zoneNameLabel: "Zone Name",
+    cageNameOrNumberLabel: "Cage Name or Number",
+    compartmentNameLabel: "Compartment Name",
+    hatchDatePrefix: "Hatching Date:",
+    caregiverPlaceholder: "Caretaker initials or name",
+    manualProtocolNameLabel: "Hand-rearing protocol name",
+    total100Percent: "Total 100%",
+    searchBirdFullPlaceholder: "Search name, ring, mutation...",
     dashboard: "Dashboard",
     canaris: "Birds",
     couples: "Breeding Couples",
@@ -1292,6 +1375,8 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     "expenses.headerCategory": "Category",
     "expenses.headerAmount": "Amount ({currency})",
     "expenses.headerDescription": "Description",
+    "expenses.totalRowLabel": "TOTAL",
+    "expenses.opCountShort": "operations",
 
     // Sales i18n
     "sales.buyerTypes.amateur_breeder": "Amateur Breeder",
@@ -1553,6 +1638,33 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     qaResetConfirmAction: "Reset",
   },
   ar: {
+    placeholderOriginalBreeder: "اسم المربي الأصلي",
+    healthCategoryRequired: "الفئة *",
+    healthTreatmentNameRequired: "اسم العلاج / الدواء *",
+    healthWeightDate: "تاريخ الوزن",
+    batchTreatmentStartDate: "تاريخ بدء العلاج",
+    clinicalObservationDate: "تاريخ الملاحظة",
+    actCategoryRequired: "فئة الإجراء *",
+    administrationStartDate: "تاريخ الإعطاء / البدء",
+    saleDateLabel: "تاريخ البيع",
+    buyerNameRequired: "اسم المشتري *",
+    expenseCategoryRequired: "فئة المصروفات *",
+    expenseDateLabel: "تاريخ المصروف",
+    totalOperatingExpenses: "إجمالي مصاريف التشغيل",
+    typeAndCategory: "النوع والفئة",
+    handoverDateLabel: "تاريخ التسليم :",
+    birthDateLabel: "تاريخ الميلاد",
+    fatherLabelPrefix: "الأب ♂ :",
+    motherLabelPrefix: "الأم ♀ :",
+    facilityNameLabel: "اسم المنشأة / المزرعة",
+    zoneNameLabel: "اسم المنطقة",
+    cageNameOrNumberLabel: "اسم أو رقم القفص",
+    compartmentNameLabel: "اسم القسم / الحجرة",
+    hatchDatePrefix: "تاريخ الفقس :",
+    caregiverPlaceholder: "الأحرف الأولى أو اسم مقدم الرعاية",
+    manualProtocolNameLabel: "اسم بروتوكول التغذية اليدوية",
+    total100Percent: "الإجمالي 100%",
+    searchBirdFullPlaceholder: "البحث بالاسم، الحلقات، الطفرة...",
     dashboard: "لوحة التحكم",
     canaris: "الطيور",
     couples: "الأزواج",
@@ -1937,6 +2049,8 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     "expenses.headerCategory": "الفئة",
     "expenses.headerAmount": "المبلغ ({currency})",
     "expenses.headerDescription": "الوصف",
+    "expenses.totalRowLabel": "المجموع",
+    "expenses.opCountShort": "عملية",
 
     // Sales i18n
     "sales.buyerTypes.amateur_breeder": "مربي هاوي",
@@ -2198,6 +2312,33 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     qaResetConfirmAction: "إعادة تعيين",
   },
   es: {
+    placeholderOriginalBreeder: "Nombre del criador original",
+    healthCategoryRequired: "Categoría *",
+    healthTreatmentNameRequired: "Nombre del tratamiento / Medicamento *",
+    healthWeightDate: "Fecha del pesaje",
+    batchTreatmentStartDate: "Fecha de inicio del tratamiento",
+    clinicalObservationDate: "Fecha de la observación",
+    actCategoryRequired: "Categoría del acto *",
+    administrationStartDate: "Fecha de administración / Inicio",
+    saleDateLabel: "Fecha de la venta",
+    buyerNameRequired: "Nombre del comprador *",
+    expenseCategoryRequired: "Categoría de gasto *",
+    expenseDateLabel: "Fecha del gasto",
+    totalOperatingExpenses: "Total Gastos Operativos",
+    typeAndCategory: "Tipo y Categoría",
+    handoverDateLabel: "Fecha de entrega:",
+    birthDateLabel: "Fecha Nacimiento",
+    fatherLabelPrefix: "Padre ♂:",
+    motherLabelPrefix: "Madre ♀:",
+    facilityNameLabel: "Nombre del criadero",
+    zoneNameLabel: "Nombre de la zona",
+    cageNameOrNumberLabel: "Nombre o Número de la jaula",
+    compartmentNameLabel: "Nombre del Compartimento",
+    hatchDatePrefix: "Fecha de eclosión:",
+    caregiverPlaceholder: "Iniciales o nombre del cuidador",
+    manualProtocolNameLabel: "Nombre del protocolo de cría manual",
+    total100Percent: "Total 100%",
+    searchBirdFullPlaceholder: "Buscar nombre, anilla, mutación...",
     dashboard: "Tablero de control",
     canaris: "Aves",
     couples: "Parejas de Cría",
@@ -2589,6 +2730,8 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     "expenses.headerCategory": "Categoría",
     "expenses.headerAmount": "Importe ({currency})",
     "expenses.headerDescription": "Descripción",
+    "expenses.totalRowLabel": "TOTAL",
+    "expenses.opCountShort": "operaciones",
 
     // Sales i18n
     "sales.buyerTypes.amateur_breeder": "Criador Aficionado",
@@ -2837,6 +2980,33 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     qaResetConfirmAction: "Restablecer",
   },
   it: {
+    placeholderOriginalBreeder: "Nome dell'allevatore d'origine",
+    healthCategoryRequired: "Categoria *",
+    healthTreatmentNameRequired: "Nome del trattamento / Farmaco *",
+    healthWeightDate: "Data del peso",
+    batchTreatmentStartDate: "Data di inizio del trattamento",
+    clinicalObservationDate: "Data dell'osservazione",
+    actCategoryRequired: "Categoria dell'atto *",
+    administrationStartDate: "Data di somministrazione / Inizio",
+    saleDateLabel: "Data della vendita",
+    buyerNameRequired: "Nome dell'acquirente *",
+    expenseCategoryRequired: "Categoria di spesa *",
+    expenseDateLabel: "Data della spesa",
+    totalOperatingExpenses: "Totale Spese Operative",
+    typeAndCategory: "Tipo e Categoria",
+    handoverDateLabel: "Data di consegna:",
+    birthDateLabel: "Data di Nascita",
+    fatherLabelPrefix: "Padre ♂:",
+    motherLabelPrefix: "Madre ♀:",
+    facilityNameLabel: "Nome dell'allevamento",
+    zoneNameLabel: "Nome della zona",
+    cageNameOrNumberLabel: "Nome o Numero della gabbia",
+    compartmentNameLabel: "Nome dello Scomparto",
+    hatchDatePrefix: "Data di schiusa:",
+    caregiverPlaceholder: "Iniziali o nome del curatore",
+    manualProtocolNameLabel: "Nome del protocollo di allevamento a mano",
+    total100Percent: "Totale 100%",
+    searchBirdFullPlaceholder: "Cerca nome, anello, mutazione...",
     dashboard: "Pannello di Controllo",
     canaris: "Uccelli",
     couples: "Coppie di Allevamento",
@@ -3217,6 +3387,8 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     "expenses.headerCategory": "Categoria",
     "expenses.headerAmount": "Importo ({currency})",
     "expenses.headerDescription": "Descrizione",
+    "expenses.totalRowLabel": "TOTALE",
+    "expenses.opCountShort": "operazioni",
 
     // Sales i18n
     "sales.buyerTypes.amateur_breeder": "Allevatore Amatoriale",
@@ -3493,6 +3665,7 @@ import { GENETICS_TRANSLATIONS } from '../features/genetics/utils/geneticsTransl
 import { SPECIES_TRANSLATIONS } from './translationsSpecies';
 import { APP_EXTRAS_TRANSLATIONS } from './translationsAppExtras';
 import { NURSERY_TRANSLATIONS } from './translationsNursery';
+import { PDF_REPORTS_TRANSLATIONS } from './translationsPdfReports';
 
 // Merge all sub-dictionaries into main TRANSLATIONS
 const ALL_SUB_DICTS = [
@@ -3506,6 +3679,7 @@ const ALL_SUB_DICTS = [
   SPECIES_TRANSLATIONS,
   APP_EXTRAS_TRANSLATIONS,
   NURSERY_TRANSLATIONS,
+  PDF_REPORTS_TRANSLATIONS,
 ];
 
 ALL_SUB_DICTS.forEach((sub) => {

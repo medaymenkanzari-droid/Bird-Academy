@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { BirdRepository } from '../../birds/repositories/BirdRepository';
+import { CapabilityResolver } from '../../subscription/services/CapabilityResolver';
 import { 
   Upload, Download, FileSpreadsheet, FileJson, CheckSquare, 
   AlertTriangle, Play, HelpCircle, Check, ArrowRight,
@@ -220,6 +221,33 @@ export const ImportExportPro: React.FC = () => {
       }
     });
 
+    if (dataType === 'canaris') {
+      const allExisting = BirdRepository.getAll(false);
+      const existingRings = new Set(allExisting.map(b => b.bague.toLowerCase().trim()));
+      const limit = CapabilityResolver.getBirdLimitForCurrentPlan();
+      let projectedCount = allExisting.length;
+
+      validated.forEach((item, index) => {
+        if (item._valid && item.bague) {
+          const ringKey = String(item.bague).toLowerCase().trim();
+          if (!existingRings.has(ringKey)) {
+            if (projectedCount + 1 > limit) {
+              item._valid = false;
+              validCount--;
+              errorCount++;
+              logs.push({
+                type: 'error',
+                message: `Ligne #${index + 1} (${item.bague}) : Dépassement de quota ! La capacité maximale autorisée pour votre plan est de ${limit} oiseaux.`
+              });
+            } else {
+              projectedCount++;
+              existingRings.add(ringKey);
+            }
+          }
+        }
+      });
+    }
+
     logs.unshift({ type: 'info', message: `Simulation terminée : ${data.length} lignes analysées. ${validCount} conformes, ${errorCount} anomalies bloquantes.` });
 
     setSimulationReport({
@@ -238,6 +266,17 @@ export const ImportExportPro: React.FC = () => {
       const toImport = simulationReport.parsedData.filter(d => d._valid);
       
       if (dataType === 'canaris') {
+        const allExisting = BirdRepository.getAll(false);
+        const existingRings = new Set(allExisting.map(b => b.bague.toLowerCase().trim()));
+        const newBirdsCount = toImport.filter(item => !existingRings.has(String(item.bague).toLowerCase().trim())).length;
+        const effectiveTotal = allExisting.length + newBirdsCount;
+        const limit = CapabilityResolver.getBirdLimitForCurrentPlan();
+
+        if (effectiveTotal > limit) {
+          alert(`Importation bloquée : Cette opération porterait le cheptel à ${effectiveTotal} oiseaux, ce qui dépasse la limite autorisée par votre plan (${limit} max).`);
+          return;
+        }
+
         toImport.forEach(item => {
           // Check collision
           const existing = BirdRepository.getAll().find(b => b.bague.toLowerCase() === item.bague.toLowerCase());

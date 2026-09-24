@@ -28,6 +28,7 @@ export class LicenseValidator {
         message: 'Aucune licence enregistrée.',
         remainingDays: null,
         deviceRegistered: false,
+        evaluatedState: 'INVALID',
       };
     }
 
@@ -44,6 +45,7 @@ export class LicenseValidator {
         message: keyCheck.error || 'Format de clé invalide.',
         remainingDays: null,
         deviceRegistered: false,
+        evaluatedState: 'INVALID',
       };
     }
 
@@ -62,6 +64,7 @@ export class LicenseValidator {
         message: 'Intégrité compromise : la signature numérique ou le checksum est invalide.',
         remainingDays: null,
         deviceRegistered: false,
+        evaluatedState: 'INVALID',
       };
     }
 
@@ -75,6 +78,7 @@ export class LicenseValidator {
         message: 'La licence a été suspendue administrativement.',
         remainingDays: null,
         deviceRegistered: false,
+        evaluatedState: 'INVALID',
       };
     }
 
@@ -88,6 +92,7 @@ export class LicenseValidator {
         message: 'Cette licence a été remplacée par une nouvelle licence.',
         remainingDays: 0,
         deviceRegistered: false,
+        evaluatedState: 'INVALID',
       };
     }
 
@@ -104,6 +109,7 @@ export class LicenseValidator {
         message: `Licence révoquée. ${license.revocationReason || ''}`,
         remainingDays: 0,
         deviceRegistered: false,
+        evaluatedState: 'INVALID',
       };
     }
 
@@ -120,6 +126,7 @@ export class LicenseValidator {
           message: 'Hacker/Rollback d\'horloge détecté. L\'horloge système est antérieure au dernier contrôle enregistré.',
           remainingDays: null,
           deviceRegistered: false,
+          evaluatedState: 'INVALID',
         };
       }
     }
@@ -135,11 +142,16 @@ export class LicenseValidator {
         message: 'La licence a expiré.',
         remainingDays: 0,
         deviceRegistered: entity.isDeviceRegistered(currentDevice.deviceId),
+        evaluatedState: 'EXPIRED',
       };
     }
 
     // 6. Device registration check
     const isRegistered = entity.isDeviceRegistered(currentDevice.deviceId);
+
+    const evaluatedState = (remainingDays !== null && remainingDays <= 7 && remainingDays >= 0)
+      ? 'EXPIRING_SOON'
+      : 'VALID';
 
     return {
       isValid: true,
@@ -149,6 +161,32 @@ export class LicenseValidator {
       message: 'Licence valide et active.',
       remainingDays,
       deviceRegistered: isRegistered,
+      evaluatedState,
     };
+  }
+
+  /**
+   * Deterministically evaluates the 4-state commercial qualification:
+   * VALID | EXPIRING_SOON | EXPIRED | INVALID
+   */
+  static evaluateStatus(result: LicenseValidationResult): 'VALID' | 'EXPIRING_SOON' | 'EXPIRED' | 'INVALID' {
+    if (result.evaluatedState) {
+      return result.evaluatedState;
+    }
+    if (!result.isValid) {
+      if (result.code === 'EXPIRED') return 'EXPIRED';
+      return 'INVALID';
+    }
+    if (result.remainingDays !== null && result.remainingDays <= 7 && result.remainingDays >= 0) {
+      return 'EXPIRING_SOON';
+    }
+    return 'VALID';
+  }
+
+  /**
+   * Alias for evaluateStatus providing exact compliance with evaluateState contract.
+   */
+  static evaluateState(result: LicenseValidationResult): 'VALID' | 'EXPIRING_SOON' | 'EXPIRED' | 'INVALID' {
+    return this.evaluateStatus(result);
   }
 }

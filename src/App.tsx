@@ -55,6 +55,7 @@ import { LicenseActivationModal } from './features/licensing/components/LicenseA
 import { FirstLaunchActivationScreen } from './features/licensing/components/FirstLaunchActivationScreen';
 import { useLicensing } from './features/licensing/hooks/useLicensing';
 import { useSubscription } from './features/subscription/hooks/useSubscription';
+import { CapabilityResolver } from './features/subscription/services/CapabilityResolver';
 import { FeatureLockedCard } from './features/subscription/components/FeatureLockedCard';
 import { UpgradeModal } from './features/subscription/components/UpgradeModal';
 import { DesktopSidebar } from './components/ui/DesktopSidebar';
@@ -185,7 +186,7 @@ export default function App() {
       }
     } else {
       // Fresh installation
-      const isDemoEnv = localStorage.getItem('bird_academy_demo_active') === 'true';
+      const isDemoEnv = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bird_academy_demo_active') === 'true';
       if (isDemoEnv) {
         // Initialize with pre-populated demo data only if explicitly in demo sandbox
         BirdRepository.saveAll(INITIAL_CANARIS);
@@ -327,6 +328,10 @@ export default function App() {
 
   // WEAN JEUNE CHICK (Converts chick to Canari with lineage inherit, Rule 4)
   const onWeanJeuneToCanari = (jeuneId: number, nom: string, cageId: number, race: string, couleur: string) => {
+    if (!CapabilityResolver.canCreateBird()) {
+      alert(`Quota atteint : Votre plan actuel autorise un maximum de ${CapabilityResolver.getBirdLimitForCurrentPlan()} oiseaux.`);
+      return;
+    }
     BreedingService.weanJeuneToCanari(jeuneId, nom, cageId, race, couleur, (newBirdPayload) => {
       BirdRepository.add(newBirdPayload);
       setCanaris(BirdRepository.getAll());
@@ -471,6 +476,14 @@ export default function App() {
       
       if (!data.canaris || !data.cages) {
         return "Le fichier importé n'est pas une sauvegarde valide de Bird Academy.";
+      }
+
+      const activeBirdsInBackup = Array.isArray(data.canaris)
+        ? data.canaris.filter((b: any) => !b.archived).length
+        : 0;
+      const birdLimit = CapabilityResolver.getBirdLimitForCurrentPlan();
+      if (activeBirdsInBackup > birdLimit) {
+        return `Restauration bloquée : Le fichier de sauvegarde contient ${activeBirdsInBackup} oiseaux actifs, ce qui dépasse la limite de ${birdLimit} autorisée par votre plan actuel.`;
       }
 
       BirdRepository.saveAll(data.canaris);

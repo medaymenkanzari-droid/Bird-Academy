@@ -16,6 +16,7 @@ import { ActivityLogger, EventType } from '../../../storage/ActivityLogger';
 import { BackupEncryptionError, BackupEncryptionService } from './BackupEncryptionService';
 import { BackupCompressionService } from './BackupCompressionService';
 import { BackupDataRegistry, ExtendedBackupData } from './BackupDataRegistry';
+import { CapabilityResolver } from '../../subscription/services/CapabilityResolver';
 import { BUILD_VERSION_NAME } from '../../../config/appMode';
 
 interface RestoreSnapshot {
@@ -267,6 +268,13 @@ export class BackupRestoreService {
         0,
       );
 
+      const activeBirdsInBackup = birds.filter((b: any) => !b.archived).length;
+      const currentBirdLimit = CapabilityResolver.getBirdLimitForCurrentPlan();
+      if (activeBirdsInBackup > currentBirdLimit) {
+        issues.push(`Quota dépassé : La sauvegarde contient ${activeBirdsInBackup} oiseaux actifs, ce qui dépasse la limite autorisée par votre plan (${currentBirdLimit} oiseaux max).`);
+        isCompatible = false;
+      }
+
       return {
         isValid: isCompatible,
         isEncrypted: encrypted,
@@ -311,7 +319,7 @@ export class BackupRestoreService {
       if (!simulation.isCompatible) {
         return {
           success: false,
-          error: simulation.error || "Restauration annulée pour cause d'incompatibilité de fichier."
+          error: simulation.error || (simulation.compatibilityIssues && simulation.compatibilityIssues.length > 0 ? simulation.compatibilityIssues.join(' ') : "Restauration annulée pour cause d'incompatibilité de fichier.")
         };
       }
 

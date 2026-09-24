@@ -8,10 +8,159 @@
  */
 
 import { License, LicenseValidationResult } from '../../licensing/types/licensing';
-import { SubscriptionTier } from '../types/subscription';
+import { SubscriptionTier, TierDiagnosticInfo } from '../types/subscription';
 import { isDevEnvironment } from '../../../config/appMode';
 
 export class SubscriptionTierResolver {
+  private static mockTierOverride: SubscriptionTier | null = null;
+
+  /**
+   * Sets a test-only mock tier override.
+   * This is strictly for controlled unit testing and must never be active by default in production.
+   */
+  static setMockTierOverride(tier: SubscriptionTier | null): void {
+    this.mockTierOverride = tier;
+  }
+
+  /**
+   * Cleans any legacy test/QA override stored in localStorage without touching any breeding data.
+   */
+  static clearLegacyTestState(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        localStorage.removeItem('bird_academy_subscription_tier_override');
+        localStorage.removeItem('bird_academy_assistant_tier_override');
+        localStorage.removeItem('bird_academy_qa_mode');
+        localStorage.removeItem('bird_academy_test_license');
+        localStorage.removeItem('bird_academy_lmse_active_license');
+        localStorage.removeItem('bird_academy_lmse_all_licenses');
+      } catch (e) {
+        // Ignore
+      }
+    }
+  }
+
+  /**
+   * Synchronously determines the current active subscription tier.
+   */
+  static getCurrentTierSync(): SubscriptionTier {
+    // 1. Mock override for automated tests
+    if (this.mockTierOverride) {
+      return this.mockTierOverride;
+    }
+
+    // 2. Dev / QA sandbox manual override check
+    const isTestOrDev = isDevEnvironment() || (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test');
+    if (isTestOrDev && typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const override = localStorage.getItem('bird_academy_subscription_tier_override') ||
+                         localStorage.getItem('bird_academy_assistant_tier_override');
+        if (override === 'FREE' || override === 'PREMIUM' || override === 'PRO') {
+          return override as SubscriptionTier;
+        }
+      } catch (e) {
+        // Ignore localStorage error
+      }
+    }
+
+    // 3. Inspect active LMSE license from storage
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const raw = localStorage.getItem('bird_academy_lmse_active_license');
+        if (raw) {
+          const license = JSON.parse(raw) as License;
+          // Check expiration or revocation
+          const invalidStatuses = ['revoked', 'expired', 'replaced', 'suspended'];
+          if (license.status && invalidStatuses.includes(license.status.toLowerCase())) {
+            return 'FREE';
+          }
+          if (license.expiresAt) {
+            const exp = new Date(license.expiresAt).getTime();
+            if (!isNaN(exp) && exp < Date.now()) {
+              return 'FREE';
+            }
+          }
+          return this.resolve(license);
+        }
+      } catch (e) {
+        // Ignore
+      }
+    }
+
+    return 'FREE';
+  }
+
+  /**
+   * Returns deterministic diagnostic information regarding the active tier and license status.
+   */
+  static getDiagnostics(): TierDiagnosticInfo {
+    const isTestOrDev = isDevEnvironment() || (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test');
+    let hasOverride = false;
+    let overrideValue: string | null = null;
+
+    if (this.mockTierOverride) {
+      hasOverride = true;
+      overrideValue = this.mockTierOverride;
+    } else if (isTestOrDev && typeof window !== 'undefined' && window.localStorage) {
+      try {
+        overrideValue = localStorage.getItem('bird_academy_subscription_tier_override') ||
+                        localStorage.getItem('bird_academy_assistant_tier_override');
+        if (overrideValue === 'FREE' || overrideValue === 'PREMIUM' || overrideValue === 'PRO') {
+          hasOverride = true;
+        }
+      } catch (e) {
+        // Ignore
+      }
+    }
+
+    let license: License | null = null;
+    let licenseStatus = 'NO_LICENSE';
+    let licenseKey: string | undefined;
+
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try {
+        const raw = localStorage.getItem('bird_academy_lmse_active_license');
+        if (raw) {
+          license = JSON.parse(raw);
+          licenseStatus = license?.status || 'UNKNOWN';
+          licenseKey = license?.key;
+        }
+      } catch (e) {
+        // Ignore
+      }
+    }
+
+    const activeTier = this.getCurrentTierSync();
+    const effectiveLimit = activeTier === 'FREE' ? 20 : Infinity;
+    const limitSource = hasOverride
+      ? 'TEST_OVERRIDE'
+      : activeTier === 'PRO'
+      ? 'PLAN_CONFIG_PRO'
+      : activeTier === 'PREMIUM'
+      ? 'PLAN_CONFIG_PREMIUM'
+      : 'PLAN_CONFIG_FREE';
+
+    return {
+      activeTier,
+      effectiveTier: activeTier,
+      licenseStatus,
+      hasLicense: !!license,
+      licenseKey,
+      isTestEnv: isTestOrDev,
+      isTestOverrideActive: hasOverride,
+      effectiveBirdLimit: effectiveLimit,
+      effectiveLimit,
+      limitSource
+    };
+  }
+
+  /**
+   * Offline-First Invariant: Cloud sync is strictly inactive.
+   */
+  static isCloudSyncActive(): boolean {
+    return false;
+  }
+
   /**
    * Resolves the active commercial tier from the license and validation state.
    */
@@ -20,7 +169,8 @@ export class SubscriptionTierResolver {
     validation?: LicenseValidationResult | null
   ): SubscriptionTier {
     // 1. Check for manual test/sandbox override in local storage (Strictly Dev/QA Sandbox Only)
-    if (isDevEnvironment() && typeof window !== 'undefined' && window.localStorage) {
+    const isTestOrDev = isDevEnvironment() || (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test');
+    if (isTestOrDev && typeof window !== 'undefined' && window.localStorage) {
       try {
         const override = localStorage.getItem('bird_academy_subscription_tier_override') ||
                          localStorage.getItem('bird_academy_assistant_tier_override');
@@ -33,8 +183,17 @@ export class SubscriptionTierResolver {
     }
 
     // 2. If no license or license is invalid/expired/revoked -> Default to FREE
-    if (!license || (validation && !validation.isValid)) {
+    const invalidStatuses = ['revoked', 'expired', 'replaced', 'suspended'];
+    if (!license || (validation && !validation.isValid) || (license.status && invalidStatuses.includes(license.status.toLowerCase()))) {
       return 'FREE';
+    }
+
+    // Check expiration if present
+    if (license.expiresAt) {
+      const exp = new Date(license.expiresAt).getTime();
+      if (!isNaN(exp) && exp < Date.now()) {
+        return 'FREE';
+      }
     }
 
     // 3. Check explicit metadata commercialTier or tier tags in policy features
@@ -67,6 +226,9 @@ export class SubscriptionTierResolver {
       case 'veterinary':
         return 'PRO';
 
+      case 'test':
+        return (license.metadata?.tier || 'PRO') as SubscriptionTier;
+
       case 'commercial':
         return 'PREMIUM';
 
@@ -94,3 +256,4 @@ export class SubscriptionTierResolver {
     }
   }
 }
+

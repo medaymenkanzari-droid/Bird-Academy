@@ -18,6 +18,8 @@ import { useSpeciesProfile } from '../features/species/hooks/useSpeciesProfile';
 import { BirdService } from '../features/birds/services/BirdService';
 import { BirdEngine } from '../business/BirdEngine';
 import { ActivityLogger, EventType } from '../storage/ActivityLogger';
+import { CapabilityResolver } from '../features/subscription/services/CapabilityResolver';
+import { DemoDataClassifier } from '../features/quality/utils/demoDataClassifier';
 import { HorizontalScrollContainer } from './ui/HorizontalScrollContainer';
 
 import { 
@@ -76,6 +78,7 @@ export const LOCAL_I18N: Record<string, Record<string, string>> = {
     labelBirthDate: "Date de naissance / Acquisition *",
     labelIsAcquisition: "Oiseau issu d'une acquisition extérieure ?",
     labelOriginalBreeder: "Éleveur d'origine",
+    placeholderOriginalBreeder: "Nom de l'éleveur d'origine",
     quarantineProtocol: "Protocole de quarantaine",
     quarantineCage: "Cage de quarantaine",
     quarantineAssignLater: "Créer / Assigner plus tard",
@@ -189,6 +192,7 @@ export const LOCAL_I18N: Record<string, Record<string, string>> = {
     labelBirthDate: "Birth / Acquisition Date *",
     labelIsAcquisition: "Is this bird an external acquisition?",
     labelOriginalBreeder: "Original Breeder",
+    placeholderOriginalBreeder: "Original breeder's name",
     quarantineProtocol: "Quarantine protocol",
     quarantineCage: "Quarantine cage",
     quarantineAssignLater: "Create / Assign later",
@@ -302,6 +306,7 @@ export const LOCAL_I18N: Record<string, Record<string, string>> = {
     labelBirthDate: "تاريخ الميلاد / الشراء *",
     labelIsAcquisition: "هل الطائر مقتنى من خارج المزرعة؟",
     labelOriginalBreeder: "المربي الأصلي",
+    placeholderOriginalBreeder: "اسم المربي الأصلي",
     quarantineProtocol: "بروتوكول الحجر الصحي",
     quarantineCage: "قفص الحجر الصحي",
     quarantineAssignLater: "إنشاء / تعيين لاحقًا",
@@ -415,6 +420,7 @@ export const LOCAL_I18N: Record<string, Record<string, string>> = {
     labelBirthDate: "Fecha de nacimiento / adquisición *",
     labelIsAcquisition: "¿Ave proveniente de adquisición exterior?",
     labelOriginalBreeder: "Criador de origen",
+    placeholderOriginalBreeder: "Nombre del criador original",
     quarantineProtocol: "Protocolo de cuarentena",
     quarantineCage: "Jaula de cuarentena",
     quarantineAssignLater: "Crear / asignar más tarde",
@@ -528,6 +534,7 @@ export const LOCAL_I18N: Record<string, Record<string, string>> = {
     labelBirthDate: "Data di nascita / acquisto *",
     labelIsAcquisition: "Uccello proveniente da acquisto esterno?",
     labelOriginalBreeder: "Allevatore d'origine",
+    placeholderOriginalBreeder: "Nome dell'allevatore d'origine",
     quarantineProtocol: "Protocollo di quarantena",
     quarantineCage: "Gabbia di quarantena",
     quarantineAssignLater: "Crea / assegna più tardi",
@@ -635,19 +642,25 @@ export default function Canaris({
   onNavigateToSimulator,
   setCurrentTab
 }: CanarisProps) {
-  const { language, isRtl } = useLanguage();
+  const { language, isRtl, t } = useLanguage();
 
   // Pick local i18n
   const localT = useCallback((key: string, vars?: Record<string, any>) => {
     const dict = LOCAL_I18N[language] || LOCAL_I18N.fr;
-    let text = dict[key] || key;
+    let text = dict[key] || t(key, vars) || key;
     if (vars) {
       Object.keys(vars).forEach(vKey => {
         text = text.replace(`{${vKey}}`, String(vars[vKey]));
       });
     }
     return text;
-  }, [language]);
+  }, [language, t]);
+
+  // Entitlement & Quota calculations
+  const activeBirdsCount = useMemo(() => propCanaris.filter(b => !b.archived).length, [propCanaris]);
+  const birdLimit = CapabilityResolver.getBirdLimitForCurrentPlan();
+  const isLimitReached = !CapabilityResolver.canCreateBird(activeBirdsCount, 1);
+  const isOverEntitlement = activeBirdsCount > birdLimit;
 
   // Unified State
   const [searchQuery, setSearchQuery] = useState('');
@@ -1020,20 +1033,30 @@ export default function Canaris({
   }, [selectedBirdIds, onBirdsChanged, localT]);
 
   const handleBulkDuplicate = useCallback(() => {
+    if (!CapabilityResolver.canCreateBirds(propCanaris.filter(b => !b.archived).length, selectedBirdIds.size)) {
+      alert(localT('freePlanLimitExceededError'));
+      return;
+    }
     selectedBirdIds.forEach(id => {
       BirdService.duplicate(id);
     });
     onBirdsChanged();
     setSelectedBirdIds(new Set());
-  }, [selectedBirdIds, onBirdsChanged]);
+  }, [selectedBirdIds, onBirdsChanged, propCanaris, localT]);
 
   // Singular Actions
   const handleDuplicateBird = useCallback((bird: Canari) => {
+    if (!CapabilityResolver.canCreateBird()) {
+      alert(localT('freePlanLimitExceededError'));
+      return;
+    }
     const res = BirdService.duplicate(bird.id);
     if (res.success && res.data) {
       onBirdsChanged();
+    } else if (!res.success && res.message) {
+      alert(res.message);
     }
-  }, [onBirdsChanged]);
+  }, [onBirdsChanged, localT]);
 
   const handleArchiveBird = useCallback((bird: Canari) => {
     if (!window.confirm(localT('confirmArchive'))) return;
@@ -1536,7 +1559,7 @@ export default function Canaris({
                         label={localT('labelOriginalBreeder')}
                         value={formData.eleveur_origine || ''}
                         onChange={(e) => handleInputChange('eleveur_origine', e.target.value)}
-                        placeholder="Nom de l'éleveur d'origine"
+                        placeholder={localT('placeholderOriginalBreeder')}
                       />
                       <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 space-y-4">
                         <h5 className="text-xs font-bold text-amber-800 flex items-center gap-2">
@@ -1784,8 +1807,14 @@ export default function Canaris({
           </AppButton>
           <AppButton 
             variant="primary" 
+            disabled={isLimitReached}
+            title={isLimitReached ? localT('freePlanBirdLimitReached') : undefined}
             startIcon={<Plus className="w-4 h-4" />} 
             onClick={() => {
+              if (isLimitReached) {
+                alert(localT('freePlanLimitExceededError'));
+                return;
+              }
               setIsAdding(true);
               setIsEditing(false);
               setSelectedBird(null);
@@ -1833,6 +1862,53 @@ export default function Canaris({
           </AppButton>
         </div>
       </div>
+
+      {/* Entitlement Quota Alert Banners */}
+      {isOverEntitlement && (
+        <div data-testid="over-entitlement-banner" className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs animate-fadeIn">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-extrabold text-sm text-amber-950 dark:text-amber-100">{localT('overEntitlementTitle')}</p>
+              <p className="text-xs text-amber-800 dark:text-amber-300 mt-0.5 leading-relaxed">
+                {localT('overEntitlementNotice')}
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            data-testid="cleanup-demo-data-btn"
+            onClick={() => {
+              if (window.confirm(localT('demoDataCleanupConfirm'))) {
+                const res = DemoDataClassifier.cleanupDemoData();
+                if (res.removedDemoBirds > 0) {
+                  alert(localT('demoDataCleanupSuccess', {
+                    removed: res.removedDemoBirds,
+                    preserved: res.userBirdsPreserved + res.indeterminateBirdsPreserved
+                  }));
+                  onBirdsChanged();
+                } else {
+                  alert("Aucun oiseau de démonstration identifié dans le cheptel.");
+                }
+              }
+            }}
+            className="shrink-0 px-3.5 py-2 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-xl transition-colors cursor-pointer shadow-xs"
+          >
+            {localT('demoDataCleanupAction')}
+          </button>
+        </div>
+      )}
+      {!isOverEntitlement && isLimitReached && (
+        <div data-testid="free-plan-limit-banner" className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-900 dark:text-blue-200 flex items-start gap-3 shadow-xs animate-fadeIn">
+          <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-extrabold text-sm text-blue-950 dark:text-blue-100">{localT('freePlanLimitBannerTitle')}</p>
+            <p className="text-xs text-blue-800 dark:text-blue-300 mt-0.5 leading-relaxed">
+              {localT('freePlanLimitUpgradeNotice')}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Advanced Filters Panel (Part 2) */}
       <AppCard padding="none" className="overflow-visible">
@@ -1960,7 +2036,14 @@ export default function Canaris({
             <AppButton size="sm" variant="success" startIcon={<Archive className="w-3.5 h-3.5" />} onClick={handleBulkArchive}>
               {localT('bulkArchive')}
             </AppButton>
-            <AppButton size="sm" variant="secondary" startIcon={<Copy className="w-3.5 h-3.5" />} onClick={handleBulkDuplicate}>
+            <AppButton 
+              size="sm" 
+              variant="secondary" 
+              disabled={isLimitReached}
+              title={isLimitReached ? localT('freePlanBirdLimitReached') : undefined}
+              startIcon={<Copy className="w-3.5 h-3.5" />} 
+              onClick={handleBulkDuplicate}
+            >
               {localT('bulkDuplicate')}
             </AppButton>
             <AppButton size="sm" variant="danger" startIcon={<Trash2 className="w-3.5 h-3.5" />} onClick={handleBulkDelete}>

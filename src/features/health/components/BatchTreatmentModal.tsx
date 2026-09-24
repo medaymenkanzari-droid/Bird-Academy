@@ -15,6 +15,7 @@ import { HabitatRepository } from '../../habitat/repositories/HabitatRepository'
 import { HealthService } from '../services/HealthService';
 import { CalendarService } from '../../platform/services/CalendarService';
 import { AppButton, AppInput, AppSelect } from '../../../components/design-system';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export interface BatchTreatmentModalProps {
   isOpen: boolean;
@@ -143,6 +144,7 @@ export const BatchTreatmentModal: React.FC<BatchTreatmentModalProps> = ({
   allBirds: propBirds,
   allCages: propCages
 }) => {
+  const { t, isRtl } = useLanguage();
   // Load birds and cages from props or repositories
   const birds = useMemo(() => {
     return propBirds || BirdRepository.getAll();
@@ -516,7 +518,7 @@ export const BatchTreatmentModal: React.FC<BatchTreatmentModalProps> = ({
 
                   {/* Start Date */}
                   <AppInput
-                    label="Date de début du traitement"
+                    label={t('batchTreatmentStartDate')}
                     type="date"
                     value={startDate}
                     onChange={e => setStartDate(e.target.value)}

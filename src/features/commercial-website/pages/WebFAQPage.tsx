@@ -27,7 +27,7 @@ export const FULL_FAQ_ITEMS: FAQItem[] = [
     id: 'faq-pricing-1',
     category: 'pricing',
     questionKey: 'Quels sont les tarifs officiels de Bird Academy ?',
-    answerKey: 'L\'édition FREE Community est 100% gratuite (jusqu\'à 20 oiseaux). Les grilles tarifaires officielles des éditions PREMIUM et PRO sont actuellement en cours de finalisation et seront publiées prochainement avant le lancement commercial officiel.',
+    answerKey: 'L\'édition FREE Community est 100% gratuite (jusqu\'à 20 oiseaux). Les éditions PREMIUM et PRO proposent une licence mono-appareil dédiée avec données 100% locales, dont les grilles tarifaires officielles sont en cours de finalisation avant le lancement commercial officiel.',
   },
   {
     id: 'faq-pricing-2',

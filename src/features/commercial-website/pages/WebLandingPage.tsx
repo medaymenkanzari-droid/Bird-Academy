@@ -36,7 +36,7 @@ export const WebLandingPage: React.FC<WebLandingPageProps> = ({ onNavigate }) =>
       {/* 2. Problem & Solution Section (Du Carnet Papier à l'Excellence Avicole) */}
       <ProblemSolutionSection />
 
-      {/* 3. Expert Testimonial (Jean-Marc Valenti & Volière Moderne) */}
+      {/* 3. Public Test Phase Section (Accompagnement Élevage & Volière Moderne) */}
       <ExpertTestimonialSection />
 
       {/* 4. The 4 Pillar Technological Engines */}

@@ -187,7 +187,7 @@ export const WebAccountPage: React.FC<WebAccountPageProps> = ({ onNavigate }) =>
                     <span className="font-bold text-emerald-600 dark:text-emerald-400">{selectedOrder.status}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-slate-400 block">Date</span>
+                    <span className="text-[10px] text-slate-400 block">{t('accountPage.date') || 'Date'}</span>
                     <span className="font-bold">{new Date(selectedOrder.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>

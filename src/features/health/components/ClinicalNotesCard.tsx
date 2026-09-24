@@ -12,6 +12,7 @@ import { Canari } from '../../../types';
 import { ClinicalNote } from '../models/health';
 import { ClinicalNotesService } from '../services/ClinicalNotesService';
 import { AppButton, AppInput, AppSelect, AppModal } from '../../../components/design-system';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export interface ClinicalNotesCardProps {
   bird: Canari;
@@ -22,6 +23,7 @@ export const ClinicalNotesCard: React.FC<ClinicalNotesCardProps> = ({
   bird,
   className = ''
 }) => {
+  const { t, isRtl } = useLanguage();
   const [notes, setNotes] = useState<ClinicalNote[]>(() => 
     ClinicalNotesService.getNotesForBird(bird.id)
   );
@@ -253,7 +255,7 @@ export const ClinicalNotesCard: React.FC<ClinicalNotesCardProps> = ({
               />
 
               <AppInput
-                label="Date de l'observation"
+                label={t('clinicalObservationDate')}
                 type="date"
                 value={newDate}
                 onChange={(e) => setNewDate(e.target.value)}

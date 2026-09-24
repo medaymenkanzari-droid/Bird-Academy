@@ -927,7 +927,7 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
                         },
                         {
                           key: 'nom',
-                          header: 'Nom',
+                          header: t('nameCol'),
                           render: (item: any) => (
                             <div>
                               <span className="font-bold text-slate-800 block">{item.nom}</span>
@@ -1021,7 +1021,7 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
                     },
                     {
                       key: 'nom',
-                      header: 'Nom',
+                      header: t('nameCol'),
                       render: (item: any) => (
                         <div>
                           <span className="font-bold text-slate-800 block">{item.nom}</span>
@@ -1115,9 +1115,9 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
                       hoverable={true}
                       columns={[
                         { key: 'bague', header: 'Bague', render: (b: any) => <span className="font-bold text-slate-800 font-mono">{b.bague || 'Sans bague'}</span> },
-                        { key: 'nom', header: 'Nom', render: (b: any) => <span className="font-semibold text-slate-700">{b.nom || 'Sans nom'}</span> },
+                        { key: 'nom', header: t('nameCol'), render: (b: any) => <span className="font-semibold text-slate-700">{b.nom || 'Sans nom'}</span> },
                         { key: 'espece', header: 'Espèce / Race', className: 'hidden md:table-cell', headerClassName: 'hidden md:table-cell', render: (b: any) => <span className="text-slate-500">{b.espece || 'canari'} - {b.race || 'Classique'}</span> },
-                        { key: 'sexe', header: 'Sexe', render: (b: any) => <span className="text-slate-600 font-medium">{b.sexe || '-'}</span> },
+                        { key: 'sexe', header: t('genderCol'), render: (b: any) => <span className="text-slate-600 font-medium">{b.sexe || '-'}</span> },
                         { key: 'age', header: 'Âge', className: 'hidden md:table-cell', headerClassName: 'hidden md:table-cell', render: (b: any) => <span className="text-slate-500">{BirdEngine.calculateAge(b.date_naissance).stringVal}</span> },
                         { key: 'statut', header: 'Santé', render: (b: any) => <span className="text-xs font-semibold text-emerald-600">{b.statut_sante || 'Actif'}</span> },
                         { 
@@ -1167,9 +1167,9 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
                       hoverable={true}
                       columns={[
                         { key: 'bague', header: 'Bague', render: (b: any) => <span className="font-bold text-slate-800 font-mono">{b.bague || 'Sans bague'}</span> },
-                        { key: 'nom', header: 'Nom', render: (b: any) => <span className="font-semibold text-slate-700">{b.nom || 'Sans nom'}</span> },
+                        { key: 'nom', header: t('nameCol'), render: (b: any) => <span className="font-semibold text-slate-700">{b.nom || 'Sans nom'}</span> },
                         { key: 'espece', header: 'Espèce / Race', className: 'hidden md:table-cell', headerClassName: 'hidden md:table-cell', render: (b: any) => <span className="text-slate-500">{b.espece || 'canari'} - {b.race || 'Classique'}</span> },
-                        { key: 'sexe', header: 'Sexe', render: (b: any) => <span className="text-slate-600 font-medium">{b.sexe || '-'}</span> },
+                        { key: 'sexe', header: t('genderCol'), render: (b: any) => <span className="text-slate-600 font-medium">{b.sexe || '-'}</span> },
                         { key: 'age', header: 'Âge', className: 'hidden md:table-cell', headerClassName: 'hidden md:table-cell', render: (b: any) => <span className="text-slate-500">{BirdEngine.calculateAge(b.date_naissance).stringVal}</span> },
                         { key: 'statut', header: 'Santé', render: (b: any) => <span className="text-xs font-semibold text-emerald-600">{b.statut_sante || 'Actif'}</span> },
                         { 
@@ -1228,7 +1228,7 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
                 data={movements}
                 keyExtractor={(m: any) => m.id}
                 columns={[
-                  { key: 'date', header: 'Date', render: (m: any) => <span className="text-slate-500 font-medium whitespace-nowrap">{m.date}</span> },
+                  { key: 'date', header: t('dateLabel'), render: (m: any) => <span className="text-slate-500 font-medium whitespace-nowrap">{m.date}</span> },
                   { key: 'oiseau', header: 'Oiseau', render: (m: any) => { const b = birds.find(x => x.id === m.birdId); return <span className="font-bold text-slate-800">{b ? `${b.nom} (${b.bague})` : `Oiseau #${m.birdId}`}</span>; } },
                   { key: 'origine', header: 'Origine', render: (m: any) => { const o = m.fromId ? HabitatRepository.getById(m.fromType as any, m.fromId) : null; return <span className="text-slate-600">{o ? (o as any).nom : 'Externe'}</span>; } },
                   { key: 'arrow', header: '', render: () => <ArrowRightLeft className="w-3 h-3 text-slate-300" /> },
@@ -1358,7 +1358,7 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
       >
         <form onSubmit={handleCreateFacility} className="space-y-4">
           <div>
-            <label className="text-xs font-bold text-slate-600 block mb-1">Nom de l'élevage</label>
+            <label className="text-xs font-bold text-slate-600 block mb-1">{t('facilityNameLabel')}</label>
             <AppInput 
               placeholder="ex: Volière Principale Sud" 
               value={facilityForm.nom}
@@ -1408,7 +1408,7 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
             </AppSelect>
           </div>
           <div>
-            <label className="text-xs font-bold text-slate-600 block mb-1">Nom de la zone</label>
+            <label className="text-xs font-bold text-slate-600 block mb-1">{t('zoneNameLabel')}</label>
             <AppInput 
               placeholder="ex: Zone d'accouplement" 
               value={zoneForm.nom}
@@ -1473,7 +1473,7 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
             </AppSelect>
           </div>
           <div>
-            <label className="text-xs font-bold text-slate-600 block mb-1">Nom ou Numéro de la cage</label>
+            <label className="text-xs font-bold text-slate-600 block mb-1">{t('cageNameOrNumberLabel')}</label>
             <AppInput 
               placeholder="ex: Cage 105" 
               value={cageForm.nom}
@@ -1523,7 +1523,7 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
             </AppSelect>
           </div>
           <div>
-            <label className="text-xs font-bold text-slate-600 block mb-1">Nom du Compartiment</label>
+            <label className="text-xs font-bold text-slate-600 block mb-1">{t('compartmentNameLabel')}</label>
             <AppInput 
               placeholder="ex: Compartiment Gauche" 
               value={compartmentForm.nom}

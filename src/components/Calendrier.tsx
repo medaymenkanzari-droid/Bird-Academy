@@ -226,21 +226,27 @@ export default function CalendrierComponent({
 
               await exportDocumentAsPDF({
                 title: `${t('calendarTitle')} — ${monthName} ${currentYear}`,
-                subtitle: t('calendarSub') || 'Calendrier d\'Élevage',
+                subtitle: t('calendarSub') || t('calendar.pdfTitle'),
                 language: currentLanguage,
                 isRtl,
                 sections: [
                   {
-                    title: 'Résumé du Mois',
+                    title: t('calendar.secSummary'),
                     metrics: [
-                      { label: 'Total Événements', value: `${monthEvents.length}` },
-                      { label: 'Période', value: `${monthName} ${currentYear}` },
+                      { label: t('calendar.totalEvents'), value: `${monthEvents.length}` },
+                      { label: t('calendar.period'), value: `${monthName} ${currentYear}` },
                     ],
                   },
                   {
-                    title: 'Liste des Événements',
+                    title: t('calendar.secEvents'),
                     table: {
-                      headers: ['Date', 'Catégorie', 'Événement'],
+                      headers: [
+                        t('calendar.headerDate'),
+                        t('calendar.headerCategory'),
+                        t('calendar.headerEvent')
+                      ],
+                      columnWidths: [100, 120, 295.28],
+                      alignments: ['left', 'left', 'left'],
                       rows: monthEvents,
                     },
                   },

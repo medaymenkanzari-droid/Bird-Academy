@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { AuditLogEntry, LicenseStats, License } from '../types/licensing';
+import { AuditLogEntry, LicenseStats, License, LicenseType } from '../types/licensing';
 import { ILicenseRepository } from '../repositories/ILicenseRepository';
 
 export class LicenseAuditEngine {
@@ -21,7 +21,7 @@ export class LicenseAuditEngine {
     const licenses = await repository.getAllLicenses();
     const activeLic = await repository.getActiveLicense();
 
-    const typeBreakdown = {
+    const typeBreakdown: Record<LicenseType, number> = {
       beta: 0,
       commercial: 0,
       permanent: 0,
@@ -29,6 +29,7 @@ export class LicenseAuditEngine {
       enterprise: 0,
       association: 0,
       veterinary: 0,
+      test: 0,
     };
 
     let totalActivatedDevices = 0;

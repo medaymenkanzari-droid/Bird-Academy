@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Home, Bird, Heart, Egg, Grid, Activity, Calendar, 
-  TrendingDown, TrendingUp, BarChart3, Settings, Wheat, BookOpen, BrainCircuit, Dna, Sparkles,
+  TrendingDown, TrendingUp, BarChart3, Settings, Wheat, BookOpen, BrainCircuit, Dna, Sparkles, Database,
   ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
@@ -84,7 +84,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
         { id: 'depenses', label: t('depenses'), icon: TrendingDown },
         { id: 'ventes', label: t('ventes'), icon: TrendingUp },
         { id: 'parametres', label: t('parametres'), icon: Settings },
-        { id: 'demo_shortcut', label: t('demoSandbox'), icon: Sparkles },
+        { id: 'demo_shortcut', label: t('demoSandbox'), icon: Database },
       ]
     }
   ];
@@ -226,9 +226,12 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
       {/* Sidebar Footer */}
       <div className="p-3 border-t border-slate-800 bg-slate-950/60 text-center text-[10px] text-slate-400 font-medium shrink-0">
         {!isCollapsed ? (
-          <span>Bird Academy Enterprise</span>
+          <div className="flex flex-col gap-0.5">
+            <span className="font-bold text-slate-300">Bird Academy Enterprise</span>
+            <span className="font-mono text-[9px] text-amber-400">v1.3.6 • BUILD BA-V1.3.6</span>
+          </div>
         ) : (
-          <span className="text-[9px] font-mono">v1.3.6</span>
+          <span className="text-[9px] font-mono text-amber-400">v1.3.6</span>
         )}
       </div>
     </aside>

@@ -509,7 +509,7 @@ export default function ReproductionComponent() {
               columns={[
                 {
                   key: 'id',
-                  header: 'ID / Nom',
+                  header: t('colIdOrName'),
                   render: (p) => {
                     return (
                       <div>

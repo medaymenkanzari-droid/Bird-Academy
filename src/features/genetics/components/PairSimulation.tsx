@@ -26,7 +26,7 @@ interface PairSimulationProps {
 }
 
 export const PairSimulation: React.FC<PairSimulationProps> = ({ birds }) => {
-  const { language, isRtl } = useLanguage();
+  const { t, language, isRtl } = useLanguage();
   const gt = (key: string, variables?: Record<string, string | number>) => translateGenetics(language, key, variables);
   
   const [maleId, setMaleId] = useState<number | ''>(() => {
@@ -347,7 +347,7 @@ export const PairSimulation: React.FC<PairSimulationProps> = ({ birds }) => {
                 <div className="space-y-3.5">
                   <h4 className="text-xs font-extrabold uppercase tracking-wide text-sky-400 flex items-center justify-between">
                     <span>Phénotypes Visuels Attendus</span>
-                    <span className="text-[10px] font-mono text-slate-400">Total 100%</span>
+                    <span className="text-[10px] font-mono text-slate-400">{t('total100Percent')}</span>
                   </h4>
 
                   <div className="space-y-3">
@@ -478,7 +478,7 @@ export const PairSimulation: React.FC<PairSimulationProps> = ({ birds }) => {
             <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
             <input 
               type="text"
-              placeholder="Rechercher nom, bague, mutation..."
+              placeholder={t('searchBirdFullPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:ring-1 focus:ring-sky-500"
@@ -533,7 +533,7 @@ export const PairSimulation: React.FC<PairSimulationProps> = ({ birds }) => {
             <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
             <input 
               type="text"
-              placeholder="Rechercher nom, bague, mutation..."
+              placeholder={t('searchBirdFullPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:ring-1 focus:ring-pink-500"

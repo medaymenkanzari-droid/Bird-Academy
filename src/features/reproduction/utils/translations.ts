@@ -5,6 +5,7 @@
 
 export const REPRODUCTION_TRANSLATIONS: Record<string, Record<string, string>> = {
   fr: {
+    colIdOrName: "ID / Nom",
     couplesTitle: "Couples de Reproducteurs",
     couplesSub: "Gérez scientifiquement l'accouplement de votre élevage avec l'analyse de compatibilité.",
     formCoupleButton: "Former un couple",
@@ -125,6 +126,7 @@ export const REPRODUCTION_TRANSLATIONS: Record<string, Record<string, string>> =
     transferWizardTitle: "Assistant de Transfert Biologique",
   },
   en: {
+    colIdOrName: "ID / Name",
     couplesTitle: "Breeding Couples",
     couplesSub: "Manage your breeding couples scientifically with genetic compatibility check.",
     formCoupleButton: "Pair Birds",
@@ -245,6 +247,7 @@ export const REPRODUCTION_TRANSLATIONS: Record<string, Record<string, string>> =
     transferWizardTitle: "Biological Transfer Assistant",
   },
   ar: {
+    colIdOrName: "المعرف / الاسم",
     couplesTitle: "أزواج التكاثر",
     couplesSub: "أدر أزواج التكاثر لديك علمياً مع ميزة التحقق من توافق السلالات والجينات.",
     formCoupleButton: "تكوين زوج",
@@ -365,6 +368,7 @@ export const REPRODUCTION_TRANSLATIONS: Record<string, Record<string, string>> =
     transferWizardTitle: "مساعد النقل البيولوجي",
   },
   es: {
+    colIdOrName: "ID / Nombre",
     couplesTitle: "Parejas de Cría",
     couplesSub: "Gestione científicamente el emparejamiento de su criadero con el análisis de compatibilidad.",
     formCoupleButton: "Formar Pareja",
@@ -485,6 +489,7 @@ export const REPRODUCTION_TRANSLATIONS: Record<string, Record<string, string>> =
     transferWizardTitle: "Asistente de Transferencia Biológica",
   },
   it: {
+    colIdOrName: "ID / Nome",
     couplesTitle: "Coppie di Riproduttori",
     couplesSub: "Gestisci scientificamente l'accoppiamento del tuo allevamento con l'analisi di compatibilità.",
     formCoupleButton: "Forma Coppia",

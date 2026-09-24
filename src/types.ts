@@ -46,6 +46,7 @@ export interface Canari {
   cageId?: string;
   compartmentId?: string;
   quarantineId?: string;
+  isDemo?: boolean;
 }
 
 export interface Cage {

@@ -102,6 +102,9 @@ export const LicenseProvider: React.FC<LicenseProviderProps> = ({ children }) =>
   } else if (!activeLicense && (validation?.code === 'NO_LICENSE' || !validation)) {
     // FIX-FREE-001: Native FREE mode when no license is installed on clean install
     licenseState = 'LICENSE_VALID';
+  } else if (validation?.code === 'EXPIRED') {
+    // MISSION 013: Expiration of 30-day TEST license reverts to native FREE tier without blocking app (Zero Deletion)
+    licenseState = 'LICENSE_VALID';
   } else if (validation?.code === 'NO_LICENSE' || validation?.status === 'pending_activation') {
     licenseState = 'LICENSE_REQUIRED';
   } else {

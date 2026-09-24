@@ -13,6 +13,7 @@ import { TransactionType, PaymentMethod } from '../models/finance';
 import { FinanceService } from '../services/FinanceService';
 import { BirdRepository } from '../../birds/repositories/BirdRepository';
 import { AppButton, AppInput, AppSelect } from '../../../components/design-system';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export interface RecordTransactionModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export const RecordTransactionModal: React.FC<RecordTransactionModalProps> = ({
   allBirds: propBirds,
   onSuccess
 }) => {
+  const { t, isRtl } = useLanguage();
   const [transactionType, setTransactionType] = useState<TransactionType>(defaultType);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -249,7 +251,7 @@ export const RecordTransactionModal: React.FC<RecordTransactionModalProps> = ({
                 />
 
                 <AppInput
-                  label="Date de la vente"
+                  label={t('saleDateLabel')}
                   type="date"
                   value={saleDate}
                   onChange={e => setSaleDate(e.target.value)}
@@ -259,7 +261,7 @@ export const RecordTransactionModal: React.FC<RecordTransactionModalProps> = ({
               {/* Buyer Name & Payment Method */}
               <div className="grid grid-cols-2 gap-3">
                 <AppInput
-                  label="Nom de l'acquéreur *"
+                  label={t('buyerNameRequired')}
                   value={saleBuyer}
                   onChange={e => setSaleBuyer(e.target.value)}
                   placeholder="ex. M. Dupont / Animalerie"
@@ -292,7 +294,7 @@ export const RecordTransactionModal: React.FC<RecordTransactionModalProps> = ({
               
               <div className="grid grid-cols-2 gap-3">
                 <AppSelect
-                  label="Catégorie de dépense *"
+                  label={t('expenseCategoryRequired')}
                   value={expenseCategory}
                   onChange={(e: any) => setExpenseCategory(e.target.value)}
                   options={[
@@ -325,7 +327,7 @@ export const RecordTransactionModal: React.FC<RecordTransactionModalProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <AppInput
-                  label="Date de la dépense"
+                  label={t('expenseDateLabel')}
                   type="date"
                   value={expenseDate}
                   onChange={e => setExpenseDate(e.target.value)}

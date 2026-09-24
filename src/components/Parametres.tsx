@@ -7,7 +7,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { 
   Settings, Database, Download, Upload, RefreshCw, CheckCircle2, 
   ShieldAlert, BookOpen, Key, ShieldCheck, Clock, Monitor, 
-  Server, HardDrive, WifiOff, Award, Bird, Plus, Trash2, Check, Sparkles
+  Server, HardDrive, WifiOff, Award, Bird, Plus, Trash2, Check, Sparkles, MessageSquare
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
@@ -18,11 +18,12 @@ import { translateLicensing } from '../features/licensing/translations/licensing
 import { BirdRepository } from '../features/birds/repositories/BirdRepository';
 import { HabitatRepository } from '../features/habitat/repositories/HabitatRepository';
 import { BreedingRepository } from '../features/breeding/repositories/BreedingRepository';
-import { BUILD_VERSION_NAME, BUILD_RELEASE_CHANNEL, isDevEnvironment, isQaMode } from '../config/appMode';
+import { BUILD_ID, BUILD_VERSION_NAME, BUILD_RELEASE_CHANNEL, isDevEnvironment, isQaMode } from '../config/appMode';
 import { SpeciesProfileService } from '../features/species/services/SpeciesProfileService';
 import { SPECIES_REGISTRY, getSpeciesById } from '../data/speciesRegistry';
 import { SpeciesBadge } from './design-system';
 import { QaResetModal } from '../features/licensing/components/QaResetModal';
+import { TesterFeedbackModal } from '../features/feedback/components/TesterFeedbackModal';
 
 interface ParametresProps {
   onExportBackup: () => void;
@@ -42,6 +43,7 @@ export default function Parametres({
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isQaResetModalOpen, setIsQaResetModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Species Profile Management state
@@ -532,6 +534,28 @@ export default function Parametres({
                 </button>
               </div>
             )}
+
+            {/* Tester Feedback Access Card */}
+            <div className="mt-4 p-3.5 bg-emerald-50/70 dark:bg-emerald-950/40 rounded-xl border border-emerald-200/80 dark:border-emerald-850 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-emerald-600/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-lg shrink-0">
+                  <MessageSquare className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-xs text-slate-900 dark:text-white">Retour de Test & Signalement</h4>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">Signalez une anomalie, un problème UX ou une suggestion pour la version v1.3.6.</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                data-testid="btn-open-tester-feedback"
+                onClick={() => setIsFeedbackModalOpen(true)}
+                className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs cursor-pointer transition-colors shrink-0 shadow-xs"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Faire un retour</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -550,13 +574,18 @@ export default function Parametres({
           <div className="space-y-3 text-slate-600 dark:text-slate-300">
             <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
               <span className="font-medium text-slate-500 dark:text-slate-400">{t('sysInfoAppVersion')}</span>
-              <span className="font-mono text-slate-800 dark:text-slate-200 font-bold">{BUILD_VERSION_NAME || '1.3.6-RC6'}</span>
+              <span className="font-mono text-slate-800 dark:text-slate-200 font-bold">{BUILD_VERSION_NAME || '1.3.6'}</span>
+            </div>
+
+            <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
+              <span className="font-medium text-slate-500 dark:text-slate-400">BUILD_ID</span>
+              <span className="font-mono text-slate-800 dark:text-slate-200 font-bold">{BUILD_ID || 'BA-V1.3.6'}</span>
             </div>
 
             <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
               <span className="font-medium text-slate-500 dark:text-slate-400">{t('sysInfoReleaseChannel')}</span>
               <span className="font-semibold text-slate-800 dark:text-slate-200 text-right text-[11px]">
-                {BUILD_RELEASE_CHANNEL || 'Pre-External QA (Android-Free-Native-RC6)'}
+                {BUILD_RELEASE_CHANNEL || 'Public Test'}
               </span>
             </div>
             
@@ -640,7 +669,7 @@ export default function Parametres({
 
           <div className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800 text-[11px] text-slate-600 dark:text-slate-300 space-y-1">
             <div>
-              <span className="font-bold">Bird Academy Enterprise — Volière Manager</span> ({BUILD_VERSION_NAME || '1.3.6-RC6'})
+              <span className="font-bold">Bird Academy Enterprise — Volière Manager</span> (v{BUILD_VERSION_NAME || '1.3.6'} • {BUILD_ID || 'BA-V1.3.6'})
             </div>
             <div className="text-slate-500 dark:text-slate-400">
               {t('aboutEthicalCommitment')}
@@ -651,6 +680,12 @@ export default function Parametres({
           </div>
         </div>
       </div>
+
+      <TesterFeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        currentTab="Paramètres"
+      />
     </div>
   );
 }

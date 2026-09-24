@@ -96,27 +96,29 @@ export const GenealogyExplorer: React.FC<GenealogyExplorerProps> = ({ birds }) =
     if (selectedBird) {
       const fatherNode = pedigreeTree?.father;
       const motherNode = pedigreeTree?.mother;
+      const unknownMale = t('genealogy.unknownMale');
+      const unknownFemale = t('genealogy.unknownFemale');
 
       await exportDocumentAsPDF({
-        title: `Arbre Généalogique - ${selectedBird.nom}`,
-        subtitle: `Bague: ${selectedBird.bague} | Race: ${selectedBird.race || 'Standard'} | Sexe: ${selectedBird.sexe}`,
+        title: `${t('genealogy.pdfTitle')} - ${selectedBird.nom}`,
+        subtitle: `${t('genealogy.labelRing')}: ${selectedBird.bague} | ${t('genealogy.labelSex')}: ${selectedBird.sexe}`,
         language: currentLanguage,
         isRtl,
         sections: [
           {
-            title: 'Fiche d\'Identité Canari',
+            title: t('genealogy.secIdentity'),
             metrics: [
-              { label: 'Nom', value: selectedBird.nom },
-              { label: 'Bague', value: selectedBird.bague },
-              { label: 'Sexe', value: selectedBird.sexe },
-              { label: 'Année', value: `${(selectedBird as any).annee || (selectedBird.date_naissance ? new Date(selectedBird.date_naissance).getFullYear() : new Date().getFullYear())}` },
+              { label: t('genealogy.labelName'), value: selectedBird.nom },
+              { label: t('genealogy.labelRing'), value: selectedBird.bague },
+              { label: t('genealogy.labelSex'), value: selectedBird.sexe },
+              { label: t('genealogy.labelYear'), value: `${(selectedBird as any).annee || (selectedBird.date_naissance ? new Date(selectedBird.date_naissance).getFullYear() : new Date().getFullYear())}` },
             ],
           },
           {
-            title: 'Généalogie / Ascendance',
+            title: t('genealogy.secAscendance'),
             metrics: [
-              { label: 'Père', value: fatherNode ? `${fatherNode.nom} (${fatherNode.bague})` : 'Inconnu' },
-              { label: 'Mère', value: motherNode ? `${motherNode.nom} (${motherNode.bague})` : 'Inconnue' },
+              { label: t('genealogy.labelFather'), value: fatherNode ? `${fatherNode.nom} (${fatherNode.bague})` : unknownMale },
+              { label: t('genealogy.labelMother'), value: motherNode ? `${motherNode.nom} (${motherNode.bague})` : unknownFemale },
             ],
           },
         ],

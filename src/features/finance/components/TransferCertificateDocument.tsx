@@ -17,6 +17,7 @@ import { calculateInbreedingCOI } from '../../../utils/genealogy';
 import { BirdRepository } from '../../birds/repositories/BirdRepository';
 import { printDocument, exportDocumentAsPDF } from '../../../utils/printUtils';
 import { formatCurrency } from '../../../utils/currencyFormatter';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export interface TransferCertificateDocumentProps {
   sale: Vente;
@@ -88,31 +89,36 @@ export const TransferCertificateDocument: React.FC<TransferCertificateDocumentPr
     printDocument('transfer-cert-a4-sheet');
   };
 
+  const { t, language, isRtl } = useLanguage();
+
   const handleDownloadPDF = () => {
     exportDocumentAsPDF({
-      title: `Attestation_Cession_${bird?.bague || sale.canari_id}`,
-      subtitle: `Certificat officiel de cession d'oiseau - ${certificateNumber}`,
-      language: 'fr',
+      title: `${t('transfer.certTitle')}_${bird?.bague || sale.canari_id}`,
+      subtitle: `${t('transfer.certSubtitle')} - ${certificateNumber}`,
+      language,
+      isRtl,
       sections: [
         {
-          title: 'Détails de la cession',
+          title: t('transfer.secDetails'),
           metrics: [
-            { label: 'Numéro Certificat', value: certificateNumber },
-            { label: 'Bague de l\'Oiseau', value: bird?.bague || `#${sale.canari_id}` },
-            { label: 'Prix de Vente', value: formatCurrency(sale.prix) },
-            { label: 'Acquéreur', value: sale.acheteur || 'Non renseigné' },
+            { label: t('transfer.certNumber'), value: certificateNumber },
+            { label: t('transfer.birdRing'), value: bird?.bague || `#${sale.canari_id}` },
+            { label: t('transfer.salePrice'), value: formatCurrency(sale.prix, undefined, true, language) },
+            { label: t('transfer.buyer'), value: sale.acheteur || t('transfer.notSpecified') },
           ],
           table: {
-            headers: ['Champ', 'Détail de l\'acte de cession'],
+            headers: [t('transfer.field'), t('transfer.detail')],
+            columnWidths: [160, 355.28],
+            alignments: ['left', 'left'],
             rows: [
-              ['Date de l\'acte', sale.date],
-              ['Espèce & Variété', bird?.race || 'Canari domestique'],
-              ['Sexe', bird?.sexe || 'Indéterminé'],
-              ['Mutation / Couleur', bird?.mutation || bird?.couleur || 'Classique'],
-              ['Père ♂', fatherBird ? `${fatherBird.bague} (${fatherBird.nom || ''})` : 'Non renseigné'],
-              ['Mère ♀', motherBird ? `${motherBird.bague} (${motherBird.nom || ''})` : 'Non renseigné'],
-              ['Consanguinité COI', `${coiScore}%`],
-              ['Observations', sale.description || 'Oiseau sevré et bagué fermé conforme.']
+              [t('transfer.deedDate'), sale.date],
+              [t('transfer.speciesBreed'), bird?.race || t('transfer.domesticCanary')],
+              [t('transfer.sex'), bird?.sexe || t('transfer.undetermined')],
+              [t('transfer.mutation'), bird?.mutation || bird?.couleur || t('transfer.classic')],
+              [t('transfer.father'), fatherBird ? `${fatherBird.bague} (${fatherBird.nom || ''})` : t('transfer.notSpecified')],
+              [t('transfer.mother'), motherBird ? `${motherBird.bague} (${motherBird.nom || ''})` : t('transfer.notSpecified')],
+              [t('transfer.coi'), `${coiScore}%`],
+              [t('transfer.observations'), sale.description || t('transfer.obsDefault')]
             ]
           }
         }
@@ -284,7 +290,7 @@ PRIX DE CESSION     : ${formatCurrency(sale.prix)}
               </div>
               <div className="text-3xs text-slate-700 space-y-0.5 font-sans">
                 <div>Statut : <strong>Particulier / Éleveur capacitaire</strong></div>
-                <div>Date de remise : <strong>{sale.date}</strong></div>
+                <div>{t('handoverDateLabel')} <strong>{sale.date}</strong></div>
                 <div>Lieu de transfert : <strong>Station d’élevage</strong></div>
                 <div>Identifiant Cession : <strong className="font-mono text-blue-900">ACQ-{sale.id.toString().padStart(4, '0')}</strong></div>
               </div>
@@ -305,9 +311,9 @@ PRIX DE CESSION     : ${formatCurrency(sale.prix)}
                   <tr>
                     <th className="p-2.5">Numéro de Bague Fermée</th>
                     <th className="p-2.5">Espèce & Variété</th>
-                    <th className="p-2.5">Sexe</th>
+                    <th className="p-2.5">{t('labelGender')}</th>
                     <th className="p-2.5">Mutation / Phénotype</th>
-                    <th className="p-2.5">Date Naissance</th>
+                    <th className="p-2.5">{t('birthDateLabel')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 bg-white">
@@ -352,14 +358,14 @@ PRIX DE CESSION     : ${formatCurrency(sale.prix)}
 
               <div className="space-y-1.5 text-3xs">
                 <div className="flex items-center justify-between p-1.5 rounded-lg bg-white border border-slate-200 font-mono">
-                  <span className="font-sans font-bold text-blue-900">Père ♂ :</span>
+                  <span className="font-sans font-bold text-blue-900">{t('fatherLabelPrefix')}</span>
                   <span className="font-extrabold text-slate-900">
                     {fatherBird ? `${fatherBird.bague} (${fatherBird.nom || fatherBird.race || 'Canari'})` : 'Père non renseigné / Souche externe'}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between p-1.5 rounded-lg bg-white border border-slate-200 font-mono">
-                  <span className="font-sans font-bold text-pink-900">Mère ♀ :</span>
+                  <span className="font-sans font-bold text-pink-900">{t('motherLabelPrefix')}</span>
                   <span className="font-extrabold text-slate-900">
                     {motherBird ? `${motherBird.bague} (${motherBird.nom || motherBird.race || 'Canari'})` : 'Mère non renseignée / Souche externe'}
                   </span>

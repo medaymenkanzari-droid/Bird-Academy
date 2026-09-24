@@ -11,6 +11,7 @@ import {
 import { Sante, Canari } from '../../../types';
 import { MedicalTreatmentItem, AdministrationRoute, MedicalStatus } from '../models/health';
 import { AppButton, AppBadge, AppModal, AppInput, AppSelect } from '../../../components/design-system';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export interface TreatmentHistoryTimelineProps {
   bird: Canari;
@@ -29,6 +30,7 @@ export const TreatmentHistoryTimeline: React.FC<TreatmentHistoryTimelineProps> =
   onDeleteRecord,
   className = ''
 }) => {
+  const { t, isRtl } = useLanguage();
   const [filterCat, setFilterCat] = useState<string>('ALL');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
@@ -285,7 +287,7 @@ export const TreatmentHistoryTimeline: React.FC<TreatmentHistoryTimelineProps> =
         >
           <form onSubmit={handleAddSubmit} className="space-y-4">
             <AppSelect
-              label="Catégorie d'acte *"
+              label={t('actCategoryRequired')}
               value={newCategory}
               onChange={(e: any) => setNewCategory(e.target.value)}
               options={[
@@ -306,7 +308,7 @@ export const TreatmentHistoryTimeline: React.FC<TreatmentHistoryTimelineProps> =
 
             <div className="grid grid-cols-2 gap-3">
               <AppInput
-                label="Date d'administration / Début"
+                label={t('administrationStartDate')}
                 type="date"
                 value={newDate}
                 onChange={(e) => setNewDate(e.target.value)}

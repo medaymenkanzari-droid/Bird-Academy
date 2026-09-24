@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { Bird, Heart, Egg, Grid, Activity, Calendar, TrendingDown, TrendingUp, BarChart3, Plus, Clock, Info, Check, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Canari, Couple, Reproduction, Ponte, Sante, Depense, Vente, Cage } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import { CapabilityResolver } from '../features/subscription/services/CapabilityResolver';
 import { AppButton, AppCard, AppBadge, AppKpiCard } from './design-system';
 import { HorizontalScrollContainer } from './ui/HorizontalScrollContainer';
 
@@ -48,6 +49,11 @@ export default function Dashboard({
   const males = canaris.filter(c => c.sexe === 'Mâle').length;
   const females = canaris.filter(c => c.sexe === 'Femelle').length;
   const indet = canaris.filter(c => c.sexe === 'Indéterminé').length;
+
+  // Quota and entitlement enforcement
+  const birdLimit = CapabilityResolver.getBirdLimitForCurrentPlan();
+  const isLimitReached = !CapabilityResolver.canCreateBird(totalBirds, 1);
+  const isOverEntitlement = totalBirds > birdLimit;
   
   const activeCouples = couples.filter(c => c.statut === 'Actif').length;
   const activeRepros = reproductions.filter(r => r.statut === 'En cours').length;
@@ -231,6 +237,39 @@ export default function Dashboard({
 
   return (
     <div className="space-y-6">
+      {/* Over-entitlement Alert Banner */}
+      {isOverEntitlement && (
+        <div data-testid="dashboard-over-entitlement-banner" className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs animate-fadeIn">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-extrabold text-sm text-amber-950 dark:text-amber-100">{t('overEntitlementTitle')}</p>
+              <p className="text-xs text-amber-800 dark:text-amber-300 mt-0.5 leading-relaxed">
+                {t('overEntitlementNotice')}
+              </p>
+            </div>
+          </div>
+          <AppButton
+            size="sm"
+            variant="secondary"
+            onClick={() => setCurrentTab('canaris')}
+          >
+            {t('canaris') || 'Consulter les oiseaux'}
+          </AppButton>
+        </div>
+      )}
+      {!isOverEntitlement && isLimitReached && (
+        <div data-testid="dashboard-limit-banner" className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-900 dark:text-blue-200 flex items-start gap-3 shadow-xs animate-fadeIn">
+          <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-extrabold text-sm text-blue-950 dark:text-blue-100">{t('freePlanLimitBannerTitle')}</p>
+            <p className="text-xs text-blue-800 dark:text-blue-300 mt-0.5 leading-relaxed">
+              {t('freePlanLimitUpgradeNotice')}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* 4 Standard Breeding KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <AppKpiCard
@@ -386,16 +425,22 @@ export default function Dashboard({
             <div className="space-y-3 mt-4">
               <button
                 onClick={onQuickAddCanari}
+                disabled={isLimitReached}
+                title={isLimitReached ? t('freePlanBirdLimitReached') : undefined}
                 data-testid="dashboard-quick-add-bird-btn"
-                className="w-full flex items-center justify-between p-3.5 bg-blue-50/80 hover:bg-blue-100/80 dark:bg-slate-800/80 dark:hover:bg-slate-750 text-slate-900 dark:text-white font-semibold rounded-xl border border-blue-100 dark:border-slate-700 transition-colors text-left cursor-pointer min-h-[48px]"
+                className={`w-full flex items-center justify-between p-3.5 ${
+                  isLimitReached 
+                    ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed opacity-60' 
+                    : 'bg-blue-50/80 hover:bg-blue-100/80 dark:bg-slate-800/80 dark:hover:bg-slate-750 text-slate-900 dark:text-white cursor-pointer'
+                } font-semibold rounded-xl border border-blue-100 dark:border-slate-700 transition-colors text-left min-h-[48px]`}
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg">
+                  <div className={`p-2 rounded-lg ${isLimitReached ? 'bg-slate-200 dark:bg-slate-700 text-slate-400' : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'}`}>
                     <Bird className="w-4.5 h-4.5" />
                   </div>
                   <span data-testid="dashboard-quick-add-bird-label" className="text-sm font-bold">{t('addBird')}</span>
                 </div>
-                <Plus className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <Plus className={`w-4 h-4 ${isLimitReached ? 'text-slate-400' : 'text-blue-600 dark:text-blue-400'}`} />
               </button>
 
               <button

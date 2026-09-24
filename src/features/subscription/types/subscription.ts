@@ -76,7 +76,10 @@ export type SubscriptionCapability =
   | 'AI_ASSISTANT_INTELLIGENCE_GENEALOGY'
   | 'AI_ASSISTANT_QUOTA_10'
   | 'AI_ASSISTANT_QUOTA_100'
-  | 'AI_ASSISTANT_QUOTA_UNLIMITED';
+  | 'AI_ASSISTANT_QUOTA_UNLIMITED'
+
+  // 14. Démonstration & Sandbox
+  | 'DEMO_GENERATOR_ACCESS';
 
 export interface FeatureAccess {
   isAccessible: boolean;
@@ -93,4 +96,24 @@ export interface TierDefinition {
   badgeStyle: string;
   maxDailyAiQueries: number | null; // null = unlimited
   capabilities: SubscriptionCapability[];
+}
+
+export interface TierLimits {
+  maxBirds: number;
+  demoGeneratorAvailable: boolean;
+}
+
+export type PlanLimits = Record<SubscriptionTier, TierLimits>;
+
+export interface TierDiagnosticInfo {
+  activeTier: SubscriptionTier;
+  effectiveTier: SubscriptionTier;
+  licenseStatus: string;
+  hasLicense: boolean;
+  licenseKey?: string;
+  isTestEnv: boolean;
+  isTestOverrideActive: boolean;
+  effectiveBirdLimit: number;
+  effectiveLimit: number;
+  limitSource: 'PLAN_CONFIG_FREE' | 'PLAN_CONFIG_PREMIUM' | 'PLAN_CONFIG_PRO' | 'TEST_OVERRIDE' | string;
 }

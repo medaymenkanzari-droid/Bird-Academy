@@ -62,7 +62,7 @@ export default function Statistiques({
         isRtl,
         sections: [
           {
-            title: 'Synthèse Financière',
+            title: t('statistics.secFinancial'),
             metrics: [
               { label: t('statisticsRevenue'), value: `+${formatCurrency(totalSales, userCurrency, true, currentLanguage)}` },
               { label: t('globalCharges'), value: `-${formatCurrency(totalExpenses, userCurrency, true, currentLanguage)}` },
@@ -70,7 +70,7 @@ export default function Statistiques({
             ],
           },
           {
-            title: 'Taux de Reproduction & Survie',
+            title: t('statistics.secReproduction'),
             metrics: [
               { label: t('fecondationRate'), value: `${rateFecondation.toFixed(1)}%` },
               { label: t('hatchingRate'), value: `${rateEclosion.toFixed(1)}%` },

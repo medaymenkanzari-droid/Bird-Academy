@@ -64,8 +64,8 @@ export const ExportCenter: React.FC<ExportCenterProps> = ({ filters }) => {
   const columnsList = [
     { id: 'id', label: 'Identifiant interne' },
     { id: 'bague', label: 'Numéro de bague' },
-    { id: 'nom', label: 'Nom d\'oiseau' },
-    { id: 'sexe', label: 'Sexe' },
+    { id: 'nom', label: at('birdNameLabel') },
+    { id: 'sexe', label: at('filterSex') },
     { id: 'race', label: 'Race ornithologique' },
     { id: 'mutation', label: 'Mutation active' },
     { id: 'couleur', label: 'Synthèse de couleur' },

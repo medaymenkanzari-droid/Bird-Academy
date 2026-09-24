@@ -277,7 +277,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
             {isEditingInfo ? (
               <div className="space-y-3">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase">Nom</label>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase">{t('chickNameLabel')}</label>
                   <AppInput value={editName} onChange={(e) => setEditName(e.target.value)} />
                 </div>
                 <div>
@@ -285,7 +285,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
                   <AppInput value={editRing} onChange={(e) => setEditRing(e.target.value)} />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase">Sexe estimé</label>
+                  <label className="block text-[10px] font-bold text-slate-500 uppercase">{t('estimatedGenderLabel')}</label>
                   <AppSelect
                     value={editGender}
                     onChange={(e) => setEditGender(e.target.value as any)}
@@ -323,7 +323,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
                   <span className="font-bold text-slate-700">{chick.provisionalNumber}</span>
                 </div>
                 <div className="flex justify-between border-b border-slate-100 pb-1.5">
-                  <span className="text-slate-400 text-xs">Date d'éclosion</span>
+                  <span className="text-slate-400 text-xs">{t('hatchDateLabel')}</span>
                   <span className="font-semibold text-slate-700">{chick.hatchDate}</span>
                 </div>
                 <div className="flex justify-between border-b border-slate-100 pb-1.5">
@@ -335,7 +335,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
                   <span className="font-semibold text-slate-700">{chick.birthWeight}g</span>
                 </div>
                 <div className="flex justify-between border-b border-slate-100 pb-1.5">
-                  <span className="text-slate-400 text-xs">Sexe</span>
+                  <span className="text-slate-400 text-xs">{t('genderLabel')}</span>
                   <span className="font-bold text-slate-700">{chick.gender}</span>
                 </div>
                 <div>
@@ -618,7 +618,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
       <AppModal isOpen={showLogWeight} onClose={() => setShowLogWeight(false)} title="Enregistrer une pesée" size="sm">
         <form onSubmit={handleLogWeight} className="space-y-4 text-left">
           <div>
-            <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Date</label>
+            <label className="block text-xs font-bold text-slate-600 uppercase mb-1">{t('dateLabel')}</label>
             <AppInput type="date" value={wtDate} onChange={(e) => setWtDate(e.target.value)} required />
           </div>
           <div>
@@ -648,7 +648,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
         <form onSubmit={handleLogGrowth} className="space-y-4 text-left">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Date</label>
+              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">{t('dateLabel')}</label>
               <AppInput type="date" value={grDate} onChange={(e) => setGrDate(e.target.value)} required />
             </div>
             <div>
@@ -722,7 +722,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
         <form onSubmit={handleLogFeeding} className="space-y-4 text-left">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Date</label>
+              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">{t('dateLabel')}</label>
               <AppInput type="date" value={fdDate} onChange={(e) => setFdDate(e.target.value)} required />
             </div>
             <div>
@@ -783,7 +783,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Date d'effet</label>
+              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">{t('effectiveDateLabel')}</label>
               <AppInput type="date" value={weanDate} onChange={(e) => setWeanDate(e.target.value)} required />
             </div>
             <div>
@@ -838,7 +838,7 @@ export default function ChickDetailModal({ isOpen, onClose, chick, onRefresh }: 
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Nom Permanent</label>
+            <label className="block text-xs font-bold text-slate-600 uppercase mb-1">{t('permanentNameLabel')}</label>
             <AppInput value={finalName} onChange={(e) => setFinalName(e.target.value)} required />
           </div>
 

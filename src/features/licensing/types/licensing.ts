@@ -10,7 +10,8 @@ export type LicenseType =
   | 'temporary' 
   | 'enterprise' 
   | 'association' 
-  | 'veterinary';
+  | 'veterinary'
+  | 'test';
 
 export type LicenseStatus = 
   | 'active' 
@@ -116,6 +117,7 @@ export interface LicenseValidationResult {
   message: string;
   remainingDays: number | null;
   deviceRegistered: boolean;
+  evaluatedState?: 'VALID' | 'EXPIRING_SOON' | 'EXPIRED' | 'INVALID';
 }
 
 export interface LicenseStats {

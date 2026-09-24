@@ -6,7 +6,15 @@
  * Centralized capability engine enforcing the commercial matrix.
  */
 
-import { SubscriptionTier, SubscriptionCapability, FeatureAccess } from '../types/subscription';
+import { SubscriptionTier, SubscriptionCapability, FeatureAccess, PlanLimits } from '../types/subscription';
+import { SubscriptionTierResolver } from './SubscriptionTierResolver';
+import { appStorage } from '../../../storage';
+
+export const PLAN_LIMITS: PlanLimits = {
+  FREE: { maxBirds: 20, demoGeneratorAvailable: false },
+  PREMIUM: { maxBirds: Infinity, demoGeneratorAvailable: true },
+  PRO: { maxBirds: Infinity, demoGeneratorAvailable: true }
+};
 
 export const TIER_CAPABILITIES: Record<SubscriptionTier, SubscriptionCapability[]> = {
   FREE: [
@@ -95,7 +103,8 @@ export const TIER_CAPABILITIES: Record<SubscriptionTier, SubscriptionCapability[
     'GENETICS_WRIGHT_INBREEDING',
     'INTELLIGENCE_DIAGNOSTIC_FICHES',
     'AI_ASSISTANT_FARM_CONTEXT',
-    'AI_ASSISTANT_QUOTA_100'
+    'AI_ASSISTANT_QUOTA_100',
+    'DEMO_GENERATOR_ACCESS'
   ],
 
   PRO: [
@@ -141,7 +150,8 @@ export const TIER_CAPABILITIES: Record<SubscriptionTier, SubscriptionCapability[
     'GENETICS_ADVANCED_TREE',
     'INTELLIGENCE_FULL_ENGINE',
     'AI_ASSISTANT_INTELLIGENCE_GENEALOGY',
-    'AI_ASSISTANT_QUOTA_UNLIMITED'
+    'AI_ASSISTANT_QUOTA_UNLIMITED',
+    'DEMO_GENERATOR_ACCESS'
   ]
 };
 
@@ -237,4 +247,82 @@ export class CapabilityResolver {
         return { isAccessible: true, isLimited: false, isLocked: false, requiredTier: null };
     }
   }
+
+  /**
+   * Returns the maximum bird limit for a specified tier.
+   */
+  static getBirdLimit(tier: SubscriptionTier): number {
+    return PLAN_LIMITS[tier]?.maxBirds ?? 20;
+  }
+
+  /**
+   * Returns the maximum bird limit for the currently active plan.
+   */
+  static getBirdLimitForCurrentPlan(): number {
+    const tier = SubscriptionTierResolver.getCurrentTierSync();
+    return this.getBirdLimit(tier);
+  }
+
+  /**
+   * Checks if additional birds can be created without exceeding the current plan quota.
+   * If currentBirdCount is omitted, counts active (non-archived) birds directly from storage.
+   */
+  static canCreateBird(currentBirdCount?: number, additionalCount: number = 1): boolean {
+    const limit = this.getBirdLimitForCurrentPlan();
+    if (limit === Infinity) return true;
+
+    let count: number;
+    if (typeof currentBirdCount === 'number') {
+      count = currentBirdCount;
+    } else {
+      const stored = appStorage.getItem<Array<{ archived?: boolean }>>('canaris', []);
+      count = Array.isArray(stored) ? stored.filter(b => !b.archived).length : 0;
+    }
+
+    return (count + additionalCount) <= limit;
+  }
+
+  /**
+   * Checks if a batch of birds can be created without exceeding the current plan quota.
+   */
+  static canCreateBirds(currentBirdCount: number, batchCount: number): boolean {
+    return this.canCreateBird(currentBirdCount, batchCount);
+  }
+
+  /**
+   * Returns the currently active subscription tier synchronously.
+   */
+  static getCurrentTierSync(): SubscriptionTier {
+    return SubscriptionTierResolver.getCurrentTierSync();
+  }
+
+  /**
+   * Sets mock tier override (strictly for controlled testing).
+   */
+  static setMockTierOverride(tier: SubscriptionTier | null): void {
+    SubscriptionTierResolver.setMockTierOverride(tier);
+  }
+
+  /**
+   * Checks if the demo generator can be used for the given or current tier.
+   * FREE tier has demo generator disabled.
+   */
+  static canUseDemoGenerator(tier?: SubscriptionTier): boolean {
+    const activeTier = tier || this.getCurrentTierSync();
+    return PLAN_LIMITS[activeTier]?.demoGeneratorAvailable ?? false;
+  }
+
+  /**
+   * Enforces capacity limit centrally across creation, duplication, import, and restore operations.
+   */
+  static enforceCapacityLimit(currentCount: number, additional: number = 1): { allowed: boolean; remaining: number; limit: number } {
+    const limit = this.getBirdLimitForCurrentPlan();
+    if (limit === Infinity) {
+      return { allowed: true, remaining: Infinity, limit: Infinity };
+    }
+    const allowed = (currentCount + additional) <= limit;
+    const remaining = Math.max(0, limit - currentCount);
+    return { allowed, remaining, limit };
+  }
 }
+

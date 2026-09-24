@@ -324,7 +324,7 @@ export const CheckoutWizard: React.FC<CheckoutWizardProps> = ({
                 Informations du Bénéficiaire
               </h3>
               <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
-                <div><strong>Nom :</strong> {customerName}</div>
+                <div><strong>{t('checkout.recipientNameColon') || 'Nom :'}</strong> {customerName}</div>
                 <div><strong>Email :</strong> {customerEmail}</div>
                 <div><strong>Pays :</strong> {country}</div>
                 {customerNotes && <div><strong>Notes :</strong> {customerNotes}</div>}

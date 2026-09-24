@@ -30,20 +30,20 @@ export const fr = {
     ctaPricing: 'Obtenir une Licence',
     ctaFeatures: 'Explorer les Fonctionnalités',
     offlineGuarantee: '100% Autonome & Hors-Ligne — Aucune donnée d\'élevage n\'est transmise dans le cloud.',
-    breedersCount: '1 200+',
-    breedersLabel: 'Éleveurs & Maîtres sélectionneurs',
-    birdsCount: '50 000+',
-    birdsLabel: 'Sujets bagués & suivis',
+    breedersCount: '100%',
+    breedersLabel: 'Hors-Ligne & Souverain',
+    birdsCount: 'v1.3.6',
+    birdsLabel: 'Phase de Test Public',
     wrightCount: '7 Gén.',
     wrightLabel: 'Calculateur de Wright',
-    badgeRing: 'Champion de Posture • Bague FFO-2024-892',
+    badgeRing: 'Exemple : Bague FFO-2024-892',
     badgeRingSub: 'Standard officiel COM',
     badgeWright: 'Wright (F) = 0.8% • Accouplement recommandé',
     badgeWrightSub: 'Consanguinité optimale',
     badgeSecurity: 'AES-256 Scellé',
     badgeSecuritySub: 'Base locale chiffrée',
-    badgeScore: 'Standard 94 pts • Médaille d\'Or COM',
-    badgeScoreSub: 'Championnat Mondial',
+    badgeScore: 'Critères COM 94 pts',
+    badgeScoreSub: 'Exemple d\'Évaluation',
     trustNoCard: 'Sans carte bancaire',
     trustOffline: '100% Hors-Ligne',
     trustLocalDb: 'Base SQLite locale chiffrée AES-256',
@@ -66,15 +66,16 @@ export const fr = {
     solution3: 'Traçabilité inviolable, bagues conformes, passeports biologiques et export PDF immédiat',
   },
 
-  // Expert Testimonial
+  // Public Test Phase Section (formerly expertTestimonial)
   expertTestimonial: {
-    tag: 'Témoignage de Maître Éleveur',
-    title: 'Reconnu par les juges et champions internationaux',
-    quote: '« En 35 ans d\'élevage de posture et de couleur, je n\'ai jamais eu un outil aussi fiable. Le calcul immédiat du coefficient de Wright m\'a permis d\'éviter des dérives génétiques tout en fixant les meilleurs caractères morphologiques. C\'est le standard ultime. »',
-    author: 'Jean-Marc Valenti',
-    role: 'Juge & Maître Éleveur COM',
-    ratingText: '5.0 / 5.0 • Note d\'Excellence COM',
-    badgeCom: 'Standard COM Certifié',
+    tag: 'EN PHASE DE TEST',
+    title: 'Conçu pour accompagner chaque étape de l\'élevage',
+    text1: 'Bird Academy est actuellement en phase de test avec des éleveurs afin d\'améliorer l\'application avant son lancement.',
+    text2: 'Vos retours et observations sur le terrain permettent d\'enrichir l\'application et d\'assurer une parfaite adéquation avec la réalité de votre élevage.',
+    badgeAviary: 'Volière & Suivi Terrain',
+    badgePhase: 'Programme de Test Public',
+    cardFooter: 'Testez l\'application et partagez vos retours',
+    statusBadge: 'Version de Test v1.3.6',
   },
 
   // Core Engines Grid
@@ -132,7 +133,7 @@ export const fr = {
   features: {
     badge: 'Modules Métier',
     title: 'Une suite complète pour chaque dimension de l\'élevage',
-    subtitle: 'Conçue avec des éleveurs chevronnés et validée selon les standards ornithologiques internationaux.',
+    subtitle: 'Conçue pour accompagner la sélection avicole selon les standards ornithologiques.',
     birdsTitle: 'Fiches Individuelles & Baguage',
     birdsDesc: 'Identification formelle (bague, souche, année), statut biologique, phénotype, mutation, photos et passeport biologique.',
     habitatTitle: 'Habitat, Cages & Volières',
@@ -383,6 +384,7 @@ export const fr = {
 
   // Checkout
   checkout: {
+    recipientNameColon: 'Nom :',
     title: 'Passer Commande — Licence Bird Academy',
     subtitle: 'Processus de commande sécurisé et livraison immédiate de votre kit de licence.',
     step1: '1. Choix de l\'Offre',

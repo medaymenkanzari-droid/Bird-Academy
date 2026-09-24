@@ -869,7 +869,7 @@ export default function NurseryDashboard() {
               {selectedTransferChick && (
                 <div className="p-3 bg-slate-50 rounded-xl text-xs text-slate-600 space-y-1">
                   <div><span>Saison / Couple d'origine :</span> <strong className="text-slate-700">Couple {selectedTransferChick.pairId}</strong></div>
-                  <div><span>Date d'éclosion :</span> <strong className="text-slate-700">{selectedTransferChick.hatchDate}</strong></div>
+                  <div><span>{t('hatchDatePrefix', "Date d'éclosion :")}</span> <strong className="text-slate-700">{selectedTransferChick.hatchDate}</strong></div>
                   <div><span>Age actuel :</span> <strong className="text-slate-700">{ReproductionEngine.calculateAgeInDays(selectedTransferChick.hatchDate)} jours</strong></div>
                 </div>
               )}
@@ -1036,7 +1036,7 @@ export default function NurseryDashboard() {
                 type="text"
                 value={feedOperator}
                 onChange={(e) => setFeedOperator(e.target.value)}
-                placeholder="Initiales ou nom du soigneur"
+                placeholder={t('caregiverPlaceholder', "Initiales ou nom du soigneur")}
               />
             </div>
 
@@ -1193,7 +1193,7 @@ export default function NurseryDashboard() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block font-bold text-slate-600">Nom du protocole d'élevage manuel</label>
+            <label className="block font-bold text-slate-600">{t('manualProtocolNameLabel', "Nom du protocole d'élevage manuel")}</label>
             <AppInput
               type="text"
               value={newProtoName}

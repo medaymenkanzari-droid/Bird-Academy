@@ -24,6 +24,7 @@ import { AdminRole, isAdminRole } from '../config/appMode';
 import { AdminUserRepository } from './repositories/AdminUserRepository';
 import { PasswordCrypto } from './utils/passwordCrypto';
 import { CommercialPaymentService } from './services/CommercialPaymentService';
+import { WebDownloadService } from '../features/commercial-website/services/WebDownloadService';
 
 export interface AuditServerLog {
   id: string;
@@ -355,12 +356,15 @@ export class LmseBackendServer {
         let targetType = String(type).trim().toLowerCase();
         if (targetType === 'beta_tester') targetType = 'beta';
 
-        const validTypes = ['beta', 'commercial', 'permanent', 'temporary', 'enterprise', 'association', 'veterinary'];
+        const validTypes = ['beta', 'commercial', 'permanent', 'temporary', 'enterprise', 'association', 'veterinary', 'test'];
         if (!validTypes.includes(targetType)) {
           return res.status(400).json({ error: 'INVALID_TYPE', message: 'Le type de licence est invalide.' });
         }
 
-        if (durationDays !== undefined && durationDays !== null && (typeof durationDays !== 'number' || durationDays < 0)) {
+        let targetDurationDays = durationDays;
+        if (targetType === 'test') {
+          targetDurationDays = Math.min(typeof durationDays === 'number' ? durationDays : 30, 30);
+        } else if (durationDays !== undefined && durationDays !== null && (typeof durationDays !== 'number' || durationDays < 0)) {
           return res.status(400).json({ error: 'INVALID_DURATION', message: 'La durée de la licence doit être un nombre positif ou nul.' });
         }
 
@@ -376,7 +380,7 @@ export class LmseBackendServer {
           holderName: holderName.trim(),
           holderEmail: holderEmail ? String(holderEmail).trim() : undefined,
           type: targetType as any,
-          durationDays,
+          durationDays: targetDurationDays,
           maxDevices,
           customFeatures,
           metadata,
@@ -862,6 +866,7 @@ export class LmseBackendServer {
             res.setHeader('Content-Type', contentType);
             res.setHeader('Content-Length', stat.size);
             res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+            res.setHeader('Accept-Ranges', 'bytes');
             res.setHeader('Cache-Control', 'public, max-age=3600');
             return fs.createReadStream(cand).pipe(res);
           }
@@ -874,12 +879,20 @@ export class LmseBackendServer {
         return res.status(404).json({ error: 'NOT_FOUND', message: 'Artefact introuvable.' });
       }
 
+      const activeArtifact = WebDownloadService.getArtifact(filename);
+      const isExpectedMatch = (size: number, sha: string) => {
+        if (size === artifactConfig.expectedSize && sha === artifactConfig.expectedSha256) return true;
+        if (activeArtifact && size === activeArtifact.sizeBytes && sha === activeArtifact.sha256) return true;
+        return false;
+      };
+
       let targetPath: string | null = null;
       for (const cand of artifactConfig.candidatePaths) {
         if (!fs.existsSync(cand)) continue;
         try {
           const stat = fs.statSync(cand);
-          if (!stat.isFile() || stat.size !== artifactConfig.expectedSize) continue;
+          if (!stat.isFile()) continue;
+          if (stat.size !== artifactConfig.expectedSize && (!activeArtifact || stat.size !== activeArtifact.sizeBytes)) continue;
 
           // Vérification d'intégrité cryptographique SHA-256 avec cache mtime
           const cached = fileHashCache.get(cand);
@@ -901,7 +914,7 @@ export class LmseBackendServer {
             });
           }
 
-          if (computedSha256 === artifactConfig.expectedSha256) {
+          if (isExpectedMatch(stat.size, computedSha256)) {
             targetPath = cand;
             break;
           } else {
