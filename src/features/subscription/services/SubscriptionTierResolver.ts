@@ -10,6 +10,7 @@
 import { License, LicenseValidationResult } from '../../licensing/types/licensing';
 import { SubscriptionTier, TierDiagnosticInfo } from '../types/subscription';
 import { isDevEnvironment } from '../../../config/appMode';
+import { LicensingService } from '../../licensing/services/LicensingService';
 
 export class SubscriptionTierResolver {
   private static mockTierOverride: SubscriptionTier | null = null;
@@ -69,6 +70,10 @@ export class SubscriptionTierResolver {
         const raw = localStorage.getItem('bird_academy_lmse_active_license');
         if (raw) {
           const license = JSON.parse(raw) as License;
+          // Check for legacy test license (WINDOWS-FREE-FIX-002)
+          if (LicensingService.isLegacyTestLicenseKey(license.key, license)) {
+            return 'FREE';
+          }
           // Check expiration or revocation
           const invalidStatuses = ['revoked', 'expired', 'replaced', 'suspended'];
           if (license.status && invalidStatuses.includes(license.status.toLowerCase())) {
@@ -182,9 +187,9 @@ export class SubscriptionTierResolver {
       }
     }
 
-    // 2. If no license or license is invalid/expired/revoked -> Default to FREE
+    // 2. If no license or license is invalid/expired/revoked or legacy test -> Default to FREE
     const invalidStatuses = ['revoked', 'expired', 'replaced', 'suspended'];
-    if (!license || (validation && !validation.isValid) || (license.status && invalidStatuses.includes(license.status.toLowerCase()))) {
+    if (!license || LicensingService.isLegacyTestLicenseKey(license.key, license) || (validation && !validation.isValid) || (license.status && invalidStatuses.includes(license.status.toLowerCase()))) {
       return 'FREE';
     }
 

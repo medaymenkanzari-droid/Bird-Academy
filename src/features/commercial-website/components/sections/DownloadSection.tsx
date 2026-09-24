@@ -91,9 +91,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 </p>
               </div>
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div>Version : <strong>v1.3.6</strong></div>
-                <div>BUILD_ID : <strong>BA-V1.3.6</strong></div>
-                <div>Taille : <strong>{setupArt?.sizeMB || '106 800 570 octets'}</strong></div>
+                <div>Version : <strong>{setupArt?.version || 'v1.3.6-RC6'}</strong></div>
+                <div>BUILD_ID : <strong>{setupArt?.buildId || 'BA-V1.3.6-RC6'}</strong></div>
+                <div>Taille : <strong>{setupArt?.sizeMB || '112 731 374 octets (107.51 Mo)'}</strong></div>
               </div>
             </div>
 
@@ -132,9 +132,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 </p>
               </div>
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div>Version : <strong>v1.3.6</strong></div>
-                <div>BUILD_ID : <strong>BA-V1.3.6</strong></div>
-                <div>Taille : <strong>{portableArt?.sizeMB || '106 462 030 octets'}</strong></div>
+                <div>Version : <strong>{portableArt?.version || 'v1.3.6-RC6'}</strong></div>
+                <div>BUILD_ID : <strong>{portableArt?.buildId || 'BA-V1.3.6-RC6'}</strong></div>
+                <div>Taille : <strong>{portableArt?.sizeMB || '111 233 160 octets (106.08 Mo)'}</strong></div>
               </div>
             </div>
 

@@ -927,9 +927,10 @@ export class LmseBackendServer {
 
       if (!targetPath) {
         // En environnement cloud distant (Render) où les gros binaires compilés (.exe/.apk) ne sont pas stockés dans Git,
-        // redirection sécurisée vers la release GitHub officielle
+        // redirection sécurisée vers la release GitHub officielle qualifiée (v1.3.6-RC6 pour les binaires Windows RC6)
         if (filename.endsWith('.exe') || filename.endsWith('.apk')) {
-          const githubAssetUrl = `https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/v1.3.6/${filename}`;
+          const releaseTag = filename.endsWith('.exe') ? 'v1.3.6-RC6' : 'v1.3.6';
+          const githubAssetUrl = `https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/${releaseTag}/${filename}`;
           return res.redirect(302, githubAssetUrl);
         }
         console.error(`[LMSE_DOWNLOAD_SECURITY] Integrity verification failed for ${filename}: No valid RC6 candidate found matching official SHA-256.`);

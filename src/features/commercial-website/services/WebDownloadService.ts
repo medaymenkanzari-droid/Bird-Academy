@@ -24,34 +24,36 @@ export class WebDownloadService {
       platform: 'windows',
       name: 'Bird Academy Enterprise — Volière Manager (Windows Setup)',
       filename: 'Bird-Academy-User-Windows-Setup.exe',
-      version: 'v1.3.6',
-      buildId: 'BA-V1.3.6',
-      sizeBytes: 121504893,
-      sizeMB: '121 504 893 octets (115.88 Mo)',
-      sha256: 'EC4BE9769261943ECF93B63D05566BB671DBEC490E66E5379E292293849A41E7',
-      releaseDate: '2026-09-23',
+      version: 'v1.3.6-RC6',
+      buildId: 'BA-V1.3.6-RC6',
+      sizeBytes: 112731374,
+      sizeMB: '112 731 374 octets (107.51 Mo)',
+      sha256: '746F6D99CF91802686D21A2F7632945730B96F2225B756AD2BF27B27B815754B',
+      releaseDate: '2026-09-24',
       downloadUrl: '/downloads/Bird-Academy-User-Windows-Setup.exe',
       architecture: 'x64 (64-bit)',
       minOsVersion: 'Windows 10 / 11 (64-bit)',
       isAvailable: true,
       isTestDistribution: true,
+      releaseTag: 'v1.3.6-RC6',
       descriptionKey: 'downloadPage.winSetupDesc',
     },
     {
       platform: 'windows',
       name: 'Bird Academy Enterprise — Volière Manager (Version Portable)',
       filename: 'Bird-Academy-User.exe',
-      version: 'v1.3.6',
-      buildId: 'BA-V1.3.6',
-      sizeBytes: 121166366,
-      sizeMB: '121 166 366 octets (115.55 Mo)',
-      sha256: 'FA87FE7D758DE103D487005F3EEA60920A0FE70AD1B82C9F3DF5F0A47C941D4A',
-      releaseDate: '2026-09-23',
+      version: 'v1.3.6-RC6',
+      buildId: 'BA-V1.3.6-RC6',
+      sizeBytes: 111233160,
+      sizeMB: '111 233 160 octets (106.08 Mo)',
+      sha256: 'EDDD283D2A212B7A0155B32FC8CA7B188E28C3ED0874C509DDE395DAAD37E1BE',
+      releaseDate: '2026-09-24',
       downloadUrl: '/downloads/Bird-Academy-User.exe',
       architecture: 'x64 (64-bit)',
       minOsVersion: 'Windows 10 / 11 (64-bit)',
       isAvailable: true,
       isTestDistribution: true,
+      releaseTag: 'v1.3.6-RC6',
       descriptionKey: 'downloadPage.winPortableDesc',
     },
     {
@@ -306,12 +308,15 @@ export class WebDownloadService {
 
   public static readonly GITHUB_REPO = 'medaymenkanzari-droid/Bird-Academy';
   public static readonly DEFAULT_RELEASE_TAG = 'v1.3.6';
+  public static readonly RC6_RELEASE_TAG = 'v1.3.6-RC6';
 
   /**
    * Constructs the official GitHub Release direct download URL for a binary asset
    */
-  public static getGitHubReleaseUrl(filename: string, tag: string = this.DEFAULT_RELEASE_TAG): string {
-    return `https://github.com/${this.GITHUB_REPO}/releases/download/${tag}/${filename}`;
+  public static getGitHubReleaseUrl(filename: string, tag?: string): string {
+    const art = this.getArtifact(filename);
+    const effectiveTag = tag || art?.releaseTag || (filename.endsWith('.exe') ? this.RC6_RELEASE_TAG : this.DEFAULT_RELEASE_TAG);
+    return `https://github.com/${this.GITHUB_REPO}/releases/download/${effectiveTag}/${filename}`;
   }
 
   /**

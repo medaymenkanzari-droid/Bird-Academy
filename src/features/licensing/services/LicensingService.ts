@@ -41,7 +41,110 @@ export class LicensingService {
   }
 
   public async initialize(): Promise<LicenseValidationResult> {
+    await this.migrateLegacyTestLicenses();
     return await this.validateCurrentLicense();
+  }
+
+  /**
+   * MISSION WINDOWS-FREE-FIX-002:
+   * Controlled Migration / Fail-Safe Cleanup for Legacy Test Licenses.
+   * 
+   * When an old test license (e.g. LMSE-TEST-*) persists in storage from prior QA/dev testing,
+   * it must not trigger FirstLaunchActivationScreen or prevent clean native FREE startup.
+   * 
+   * CRITICAL SECURITY INVARIANTS:
+   * - STRICT EXCLUSION: Never touch real commercial or official prefixes:
+   *   BETA-*, COMM-*, PERM-*, TEMP-*, ENTP-*, ASSO-*, VETE-*, or LMSE-<OFFICIAL>-*
+   * - Real invalid, expired, revoked, or tampered commercial licenses are strictly preserved
+   *   and evaluated normally by LicenseValidator.
+   * - ZERO BREEDING DATA DELETION: Never touch birds, pairs, cages, clutches, health, finance,
+   *   or user preferences (language, theme, currency).
+   * - NEVER call localStorage.clear().
+   */
+  public async migrateLegacyTestLicenses(): Promise<boolean> {
+    try {
+      let migrated = false;
+      const active = await this.repository.getActiveLicense();
+      if (active && LicensingService.isLegacyTestLicenseKey(active.key, active)) {
+        console.warn(`[LICENSING-MIGRATION] Legacy test license detected (${active.key}). Controlled neutralization executing to allow native FREE startup.`);
+        await this.repository.clearActiveLicense();
+        if (active.id) {
+          await this.repository.deleteLicense(active.id);
+        }
+        migrated = true;
+      }
+
+      // Also clean any legacy test licenses stored in all_licenses
+      const all = await this.repository.getAllLicenses();
+      for (const lic of all) {
+        if (LicensingService.isLegacyTestLicenseKey(lic.key, lic)) {
+          if (lic.id) {
+            await this.repository.deleteLicense(lic.id);
+            migrated = true;
+          }
+        }
+      }
+
+      // Also remove test tier overrides if any exist in storage
+      if (migrated) {
+        const storage = (typeof window !== 'undefined' && window.localStorage)
+          ? window.localStorage
+          : ((typeof globalThis !== 'undefined' && (globalThis as any).localStorage) ? (globalThis as any).localStorage : null);
+        if (storage) {
+          storage.removeItem('bird_academy_subscription_tier_override');
+          storage.removeItem('bird_academy_assistant_tier_override');
+          storage.removeItem('bird_academy_qa_mode');
+          storage.removeItem('bird_academy_test_license');
+        }
+      }
+
+      return migrated;
+    } catch (err: any) {
+      console.error('[LICENSING-MIGRATION] Non-blocking error during legacy test license check:', err?.message);
+      return false;
+    }
+  }
+
+  /**
+   * Identifies whether a given license key or license object corresponds to a legacy test license.
+   * STRICT SAFETY GUARD:
+   * Real commercial, permanent, beta, enterprise, association, or veterinary licenses
+   * are NEVER treated as legacy test licenses.
+   */
+  public static isLegacyTestLicenseKey(rawKey: string | undefined | null, license?: License | null): boolean {
+    if (!rawKey && !license) return false;
+    const cleanKey = (rawKey || license?.key || '').trim().toUpperCase();
+
+    // STRICT EXCLUSION: Never touch real commercial or official prefixes
+    const officialPrefixes = [
+      'LMSE-BETA-', 'BETA-',
+      'LMSE-COMM-', 'COMM-',
+      'LMSE-PERM-', 'PERM-',
+      'LMSE-TEMP-', 'TEMP-',
+      'LMSE-ENTP-', 'ENTP-',
+      'LMSE-ASSO-', 'ASSO-',
+      'LMSE-VETE-', 'VETE-',
+    ];
+
+    for (const prefix of officialPrefixes) {
+      if (cleanKey.startsWith(prefix)) {
+        return false;
+      }
+    }
+
+    // Match identified legacy test patterns
+    if (cleanKey.startsWith('LMSE-TEST-') || cleanKey.startsWith('TEST-')) {
+      return true;
+    }
+
+    // Secondary check on license metadata if present
+    if (license) {
+      if ((license as any).type === 'test') return true;
+      if ((license as any).metadata?.isPublicTest === true) return true;
+      if (typeof (license as any).notes === 'string' && (license as any).notes.includes('TEST') && !license.type) return true;
+    }
+
+    return false;
   }
 
   public async getCurrentDevice(): Promise<DeviceFingerprint> {

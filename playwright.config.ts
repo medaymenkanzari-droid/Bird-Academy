@@ -14,9 +14,13 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests/e2e',
   testMatch: process.env.PLAYWRIGHT_ALL ? '**/*.spec.ts' : [
+    '**/real-tester-cohort-launch-016.spec.ts',
+    '**/real-tester-phase-launch-015.spec.ts',
     '**/public-site-deployment-truthfulness-014-a.spec.ts',
     '**/public-test-licensing-demo-entitlement-hardening-010.spec.ts', 
-    '**/public-test-regression-integrity-007.spec.ts'
+    '**/public-test-regression-integrity-007.spec.ts',
+    '**/windows-free-fix-001.spec.ts',
+    '**/windows-download-rc6-002.spec.ts'
   ],
   /* Run tests in files in parallel */
   fullyParallel: false,

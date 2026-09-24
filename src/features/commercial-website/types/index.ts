@@ -115,6 +115,7 @@ export interface DownloadArtifact {
   descriptionKey: string;
   warning?: string;
   isTestDistribution?: boolean;
+  releaseTag?: string;
 }
 
 export interface SupportTicketSubmission {
