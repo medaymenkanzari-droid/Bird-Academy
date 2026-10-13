@@ -260,14 +260,14 @@ export class WebOrderCheckoutService {
       // Backend authority is unreachable (e.g. offline evaluation mode); fallback below
     }
 
-    // 2. Offline / Demo Mode: Produce compliant evaluation license with valid public signature
-    return this.generateDemoCompatibleLicense(offer, order);
+    // 2. Offline / Evaluation Mode: Produce compliant evaluation license with valid public signature
+    return this.generateEvaluationLicense(offer, order);
   }
 
   /**
    * Generates a compliant evaluation license formatted according to the official bird-academy-lmse schema.
    */
-  public async generateDemoCompatibleLicense(
+  public async generateEvaluationLicense(
     offer: CommercialOffer,
     order: CommercialOrder
   ): Promise<{ license: License; deliveryPackage: DeliveryPackage }> {
@@ -328,7 +328,7 @@ export class WebOrderCheckoutService {
         orderId: order.orderId,
         offerId: offer.id,
         isCommercialWeb: true,
-        isOfflineDemoMode: true,
+        isOfflineEvaluationMode: true,
         activatedOfflineAt: nowIso,
       },
     };
@@ -339,15 +339,15 @@ export class WebOrderCheckoutService {
   }
 
   /**
-   * Generates a safe demo delivery package marked explicitly as evaluation/test
+   * Generates a safe evaluation delivery package marked explicitly as evaluation/test
    */
-  public generateDemoDeliveryPackage(
+  public generateEvaluationDeliveryPackage(
     offer: CommercialOffer,
     order: CommercialOrder,
-    demoLicenseKey: string
+    evalLicenseKey: string
   ): DeliveryPackage {
     const nowIso = new Date().toISOString();
-    const demoLicenseId = `lic_demo_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const evalLicenseId = `lic_eval_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     const expiresAt = offer.durationDays 
       ? new Date(Date.now() + offer.durationDays * 24 * 3600 * 1000).toISOString()
       : null;
@@ -357,9 +357,9 @@ export class WebOrderCheckoutService {
     const tierFeatureTag = `tier:${offer.tier.toLowerCase()}`;
     const features = Array.from(new Set([...(offer.features || ['core', 'unlimited_birds']), tierFeatureTag]));
 
-    const demoLicense: License = {
-      id: demoLicenseId,
-      key: demoLicenseKey,
+    const evalLicense: License = {
+      id: evalLicenseId,
+      key: evalLicenseKey,
       holderName: order.customerName,
       holderEmail: order.customerEmail,
       type: licenseType,
@@ -383,7 +383,7 @@ export class WebOrderCheckoutService {
       },
     };
 
-    return LicenseDeliveryPackageGenerator.generatePackage(demoLicense, order);
+    return LicenseDeliveryPackageGenerator.generatePackage(evalLicense, order);
   }
 
   /**

@@ -23,7 +23,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
   const [isShaOpen, setIsShaOpen] = useState(false);
   const [copiedSha, setCopiedSha] = useState<string | null>(null);
 
-  const setupArt = artifacts.find(a => a.filename === 'Bird-Academy-User-Windows-Setup.exe');
+  const setupArt = artifacts.find(a => a.filename === 'Bird-Academy-Avian-ERP-Setup.exe' || a.filename === 'Bird-Academy-User-Windows-Setup.exe');
   const portableArt = artifacts.find(a => a.filename === 'Bird-Academy-User.exe');
   const apkArt = artifacts.find(a => a.filename === 'Bird-Academy-User.apk');
 
@@ -60,7 +60,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
         <div className="max-w-3xl mx-auto text-center space-y-3">
           <div className="inline-flex items-center gap-1.5 text-xs font-black tracking-widest text-[#2e3a8c] dark:text-indigo-400 uppercase bg-[#f0f3fa] dark:bg-indigo-950 px-3.5 py-1 rounded-full">
             <ShieldCheck className="w-4 h-4" />
-            <span>Distribution Officielle de Test • v1.3.6 (BUILD_ID BA-V1.3.6)</span>
+            <span>Distribution Officielle de Test • V2.0.0-RC1 (BUILD_ID BA-V2.0.0-RC1)</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {t('downloadPage.title')}
@@ -91,9 +91,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 </p>
               </div>
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div>Version : <strong>{setupArt?.version || 'v1.3.6-RC7'}</strong></div>
-                <div>BUILD_ID : <strong>{setupArt?.buildId || 'BA-V1.3.6-RC7'}</strong></div>
-                <div>Taille : <strong>{setupArt?.sizeMB || '121 547 635 octets (115.92 Mo)'}</strong></div>
+                <div>Version : <strong>{setupArt?.version || 'V2.0.0-RC1'}</strong></div>
+                <div>BUILD_ID : <strong>{setupArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
+                <div>Taille : <strong>{setupArt?.sizeMB || '121 765 349 octets (116.12 Mo)'}</strong></div>
               </div>
             </div>
 
@@ -132,9 +132,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 </p>
               </div>
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div>Version : <strong>{portableArt?.version || 'v1.3.6-RC7'}</strong></div>
-                <div>BUILD_ID : <strong>{portableArt?.buildId || 'BA-V1.3.6-RC7'}</strong></div>
-                <div>Taille : <strong>{portableArt?.sizeMB || '121 209 111 octets (115.59 Mo)'}</strong></div>
+                <div>Version : <strong>{portableArt?.version || 'V2.0.0-RC1'}</strong></div>
+                <div>BUILD_ID : <strong>{portableArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
+                <div>Taille : <strong>{portableArt?.sizeMB || '121 426 841 octets (115.80 Mo)'}</strong></div>
               </div>
             </div>
 
@@ -182,9 +182,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               </div>
 
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div>Version : <strong>v1.3.6</strong></div>
-                <div>BUILD_ID : <strong>BA-V1.3.6</strong></div>
-                <div>Taille : <strong>9 916 814 octets</strong></div>
+                <div>Version : <strong>{apkArt?.version || 'V2.0.0-RC1'}</strong></div>
+                <div>BUILD_ID : <strong>{apkArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
+                <div>Taille : <strong>{apkArt?.sizeMB || '18 710 063 octets (17.84 Mo)'}</strong></div>
               </div>
             </div>
 
@@ -226,7 +226,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
           {isShaOpen && (
             <div className="mt-6 text-start p-6 rounded-2xl bg-slate-950 text-white border border-slate-800 space-y-3 font-mono text-xs">
               <p className="text-slate-400 font-sans text-xs">
-                Empreintes numériques officielles scellées par l'autorité cryptographique (v1.3.6) :
+                Empreintes numériques officielles scellées par l'autorité cryptographique (V2.0.0-RC1) :
               </p>
               {artifacts.slice(0, 3).map((art) => (
                 <div key={art.filename} className="p-3 bg-slate-900 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">

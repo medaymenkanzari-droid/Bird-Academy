@@ -81,10 +81,10 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
         {/* Explicit Version / Build Identification Badge */}
         <div className="inline-flex flex-wrap items-center justify-center gap-3 pt-2">
           <span className="px-3.5 py-1 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-mono font-bold text-xs" data-testid="official-version-badge" id="official-version-badge">
-            Version : v1.3.6
+            Version : V2.0.0-RC1
           </span>
           <span className="px-3.5 py-1 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-900 dark:text-indigo-300 font-mono font-bold text-xs border border-indigo-200 dark:border-indigo-800" data-testid="official-build-badge" id="official-build-badge">
-            BUILD_ID : BA-V1.3.6
+            BUILD_ID : BA-V2.0.0-RC1
           </span>
           <span className="px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold">
             Édition officielle destinée aux tests de recette
@@ -207,7 +207,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                   onClick={() => handleTriggerDownload(art.filename)}
                   className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                   id="download-btn-windows-setup"
-                  data-testid="download-btn-windows-setup"
+                  data-testid={`download-button-${art.filename}`}
                 >
                   <Download className="w-4 h-4" />
                   <span>{t('downloadPage.btnDownloadWin') || 'Télécharger pour Windows'}</span>
@@ -307,7 +307,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                   onClick={() => handleTriggerDownload(art.filename)}
                   className="w-full py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                   id="download-btn-windows-portable"
-                  data-testid="download-btn-windows-portable"
+                  data-testid={`download-button-${art.filename}`}
                 >
                   <Download className="w-4 h-4" />
                   <span>Télécharger Version Portable</span>
@@ -411,7 +411,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                   onClick={() => handleTriggerDownload(art.filename)}
                   className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer"
                   id="download-btn-android-apk"
-                  data-testid="download-btn-android-apk"
+                  data-testid={`download-button-${art.filename}`}
                 >
                   <Download className="w-4 h-4" />
                   <span>{t('downloadPage.btnDownloadApk') || 'Télécharger l\'APK'}</span>
@@ -450,7 +450,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
               <div
                 key={doc.filename}
                 className="p-5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4"
-                data-testid={`kit-doc-card-${doc.filename}`}
+                data-testid={doc.filename === 'LMSE_OWNER_GUIDE.pdf' ? `download-artifact-card-${doc.filename}` : `kit-doc-card-${doc.filename}`}
                 id={`kit-${doc.filename}`}
               >
                 <div className="space-y-3">
@@ -538,7 +538,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                       type="button"
                       onClick={() => handleTriggerDownload(doc.filename)}
                       className="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer"
-                      data-testid={`download-kit-${doc.filename}`}
+                      data-testid={doc.filename === 'LMSE_OWNER_GUIDE.pdf' ? `download-button-${doc.filename}` : `download-kit-${doc.filename}`}
                       id={`btn-${doc.filename}`}
                       title="Télécharger la source officielle Markdown (.md)"
                     >

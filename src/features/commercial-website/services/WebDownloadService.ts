@@ -23,56 +23,57 @@ export class WebDownloadService {
     {
       platform: 'windows',
       name: 'Bird Academy Enterprise — Volière Manager (Windows Setup)',
-      filename: 'Bird-Academy-User-Windows-Setup.exe',
-      version: 'v1.3.6-RC7',
-      buildId: 'BA-V1.3.6-RC7',
-      sizeBytes: 121547635,
-      sizeMB: '121 547 635 octets (115.92 Mo)',
-      sha256: '169CD534F7019EB0E8B698C92422848C58356E437FF65A5FF308A13524236F4D',
-      releaseDate: '2026-09-25',
-      downloadUrl: '/downloads/Bird-Academy-User-Windows-Setup.exe',
+      filename: 'Bird-Academy-Avian-ERP-Setup.exe',
+      version: 'V2.0.0-RC1',
+      buildId: 'BA-V2.0.0-RC1',
+      sizeBytes: 121765349,
+      sizeMB: '121 765 349 octets (116.12 Mo)',
+      sha256: '8EDA77F7421803FD62E9D23AD2561ED509582A4E42E8A8461137E92E08F7A4B4',
+      releaseDate: '2026-10-13',
+      downloadUrl: '/downloads/Bird-Academy-Avian-ERP-Setup.exe',
       architecture: 'x64 (64-bit)',
       minOsVersion: 'Windows 10 / 11 (64-bit)',
       isAvailable: true,
       isTestDistribution: true,
-      releaseTag: 'v1.3.6-RC7',
-      descriptionKey: 'downloadPage.winSetupDesc',
+      releaseTag: 'v2.0.0-rc1',
+      descriptionKey: 'downloadPage.winSetupDesc'
     },
     {
       platform: 'windows',
       name: 'Bird Academy Enterprise — Volière Manager (Version Portable)',
       filename: 'Bird-Academy-User.exe',
-      version: 'v1.3.6-RC7',
-      buildId: 'BA-V1.3.6-RC7',
-      sizeBytes: 121209111,
-      sizeMB: '121 209 111 octets (115.59 Mo)',
-      sha256: '9E402204E517E85DE2E9FA39174274021E7707CAD458BBFCA3CBFF66AB9CBF41',
-      releaseDate: '2026-09-25',
+      version: 'V2.0.0-RC1',
+      buildId: 'BA-V2.0.0-RC1',
+      sizeBytes: 121426841,
+      sizeMB: '121 426 841 octets (115.80 Mo)',
+      sha256: '104BBCE6B867AACEBB6A1DB104635C6427C230A2FE26930BC34342BF7D61BF90',
+      releaseDate: '2026-10-13',
       downloadUrl: '/downloads/Bird-Academy-User.exe',
       architecture: 'x64 (64-bit)',
       minOsVersion: 'Windows 10 / 11 (64-bit)',
       isAvailable: true,
       isTestDistribution: true,
-      releaseTag: 'v1.3.6-RC7',
-      descriptionKey: 'downloadPage.winPortableDesc',
+      releaseTag: 'v2.0.0-rc1',
+      descriptionKey: 'downloadPage.winPortableDesc'
     },
     {
       platform: 'android',
       name: 'Bird Academy Enterprise — Volière Manager (Android APK)',
       filename: 'Bird-Academy-User.apk',
-      version: 'v1.3.6',
-      buildId: 'BA-V1.3.6',
-      sizeBytes: 9916814,
-      sizeMB: '9 916 814 octets (9.46 Mo)',
-      sha256: '20AD96A27742B4A013FB13774EFFEB716A5E4672509F279AB7D60292251D4F63',
-      releaseDate: '2026-09-19',
+      version: 'V2.0.0-RC1',
+      buildId: 'BA-V2.0.0-RC1',
+      sizeBytes: 18710063,
+      sizeMB: '18 710 063 octets (17.84 Mo)',
+      sha256: '08EEE05006DC9A89FB82524ECD51168D6D5ADCFFF52C2BB3420FC67AA64F0758',
+      releaseDate: '2026-10-13',
       downloadUrl: '/downloads/Bird-Academy-User.apk',
       architecture: 'ARM64 / ARMv7',
       minOsVersion: 'Android 10+ (API 29+)',
       isAvailable: true,
       isTestDistribution: true,
       warning: "Installation manuelle APK destinée au programme de test. Autoriser l'installation depuis cette source uniquement si nécessaire.",
-      descriptionKey: 'downloadPage.androidDesc',
+      releaseTag: 'v2.0.0-rc1',
+      descriptionKey: 'downloadPage.androidDesc'
     },
     // Kit testeur — Validation Android (11 official test documents)
     {
@@ -290,7 +291,11 @@ export class WebDownloadService {
   }
 
   public getArtifactByFilename(filename: string): DownloadArtifact | undefined {
-    return this.artifacts.find((a) => a.filename === filename);
+    let art = this.artifacts.find((a) => a.filename === filename);
+    if (!art && filename === 'Bird-Academy-User-Windows-Setup.exe') {
+      art = this.artifacts.find((a) => a.filename === 'Bird-Academy-Avian-ERP-Setup.exe');
+    }
+    return art;
   }
 
   // Static convenience API
@@ -307,7 +312,8 @@ export class WebDownloadService {
   }
 
   public static readonly GITHUB_REPO = 'medaymenkanzari-droid/Bird-Academy';
-  public static readonly DEFAULT_RELEASE_TAG = 'v1.3.6';
+  public static readonly DEFAULT_RELEASE_TAG = 'v2.0.0-rc1';
+  public static readonly RC1_RELEASE_TAG = 'v2.0.0-rc1';
   public static readonly RC6_RELEASE_TAG = 'v1.3.6-RC6';
   public static readonly RC7_RELEASE_TAG = 'v1.3.6-RC7';
 
@@ -316,7 +322,7 @@ export class WebDownloadService {
    */
   public static getGitHubReleaseUrl(filename: string, tag?: string): string {
     const art = this.getArtifact(filename);
-    const effectiveTag = tag || art?.releaseTag || (filename.endsWith('.exe') ? this.RC7_RELEASE_TAG : this.DEFAULT_RELEASE_TAG);
+    const effectiveTag = tag || art?.releaseTag || this.RC1_RELEASE_TAG;
     return `https://github.com/${this.GITHUB_REPO}/releases/download/${effectiveTag}/${filename}`;
   }
 

@@ -56,8 +56,8 @@ export const FULL_FAQ_ITEMS: FAQItem[] = [
   {
     id: 'faq-ai-1',
     category: 'ai',
-    questionKey: 'Comment fonctionne l\'Assistant IA sans connexion Internet ?',
-    answerKey: 'L\'Assistant IA s\'appuie sur un modèle local contextualisé avec vos fiches d\'élevage pour vous fournir des réponses expertes en zootechnie sans faire fuiter vos données.',
+    questionKey: 'Comment fonctionne l\'Assistant local sans connexion Internet ?',
+    answerKey: 'L\'Assistant local s\'appuie sur le référentiel biologique certifié et vos fiches d\'élevage pour vous fournir des réponses expertes en zootechnie sans faire fuiter vos données.',
   },
   {
     id: 'faq-genetics-1',

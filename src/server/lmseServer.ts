@@ -803,40 +803,50 @@ export class LmseBackendServer {
 
       const rootDir = process.cwd();
 
-      // Table stricte des artefacts officiels validés pour RC7 (avec SHA-256 et taille attendus)
+      // Table stricte des artefacts officiels validés pour V2.0.0-RC1 (avec SHA-256 et taille attendus)
       const RC6_DOWNLOAD_REGISTRY: Record<string, {
         expectedSha256: string;
         expectedSize: number;
         candidatePaths: string[];
       }> = {
-        'Bird-Academy-User-Windows-Setup.exe': {
-          expectedSha256: '169CD534F7019EB0E8B698C92422848C58356E437FF65A5FF308A13524236F4D',
-          expectedSize: 121547635,
+        'Bird-Academy-Avian-ERP-Setup.exe': {
+          expectedSha256: '8EDA77F7421803FD62E9D23AD2561ED509582A4E42E8A8461137E92E08F7A4B4',
+          expectedSize: 121765349,
           candidatePaths: [
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'dist_binaries', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'Release', 'Bird-Academy-Avian-ERP-Setup.exe'),
+          ],
+        },
+        'Bird-Academy-User-Windows-Setup.exe': {
+          expectedSha256: '8EDA77F7421803FD62E9D23AD2561ED509582A4E42E8A8461137E92E08F7A4B4',
+          expectedSize: 121765349,
+          candidatePaths: [
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User-Windows-Setup.exe'),
             path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
             path.join(rootDir, 'Release', 'Bird-Academy-Avian-ERP-Setup.exe'),
-            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
           ],
         },
         'Bird-Academy-User.exe': {
-          expectedSha256: '9E402204E517E85DE2E9FA39174274021E7707CAD458BBFCA3CBFF66AB9CBF41',
-          expectedSize: 121209111,
+          expectedSha256: '104BBCE6B867AACEBB6A1DB104635C6427C230A2FE26930BC34342BF7D61BF90',
+          expectedSize: 121426841,
           candidatePaths: [
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.exe'),
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.exe'),
             path.join(rootDir, 'release', 'Bird-Academy-User.exe'),
             path.join(rootDir, 'Release', 'Bird-Academy-User.exe'),
-            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.exe'),
           ],
         },
         'Bird-Academy-User.apk': {
-          expectedSha256: '061CF531C7DE55465C093874ABF9C649CA3830659EFDE1443E2F8C911E4717DB',
-          expectedSize: 12043947,
+          expectedSha256: '08EEE05006DC9A89FB82524ECD51168D6D5ADCFFF52C2BB3420FC67AA64F0758',
+          expectedSize: 18710063,
           candidatePaths: [
-            path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.apk'),
-            path.join(rootDir, 'Bird-Academy-User.apk'),
-            path.join(rootDir, 'release', 'Bird-Academy-User.apk'),
             path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.apk'),
+            path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.apk'),
+            path.join(rootDir, 'release', 'Bird-Academy-User.apk'),
+            path.join(rootDir, 'Bird-Academy-User.apk'),
           ],
         },
         'LMSE_OWNER_GUIDE.pdf': {
@@ -929,11 +939,11 @@ export class LmseBackendServer {
         // En environnement cloud distant (Render) où les gros binaires compilés (.exe/.apk) ne sont pas stockés dans Git,
         // redirection sécurisée vers la release GitHub officielle qualifiée (v1.3.6-RC7 pour les binaires Windows RC7)
         if (filename.endsWith('.exe') || filename.endsWith('.apk')) {
-          const releaseTag = filename.endsWith('.exe') ? 'v1.3.6-RC7' : 'v1.3.6';
+          const releaseTag = 'v2.0.0-rc1';
           const githubAssetUrl = `https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/${releaseTag}/${filename}`;
           return res.redirect(302, githubAssetUrl);
         }
-        console.error(`[LMSE_DOWNLOAD_SECURITY] Integrity verification failed for ${filename}: No valid RC7 candidate found matching official SHA-256.`);
+        console.error(`[LMSE_DOWNLOAD_SECURITY] Integrity verification failed for ${filename}: No valid V2.0.0-RC1 candidate found matching official SHA-256.`);
         // Message propre sans fuite d'informations internes (chemins système, stack trace)
         return res.status(500).json({ error: 'INTEGRITY_CHECK_FAILED', message: "Échec de vérification d'intégrité de l'artefact." });
       }

@@ -30,7 +30,7 @@ export const AIAssistantSection: React.FC = () => {
                   <Bot className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="font-bold text-xs text-slate-900 dark:text-white block">Assistant IA Bird Academy</span>
+                  <span className="font-bold text-xs text-slate-900 dark:text-white block">Assistant local Bird Academy</span>
                   <span className="text-[10px] text-emerald-500 font-medium">● Raisonnement 100% Local</span>
                 </div>
               </div>
@@ -65,13 +65,13 @@ export const AIAssistantSection: React.FC = () => {
           {/* Right: Explanatory Content */}
           <div className="space-y-6 order-1 lg:order-2">
             <span className="text-xs font-black tracking-widest text-indigo-600 dark:text-indigo-400 uppercase">
-              Assistant Conversationnel Expert
+              Assistant Local Expert
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
               Un expert en ornithologie disponible 24h/24 dans votre volière
             </h2>
             <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-              L'Assistant IA de Bird Academy analyse instantanément vos fiches d'élevage locales sans jamais envoyer une seule donnée personnelle sur des serveurs tiers.
+              L'Assistant local de Bird Academy analyse instantanément vos fiches d'élevage locales sans jamais envoyer une seule donnée personnelle sur des serveurs tiers.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">

@@ -132,7 +132,7 @@ export default defineConfig(() => {
           navigateFallback: '/index.html',
           globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
           globIgnores: ['**/win-unpacked/**', '**/*.exe', '**/builder-debug.yml'],
-          maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         },
         manifest: {
           name: "Bird Academy - Volière Manager",
