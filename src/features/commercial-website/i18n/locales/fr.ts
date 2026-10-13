@@ -30,10 +30,10 @@ export const fr = {
     ctaPricing: 'Obtenir une Licence',
     ctaFeatures: 'Explorer les Fonctionnalités',
     offlineGuarantee: '100% Autonome & Hors-Ligne — Aucune donnée d\'élevage n\'est transmise dans le cloud.',
-    breedersCount: '1 200+',
-    breedersLabel: 'Éleveurs Professionnels',
-    birdsCount: '50 000+',
-    birdsLabel: 'Oiseaux Suivis',
+    breedersCount: '100%',
+    breedersLabel: '100% Hors-Ligne',
+    birdsCount: 'V2.0.0-RC1',
+    birdsLabel: 'Programme de Test Public',
     wrightCount: '7 Gén.',
     wrightLabel: 'Calculateur de Wright',
     badgeRing: 'Exemple : Bague FFO-2024-892',
@@ -78,7 +78,7 @@ export const fr = {
     badgeAviary: 'Volière & Suivi Terrain',
     badgePhase: 'Programme de Test Public',
     cardFooter: 'Testez l\'application et partagez vos retours',
-    statusBadge: 'Version de Test v1.3.6',
+    statusBadge: 'Version de Test V2.0.0-RC1',
   },
 
   // Core Engines Grid
@@ -155,7 +155,7 @@ export const fr = {
     financeDesc: 'Suivi des dépenses d\'alimentation, soins, équipements, ventes d\'oiseaux et rentabilité de la saison.',
   },
 
-  // Bird Intelligence & AI Section
+  // Bird Intelligence & Assistant Local Section
   intelligence: {
     badge: 'Intelligence Déterministe',
     title: 'La puissance de l\'analyse prédictive appliquée à votre volière',
@@ -201,7 +201,7 @@ export const fr = {
     proPrice: 'Tarif en préparation',
     proPeriod: 'Licence Annuelle (1 an)',
     proCta: 'Découvrir Pro',
-    proSummary: 'Moteur Bird Intelligence complet, arbres généalogiques illimités, IA sans quota et licence mono-appareil (100% local).',
+    proSummary: 'Moteur Bird Intelligence complet, arbres généalogiques illimités, Assistant local sans quota et licence mono-appareil (100% local).',
 
     lifetimeBadge: 'Perpétuelle sans Abonnement',
     lifetimeTitle: 'Enterprise (Pro À Vie)',
@@ -326,7 +326,7 @@ export const fr = {
       ],
       limits: [
         'Arbres généalogiques limités à 4 générations',
-        'Quota IA fixé à 100 requêtes par jour',
+        'Quota Assistant local fixé à 100 requêtes par jour',
         'Support technique standard par email',
       ],
       ctaLabel: 'Découvrir Passion',
@@ -335,7 +335,7 @@ export const fr = {
       name: 'Bird Academy Enterprise Annuel',
       badge: 'Enterprise',
       period: 'Licence Annuelle (1 an)',
-      description: 'Plateforme complète d\'intelligence aviaire, arbres généalogiques infinis et IA illimitée.',
+      description: 'Plateforme complète d\'intelligence aviaire, arbres généalogiques infinis et Assistant local illimité.',
       features: [
         'Moteur Bird Intelligence complet (Scores & Alertes)',
         'Arbres généalogiques jusqu\'à 6 générations interactives',
@@ -446,14 +446,12 @@ export const fr = {
   // Download Center
   downloadPage: {
     title: 'Centre de Téléchargement Officiel',
-    subtitle: 'Point de distribution officiel des versions de test Windows / Android et du kit complet de recette terrain.',
+    subtitle: 'Point de distribution officiel des versions Windows / Android et de la documentation de qualification V2.0.0-RC1.',
     officialBadge: 'Version Officielle de Test — Distribution Pilote',
-    officialVersion: 'Version v1.3.6',
-    officialBuildId: 'BUILD_ID : BA-V1.3.6',
+    officialVersion: 'Version V2.0.0-RC1',
+    officialBuildId: 'BUILD_ID : BA-V2.0.0-RC1',
     appSectionTitle: 'Applications de Test & Binaires Officiels',
     appSectionSubtitle: 'Téléchargement direct des packages d\'installation certifiés pour Windows et Android.',
-    testerKitTitle: 'Kit testeur — Validation Android',
-    testerKitSubtitle: 'Ensemble documentaire complet destiné aux éleveurs pilotes et testeurs terrain pour la recette physique.',
     winSetupTitle: 'Bird Academy pour Windows (Installateur Setup)',
     winSetupDesc: 'Installateur officiel Windows 10 / 11 (64-bit). Version officielle destinée aux tests.',
     winPortableTitle: 'Bird Academy pour Windows (Version Portable)',
@@ -471,6 +469,7 @@ export const fr = {
     backToDownloads: '← Retour au Centre de téléchargement',
     docsTitle: 'Documentation & Guides Officiels',
     docsDesc: 'Manuel utilisateur, guide d\'activation LMSE et protocoles de validation.',
+    testReportDesc: 'Rapport officiel de qualification des tests pour testeurs et éleveurs partenaires (Windows & Android).',
     docGuide: 'Guide pas à pas de validation terrain (Kit 001)',
     docSession: 'Fiche de session opérationnelle pour testeur',
     docIncident: 'Fiche de relevé d\'incident et blocage terrain',
@@ -516,7 +515,7 @@ export const fr = {
     catPricing: 'Tarifs & Commandes',
     catLicensing: 'Licences & Activation',
     catOffline: 'Hors-Ligne & Données',
-    catAI: 'Intelligence Artificielle',
+    catAI: 'Assistant local',
     catSecurity: 'Sécurité',
     catDownloads: 'Téléchargements',
     catTroubleshooting: 'Dépannage',

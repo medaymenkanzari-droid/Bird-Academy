@@ -4,7 +4,7 @@
  * 
  * BIRD ACADEMY COMMERCIAL WEBSITE — OFFICIAL DOWNLOAD CENTER
  * Pilot testing distribution point for Windows, Android APK & Tester Field Kit.
- * Strictly configured for Volière Manager v1.3.6 (BUILD_ID: BA-V1.3.6).
+ * Strictly configured for Volière Manager V2.0.0-RC1 (BUILD_ID: BA-V2.0.0-RC1).
  */
 
 import React, { useState } from 'react';
@@ -27,8 +27,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
 
   const winArtifacts = allArtifacts.filter(a => a.platform === 'windows');
   const androidArtifacts = allArtifacts.filter(a => a.platform === 'android');
-  const kitArtifacts = allArtifacts.filter(a => a.platform === 'kit');
-  const docArtifacts = allArtifacts.filter(a => a.platform === 'documentation');
+    const docArtifacts = allArtifacts.filter(a => a.platform === 'documentation');
 
   const [copiedSha, setCopiedSha] = useState<string | null>(null);
   const [openShaId, setOpenShaId] = useState<string | null>(null);
@@ -422,187 +421,113 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
         </div>
       </section>
 
-      {/* 4. Section « Kit testeur — Validation Android » */}
-      <section className="space-y-6 pt-4" id="section-tester-kit" data-testid="section-tester-kit">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
-          <div className="flex items-center gap-2">
+      {/* 4. Documentation & Rapport de Test Officiel */}
+      {docArtifacts.length > 0 && (
+        <section className="space-y-6 pt-4" id="section-docs" data-testid="section-docs">
+          <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
             <BookOpen className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white" id="tester-kit-title">
-              {t('downloadPage.testerKitTitle') || 'Kit testeur — Validation Android'}
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white" id="docs-title">
+              {t('downloadPage.docsTitle') || 'Documentation Officielle & Rapports'}
             </h2>
           </div>
-          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-            {kitArtifacts.length} documents de recette disponibles
-          </span>
-        </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          {t('downloadPage.testerKitSubtitle') || 'Téléchargez directement les documents et fiches de relevé nécessaires aux sessions de recette physique avec les smartphones Samsung et Xiaomi.'}
-        </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {docArtifacts.map((doc) => {
+              const isTestReport = doc.filename.includes('Rapport-de-test');
+              const isCopied = copiedSha === doc.sha256;
+              const isShaOpen = openShaId === doc.filename;
 
-        {/* Tester Kit Documents Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {kitArtifacts.map((doc) => {
-            const isCopied = copiedSha === doc.sha256;
-            const isShaOpen = openShaId === doc.filename;
+              return (
+                <div
+                  key={doc.filename}
+                  className={`p-6 rounded-3xl bg-white dark:bg-slate-800 border flex flex-col justify-between space-y-5 transition-all shadow-sm hover:shadow-md ${
+                    isTestReport
+                      ? 'border-indigo-300 dark:border-indigo-700/80 ring-1 ring-indigo-200 dark:ring-indigo-900/50'
+                      : 'border-slate-200 dark:border-slate-700'
+                  }`}
+                  data-testid={isTestReport ? 'download-test-report-card' : `doc-card-${doc.filename}`}
+                  id={isTestReport ? 'card-rapport-de-test' : `doc-${doc.filename}`}
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        isTestReport
+                          ? 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800'
+                          : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                      }`}>
+                        {isTestReport ? 'Rapport de qualification • V2.0.0-RC1' : 'Guide officiel de mise en route'}
+                      </span>
+                      <span className="text-[11px] font-mono font-bold text-slate-500 dark:text-slate-400">
+                        {doc.sizeMB}
+                      </span>
+                    </div>
 
-            return (
-              <div
-                key={doc.filename}
-                className="p-5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4"
-                data-testid={doc.filename === 'LMSE_OWNER_GUIDE.pdf' ? `download-artifact-card-${doc.filename}` : `kit-doc-card-${doc.filename}`}
-                id={`kit-${doc.filename}`}
-              >
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-2.5">
-                      <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
-                        <FileText className="w-4 h-4" />
+                    <div className="flex items-start gap-3">
+                      <div className={`p-3 rounded-2xl shrink-0 ${
+                        isTestReport
+                          ? 'bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300'
+                          : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
+                      }`}>
+                        <FileText className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-xs text-slate-900 dark:text-white leading-tight">
+                        <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
                           {doc.name}
-                        </h4>
-                        <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 block truncate max-w-[200px]">
-                          {doc.filename}
-                        </span>
+                        </h3>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                          {isTestReport
+                            ? 'Résultats officiels des tests de qualification Windows & Android validés pour les testeurs et éleveurs partenaires.'
+                            : 'Guide complet pour la prise en main et l’activation souveraine 100% locale sans Internet.'}
+                        </p>
                       </div>
                     </div>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">
-                      {doc.sizeMB}
-                    </span>
+
+                    {/* SHA-256 Toggle */}
+                    <div className="pt-1">
+                      <button
+                        type="button"
+                        onClick={() => toggleSha(doc.filename)}
+                        className="inline-flex items-center gap-1.5 text-[11px] text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium cursor-pointer"
+                      >
+                        <Fingerprint className="w-3.5 h-3.5 text-indigo-500" />
+                        <span>Empreinte SHA-256 certifiée</span>
+                        <ChevronDown className={`w-3 h-3 transition-transform ${isShaOpen ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      {isShaOpen && (
+                        <div className="mt-2 p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 font-mono text-[10px] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2">
+                          <span className="truncate select-all">{doc.sha256}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleCopySha(doc.sha256)}
+                            className="px-2 py-0.5 rounded bg-white dark:bg-slate-800 text-[10px] font-bold text-indigo-600 shadow-sm shrink-0 cursor-pointer"
+                          >
+                            {isCopied ? 'Copié' : 'Copier'}
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Short description */}
-                  {doc.descriptionKey && (
-                    <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                      {t(doc.descriptionKey)}
-                    </p>
-                  )}
-
-                  {/* Format & Reading Indicators */}
-                  <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-500 dark:text-slate-400">
-                    <span className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700/80 font-mono font-semibold text-slate-700 dark:text-slate-300">
-                      Source : .md
-                    </span>
-                    <span className="px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 font-semibold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80">
-                      Terrain : PDF A4
-                    </span>
-                    <span className="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 font-semibold text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/80">
-                      Lecture directe
-                    </span>
-                  </div>
-
-                  {/* SHA-256 mini toggle */}
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => toggleSha(doc.filename)}
-                      className="inline-flex items-center gap-1 text-[10px] text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer"
-                    >
-                      <Fingerprint className="w-3 h-3 text-indigo-500" />
-                      <span>SHA-256</span>
-                      <ChevronDown className={`w-2.5 h-2.5 transition-transform ${isShaOpen ? 'rotate-180' : ''}`} />
-                    </button>
-
-                    {isShaOpen && (
-                      <div className="mt-1.5 p-2 rounded-lg bg-slate-100 dark:bg-slate-900 font-mono text-[9px] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-1">
-                        <span className="truncate select-all">{doc.sha256}</span>
-                        <button
-                          type="button"
-                          onClick={() => handleCopySha(doc.sha256)}
-                          className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 text-[9px] font-bold text-indigo-600 shadow-sm shrink-0 cursor-pointer"
-                        >
-                          {isCopied ? 'OK' : 'Copier'}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Actions: Read in-app + Download .md + Download A4 PDF */}
-                <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-700/60">
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('download-doc', doc.filename)}
-                    className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
-                    data-testid={`read-kit-${doc.filename}`}
-                    id={`read-${doc.filename}`}
-                  >
-                    <BookOpen className="w-3.5 h-3.5" />
-                    <span>{t('downloadPage.btnReadDoc') || 'Lire le document'}</span>
-                  </button>
-
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-700/60">
                     <button
                       type="button"
                       onClick={() => handleTriggerDownload(doc.filename)}
-                      className="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer"
-                      data-testid={doc.filename === 'LMSE_OWNER_GUIDE.pdf' ? `download-button-${doc.filename}` : `download-kit-${doc.filename}`}
-                      id={`btn-${doc.filename}`}
-                      title="Télécharger la source officielle Markdown (.md)"
+                      className={`w-full py-3 rounded-xl font-bold text-xs sm:text-sm shadow-sm transition flex items-center justify-center gap-2 cursor-pointer ${
+                        isTestReport
+                          ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20'
+                          : 'bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-700 dark:hover:bg-slate-600'
+                      }`}
+                      data-testid={isTestReport ? 'download-test-report-btn' : `download-doc-${doc.filename}`}
+                      id={`download-btn-${doc.filename}`}
                     >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>{t('downloadPage.btnDownloadOriginal') || 'Source (.md)'}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleTriggerDownload(doc.filename.replace(/\.md$/, '.pdf'))}
-                      className="py-2 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/80 font-bold text-xs rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer"
-                      data-testid={`download-pdf-${doc.filename}`}
-                      id={`pdf-${doc.filename}`}
-                      title="Télécharger la fiche A4 imprimable pour le terrain"
-                    >
-                      <FileDown className="w-3.5 h-3.5" />
-                      <span>{t('downloadPage.btnDownloadPdf') || 'Fiche PDF'}</span>
+                      <Download className="w-4 h-4" />
+                      <span>{isTestReport ? 'Télécharger le rapport de test' : 'Télécharger le guide'}</span>
                     </button>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 5. Documentation LMSE Guide */}
-      {docArtifacts.length > 0 && (
-        <section className="space-y-4 pt-2" id="section-docs">
-          <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
-            <BookOpen className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-              {t('downloadPage.docsTitle') || 'Documentation Officielle'}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {docArtifacts.map((doc) => (
-              <div
-                key={doc.filename}
-                className="p-5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-4"
-                data-testid={`doc-card-${doc.filename}`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">{doc.name}</h4>
-                    <span className="text-[10px] text-slate-400 font-mono">{doc.filename} • {doc.sizeMB}</span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleTriggerDownload(doc.filename)}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 shrink-0 cursor-pointer"
-                  data-testid={`download-doc-${doc.filename}`}
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Télécharger</span>
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

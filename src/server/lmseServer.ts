@@ -858,9 +858,18 @@ export class LmseBackendServer {
             path.join(rootDir, 'LMSE_OWNER_GUIDE.pdf'),
           ],
         },
+        'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf': {
+          expectedSha256: '256C5A3751B5B77F704FE0B5860D4BE0EC12EB6BAD896132AD0AD8F9D84F0691',
+          expectedSize: 89937,
+          candidatePaths: [
+            path.join(rootDir, 'public', 'downloads', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf'),
+            path.join(rootDir, 'dist_binaries', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf'),
+            path.join(rootDir, 'dist', 'downloads', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf'),
+          ],
+        },
       };
 
-      // Support des documents Markdown & PDF officiels du Kit Testeur
+      // Support des documents Markdown & PDF officiels de documentation et qualification
       if (filename.endsWith('.md') || filename.endsWith('.pdf')) {
         const docCandidates = [
           path.join(rootDir, 'public', 'downloads', filename),

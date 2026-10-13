@@ -30,7 +30,7 @@ export const es = {
     offlineGuarantee: '100% Autónomo y Fuera de Línea — Ningún dato se transmite a la nube.',
     breedersCount: '100%',
     breedersLabel: '100% Fuera de Línea',
-    birdsCount: 'v1.3.6',
+    birdsCount: 'V2.0.0-RC1',
     birdsLabel: 'Fase de Pruebas Pública',
     wrightCount: '7 Gen.',
     wrightLabel: 'Calculadora de Wright',
@@ -75,7 +75,7 @@ export const es = {
     badgeAviary: 'Aviario & Seguimiento',
     badgePhase: 'Programa de Pruebas Público',
     cardFooter: 'Pruebe la aplicación y comparta sus comentarios',
-    statusBadge: 'Versión de Prueba v1.3.6',
+    statusBadge: 'Versión de Prueba V2.0.0-RC1',
   },
 
   coreEngines: {
@@ -190,7 +190,7 @@ export const es = {
     proPrice: 'Tarifa en preparación',
     proPeriod: 'Licencia Anual (1 Año)',
     proCta: 'Descubrir Pro',
-    proSummary: 'Motor Bird Intelligence completo, árboles ilimitados, IA sin límites e instalación monopuesto (100% local).',
+    proSummary: 'Motor Bird Intelligence completo, árboles ilimitados, Asistente local sin límites e instalación monopuesto (100% local).',
 
     lifetimeBadge: 'Perpetua sin Renovación',
     lifetimeTitle: 'Enterprise (Pro Vitalicia)',
@@ -313,7 +313,7 @@ export const es = {
       ],
       limits: [
         'Árboles genealógicos hasta 4 generaciones',
-        'Cuota de IA fijada en 100 consultas al día',
+        'Cuota de Asistente local fijada en 100 consultas al día',
         'Soporte técnico estándar por email',
       ],
       ctaLabel: 'Descubrir Passion',
@@ -430,14 +430,12 @@ export const es = {
 
   downloadPage: {
     title: 'Centro de Descargas Oficial',
-    subtitle: 'Punto oficial de distribución de versiones de prueba Windows / Android y kit completo de validación de campo.',
+    subtitle: 'Punto oficial de distribución de versiones de prueba Windows / Android y documentación de calificación V2.0.0-RC1.',
     officialBadge: 'Versión Oficial de Prueba — Distribución Piloto',
-    officialVersion: 'Versión v1.3.6',
-    officialBuildId: 'BUILD_ID: BA-V1.3.6',
+    officialVersion: 'Versión V2.0.0-RC1',
+    officialBuildId: 'BUILD_ID : BA-V2.0.0-RC1',
     appSectionTitle: 'Aplicaciones de Prueba & Binarios Oficiales',
     appSectionSubtitle: 'Descarga directa de los paquetes de instalación certificados para Windows y Android.',
-    testerKitTitle: 'Kit Probador — Validación Android',
-    testerKitSubtitle: 'Documentación operativa completa para criadores piloto y probadores de campo.',
     winSetupTitle: 'Bird Academy para Windows (Instalador Setup)',
     winSetupDesc: 'Instalador oficial Windows 10 / 11 (64 bits). Versión oficial destinada a pruebas.',
     winPortableTitle: 'Bird Academy para Windows (Edición Portable)',
@@ -498,7 +496,7 @@ export const es = {
     catPricing: 'Precios & Pedidos',
     catLicensing: 'Licencias & Activación',
     catOffline: 'Fuera de Línea & Datos',
-    catAI: 'Inteligencia Artificial',
+    catAI: 'Asistente local',
     catSecurity: 'Seguridad',
     catDownloads: 'Descargas',
     catTroubleshooting: 'Solución de Problemas',

@@ -90,7 +90,7 @@ export const WebFAQPage: React.FC = () => {
     { id: 'pricing', label: 'Tarifs & Commandes' },
     { id: 'licensing', label: 'Licences & Activation' },
     { id: 'offline', label: 'Hors-Ligne & Données' },
-    { id: 'ai', label: 'Intelligence Artificielle' },
+    { id: 'ai', label: 'Assistant local' },
     { id: 'general', label: 'Génétique & Élevage' },
     { id: 'downloads', label: 'Téléchargements' },
     { id: 'security', label: 'Sécurité' },

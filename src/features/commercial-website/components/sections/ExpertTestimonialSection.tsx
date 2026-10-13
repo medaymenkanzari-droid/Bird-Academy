@@ -97,7 +97,7 @@ export const ExpertTestimonialSection: React.FC = () => {
                 </div>
 
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[11px] font-mono font-bold text-slate-700 dark:text-slate-300 self-start sm:self-auto">
-                  <span>BUILD_ID : BA-V1.3.6</span>
+                  <span>BUILD_ID : BA-V2.0.0-RC1</span>
                 </div>
               </div>
 

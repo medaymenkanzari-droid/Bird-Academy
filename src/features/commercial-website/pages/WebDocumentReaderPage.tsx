@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * 
  * BIRD ACADEMY ENTERPRISE — OFFICIAL REACT DOCUMENT READER
- * High-fidelity, mobile-responsive reader for Tester Kit documentation with real A4 PDF & Markdown exports.
+ * High-fidelity, mobile-responsive reader for official documentation with real A4 PDF & Markdown exports.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -130,7 +130,7 @@ export const WebDocumentReaderPage: React.FC<WebDocumentReaderPageProps> = ({
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/80">
             <ShieldCheck className="w-3.5 h-3.5 text-indigo-600" />
-            <span>v1.3.6 • BA-V1.3.6</span>
+            <span>V2.0.0-RC1 • BA-V2.0.0-RC1</span>
           </span>
           <span className="hidden sm:inline-flex px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
             Lecteur Officiel Réactif
@@ -144,7 +144,7 @@ export const WebDocumentReaderPage: React.FC<WebDocumentReaderPageProps> = ({
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-indigo-100 dark:bg-indigo-900/60 text-indigo-800 dark:text-indigo-300 uppercase tracking-wider">
-                Kit Testeur Android
+                Documentation Officielle
               </span>
               <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
                 {actualFilename}
@@ -268,7 +268,7 @@ export const WebDocumentReaderPage: React.FC<WebDocumentReaderPageProps> = ({
       {/* Bottom Sticky-friendly Navigation Footer */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs">
         <span className="text-slate-600 dark:text-slate-400">
-          Ce document fait partie du <strong>Kit Testeur — Validation Android v1.3.6</strong> (Action `ACT-P1-02`).
+          Ce document fait partie de la <strong>Documentation Officielle Bird Academy V2.0.0-RC1</strong>.
         </span>
         <button
           type="button"

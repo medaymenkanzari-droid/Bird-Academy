@@ -8,6 +8,7 @@
 import React from 'react';
 import { WebRoute } from '../types';
 import { HeroSection } from '../components/sections/HeroSection';
+import { VisualDiscoverySection } from '../components/sections/VisualDiscoverySection';
 import { ProblemSolutionSection } from '../components/sections/ProblemSolutionSection';
 import { ExpertTestimonialSection } from '../components/sections/ExpertTestimonialSection';
 import { CoreEnginesGridSection } from '../components/sections/CoreEnginesGridSection';
@@ -33,7 +34,10 @@ export const WebLandingPage: React.FC<WebLandingPageProps> = ({ onNavigate }) =>
       {/* 1. Hero Split-Screen Showcase */}
       <HeroSection onNavigate={onNavigate} />
 
-      {/* 2. Problem & Solution Section (Du Carnet Papier à l'Excellence Avicole) */}
+      {/* 2. Visual Discovery (Ce qu'est Bird Academy • À qui il s'adresse • Ce qu'il fait • Où télécharger) */}
+      <VisualDiscoverySection onNavigate={onNavigate} />
+
+      {/* 3. Problem & Solution Section (Du Carnet Papier à l'Excellence Avicole) */}
       <ProblemSolutionSection />
 
       {/* 3. Public Test Phase Section (Accompagnement Élevage & Volière Moderne) */}
@@ -57,7 +61,7 @@ export const WebLandingPage: React.FC<WebLandingPageProps> = ({ onNavigate }) =>
       {/* 9. Bird Intelligence Deterministic Engine */}
       <BirdIntelligenceSection />
 
-      {/* 10. Local AI Assistant */}
+      {/* 10. Assistant Local */}
       <AIAssistantSection />
 
       {/* 11. Cryptographic Security & LMSE */}

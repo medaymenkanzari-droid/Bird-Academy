@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * 
  * BIRD ACADEMY COMMERCIAL WEBSITE — DOWNLOAD SECTION (AVIAN PRECISION)
- * Updated for Volière Manager v1.3.6 & BUILD_ID BA-V1.3.6.
+ * Updated for Bird Academy V2.0.0-RC1 & BUILD_ID BA-V2.0.0-RC1.
  */
 
 import React, { useState } from 'react';
@@ -203,7 +203,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 onClick={() => onNavigate('download')}
                 className="w-full text-center text-xs text-emerald-700 dark:text-emerald-400 hover:underline font-semibold cursor-pointer py-1"
               >
-                Accéder au Kit Testeur & Formulaires →
+                Accéder au Centre de Téléchargement & Documentation →
               </button>
             </div>
           </div>

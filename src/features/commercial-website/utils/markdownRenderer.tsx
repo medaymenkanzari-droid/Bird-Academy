@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * 
  * BIRD ACADEMY ENTERPRISE — SECURE REACT MARKDOWN RENDERER
- * High-performance, zero-XSS virtual DOM parser for official documentation & tester kits.
+ * High-performance, zero-XSS virtual DOM parser for official documentation & technical reports.
  */
 
 import React from 'react';
