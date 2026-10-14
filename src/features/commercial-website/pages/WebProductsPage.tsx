@@ -24,11 +24,11 @@ export const WebProductsPage: React.FC<WebProductsPageProps> = ({ onNavigate }) 
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16" data-testid="web-products-page" dir={isRtl ? 'rtl' : 'ltr'}>
       
       {/* Header */}
-      <div className="max-w-3xl mx-auto text-center space-y-3">
+      <div className="max-w-4xl lg:max-w-5xl mx-auto text-center space-y-3">
         <span className="text-xs font-black tracking-widest text-indigo-600 dark:text-indigo-400 uppercase">
           {t('products.title')}
         </span>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
           {t('products.title')}
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">

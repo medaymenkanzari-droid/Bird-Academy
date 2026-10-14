@@ -34,7 +34,7 @@ export const FinalEngagementCtaSection: React.FC<FinalEngagementCtaSectionProps>
           <div className="absolute -right-20 -top-20 w-80 h-80 bg-amber-400/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+          <div className="relative z-10 max-w-4xl lg:max-w-5xl mx-auto text-center space-y-6">
             
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/10 border border-white/20 text-[#ffc107] shadow-sm backdrop-blur-sm">
@@ -43,7 +43,7 @@ export const FinalEngagementCtaSection: React.FC<FinalEngagementCtaSectionProps>
             </div>
 
             {/* Title */}
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
               {t('finalCta.title')}
             </h2>
 

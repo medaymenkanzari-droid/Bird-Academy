@@ -948,11 +948,14 @@ export class LmseBackendServer {
         // En environnement cloud distant (Render) où les gros binaires compilés (.exe/.apk) ne sont pas stockés dans Git,
         // redirection sécurisée vers la release GitHub officielle qualifiée (v1.3.6-RC7 pour les binaires Windows RC7)
         if (filename.endsWith('.exe') || filename.endsWith('.apk')) {
-          const releaseTag = 'v2.0.0-rc1';
-          const githubAssetUrl = `https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/${releaseTag}/${filename}`;
+          const targetFilename = filename === 'Bird-Academy-Avian-ERP-Setup.exe'
+            ? 'Bird-Academy-User-Windows-Setup.exe'
+            : filename;
+          const releaseTag = filename.endsWith('.exe') ? 'v1.3.6-RC7' : 'v1.3.6-RC7';
+          const githubAssetUrl = `https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/${releaseTag}/${targetFilename}`;
           return res.redirect(302, githubAssetUrl);
         }
-        console.error(`[LMSE_DOWNLOAD_SECURITY] Integrity verification failed for ${filename}: No valid V2.0.0-RC1 candidate found matching official SHA-256.`);
+        console.error(`[LMSE_DOWNLOAD_SECURITY] Integrity verification failed for ${filename}: No valid candidate found matching official SHA-256.`);
         // Message propre sans fuite d'informations internes (chemins système, stack trace)
         return res.status(500).json({ error: 'INTEGRITY_CHECK_FAILED', message: "Échec de vérification d'intégrité de l'artefact." });
       }

@@ -25,11 +25,11 @@ export const ProblemSolutionSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center space-y-3">
+        <div className="max-w-4xl lg:max-w-5xl mx-auto text-center space-y-3">
           <span className="text-xs font-black tracking-widest text-[#2e3a8c] dark:text-indigo-400 uppercase bg-indigo-50 dark:bg-indigo-950/60 px-3 py-1 rounded-full border border-indigo-200 dark:border-indigo-800">
             {t('problemSolution.tag')}
           </span>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {t('problemSolution.title')}
           </h2>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 font-normal">

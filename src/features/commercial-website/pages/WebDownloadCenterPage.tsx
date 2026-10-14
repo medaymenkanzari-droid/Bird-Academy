@@ -65,12 +65,12 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
     >
       
       {/* 1. Header & Version Identification Banner */}
-      <div className="max-w-3xl mx-auto text-center space-y-4">
+      <div className="max-w-4xl lg:max-w-5xl mx-auto text-center space-y-4">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shadow-sm">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
           <span>{t('downloadPage.officialBadge') || 'Version Officielle de Test — Distribution Pilote'}</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight" id="download-center-title">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight" id="download-center-title">
           {t('downloadPage.title')}
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -128,23 +128,23 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                 id={`card-${art.filename}`}
               >
                 <div className="space-y-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
-                        <Monitor className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400 block">
-                          Windows 10 / 11 (64-bit)
-                        </span>
-                        <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug">
-                          Bird Academy Enterprise — Volière Manager
-                        </h3>
-                      </div>
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                        Windows 10 / 11 (64-bit)
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 shrink-0">
+                        Recommandé
+                      </span>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 shrink-0">
-                      Recommandé
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 shrink-0">
+                        <Monitor className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug">
+                        Bird Academy Enterprise — Volière Manager
+                      </h3>
+                    </div>
                   </div>
 
                   <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -228,23 +228,23 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                 id={`card-${art.filename}`}
               >
                 <div className="space-y-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
-                        <Monitor className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
-                          Windows Portable
-                        </span>
-                        <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug">
-                          Bird Academy Enterprise — Volière Manager
-                        </h3>
-                      </div>
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                        Windows Portable
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">
+                        Portable
+                      </span>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 shrink-0">
-                      Portable
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-2xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 shrink-0">
+                        <Monitor className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug">
+                        Bird Academy Enterprise — Volière Manager
+                      </h3>
+                    </div>
                   </div>
 
                   <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -328,23 +328,23 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                 id={`card-${art.filename}`}
               >
                 <div className="space-y-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">
-                        <Smartphone className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400 block">
-                          Android (API 29+)
-                        </span>
-                        <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug">
-                          Bird Academy Enterprise — Volière Manager
-                        </h3>
-                      </div>
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                        Android (API 29+)
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 shrink-0">
+                        APK Recette
+                      </span>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 shrink-0">
-                      APK Recette
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-2xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 shrink-0">
+                        <Smartphone className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug">
+                        Bird Academy Enterprise — Volière Manager
+                      </h3>
+                    </div>
                   </div>
 
                   {/* Mandatory Alert Warning for Android APK */}

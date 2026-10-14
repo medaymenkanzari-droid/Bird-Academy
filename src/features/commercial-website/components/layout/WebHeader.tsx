@@ -82,35 +82,35 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
       dir={isRtl ? 'rtl' : 'ltr'}
       data-testid="web-header"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[5.5rem] py-2 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 min-h-[5rem] sm:min-h-[5.5rem] py-2 flex items-center justify-between gap-2 sm:gap-4">
         
         {/* 1. Bloc Marque (Logo + Titre + Badge ENTERPRISE) */}
         <button
           type="button"
           onClick={() => handleLinkClick('home')}
-          className="flex items-center gap-3 mr-8 shrink-0 cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
+          className="flex items-center gap-2 sm:gap-3 mr-0 lg:mr-8 [dir=rtl]:lg:mr-0 [dir=rtl]:lg:ml-8 min-w-0 shrink cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
           data-testid="header-brand-logo"
           aria-label="Bird Academy Enterprise Home"
         >
           <img
             src="/bird-academy-logo.svg"
             alt="Bird Academy"
-            className="h-10 w-auto object-contain"
+            className="h-8 sm:h-10 w-auto object-contain shrink-0"
           />
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold tracking-tight text-slate-900 dark:text-white text-lg leading-tight">
+          <div className="flex flex-col min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <span className="font-extrabold tracking-tight text-slate-900 dark:text-white text-base sm:text-lg leading-tight shrink-0">
                 BIRD ACADEMY
               </span>
               {/* Badge ENTERPRISE avec espacement autonome */}
               <span 
-                className="px-2 py-0.5 text-[11px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700 rounded-md shadow-xs select-none"
+                className="px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700 rounded-md shadow-xs select-none shrink-0"
                 data-testid="header-enterprise-badge"
               >
                 ENTERPRISE
               </span>
             </div>
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate hidden xs:inline sm:inline">
               Logiciel d'Élevage 100% Hors-Ligne
             </span>
           </div>
@@ -194,19 +194,19 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
         </div>
 
         {/* Mobile Hamburger Button */}
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 lg:hidden">
           <LanguageSelector variant="header" />
           <button
             ref={mobileMenuBtnRef}
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2e3a8c] cursor-pointer"
+            className="p-2 sm:p-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2e3a8c] cursor-pointer"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-drawer"
             aria-label={mobileMenuOpen ? 'Fermer le menu de navigation' : 'Ouvrir le menu de navigation'}
             data-testid="mobile-menu-toggle-btn"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6 text-slate-900 dark:text-white" /> : <Menu className="w-6 h-6 text-slate-900 dark:text-white" />}
+            {mobileMenuOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6 text-slate-900 dark:text-white" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-slate-900 dark:text-white" />}
           </button>
         </div>
 

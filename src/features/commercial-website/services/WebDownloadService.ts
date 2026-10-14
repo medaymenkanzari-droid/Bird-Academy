@@ -35,7 +35,7 @@ export class WebDownloadService {
       minOsVersion: 'Windows 10 / 11 (64-bit)',
       isAvailable: true,
       isTestDistribution: true,
-      releaseTag: 'v2.0.0-rc1',
+      releaseTag: 'v1.3.6-RC7',
       descriptionKey: 'downloadPage.winSetupDesc'
     },
     {
@@ -53,7 +53,7 @@ export class WebDownloadService {
       minOsVersion: 'Windows 10 / 11 (64-bit)',
       isAvailable: true,
       isTestDistribution: true,
-      releaseTag: 'v2.0.0-rc1',
+      releaseTag: 'v1.3.6-RC7',
       descriptionKey: 'downloadPage.winPortableDesc'
     },
     {
@@ -72,7 +72,7 @@ export class WebDownloadService {
       isAvailable: true,
       isTestDistribution: true,
       warning: "Installation manuelle APK destinée au programme de test. Autoriser l'installation depuis cette source uniquement si nécessaire.",
-      releaseTag: 'v2.0.0-rc1',
+      releaseTag: 'v1.3.6-RC7',
       descriptionKey: 'downloadPage.androidDesc'
     },
     // Documentation
@@ -140,8 +140,8 @@ export class WebDownloadService {
   }
 
   public static readonly GITHUB_REPO = 'medaymenkanzari-droid/Bird-Academy';
-  public static readonly DEFAULT_RELEASE_TAG = 'v2.0.0-rc1';
-  public static readonly RC1_RELEASE_TAG = 'v2.0.0-rc1';
+  public static readonly DEFAULT_RELEASE_TAG = 'v1.3.6-RC7';
+  public static readonly RC1_RELEASE_TAG = 'v1.3.6-RC7';
   public static readonly RC6_RELEASE_TAG = 'v1.3.6-RC6';
   public static readonly RC7_RELEASE_TAG = 'v1.3.6-RC7';
 
@@ -150,8 +150,11 @@ export class WebDownloadService {
    */
   public static getGitHubReleaseUrl(filename: string, tag?: string): string {
     const art = this.getArtifact(filename);
-    const effectiveTag = tag || art?.releaseTag || this.RC1_RELEASE_TAG;
-    return `https://github.com/${this.GITHUB_REPO}/releases/download/${effectiveTag}/${filename}`;
+    const targetFilename = filename === 'Bird-Academy-Avian-ERP-Setup.exe'
+      ? 'Bird-Academy-User-Windows-Setup.exe'
+      : filename;
+    const effectiveTag = tag || art?.releaseTag || this.RC7_RELEASE_TAG;
+    return `https://github.com/${this.GITHUB_REPO}/releases/download/${effectiveTag}/${targetFilename}`;
   }
 
   /**
