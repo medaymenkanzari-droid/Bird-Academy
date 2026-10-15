@@ -93,7 +93,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                 <div>Version : <strong>{setupArt?.version || 'V2.0.0-RC1'}</strong></div>
                 <div>BUILD_ID : <strong>{setupArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
-                <div>Taille : <strong>{setupArt?.sizeMB || '121 765 349 octets (116.12 Mo)'}</strong></div>
+                <div>Taille : <strong>{setupArt?.sizeMB || '882 800 300 octets (841.90 Mo)'}</strong></div>
               </div>
             </div>
 
@@ -134,7 +134,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                 <div>Version : <strong>{portableArt?.version || 'V2.0.0-RC1'}</strong></div>
                 <div>BUILD_ID : <strong>{portableArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
-                <div>Taille : <strong>{portableArt?.sizeMB || '121 426 841 octets (115.80 Mo)'}</strong></div>
+                <div>Taille : <strong>{portableArt?.sizeMB || '882 461 776 octets (841.58 Mo)'}</strong></div>
               </div>
             </div>
 
@@ -177,14 +177,14 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-[11px] text-amber-900 dark:text-amber-200 flex items-start gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
                 <p className="leading-tight">
-                  Installation manuelle APK destinée au programme de test.
+                  Installation manuelle APK destinée au programme de test (versionCode 22).
                 </p>
               </div>
 
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                 <div>Version : <strong>{apkArt?.version || 'V2.0.0-RC1'}</strong></div>
                 <div>BUILD_ID : <strong>{apkArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
-                <div>Taille : <strong>{apkArt?.sizeMB || '18 710 063 octets (17.84 Mo)'}</strong></div>
+                <div>Taille : <strong>{apkArt?.sizeMB || '400 904 790 octets (382.33 Mo)'}</strong></div>
               </div>
             </div>
 

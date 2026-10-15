@@ -374,7 +374,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                     </div>
                   </div>
 
-                  {/* Android SHA-256 (20AD96A27742B4A013FB13774EFFEB716A5E4672509F279AB7D60292251D4F63) */}
+                  {/* Android SHA-256 */}
                   <div className="space-y-1.5">
                     <button
                       type="button"

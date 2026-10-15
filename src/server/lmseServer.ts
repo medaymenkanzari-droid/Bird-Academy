@@ -810,41 +810,48 @@ export class LmseBackendServer {
         candidatePaths: string[];
       }> = {
         'Bird-Academy-Avian-ERP-Setup.exe': {
-          expectedSha256: '8EDA77F7421803FD62E9D23AD2561ED509582A4E42E8A8461137E92E08F7A4B4',
-          expectedSize: 121765349,
+          expectedSha256: '0140319CECA91E5C1B8D83444EF852C934D44C4F42275C26779D10AC3A1904BE',
+          expectedSize: 882800300,
           candidatePaths: [
-            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-Avian-ERP-Setup.exe'),
             path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'dist_binaries', 'Bird-Academy-User-Windows-Setup.exe'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
+            path.join(rootDir, 'dist', 'downloads', 'Bird-Academy-Avian-ERP-Setup.exe'),
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-Avian-ERP-Setup.exe'),
             path.join(rootDir, 'Release', 'Bird-Academy-Avian-ERP-Setup.exe'),
           ],
         },
         'Bird-Academy-User-Windows-Setup.exe': {
-          expectedSha256: '8EDA77F7421803FD62E9D23AD2561ED509582A4E42E8A8461137E92E08F7A4B4',
-          expectedSize: 121765349,
+          expectedSha256: '0140319CECA91E5C1B8D83444EF852C934D44C4F42275C26779D10AC3A1904BE',
+          expectedSize: 882800300,
           candidatePaths: [
-            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User-Windows-Setup.exe'),
             path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'dist', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
             path.join(rootDir, 'Release', 'Bird-Academy-Avian-ERP-Setup.exe'),
           ],
         },
         'Bird-Academy-User.exe': {
-          expectedSha256: '104BBCE6B867AACEBB6A1DB104635C6427C230A2FE26930BC34342BF7D61BF90',
-          expectedSize: 121426841,
+          expectedSha256: 'F69924BDDE888E81ADD2AB9003CDF2B78F57068FF91F5B30A1A1AFDD8D90A644',
+          expectedSize: 882461776,
           candidatePaths: [
-            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.exe'),
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.exe'),
             path.join(rootDir, 'release', 'Bird-Academy-User.exe'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.exe'),
+            path.join(rootDir, 'dist', 'downloads', 'Bird-Academy-User.exe'),
             path.join(rootDir, 'Release', 'Bird-Academy-User.exe'),
           ],
         },
         'Bird-Academy-User.apk': {
-          expectedSha256: '08EEE05006DC9A89FB82524ECD51168D6D5ADCFFF52C2BB3420FC67AA64F0758',
-          expectedSize: 18710063,
+          expectedSha256: 'FA759004960604DDA0F9E195E47FE86C164F0EF9F824BF9ED840F94F7A7A970D',
+          expectedSize: 400904790,
           candidatePaths: [
-            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.apk'),
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.apk'),
+            path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.apk'),
+            path.join(rootDir, 'dist', 'downloads', 'Bird-Academy-User.apk'),
             path.join(rootDir, 'release', 'Bird-Academy-User.apk'),
             path.join(rootDir, 'Bird-Academy-User.apk'),
           ],
@@ -946,12 +953,12 @@ export class LmseBackendServer {
 
       if (!targetPath) {
         // En environnement cloud distant (Render) où les gros binaires compilés (.exe/.apk) ne sont pas stockés dans Git,
-        // redirection sécurisée vers la release GitHub officielle qualifiée (v1.3.6-RC7 pour les binaires Windows RC7)
+        // redirection sécurisée vers la release GitHub officielle qualifiée (v2.0.0-RC1)
         if (filename.endsWith('.exe') || filename.endsWith('.apk')) {
           const targetFilename = filename === 'Bird-Academy-Avian-ERP-Setup.exe'
             ? 'Bird-Academy-User-Windows-Setup.exe'
             : filename;
-          const releaseTag = filename.endsWith('.exe') ? 'v1.3.6-RC7' : 'v1.3.6-RC7';
+          const releaseTag = 'v2.0.0-RC1';
           const githubAssetUrl = `https://github.com/medaymenkanzari-droid/Bird-Academy/releases/download/${releaseTag}/${targetFilename}`;
           return res.redirect(302, githubAssetUrl);
         }
