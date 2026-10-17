@@ -8,7 +8,7 @@
 import React, { useState } from 'react';
 import { useWebLanguage } from '../../i18n';
 import { SupportTicketSubmission } from '../../types';
-import { LifeBuoy, Send, CheckCircle2, MessageSquare, ShieldCheck, Mail, BookOpen, Clock, Zap, UserCheck } from 'lucide-react';
+import { LifeBuoy, Send, CheckCircle2, MessageSquare, ShieldCheck, Mail, BookOpen, Clock, Zap, UserCheck, AlertCircle } from 'lucide-react';
 
 export const SupportContactSection: React.FC = () => {
   const { t, isRtl } = useWebLanguage();
@@ -20,21 +20,65 @@ export const SupportContactSection: React.FC = () => {
   const [submittedTicket, setSubmittedTicket] = useState<SupportTicketSubmission | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{
+    name?: string;
+    email?: string;
+    subject?: string;
+    message?: string;
+  }>({});
+
+  const validateForm = () => {
+    const errors: { name?: string; email?: string; subject?: string; message?: string } = {};
+
+    if (!name.trim()) {
+      errors.name = 'Veuillez renseigner votre nom.';
+    }
+
+    if (!email.trim()) {
+      errors.email = 'Veuillez renseigner votre adresse email.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      errors.email = 'Adresse email invalide.';
+    }
+
+    if (!subject.trim()) {
+      errors.subject = "Veuillez renseigner l'objet de votre demande.";
+    }
+
+    if (!message.trim()) {
+      errors.message = 'Veuillez rédiger votre message.';
+    }
+
+    return errors;
+  };
+
+  const handleInvalid = () => {
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      if (errors.email && Object.keys(errors).length === 1) {
+        setErrorMsg('Adresse email invalide.');
+      } else {
+        setErrorMsg('Veuillez remplir tous les champs obligatoires.');
+      }
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !subject.trim() || !message.trim()) {
-      setErrorMsg('Veuillez remplir tous les champs obligatoires.');
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      if (errors.email && Object.keys(errors).length === 1) {
+        setErrorMsg('Adresse email invalide.');
+      } else {
+        setErrorMsg('Veuillez remplir tous les champs obligatoires.');
+      }
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setErrorMsg('Adresse email invalide.');
-      return;
-    }
-
-    setIsSubmitting(true);
+    setFieldErrors({});
     setErrorMsg(null);
+    setIsSubmitting(true);
 
     // Save ticket locally in offline storage
     const newTicket: SupportTicketSubmission = {
@@ -176,8 +220,13 @@ export const SupportContactSection: React.FC = () => {
               data-testid="support-contact-form"
             >
               {errorMsg && (
-                <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-xs font-semibold text-rose-700 dark:text-rose-300">
-                  {errorMsg}
+                <div 
+                  role="alert"
+                  className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-xs font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-2"
+                  data-testid="support-form-error-banner"
+                >
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
+                  <span>{errorMsg}</span>
                 </div>
               )}
 
@@ -193,11 +242,34 @@ export const SupportContactSection: React.FC = () => {
                     type="text"
                     required
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (fieldErrors.name) {
+                        setFieldErrors((prev) => ({ ...prev, name: undefined }));
+                      }
+                    }}
+                    onInvalid={handleInvalid}
                     placeholder="Ex: Jean Dupont"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none"
+                    aria-invalid={fieldErrors.name ? 'true' : undefined}
+                    aria-describedby={fieldErrors.name ? 'support-error-name' : undefined}
+                    className={`w-full px-4 py-3 rounded-xl bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none transition-colors ${
+                      fieldErrors.name
+                        ? 'border-2 border-rose-500 dark:border-rose-500'
+                        : 'border border-slate-200 dark:border-slate-700'
+                    }`}
                     data-testid="support-input-name"
                   />
+                  {fieldErrors.name && (
+                    <p 
+                      id="support-error-name" 
+                      role="alert" 
+                      className="text-xs font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 pt-1"
+                      data-testid="support-error-name"
+                    >
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
+                      <span>{fieldErrors.name}</span>
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -210,11 +282,34 @@ export const SupportContactSection: React.FC = () => {
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (fieldErrors.email) {
+                        setFieldErrors((prev) => ({ ...prev, email: undefined }));
+                      }
+                    }}
+                    onInvalid={handleInvalid}
                     placeholder="Ex: jean@exemple.fr"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none"
+                    aria-invalid={fieldErrors.email ? 'true' : undefined}
+                    aria-describedby={fieldErrors.email ? 'support-error-email' : undefined}
+                    className={`w-full px-4 py-3 rounded-xl bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none transition-colors ${
+                      fieldErrors.email
+                        ? 'border-2 border-rose-500 dark:border-rose-500'
+                        : 'border border-slate-200 dark:border-slate-700'
+                    }`}
                     data-testid="support-input-email"
                   />
+                  {fieldErrors.email && (
+                    <p 
+                      id="support-error-email" 
+                      role="alert" 
+                      className="text-xs font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 pt-1"
+                      data-testid="support-error-email"
+                    >
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
+                      <span>{fieldErrors.email}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -252,11 +347,34 @@ export const SupportContactSection: React.FC = () => {
                     type="text"
                     required
                     value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
+                    onChange={(e) => {
+                      setSubject(e.target.value);
+                      if (fieldErrors.subject) {
+                        setFieldErrors((prev) => ({ ...prev, subject: undefined }));
+                      }
+                    }}
+                    onInvalid={handleInvalid}
                     placeholder="Objet du message"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none"
+                    aria-invalid={fieldErrors.subject ? 'true' : undefined}
+                    aria-describedby={fieldErrors.subject ? 'support-error-subject' : undefined}
+                    className={`w-full px-4 py-3 rounded-xl bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none transition-colors ${
+                      fieldErrors.subject
+                        ? 'border-2 border-rose-500 dark:border-rose-500'
+                        : 'border border-slate-200 dark:border-slate-700'
+                    }`}
                     data-testid="support-input-subject"
                   />
+                  {fieldErrors.subject && (
+                    <p 
+                      id="support-error-subject" 
+                      role="alert" 
+                      className="text-xs font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 pt-1"
+                      data-testid="support-error-subject"
+                    >
+                      <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
+                      <span>{fieldErrors.subject}</span>
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -271,11 +389,34 @@ export const SupportContactSection: React.FC = () => {
                   required
                   rows={4}
                   value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    if (fieldErrors.message) {
+                      setFieldErrors((prev) => ({ ...prev, message: undefined }));
+                    }
+                  }}
+                  onInvalid={handleInvalid}
                   placeholder="Expliquez en détail votre demande..."
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none"
+                  aria-invalid={fieldErrors.message ? 'true' : undefined}
+                  aria-describedby={fieldErrors.message ? 'support-error-message' : undefined}
+                  className={`w-full px-4 py-3 rounded-xl bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none transition-colors ${
+                    fieldErrors.message
+                      ? 'border-2 border-rose-500 dark:border-rose-500'
+                      : 'border border-slate-200 dark:border-slate-700'
+                  }`}
                   data-testid="support-input-message"
                 />
+                {fieldErrors.message && (
+                  <p 
+                    id="support-error-message" 
+                    role="alert" 
+                    className="text-xs font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-1.5 pt-1"
+                    data-testid="support-error-message"
+                  >
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-600 dark:text-rose-400" aria-hidden="true" />
+                    <span>{fieldErrors.message}</span>
+                  </p>
+                )}
               </div>
 
               <button
