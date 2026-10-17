@@ -96,7 +96,7 @@ export const VisualDiscoverySection: React.FC<VisualDiscoverySectionProps> = ({ 
                   Pour les amateurs désireux de quitter le carnet papier : fiches de bagues, dates d'éclosion et suivi sanitaire simplifié.
                 </p>
               </div>
-              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-[11px] font-bold text-[#2e3a8c] dark:text-indigo-400">
+              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-xs font-bold text-[#2e3a8c] dark:text-indigo-400">
                 <span>Canaris & Exotiques</span>
                 <span className="font-mono bg-indigo-50 dark:bg-indigo-950 px-2 py-0.5 rounded">Édition FREE & Passion</span>
               </div>
@@ -104,12 +104,12 @@ export const VisualDiscoverySection: React.FC<VisualDiscoverySectionProps> = ({ 
 
             {/* Profil 2: Compétiteurs & Sélectionneurs */}
             <div className="p-6 rounded-3xl bg-[#f7f9fb] dark:bg-slate-800/60 border-2 border-[#2e3a8c] dark:border-indigo-600 shadow-md flex flex-col justify-between space-y-4 relative">
-              <div className="absolute -top-3 right-6 bg-[#2e3a8c] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+              <div className="absolute -top-3 right-6 bg-[#2e3a8c] text-white text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                 Sélection COM
               </div>
               <div className="space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-400 flex items-center justify-center">
-                  <Award className="w-6 h-6 text-[#ffc107]" />
+                <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/80 text-amber-950 dark:text-amber-300 flex items-center justify-center">
+                  <Award className="w-6 h-6 text-amber-700 dark:text-[#ffc107]" />
                 </div>
                 <h4 className="font-extrabold text-base text-slate-900 dark:text-white">
                   Compétiteurs & Clubs
@@ -118,7 +118,7 @@ export const VisualDiscoverySection: React.FC<VisualDiscoverySectionProps> = ({ 
                   Calculateur de consanguinité de Wright, standard morphologique officiel et simulation des accouplements de concours.
                 </p>
               </div>
-              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-[11px] font-bold text-amber-800 dark:text-amber-400">
+              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-xs font-bold text-amber-950 dark:text-amber-300">
                 <span>Génétique & Posture</span>
                 <span className="font-mono bg-amber-50 dark:bg-amber-950 px-2 py-0.5 rounded">Édition Pro</span>
               </div>
@@ -137,7 +137,7 @@ export const VisualDiscoverySection: React.FC<VisualDiscoverySectionProps> = ({ 
                   Gestion multi-volières, historique sanitaire par lot, comptabilité intégrée et passeports biologiques certifiés.
                 </p>
               </div>
-              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-[11px] font-bold text-emerald-800 dark:text-emerald-400">
+              <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-xs font-bold text-emerald-900 dark:text-emerald-300">
                 <span>Volume & Sécurité</span>
                 <span className="font-mono bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded">Mono-appareil 100% local</span>
               </div>
@@ -161,7 +161,7 @@ export const VisualDiscoverySection: React.FC<VisualDiscoverySectionProps> = ({ 
               <button
                 type="button"
                 onClick={() => setActiveTab('dashboard')}
-                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                className={`min-h-[44px] px-3.5 py-2 rounded-xl transition cursor-pointer flex items-center justify-center ${
                   activeTab === 'dashboard'
                     ? 'bg-white dark:bg-slate-900 text-[#2e3a8c] dark:text-indigo-400 shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -172,7 +172,7 @@ export const VisualDiscoverySection: React.FC<VisualDiscoverySectionProps> = ({ 
               <button
                 type="button"
                 onClick={() => setActiveTab('bird')}
-                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                className={`min-h-[44px] px-3.5 py-2 rounded-xl transition cursor-pointer flex items-center justify-center ${
                   activeTab === 'bird'
                     ? 'bg-white dark:bg-slate-900 text-[#2e3a8c] dark:text-indigo-400 shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -183,7 +183,7 @@ export const VisualDiscoverySection: React.FC<VisualDiscoverySectionProps> = ({ 
               <button
                 type="button"
                 onClick={() => setActiveTab('breeding')}
-                className={`px-3 py-1.5 rounded-xl transition cursor-pointer ${
+                className={`min-h-[44px] px-3.5 py-2 rounded-xl transition cursor-pointer flex items-center justify-center ${
                   activeTab === 'breeding'
                     ? 'bg-white dark:bg-slate-900 text-[#2e3a8c] dark:text-indigo-400 shadow-sm'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -225,7 +225,7 @@ export const VisualDiscoverySection: React.FC<VisualDiscoverySectionProps> = ({ 
                   <button
                     type="button"
                     onClick={() => onNavigate('download')}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer"
+                    className="w-full sm:w-auto min-h-[44px] px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer"
                   >
                     <span>Découvrir dans l'application</span>
                     <ArrowIcon className="w-3.5 h-3.5" />

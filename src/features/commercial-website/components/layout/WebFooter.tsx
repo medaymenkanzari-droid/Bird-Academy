@@ -42,7 +42,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 <span className="text-lg font-black tracking-tight text-white uppercase font-sans">
                   Bird Academy
                 </span>
-                <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">
+                <span className="text-xs font-mono font-bold text-amber-300 uppercase tracking-widest">
                   AVIAN PRECISION • BREEDING ERP
                 </span>
               </div>
@@ -52,7 +52,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
               {t('footer.brandDesc')}
             </p>
 
-            <div className="flex flex-wrap gap-2 pt-2 text-[11px] text-slate-400 font-medium">
+            <div className="flex flex-wrap gap-2 pt-2 text-xs text-slate-300 font-medium">
               <span className="inline-flex items-center gap-1 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg text-slate-300">
                 <HardDrive className="w-3.5 h-3.5 text-amber-400" />
                 Données Locales Souveraines
@@ -70,15 +70,15 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
 
           {/* Column 2: Editions */}
           <div className="space-y-3">
-            <h4 className="text-xs font-black uppercase tracking-wider text-white">
+            <h3 className="text-xs font-black uppercase tracking-wider text-white">
               {t('footer.editionsTitle')}
-            </h4>
-            <ul className="space-y-2 text-xs text-slate-400">
+            </h3>
+            <ul className="space-y-1 text-xs text-slate-400">
               <li>
                 <button
                   type="button"
                   onClick={() => onNavigate('product-free')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   Bird Academy Community
                 </button>
@@ -87,7 +87,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('product-premium')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   Bird Academy Passion / Premium
                 </button>
@@ -96,7 +96,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('product-pro')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   Bird Academy Enterprise / Pro
                 </button>
@@ -105,7 +105,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('pricing')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   Bird Academy Lifetime
                 </button>
@@ -115,15 +115,15 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
 
           {/* Column 3: Navigation */}
           <div className="space-y-3">
-            <h4 className="text-xs font-black uppercase tracking-wider text-white">
+            <h3 className="text-xs font-black uppercase tracking-wider text-white">
               Navigation
-            </h4>
-            <ul className="space-y-2 text-xs text-slate-400">
+            </h3>
+            <ul className="space-y-1 text-xs text-slate-400">
               <li>
                 <button
                   type="button"
                   onClick={() => onNavigate('home')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   {t('nav.home')}
                 </button>
@@ -132,7 +132,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('pricing')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   {t('nav.pricing')}
                 </button>
@@ -141,7 +141,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('download')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   {t('nav.download')}
                 </button>
@@ -150,7 +150,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('faq')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   {t('nav.faq')}
                 </button>
@@ -159,7 +159,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
                 <button
                   type="button"
                   onClick={() => onNavigate('support')}
-                  className="hover:text-indigo-400 transition cursor-pointer text-left"
+                  className="w-full hover:text-indigo-400 transition cursor-pointer text-left min-h-[44px] py-2 flex items-center"
                 >
                   {t('nav.support')}
                 </button>
@@ -169,12 +169,12 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
 
           {/* Column 4: Language & Locale */}
           <div className="space-y-3">
-            <h4 className="text-xs font-black uppercase tracking-wider text-white">
+            <h3 className="text-xs font-black uppercase tracking-wider text-white">
               {t('footer.langTitle')}
-            </h4>
+            </h3>
             <div className="space-y-3">
               <LanguageSelector variant="footer" />
-              <p className="text-[11px] text-slate-500 leading-tight">
+              <p className="text-xs text-slate-400 leading-tight">
                 Disponible en Français, Anglais, Arabe (RTL), Espagnol et Italien.
               </p>
             </div>
@@ -183,11 +183,11 @@ export const WebFooter: React.FC<WebFooterProps> = ({ onNavigate }) => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex items-center gap-2">
             <span>© 2026 Bird Academy — Identité Avian Precision. Tous droits réservés.</span>
           </div>
-          <div className="flex items-center gap-4 text-[11px]">
+          <div className="flex items-center gap-4 text-xs">
             <span className="inline-flex items-center gap-1 text-slate-400">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               Distribution V2.0.0-RC1 (BUILD_ID : BA-V2.0.0-RC1)

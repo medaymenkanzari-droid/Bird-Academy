@@ -75,7 +75,7 @@ export const CurrencySelector: React.FC<{
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+        className="flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer"
         aria-expanded={isOpen}
         aria-label="Select Currency"
         data-testid="currency-selector-btn"
@@ -98,7 +98,7 @@ export const CurrencySelector: React.FC<{
                 key={curr.code}
                 type="button"
                 onClick={() => handleSelect(curr.code)}
-                className={`w-full flex items-center justify-between px-3.5 py-2 text-xs text-left cursor-pointer transition-colors ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 min-h-[44px] text-xs text-left cursor-pointer transition-colors ${
                   isSelected
                     ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 font-bold'
                     : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'

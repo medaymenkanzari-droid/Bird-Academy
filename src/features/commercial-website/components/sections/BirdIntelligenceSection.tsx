@@ -23,7 +23,7 @@ export const BirdIntelligenceSection: React.FC = () => {
           
           {/* Left: Text Description */}
           <div className="space-y-6">
-            <span className="text-xs font-black tracking-widest text-cyan-600 dark:text-cyan-400 uppercase">
+            <span className="text-xs font-black tracking-widest text-cyan-800 dark:text-cyan-300 uppercase">
               {t('intelligence.badge')}
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
@@ -60,7 +60,7 @@ export const BirdIntelligenceSection: React.FC = () => {
                 <BrainCircuit className="w-5 h-5 text-cyan-400" />
                 <span className="text-sm font-bold text-white">Moteur Analytique Déterministe</span>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">
+              <span className="text-xs font-mono px-2.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
                 Zero Cloud Sync
               </span>
             </div>
@@ -68,7 +68,7 @@ export const BirdIntelligenceSection: React.FC = () => {
             <div className="space-y-4 text-xs">
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
                 <div>
-                  <span className="text-slate-400 block text-[10px]">Score de Fertilité Prédictif</span>
+                  <span className="text-slate-300 block text-xs font-medium">Score de Fertilité Prédictif</span>
                   <span className="font-bold text-white text-base">94.8% — Excellent</span>
                 </div>
                 <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400">
@@ -78,7 +78,7 @@ export const BirdIntelligenceSection: React.FC = () => {
 
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
                 <div>
-                  <span className="text-slate-400 block text-[10px]">Coefficient de Consanguinité</span>
+                  <span className="text-slate-300 block text-xs font-medium">Coefficient de Consanguinité</span>
                   <span className="font-bold text-cyan-400 text-base">F = 0.0156 (Sécurisé)</span>
                 </div>
                 <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400">
@@ -88,7 +88,7 @@ export const BirdIntelligenceSection: React.FC = () => {
 
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
                 <div>
-                  <span className="text-slate-400 block text-[10px]">Diagnostic Biologique</span>
+                  <span className="text-slate-300 block text-xs font-medium">Diagnostic Biologique</span>
                   <span className="font-bold text-emerald-400 text-base">0 anomalie détectée</span>
                 </div>
                 <div className="p-2 rounded-xl bg-purple-500/20 text-purple-400">

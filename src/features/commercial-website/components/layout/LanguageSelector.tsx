@@ -47,7 +47,7 @@ export const LanguageSelector: React.FC<{ variant?: 'header' | 'footer' | 'pill'
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+        className={`flex items-center gap-2 px-3 py-2 min-h-[44px] rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
           variant === 'footer'
             ? 'bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700'
             : 'bg-white/80 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700'
@@ -81,7 +81,7 @@ export const LanguageSelector: React.FC<{ variant?: 'header' | 'footer' | 'pill'
                   setLocale(loc);
                   setIsOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-3.5 py-2 text-xs text-left cursor-pointer transition-colors ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 min-h-[44px] text-xs text-left cursor-pointer transition-colors ${
                   isSelected
                     ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 font-bold'
                     : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50'

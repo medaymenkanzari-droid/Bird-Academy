@@ -32,7 +32,7 @@ export const CoreEnginesGridSection: React.FC = () => {
       metricKey: 'coreEngines.engine2Metric',
       color: 'amber',
       accentColor: '#ffc107',
-      badgeBg: 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800',
+      badgeBg: 'bg-amber-50 dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 border-amber-300 dark:border-amber-700',
     },
     {
       id: 'banding',
@@ -95,7 +95,7 @@ export const CoreEnginesGridSection: React.FC = () => {
                     <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[#2e3a8c] dark:text-indigo-400 group-hover:scale-110 transition-transform">
                       <Icon className="w-6 h-6" />
                     </div>
-                    <span className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border ${engine.badgeBg}`}>
+                    <span className={`px-2.5 py-1 rounded-xl text-xs font-bold border ${engine.badgeBg}`}>
                       {t(engine.metricKey)}
                     </span>
                   </div>

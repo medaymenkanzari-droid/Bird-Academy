@@ -108,7 +108,7 @@ export const ComparisonTableSection: React.FC = () => {
                 <th className="py-4 px-4 font-bold text-slate-900 dark:text-white text-center w-[15%]">
                   {t('pricing.colPro')}
                 </th>
-                <th className="py-4 px-4 font-bold text-amber-800 dark:text-amber-400 text-center w-[15%]">
+                <th className="py-4 px-4 font-bold text-[#78350f] dark:text-amber-300 text-center w-[15%]">
                   Lifetime
                 </th>
               </tr>
@@ -133,7 +133,7 @@ export const ComparisonTableSection: React.FC = () => {
                   <td className="py-4 px-4 text-center font-bold text-slate-900 dark:text-white">
                     {row.pro === null ? <Minus className="w-4 h-4 text-slate-300 mx-auto" /> : row.pro}
                   </td>
-                  <td className="py-4 px-4 text-center font-bold text-amber-700 dark:text-amber-400">
+                  <td className="py-4 px-4 text-center font-bold text-[#78350f] dark:text-amber-300">
                     {row.lifetime === null ? <Minus className="w-4 h-4 text-slate-300 mx-auto" /> : row.lifetime}
                   </td>
                 </tr>

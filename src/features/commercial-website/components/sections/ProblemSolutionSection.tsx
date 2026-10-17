@@ -77,9 +77,9 @@ export const ProblemSolutionSection: React.FC = () => {
               </ul>
             </div>
 
-            <div className="pt-4 border-t border-rose-200/60 dark:border-rose-900/40 flex items-center justify-between text-xs text-rose-700 dark:text-rose-400 font-bold">
+            <div className="pt-4 border-t border-rose-200/60 dark:border-rose-900/40 flex items-center justify-between text-xs text-rose-900 dark:text-rose-300 font-bold">
               <span>Risque élevé d'extinction de souche</span>
-              <span className="font-mono text-[11px] bg-rose-200/60 dark:bg-rose-900/60 px-2 py-0.5 rounded">Zéro Sauvegarde</span>
+              <span className="font-mono text-xs bg-rose-200/90 text-rose-950 dark:bg-rose-900/60 dark:text-rose-200 px-2 py-0.5 rounded">Zéro Sauvegarde</span>
             </div>
           </div>
 
@@ -108,12 +108,12 @@ export const ProblemSolutionSection: React.FC = () => {
                   className="w-full h-44 object-cover object-center"
                   loading="lazy"
                 />
-                <div className="absolute bottom-2 inset-x-2 px-3 py-1.5 rounded-xl bg-slate-950/80 text-white backdrop-blur-sm flex items-center justify-between text-[11px]">
+                <div className="absolute bottom-2 inset-x-2 px-3 py-1.5 rounded-xl bg-slate-950/80 text-white backdrop-blur-sm flex items-center justify-between text-xs">
                   <span className="flex items-center gap-1.5 font-semibold">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                     Saisie instantanée au perchoir
                   </span>
-                  <span className="text-[#ffc107] font-mono text-[10px]">100% Hors-Ligne</span>
+                  <span className="text-amber-300 font-mono text-xs">100% Hors-Ligne</span>
                 </div>
               </div>
 
@@ -133,9 +133,9 @@ export const ProblemSolutionSection: React.FC = () => {
               </ul>
             </div>
 
-            <div className="pt-4 border-t border-emerald-200/60 dark:border-emerald-900/40 flex items-center justify-between text-xs text-emerald-700 dark:text-emerald-400 font-bold">
+            <div className="pt-4 border-t border-emerald-200/60 dark:border-emerald-900/40 flex items-center justify-between text-xs text-emerald-900 dark:text-emerald-300 font-bold">
               <span>Souveraineté totale & Sécurité des lignées</span>
-              <span className="font-mono text-[11px] bg-emerald-200/60 dark:bg-emerald-900/60 px-2 py-0.5 rounded">Scellé AES-256</span>
+              <span className="font-mono text-xs bg-emerald-200/90 text-emerald-950 dark:bg-emerald-900/60 dark:text-emerald-200 px-2 py-0.5 rounded">Scellé AES-256</span>
             </div>
           </div>
 

@@ -107,7 +107,7 @@ export const SupportContactSection: React.FC = () => {
             </div>
             <div className="p-3 bg-white dark:bg-slate-800 rounded-xl text-xs font-mono text-slate-700 dark:text-slate-300 border border-emerald-100 dark:border-emerald-900 flex justify-between items-center">
               <span>Référence du ticket : <strong>{submittedTicket.ticketId}</strong></span>
-              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase">Enregistré Localement</span>
+              <span className="text-xs text-emerald-700 dark:text-emerald-300 font-bold uppercase">Enregistré Localement</span>
             </div>
           </div>
         )}
@@ -119,8 +119,8 @@ export const SupportContactSection: React.FC = () => {
             <div className="p-6 sm:p-8 rounded-3xl bg-[#f7f9fb] dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm space-y-5">
               
               {/* Guaranteed Response Badge */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 text-xs font-black border border-amber-300">
-                <Clock className="w-4 h-4 text-amber-700" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-950 dark:text-amber-200 text-xs font-bold border border-amber-300 dark:border-amber-700">
+                <Clock className="w-4 h-4 text-amber-800 dark:text-amber-300" />
                 <span>⚡ Temps de réponse garanti &lt; 24h ouvrées</span>
               </div>
 
@@ -135,7 +135,7 @@ export const SupportContactSection: React.FC = () => {
                   </div>
                   <div>
                     <strong className="text-slate-900 dark:text-white block font-bold">Documentation & Guides Pratiques</strong>
-                    <span className="text-xs text-slate-500 dark:text-slate-400">Accédez aux fiches d'installation, tutoriels de baguage et protocoles génétiques.</span>
+                    <span className="text-xs text-slate-600 dark:text-slate-400">Accédez aux fiches d'installation, tutoriels de baguage et protocoles génétiques.</span>
                   </div>
                 </li>
 
@@ -145,7 +145,7 @@ export const SupportContactSection: React.FC = () => {
                   </div>
                   <div>
                     <strong className="text-slate-900 dark:text-white block font-bold">Confidentialité Respectée</strong>
-                    <span className="text-xs text-slate-500 dark:text-slate-400">Vos coordonnées et demandes sont strictement protégées sans démarchage.</span>
+                    <span className="text-xs text-slate-600 dark:text-slate-400">Vos coordonnées et demandes sont strictement protégées sans démarchage.</span>
                   </div>
                 </li>
 
@@ -155,13 +155,13 @@ export const SupportContactSection: React.FC = () => {
                   </div>
                   <div>
                     <strong className="text-slate-900 dark:text-white block font-bold">Assistance Dédiée Aviculture</strong>
-                    <span className="text-xs text-slate-500 dark:text-slate-400">Support assuré par des passionnés qui comprennent les réalités du terrain.</span>
+                    <span className="text-xs text-slate-600 dark:text-slate-400">Support assuré par des passionnés qui comprennent les réalités du terrain.</span>
                   </div>
                 </li>
               </ul>
 
               <div className="pt-3 border-t border-slate-200 dark:border-slate-700 text-xs">
-                <span className="text-slate-500 dark:text-slate-400 block">Email direct du support :</span>
+                <span className="text-slate-600 dark:text-slate-400 block">Email direct du support :</span>
                 <span className="font-mono font-bold text-[#2e3a8c] dark:text-indigo-400 text-sm">contact@birdacademy.internal</span>
               </div>
 
@@ -184,10 +184,12 @@ export const SupportContactSection: React.FC = () => {
               {/* Dual Column Contact Inputs */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                  <label htmlFor="support-input-name" className="text-xs font-bold text-slate-700 dark:text-slate-200">
                     {t('supportPage.nameLabel')} *
                   </label>
                   <input
+                    id="support-input-name"
+                    name="name"
                     type="text"
                     required
                     value={name}
@@ -199,10 +201,12 @@ export const SupportContactSection: React.FC = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                  <label htmlFor="support-input-email" className="text-xs font-bold text-slate-700 dark:text-slate-200">
                     {t('supportPage.emailLabel')} *
                   </label>
                   <input
+                    id="support-input-email"
+                    name="email"
                     type="email"
                     required
                     value={email}
@@ -217,10 +221,13 @@ export const SupportContactSection: React.FC = () => {
               {/* Dual Column Category & Subject */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                  <label htmlFor="support-select-category" className="text-xs font-bold text-slate-700 dark:text-slate-200">
                     {t('supportPage.categoryLabel')} *
                   </label>
                   <select
+                    id="support-select-category"
+                    name="category"
+                    aria-label={t('supportPage.categoryLabel')}
                     value={category}
                     onChange={(e) => setCategory(e.target.value as any)}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-[#f7f9fb] dark:bg-slate-900 text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-[#2e3a8c] focus:outline-none"
@@ -236,10 +243,12 @@ export const SupportContactSection: React.FC = () => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                  <label htmlFor="support-input-subject" className="text-xs font-bold text-slate-700 dark:text-slate-200">
                     {t('supportPage.subjectLabel')} *
                   </label>
                   <input
+                    id="support-input-subject"
+                    name="subject"
                     type="text"
                     required
                     value={subject}
@@ -253,10 +262,12 @@ export const SupportContactSection: React.FC = () => {
 
               {/* Large Textarea for Description */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                <label htmlFor="support-input-message" className="text-xs font-bold text-slate-700 dark:text-slate-200">
                   {t('supportPage.messageLabel')} *
                 </label>
                 <textarea
+                  id="support-input-message"
+                  name="message"
                   required
                   rows={4}
                   value={message}

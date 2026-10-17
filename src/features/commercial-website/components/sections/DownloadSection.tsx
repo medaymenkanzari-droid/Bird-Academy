@@ -75,7 +75,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
           
           {/* 1. Windows Setup */}
           <div className="p-8 rounded-3xl bg-white dark:bg-slate-800 border-2 border-[#2e3a8c] dark:border-indigo-500 shadow-xl shadow-indigo-950/15 flex flex-col justify-between space-y-6 relative">
-            <div className="absolute -top-3.5 right-6 bg-[#2e3a8c] text-white text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+            <div className="absolute -top-3.5 right-6 bg-[#2e3a8c] text-white text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
               Recommandé
             </div>
             <div className="space-y-4">
@@ -101,7 +101,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <button
                 type="button"
                 onClick={() => setupArt && handleDirectDownload(setupArt.filename)}
-                className="w-full py-4 bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-sm rounded-xl shadow-md shadow-indigo-950/25 transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-4 min-h-[44px] bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-sm rounded-xl shadow-md shadow-indigo-950/25 transition flex items-center justify-center gap-2 cursor-pointer"
                 data-testid="download-btn-windows-setup"
               >
                 <Download className="w-4 h-4 text-[#ffc107]" />
@@ -110,7 +110,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <button
                 type="button"
                 onClick={() => onNavigate('download')}
-                className="w-full text-center text-xs text-indigo-600 hover:underline font-semibold cursor-pointer py-1"
+                className="w-full text-center text-xs text-indigo-700 dark:text-indigo-400 hover:underline font-semibold cursor-pointer min-h-[44px] py-2.5 flex items-center justify-center"
               >
                 Accéder au Centre de Téléchargement & SHA-256 →
               </button>
@@ -142,7 +142,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <button
                 type="button"
                 onClick={() => portableArt && handleDirectDownload(portableArt.filename)}
-                className="w-full py-3.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 font-bold text-sm rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 min-h-[44px] bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 font-bold text-sm rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
                 data-testid="download-btn-windows-portable"
               >
                 <Download className="w-4 h-4 text-slate-500" />
@@ -151,7 +151,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <button
                 type="button"
                 onClick={() => onNavigate('download')}
-                className="w-full text-center text-xs text-slate-500 hover:underline font-semibold cursor-pointer py-1"
+                className="w-full text-center text-xs text-slate-700 dark:text-slate-300 hover:underline font-semibold cursor-pointer min-h-[44px] py-2.5 flex items-center justify-center"
               >
                 Voir la fiche d'intégrité →
               </button>
@@ -174,9 +174,9 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               </div>
 
               {/* Warning Notice */}
-              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-[11px] text-amber-900 dark:text-amber-200 flex items-start gap-1.5">
-                <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                <p className="leading-tight">
+              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/60 text-xs text-amber-950 dark:text-amber-200 flex items-start gap-1.5">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
+                <p className="leading-tight font-medium">
                   Installation manuelle APK destinée au programme de test (versionCode 22).
                 </p>
               </div>
@@ -192,7 +192,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <button
                 type="button"
                 onClick={() => apkArt && handleDirectDownload(apkArt.filename)}
-                className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 min-h-[44px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-sm transition flex items-center justify-center gap-2 cursor-pointer"
                 data-testid="download-btn-android-apk"
               >
                 <Download className="w-4 h-4 text-white" />
@@ -201,7 +201,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <button
                 type="button"
                 onClick={() => onNavigate('download')}
-                className="w-full text-center text-xs text-emerald-700 dark:text-emerald-400 hover:underline font-semibold cursor-pointer py-1"
+                className="w-full text-center text-xs text-emerald-800 dark:text-emerald-300 hover:underline font-semibold cursor-pointer min-h-[44px] py-2.5 flex items-center justify-center"
               >
                 Accéder au Centre de Téléchargement & Documentation →
               </button>
@@ -215,7 +215,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
           <button
             type="button"
             onClick={() => setIsShaOpen(!isShaOpen)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 text-slate-700 dark:text-slate-300 text-xs font-bold border border-slate-300 dark:border-slate-700 transition cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 min-h-[44px] rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 text-slate-700 dark:text-slate-300 text-xs font-bold border border-slate-300 dark:border-slate-700 transition cursor-pointer"
             aria-expanded={isShaOpen}
           >
             <Fingerprint className="w-4 h-4 text-[#2e3a8c] dark:text-indigo-400" />
@@ -232,12 +232,12 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 <div key={art.filename} className="p-3 bg-slate-900 rounded-xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
                     <div className="font-sans font-bold text-slate-300 text-xs">{art.name} ({art.filename})</div>
-                    <div className="text-[#ffc107] text-[11px] break-all select-all">{art.sha256}</div>
+                    <div className="text-amber-300 text-xs break-all select-all">{art.sha256}</div>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleCopySha(art.sha256)}
-                    className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-sans rounded border border-slate-700 transition flex items-center gap-1 shrink-0 self-start sm:self-center cursor-pointer"
+                    className="px-3.5 py-2 min-h-[44px] bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-sans rounded-xl border border-slate-700 transition flex items-center gap-1 shrink-0 self-start sm:self-center cursor-pointer"
                   >
                     {copiedSha === art.sha256 ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-slate-400" />}
                     <span>{copiedSha === art.sha256 ? 'Copié' : 'Copier'}</span>

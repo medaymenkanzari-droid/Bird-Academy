@@ -56,7 +56,7 @@ export const PricingCardsSection: React.FC<PricingCardsSectionProps> = ({ onNavi
             <div className="p-7 rounded-3xl bg-[#f7f9fb] dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex flex-col justify-between space-y-6 shadow-sm" data-testid="pricing-card-free">
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <div className="text-xs font-bold uppercase tracking-wider text-slate-500">{freeOffer.name}</div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">{freeOffer.name}</div>
                   <div className="text-3xl font-black text-slate-900 dark:text-white">{freeOffer.priceFormatted}</div>
                   <div className="text-xs text-[#2e3a8c] dark:text-indigo-400 font-bold">{freeOffer.period}</div>
                   <p className="text-xs text-slate-600 dark:text-slate-400 pt-1 leading-relaxed">{freeOffer.description}</p>
@@ -75,7 +75,7 @@ export const PricingCardsSection: React.FC<PricingCardsSectionProps> = ({ onNavi
               <button
                 type="button"
                 onClick={() => handleSelectOffer(freeOffer.id)}
-                className="w-full py-3 bg-white dark:bg-slate-700 hover:bg-slate-100 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 font-bold text-xs rounded-xl transition cursor-pointer"
+                className="w-full min-h-[44px] py-3.5 bg-white dark:bg-slate-700 hover:bg-slate-100 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-600 font-bold text-xs rounded-xl transition cursor-pointer flex items-center justify-center"
                 data-testid="pricing-btn-free"
               >
                 {freeOffer.ctaLabel}
@@ -86,7 +86,7 @@ export const PricingCardsSection: React.FC<PricingCardsSectionProps> = ({ onNavi
           {/* 2. PREMIUM Passion (FEATURED & HIGHLIGHTED) */}
           {premOffer && (
             <div className="relative transform lg:scale-105 z-10 p-7 rounded-3xl bg-white dark:bg-slate-800 border-2 border-[#2e3a8c] dark:border-indigo-500 flex flex-col justify-between space-y-6 shadow-xl shadow-indigo-950/15" data-testid="pricing-card-premium">
-              <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2 px-3.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#ffc107] text-[#0f172a] shadow-md flex items-center gap-1 whitespace-nowrap">
+              <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#ffc107] text-[#0f172a] shadow-md flex items-center gap-1 whitespace-nowrap">
                 <Star className="w-3 h-3 fill-current text-[#0f172a]" />
                 <span>{premOffer.badge.toUpperCase()}</span>
               </div>
@@ -112,7 +112,7 @@ export const PricingCardsSection: React.FC<PricingCardsSectionProps> = ({ onNavi
               <button
                 type="button"
                 onClick={() => handleSelectOffer(premOffer.id)}
-                className="w-full py-3.5 bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-950/25 transition cursor-pointer"
+                className="w-full min-h-[44px] py-3.5 bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-950/25 transition cursor-pointer flex items-center justify-center"
                 data-testid="pricing-btn-premium"
               >
                 {premOffer.ctaLabel}
@@ -125,7 +125,7 @@ export const PricingCardsSection: React.FC<PricingCardsSectionProps> = ({ onNavi
             <div className="p-7 rounded-3xl bg-[#f7f9fb] dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex flex-col justify-between space-y-6 shadow-sm" data-testid="pricing-card-pro">
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <div className="text-xs font-bold uppercase tracking-wider text-slate-500">{proAnnualOffer.name}</div>
+                  <div className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">{proAnnualOffer.name}</div>
                   <div className="text-3xl font-black text-slate-900 dark:text-white">{proAnnualOffer.priceFormatted}</div>
                   <div className="text-xs text-[#2e3a8c] dark:text-indigo-400 font-bold">{proAnnualOffer.period}</div>
                   <p className="text-xs text-slate-600 dark:text-slate-400 pt-1 leading-relaxed">{proAnnualOffer.description}</p>
@@ -144,7 +144,7 @@ export const PricingCardsSection: React.FC<PricingCardsSectionProps> = ({ onNavi
               <button
                 type="button"
                 onClick={() => handleSelectOffer(proAnnualOffer.id)}
-                className="w-full py-3 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs rounded-xl transition cursor-pointer"
+                className="w-full min-h-[44px] py-3.5 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs rounded-xl transition cursor-pointer flex items-center justify-center"
                 data-testid="pricing-btn-pro"
               >
                 {proAnnualOffer.ctaLabel}
@@ -157,7 +157,7 @@ export const PricingCardsSection: React.FC<PricingCardsSectionProps> = ({ onNavi
             <div className="p-7 rounded-3xl bg-[#f7f9fb] dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex flex-col justify-between space-y-6 shadow-sm" data-testid="pricing-card-lifetime">
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <div className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-100 px-2 py-0.5 rounded">
+                  <div className="inline-flex items-center gap-1 text-xs font-extrabold uppercase tracking-wider text-amber-950 bg-amber-100 dark:bg-amber-950 dark:text-amber-200 px-2.5 py-0.5 rounded">
                     <Infinity className="w-3 h-3" />
                     <span>{proLifeOffer.badge}</span>
                   </div>
@@ -179,7 +179,7 @@ export const PricingCardsSection: React.FC<PricingCardsSectionProps> = ({ onNavi
               <button
                 type="button"
                 onClick={() => handleSelectOffer(proLifeOffer.id)}
-                className="w-full py-3 bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-xs rounded-xl shadow-md transition cursor-pointer"
+                className="w-full min-h-[44px] py-3.5 bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-xs rounded-xl shadow-md transition cursor-pointer flex items-center justify-center"
                 data-testid="pricing-btn-lifetime"
               >
                 {proLifeOffer.ctaLabel}

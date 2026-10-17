@@ -31,10 +31,10 @@ export const AIAssistantSection: React.FC = () => {
                 </div>
                 <div>
                   <span className="font-bold text-xs text-slate-900 dark:text-white block">Assistant local Bird Academy</span>
-                  <span className="text-[10px] text-emerald-500 font-medium">● Raisonnement 100% Local</span>
+                  <span className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">● Raisonnement 100% Local</span>
                 </div>
               </div>
-              <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-slate-600 dark:text-slate-300">
+              <span className="text-xs font-mono bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-slate-700 dark:text-slate-300">
                 Quota: 100/100
               </span>
             </div>
@@ -43,7 +43,7 @@ export const AIAssistantSection: React.FC = () => {
             <div className="flex justify-end">
               <div className="bg-indigo-600 text-white p-3.5 rounded-2xl rounded-tr-none text-xs max-w-sm space-y-1">
                 <p>Quel est le risque de consanguinité si j'accouple le mâle bague 2024-042 avec la femelle 2025-118 ?</p>
-                <span className="text-[9px] text-indigo-200 block text-right">14:32</span>
+                <span className="text-xs text-indigo-100 block text-right">14:32</span>
               </div>
             </div>
 
@@ -53,10 +53,10 @@ export const AIAssistantSection: React.FC = () => {
                 <p>
                   Selon l'analyse de l'arbre généalogique local, ces deux sujets partagent un grand-père commun (Bague 2021-003).
                 </p>
-                <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-medium text-[11px]">
+                <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-200 font-medium text-xs">
                   📊 Coefficient de Wright calculé : <strong>F = 6.25%</strong> (Risque Modéré). L'accouplement est viable avec surveillance.
                 </div>
-                <span className="text-[9px] text-slate-400 block">14:32 — Traité localement en 120ms</span>
+                <span className="text-xs text-slate-600 dark:text-slate-400 block">14:32 — Traité localement en 120ms</span>
               </div>
             </div>
 
@@ -77,14 +77,14 @@ export const AIAssistantSection: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1">
                 <Shield className="w-5 h-5 text-emerald-500" />
-                <h4 className="text-xs font-bold text-slate-900 dark:text-white">Confidentialité Absolue</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Aucune donnée n'est utilisée pour entraîner des modèles publics.</p>
+                <h3 className="text-xs font-bold text-slate-900 dark:text-white">Confidentialité Absolue</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Aucune donnée n'est utilisée pour entraîner des modèles publics.</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1">
                 <Sparkles className="w-5 h-5 text-indigo-500" />
-                <h4 className="text-xs font-bold text-slate-900 dark:text-white">Conseils Contextualisés</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Réponses adaptées aux espèces, mutations et cycles réels de votre volière.</p>
+                <h3 className="text-xs font-bold text-slate-900 dark:text-white">Conseils Contextualisés</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Réponses adaptées aux espèces, mutations et cycles réels de votre volière.</p>
               </div>
             </div>
           </div>

@@ -88,7 +88,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
         <button
           type="button"
           onClick={() => handleLinkClick('home')}
-          className="flex items-center gap-2 sm:gap-3 mr-0 lg:mr-8 [dir=rtl]:lg:mr-0 [dir=rtl]:lg:ml-8 min-w-0 shrink cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
+          className="flex items-center gap-2 sm:gap-3 mr-0 lg:mr-8 [dir=rtl]:lg:mr-0 [dir=rtl]:lg:ml-8 min-w-0 min-h-[44px] shrink cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
           data-testid="header-brand-logo"
           aria-label="Bird Academy Enterprise Home"
         >
@@ -104,13 +104,13 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
               </span>
               {/* Badge ENTERPRISE avec espacement autonome */}
               <span 
-                className="px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700 rounded-md shadow-xs select-none shrink-0"
+                className="px-1.5 sm:px-2 py-0.5 text-xs font-black uppercase tracking-wider bg-amber-100 text-amber-950 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-200 dark:border-amber-700 rounded-md shadow-xs select-none shrink-0"
                 data-testid="header-enterprise-badge"
               >
                 ENTERPRISE
               </span>
             </div>
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate hidden xs:inline sm:inline">
+            <span className="text-xs text-slate-600 dark:text-slate-400 font-medium truncate hidden xs:inline sm:inline">
               Logiciel d'Élevage 100% Hors-Ligne
             </span>
           </div>
@@ -125,7 +125,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
                 key={link.id}
                 type="button"
                 onClick={() => handleLinkClick(link.id)}
-                className={`px-3 py-2 rounded-xl transition-all cursor-pointer ${
+                className={`min-w-[44px] min-h-[44px] px-3.5 py-2 rounded-xl transition-all cursor-pointer flex items-center justify-center ${
                   isActive
                     ? 'bg-[#f0f3fa] dark:bg-indigo-950/40 text-[#2e3a8c] dark:text-indigo-400 font-extrabold'
                     : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
@@ -146,7 +146,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
           <button
             type="button"
             onClick={() => handleLinkClick('account')}
-            className={`p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition cursor-pointer ${
+            className={`min-w-[44px] min-h-[44px] p-2.5 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 transition cursor-pointer ${
               currentRoute === 'account' ? 'bg-[#f0f3fa] dark:bg-indigo-950/40 text-[#2e3a8c]' : ''
             }`}
             title={t('nav.account')}
@@ -161,7 +161,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
               type="button"
               onClick={onOpenApp}
               disabled={isLaunchingApp}
-              className={`px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer ${
+              className={`px-4 py-2.5 min-h-[44px] bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2 cursor-pointer ${
                 isLaunchingApp ? 'opacity-80 cursor-wait' : ''
               }`}
               title={t('appLaunch.openApp')}
@@ -185,7 +185,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
           <button
             type="button"
             onClick={() => handleLinkClick('pricing')}
-            className="px-5 py-2.5 bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-950/20 transition flex items-center gap-2 cursor-pointer"
+            className="px-5 py-2.5 min-h-[44px] bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-950/20 transition flex items-center gap-2 cursor-pointer"
             data-testid="header-btn-get-license"
           >
             <ShieldCheck className="w-4 h-4 text-[#ffc107]" />
@@ -200,7 +200,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
             ref={mobileMenuBtnRef}
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 sm:p-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2e3a8c] cursor-pointer"
+            className="min-w-[44px] min-h-[44px] p-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2e3a8c] cursor-pointer flex items-center justify-center"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-nav-drawer"
             aria-label={mobileMenuOpen ? 'Fermer le menu de navigation' : 'Ouvrir le menu de navigation'}
@@ -258,7 +258,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
                     onOpenApp();
                   }}
                   disabled={isLaunchingApp}
-                  className={`w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer ${
+                  className={`w-full min-h-[44px] py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer ${
                     isLaunchingApp ? 'opacity-80 cursor-wait' : ''
                   }`}
                   data-testid="mobile-drawer-btn-open-app"
@@ -279,7 +279,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
               <button
                 type="button"
                 onClick={() => handleLinkClick('pricing')}
-                className="w-full py-4 bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full min-h-[44px] py-4 bg-[#2e3a8c] hover:bg-[#1e265c] text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer"
                 data-testid="mobile-drawer-btn-cta"
               >
                 <ShieldCheck className="w-4 h-4 text-[#ffc107]" />

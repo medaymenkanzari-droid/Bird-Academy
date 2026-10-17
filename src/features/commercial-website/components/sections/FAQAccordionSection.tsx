@@ -104,7 +104,7 @@ export const FAQAccordionSection: React.FC<FAQAccordionSectionProps> = ({ onNavi
           <button
             type="button"
             onClick={() => setSelectedCategory('all')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`px-4 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl text-xs font-bold transition cursor-pointer ${
               selectedCategory === 'all'
                 ? 'bg-[#2e3a8c] text-white shadow-sm'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-50'
@@ -115,7 +115,7 @@ export const FAQAccordionSection: React.FC<FAQAccordionSectionProps> = ({ onNavi
           <button
             type="button"
             onClick={() => setSelectedCategory('security')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`px-4 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl text-xs font-bold transition cursor-pointer ${
               selectedCategory === 'security'
                 ? 'bg-[#2e3a8c] text-white shadow-sm'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-50'
@@ -126,7 +126,7 @@ export const FAQAccordionSection: React.FC<FAQAccordionSectionProps> = ({ onNavi
           <button
             type="button"
             onClick={() => setSelectedCategory('licensing')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`px-4 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl text-xs font-bold transition cursor-pointer ${
               selectedCategory === 'licensing'
                 ? 'bg-[#2e3a8c] text-white shadow-sm'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-50'
@@ -137,7 +137,7 @@ export const FAQAccordionSection: React.FC<FAQAccordionSectionProps> = ({ onNavi
           <button
             type="button"
             onClick={() => setSelectedCategory('genetics')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`px-4 py-2.5 min-h-[44px] flex items-center justify-center rounded-xl text-xs font-bold transition cursor-pointer ${
               selectedCategory === 'genetics'
                 ? 'bg-[#2e3a8c] text-white shadow-sm'
                 : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 hover:bg-slate-50'
@@ -190,7 +190,7 @@ export const FAQAccordionSection: React.FC<FAQAccordionSectionProps> = ({ onNavi
             <button
               type="button"
               onClick={() => onNavigate('faq')}
-              className="inline-flex items-center gap-2 text-xs font-bold text-[#2e3a8c] dark:text-indigo-400 hover:underline cursor-pointer"
+              className="inline-flex items-center justify-center min-h-[44px] py-2.5 px-4 gap-2 text-xs font-bold text-[#2e3a8c] dark:text-indigo-400 hover:underline cursor-pointer"
               data-testid="view-full-faq-btn"
             >
               <span>Consulter toutes les questions / réponses de la FAQ</span>

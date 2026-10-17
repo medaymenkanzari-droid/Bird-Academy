@@ -97,7 +97,7 @@ export const WebMobileBottomNav: React.FC<WebMobileBottomNavProps> = ({
                 )}
               </div>
 
-              <span className="text-[11px] tracking-tight mt-1 truncate max-w-[70px]">
+              <span className="text-xs font-semibold tracking-tight mt-1 truncate max-w-[70px]">
                 {tab.label}
               </span>
             </button>

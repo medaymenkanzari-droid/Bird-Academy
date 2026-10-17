@@ -61,16 +61,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 <div className="text-xl sm:text-2xl font-black text-[#2e3a8c] dark:text-indigo-400">
                   {t('hero.breedersCount')}
                 </div>
-                <div className="text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">
+                <div className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">
                   {t('hero.breedersLabel')}
                 </div>
               </div>
 
               <div className="p-3 sm:p-4 rounded-2xl bg-white/85 dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800 shadow-xs backdrop-blur-sm text-center">
-                <div className="text-xl sm:text-2xl font-black text-[#ffc107]">
+                <div className="text-xl sm:text-2xl font-black text-[#78350f] dark:text-[#ffc107]">
                   {t('hero.birdsCount')}
                 </div>
-                <div className="text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">
+                <div className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">
                   {t('hero.birdsLabel')}
                 </div>
               </div>
@@ -79,7 +79,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 <div className="text-xl sm:text-2xl font-black text-emerald-600 dark:text-emerald-400">
                   {t('hero.wrightCount')}
                 </div>
-                <div className="text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">
+                <div className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-0.5">
                   {t('hero.wrightLabel')}
                 </div>
               </div>
@@ -149,12 +149,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                       <div className="text-xs font-black tracking-tight leading-none">
                         Canari Lipochrome Jaune Mosaïque
                       </div>
-                      <div className="text-[10px] text-slate-600 dark:text-slate-400 font-mono mt-0.5">
+                      <div className="text-xs text-slate-600 dark:text-slate-400 font-mono mt-0.5">
                         Exemple Illustratif • Fiche Sujet
                       </div>
                     </div>
                   </div>
-                  <span className="px-2 py-0.5 rounded-md text-[10px] font-black bg-[#ffc107]/20 text-amber-900 dark:text-amber-300 border border-[#ffc107]/40">
+                  <span className="px-2 py-0.5 rounded-md text-xs font-black bg-[#ffc107]/20 text-amber-950 dark:text-amber-200 border border-[#ffc107]/40">
                     Critères COM
                   </span>
                 </div>
@@ -169,7 +169,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                   <div className="text-xs font-black text-slate-900 dark:text-white leading-tight">
                     {t('hero.badgeRing')}
                   </div>
-                  <div className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">
+                  <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">
                     {t('hero.badgeRingSub')}
                   </div>
                 </div>
@@ -184,7 +184,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                   <div className="text-xs font-black text-slate-900 dark:text-white leading-none">
                     {t('hero.badgeScore')}
                   </div>
-                  <div className="text-[10px] font-bold text-amber-700 dark:text-amber-400">
+                  <div className="text-xs font-bold text-amber-800 dark:text-amber-300">
                     {t('hero.badgeScoreSub')}
                   </div>
                 </div>
@@ -200,7 +200,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                     <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
                     <span>{t('hero.badgeWright')}</span>
                   </div>
-                  <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <div className="text-xs text-emerald-700 dark:text-emerald-300 font-semibold">
                     {t('hero.badgeWrightSub')}
                   </div>
                 </div>
@@ -215,7 +215,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                   <div className="text-xs font-mono font-bold tracking-wider text-[#ffc107]">
                     {t('hero.badgeSecurity')}
                   </div>
-                  <div className="text-[10px] text-slate-400">
+                  <div className="text-xs text-slate-300">
                     {t('hero.badgeSecuritySub')}
                   </div>
                 </div>
