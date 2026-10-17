@@ -88,7 +88,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
         <button
           type="button"
           onClick={() => handleLinkClick('home')}
-          className="flex items-center gap-2 sm:gap-3 mr-0 lg:mr-8 [dir=rtl]:lg:mr-0 [dir=rtl]:lg:ml-8 min-w-0 min-h-[44px] shrink cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
+          className="flex items-center gap-2 sm:gap-3 mr-0 xl:mr-8 [dir=rtl]:xl:mr-0 [dir=rtl]:xl:ml-8 min-w-0 min-h-[44px] shrink cursor-pointer text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3F51B5] rounded-xl group transition-transform hover:opacity-95 py-1 bg-transparent border-0"
           data-testid="header-brand-logo"
           aria-label="Bird Academy Enterprise Home"
         >
@@ -117,7 +117,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
         </button>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 xl:gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
+        <nav className="hidden xl:flex items-center gap-1 xl:gap-2 text-xs font-bold text-slate-700 dark:text-slate-300">
           {navLinks.map((link) => {
             const isActive = currentRoute === link.id || (link.id === 'products' && currentRoute.startsWith('product-'));
             return (
@@ -193,9 +193,11 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
           </button>
         </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 lg:hidden">
-          <LanguageSelector variant="header" />
+        {/* Mobile & Tablet Compact Hamburger Button */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 xl:hidden">
+          <div className="sm:hidden">
+            <LanguageSelector variant="header" />
+          </div>
           <button
             ref={mobileMenuBtnRef}
             type="button"
@@ -221,7 +223,7 @@ export const WebHeader: React.FC<WebHeaderProps> = ({ currentRoute, onNavigate, 
           aria-modal="true"
           aria-label="Navigation principale mobile"
           style={{ top: `${headerHeight}px` }}
-          className="lg:hidden fixed inset-x-0 bottom-0 bg-white/98 dark:bg-slate-900/98 z-[9999] p-6 flex flex-col justify-between overflow-y-auto border-t border-slate-200 dark:border-slate-800 shadow-2xl transition-all duration-300"
+          className="xl:hidden fixed inset-x-0 bottom-0 bg-white/98 dark:bg-slate-900/98 z-[9999] p-6 flex flex-col justify-between overflow-y-auto border-t border-slate-200 dark:border-slate-800 shadow-2xl transition-all duration-300"
           dir={isRtl ? 'rtl' : 'ltr'}
           data-testid="mobile-nav-drawer"
         >
