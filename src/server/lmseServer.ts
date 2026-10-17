@@ -810,8 +810,8 @@ export class LmseBackendServer {
         candidatePaths: string[];
       }> = {
         'Bird-Academy-Avian-ERP-Setup.exe': {
-          expectedSha256: '0140319CECA91E5C1B8D83444EF852C934D44C4F42275C26779D10AC3A1904BE',
-          expectedSize: 882800300,
+          expectedSha256: 'EEFB55F80511FFA36F10541438D1BA7A8EFBA02EAAADAAB584DB6D26A1E8FDF3',
+          expectedSize: 109726359,
           candidatePaths: [
             path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User-Windows-Setup.exe'),
@@ -823,11 +823,12 @@ export class LmseBackendServer {
           ],
         },
         'Bird-Academy-User-Windows-Setup.exe': {
-          expectedSha256: '0140319CECA91E5C1B8D83444EF852C934D44C4F42275C26779D10AC3A1904BE',
-          expectedSize: 882800300,
+          expectedSha256: 'EEFB55F80511FFA36F10541438D1BA7A8EFBA02EAAADAAB584DB6D26A1E8FDF3',
+          expectedSize: 109726359,
           candidatePaths: [
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User-Windows-Setup.exe'),
             path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
+            path.join(rootDir, 'release', 'Bird-Academy-User-Windows-Setup.exe'),
             path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
             path.join(rootDir, 'public', 'downloads', 'Bird-Academy-Avian-ERP-Setup.exe'),
             path.join(rootDir, 'dist', 'downloads', 'Bird-Academy-User-Windows-Setup.exe'),
@@ -835,8 +836,8 @@ export class LmseBackendServer {
           ],
         },
         'Bird-Academy-User.exe': {
-          expectedSha256: 'F69924BDDE888E81ADD2AB9003CDF2B78F57068FF91F5B30A1A1AFDD8D90A644',
-          expectedSize: 882461776,
+          expectedSha256: '6D302819F9C3E240484B7F5B54FB7904F004961D58444EA5373DDC763D2E372D',
+          expectedSize: 109387829,
           candidatePaths: [
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.exe'),
             path.join(rootDir, 'release', 'Bird-Academy-User.exe'),
@@ -846,8 +847,8 @@ export class LmseBackendServer {
           ],
         },
         'Bird-Academy-User.apk': {
-          expectedSha256: 'FA759004960604DDA0F9E195E47FE86C164F0EF9F824BF9ED840F94F7A7A970D',
-          expectedSize: 400904790,
+          expectedSha256: '8ABFC3F66329109F1F5A70EFE4EF0C5964795B19ED3D64C88D32EF24B9725DEC',
+          expectedSize: 18402794,
           candidatePaths: [
             path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.apk'),
             path.join(rootDir, 'public', 'downloads', 'Bird-Academy-User.apk'),

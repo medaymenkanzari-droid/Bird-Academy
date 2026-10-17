@@ -93,7 +93,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                 <div>Version : <strong>{setupArt?.version || 'V2.0.0-RC1'}</strong></div>
                 <div>BUILD_ID : <strong>{setupArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
-                <div>Taille : <strong>{setupArt?.sizeMB || '882 800 300 octets (841.90 Mo)'}</strong></div>
+                <div>Taille : <strong>{setupArt?.sizeMB || '109 726 359 octets (104.64 Mo)'}</strong></div>
               </div>
             </div>
 
@@ -134,7 +134,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                 <div>Version : <strong>{portableArt?.version || 'V2.0.0-RC1'}</strong></div>
                 <div>BUILD_ID : <strong>{portableArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
-                <div>Taille : <strong>{portableArt?.sizeMB || '882 461 776 octets (841.58 Mo)'}</strong></div>
+                <div>Taille : <strong>{portableArt?.sizeMB || '109 387 829 octets (104.32 Mo)'}</strong></div>
               </div>
             </div>
 
@@ -184,7 +184,7 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
                 <div>Version : <strong>{apkArt?.version || 'V2.0.0-RC1'}</strong></div>
                 <div>BUILD_ID : <strong>{apkArt?.buildId || 'BA-V2.0.0-RC1'}</strong></div>
-                <div>Taille : <strong>{apkArt?.sizeMB || '400 904 790 octets (382.33 Mo)'}</strong></div>
+                <div>Taille : <strong>{apkArt?.sizeMB || '18 402 794 octets (17.55 Mo)'}</strong></div>
               </div>
             </div>
 

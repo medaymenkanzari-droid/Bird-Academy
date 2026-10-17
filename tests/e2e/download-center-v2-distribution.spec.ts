@@ -64,15 +64,15 @@ test.describe('MISSION RELEASE-DOWNLOADS-INTEGRATION-001 — E2E Download Center
     // 4. SHA-256 toggles & values
     await page.locator('[data-testid="toggle-sha-Bird-Academy-User-Windows-Setup.exe"]').click();
     const winSetupSha = page.locator('[data-testid="sha-value-Bird-Academy-User-Windows-Setup.exe"]');
-    await expect(winSetupSha).toContainText('0140319CECA91E5C1B8D83444EF852C934D44C4F42275C26779D10AC3A1904BE');
+    await expect(winSetupSha).toContainText('EEFB55F80511FFA36F10541438D1BA7A8EFBA02EAAADAAB584DB6D26A1E8FDF3');
 
     await page.locator('[data-testid="toggle-sha-Bird-Academy-User.exe"]').click();
     const winPortableSha = page.locator('[data-testid="sha-value-Bird-Academy-User.exe"]');
-    await expect(winPortableSha).toContainText('F69924BDDE888E81ADD2AB9003CDF2B78F57068FF91F5B30A1A1AFDD8D90A644');
+    await expect(winPortableSha).toContainText('6D302819F9C3E240484B7F5B54FB7904F004961D58444EA5373DDC763D2E372D');
 
     await page.locator('[data-testid="toggle-sha-Bird-Academy-User.apk"]').click();
     const androidSha = page.locator('[data-testid="android-apk-sha"]');
-    await expect(androidSha).toContainText('FA759004960604DDA0F9E195E47FE86C164F0EF9F824BF9ED840F94F7A7A970D');
+    await expect(androidSha).toContainText('8ABFC3F66329109F1F5A70EFE4EF0C5964795B19ED3D64C88D32EF24B9725DEC');
 
     // 5. Absence totale d'ancienne version
     const pageContent = await downloadPage.innerText();
