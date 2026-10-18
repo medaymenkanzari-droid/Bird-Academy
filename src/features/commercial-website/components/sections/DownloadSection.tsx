@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import { useWebLanguage } from '../../i18n';
 import { WebRoute } from '../../types';
 import { WebDownloadService } from '../../services/WebDownloadService';
-import { Download, Monitor, Smartphone, Check, Copy, Fingerprint, ChevronDown, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Download, Monitor, Smartphone, Check, CheckCircle2, Copy, Fingerprint, ChevronDown, ShieldCheck, AlertTriangle } from 'lucide-react';
 
 export interface DownloadSectionProps {
   onNavigate: (route: WebRoute) => void;
@@ -179,6 +179,19 @@ export const DownloadSection: React.FC<DownloadSectionProps> = ({ onNavigate }) 
                 <p className="leading-tight font-medium">
                   Installation manuelle APK destinée au programme de test (versionCode 22).
                 </p>
+              </div>
+
+              {/* 3-Step Installation Guidance */}
+              <div className="p-3 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 text-xs text-slate-700 dark:text-slate-300 space-y-1.5" data-testid="android-install-guidance">
+                <div className="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5 text-[11px] sm:text-xs">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span>{t('downloadPage.androidStepsTitle')}</span>
+                </div>
+                <ol className="space-y-1 text-[11px] leading-relaxed text-slate-600 dark:text-slate-300 ps-1">
+                  <li>{t('downloadPage.androidStep1')}</li>
+                  <li>{t('downloadPage.androidStep2')}</li>
+                  <li>{t('downloadPage.androidStep3')}</li>
+                </ol>
               </div>
 
               <div className="text-xs text-slate-600 dark:text-slate-400 font-mono space-y-1 bg-[#f7f9fb] dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
