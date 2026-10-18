@@ -15,7 +15,7 @@ export const ComparisonTableSection: React.FC = () => {
   const rows = [
     {
       feature: t('pricing.rowBirdsQuota'),
-      free: '50 max',
+      free: t('pricing.rowBirdsQuotaValFree'),
       premium: 'Illimité',
       pro: 'Illimité',
       lifetime: 'Illimité',
