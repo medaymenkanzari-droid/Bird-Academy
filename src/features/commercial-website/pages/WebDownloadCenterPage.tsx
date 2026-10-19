@@ -21,7 +21,7 @@ export interface WebDownloadCenterPageProps {
 }
 
 export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ onNavigate }) => {
-  const { t, isRtl } = useWebLanguage();
+  const { t, isRtl, locale } = useWebLanguage();
   const downloadService = WebDownloadService.getInstance();
   const allArtifacts = downloadService.getAllArtifacts();
 
@@ -45,10 +45,14 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
   };
 
   const handleTriggerDownload = (filename: string) => {
-    const url = WebDownloadService.getPublicDownloadUrl(filename);
+    let effectiveFilename = filename;
+    if (filename.includes('Rapport-de-test') && locale && locale !== 'fr') {
+      effectiveFilename = `Rapport-de-test-Bird-Academy-V2.0.0-RC1-${locale}.pdf`;
+    }
+    const url = WebDownloadService.getPublicDownloadUrl(effectiveFilename);
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename;
+    a.download = effectiveFilename;
     a.target = '_blank';
     a.rel = 'noopener noreferrer';
     document.body.appendChild(a);
@@ -468,7 +472,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                           ? 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800'
                           : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                       }`}>
-                        {isTestReport ? 'Rapport de qualification • V2.0.0-RC1' : 'Guide officiel de mise en route'}
+                        {isTestReport ? (t('downloadPage.testReportTag') || 'Formulaire de testeur • V2.0.0-RC1') : 'Guide officiel de mise en route'}
                       </span>
                       <span className="text-[11px] font-mono font-bold text-slate-500 dark:text-slate-400">
                         {doc.sizeMB}
@@ -485,11 +489,11 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                       </div>
                       <div>
                         <h3 className="font-extrabold text-base text-slate-900 dark:text-white">
-                          {doc.name}
+                          {isTestReport ? (t('downloadPage.testReportName') || doc.name) : doc.name}
                         </h3>
                         <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                           {isTestReport
-                            ? 'Résultats officiels des tests de qualification Windows & Android validés pour les testeurs et éleveurs partenaires.'
+                            ? (t('downloadPage.testReportDesc') || 'Formulaire officiel d\'évaluation et de retour terrain pour testeur humain (Windows & Android).')
                             : 'Guide complet pour la prise en main et l’activation souveraine 100% locale sans Internet.'}
                         </p>
                       </div>
@@ -526,7 +530,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                     <button
                       type="button"
                       onClick={() => handleTriggerDownload(doc.filename)}
-                      className={`w-full py-3 rounded-xl font-bold text-xs sm:text-sm shadow-sm transition flex items-center justify-center gap-2 cursor-pointer ${
+                      className={`w-full py-3 min-h-[44px] rounded-xl font-bold text-xs sm:text-sm shadow-sm transition flex items-center justify-center gap-2 cursor-pointer ${
                         isTestReport
                           ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20'
                           : 'bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-700 dark:hover:bg-slate-600'
@@ -535,7 +539,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                       id={`download-btn-${doc.filename}`}
                     >
                       <Download className="w-4 h-4" />
-                      <span>{isTestReport ? 'Télécharger le rapport de test' : 'Télécharger le guide'}</span>
+                      <span>{isTestReport ? (t('downloadPage.btnDownloadTestReport') || 'Télécharger le rapport de testeur') : 'Télécharger le guide'}</span>
                     </button>
                   </div>
                 </div>
