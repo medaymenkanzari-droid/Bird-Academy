@@ -61,6 +61,16 @@ export const CANONICAL_MUTATION_ALIASES: Record<string, Record<string, string>> 
     'loc_calo_syc': 'nh_syc',
     'calo_dyc': 'nh_dyc',
     'loc_calo_dyc': 'nh_dyc'
+  },
+  agapornis_roseicollis: {
+    'agap_lutino': 'ar_lutino',
+    'agap_cinnamon': 'ar_cinnamon',
+    'agap_opaline': 'ar_opaline',
+    'agap_masque_orange': 'ar_masque_orange'
+  },
+  agapornis_personatus: {
+    'personatus_blue': 'ap_blue',
+    'true_blue': 'ap_blue'
   }
 };
 
@@ -71,6 +81,8 @@ const CANONICAL_SPECIES_MUTATIONS: Record<
     id: string;
     names: string[];
     inheritance: 'SEX_LINKED_RECESSIVE' | 'AUTOSOMAL_DOMINANT' | 'AUTOSOMAL_RECESSIVE';
+    status?: CanonicalMutationResolution['status'];
+    reason?: string;
   }>
 > = {
   canari: [
@@ -105,12 +117,40 @@ const CANONICAL_SPECIES_MUTATIONS: Record<
     { id: 'calo_panache', names: ['panaché', 'panache'], inheritance: 'AUTOSOMAL_RECESSIVE' },
     { id: 'calo_face_blanche', names: ['face blanche', 'whiteface'], inheritance: 'AUTOSOMAL_RECESSIVE' }
   ],
-  agapornis: [
-    { id: 'agap_lutino', names: ['lutino', 'ino'], inheritance: 'SEX_LINKED_RECESSIVE' },
-    { id: 'agap_cinnamon', names: ['cinnamon'], inheritance: 'SEX_LINKED_RECESSIVE' },
-    { id: 'agap_opaline', names: ['opaline'], inheritance: 'SEX_LINKED_RECESSIVE' },
-    { id: 'agap_masque_orange', names: ['masque orange', 'orange face'], inheritance: 'AUTOSOMAL_RECESSIVE' },
-    { id: 'agap_bleu', names: ['bleu', 'blue'], inheritance: 'AUTOSOMAL_RECESSIVE' }
+  agapornis_roseicollis: [
+    { id: 'ar_lutino', names: ['lutino', 'ino', 'agap_lutino', 'ar_lutino'], inheritance: 'SEX_LINKED_RECESSIVE', status: 'CANONICAL' },
+    { id: 'ar_cinnamon', names: ['cinnamon', 'agap_cinnamon', 'ar_cinnamon'], inheritance: 'SEX_LINKED_RECESSIVE', status: 'CANONICAL' },
+    { id: 'ar_opaline', names: ['opaline', 'agap_opaline', 'ar_opaline'], inheritance: 'SEX_LINKED_RECESSIVE', status: 'CANONICAL' },
+    {
+      id: 'ar_masque_orange',
+      names: ['masque orange', 'orange face', 'agap_masque_orange', 'ar_masque_orange'],
+      inheritance: 'AUTOSOMAL_RECESSIVE',
+      status: 'HUMAN_REVIEW_REQUIRED',
+      reason: 'Mutation Masque Orange établie chez Roseicollis mais sans homologation documentaire formelle dans le référentiel V2 (HRR-05.1).'
+    },
+    {
+      id: 'ar_aqua',
+      names: ['aqua', 'parblue aqua', 'bleu de mer', 'ar_aqua'],
+      inheritance: 'AUTOSOMAL_RECESSIVE',
+      status: 'HUMAN_REVIEW_REQUIRED',
+      reason: 'Allèle Parblue Aqua à réduction psittacine partielle (~50%), en attente d\'homologation formelle (HRR-05.2).'
+    },
+    {
+      id: 'ar_turquoise',
+      names: ['turquoise', 'parblue turquoise', 'ar_turquoise'],
+      inheritance: 'AUTOSOMAL_RECESSIVE',
+      status: 'HUMAN_REVIEW_REQUIRED',
+      reason: 'Allèle Parblue Turquoise à réduction psittacine forte (~80-90%), en attente d\'homologation formelle (HRR-05.2).'
+    }
+  ],
+  agapornis_personatus: [
+    {
+      id: 'ap_blue',
+      names: ['ap_blue', 'bleu', 'blue', 'véritable bleu', 'true blue', 'personatus_blue'],
+      inheritance: 'AUTOSOMAL_RECESSIVE',
+      status: 'HUMAN_REVIEW_REQUIRED',
+      reason: 'Véritable bleu autosomique récessif documenté chez Agapornis personatus, en attente d\'homologation bibliographique formelle (HRR-05.2).'
+    }
   ],
   diamant_mandarin: [
     { id: 'mand_brun', names: ['brun', 'fawn'], inheritance: 'SEX_LINKED_RECESSIVE' },
@@ -178,6 +218,17 @@ export class CanonicalDataBridgeAdapter {
       };
     }
 
+    // 1b. Espèce générique legacy Agapornis (Neutralisation stricte GAP-08)
+    if (normalizedSpecies === 'agapornis') {
+      return {
+        resolved: false,
+        speciesId: 'agapornis',
+        inheritance: 'UNKNOWN',
+        status: 'INSUFFICIENT_INFORMATION',
+        reason: 'Espèce générique agapornis ambiguë (LEGACY_SPECIES_AMBIGUITY). Préciser agapornis_roseicollis, agapornis_fischeri ou agapornis_personatus pour toute analyse génétique.'
+      };
+    }
+
     // 2. Espèce hors périmètre (Passer domesticus)
     if (normalizedSpecies === 'passer_domesticus') {
       return {
@@ -214,26 +265,36 @@ export class CanonicalDataBridgeAdapter {
         };
       }
     }
-    // 4b. Espèces Agapornis à cercle oculaire : Catalogue génétique réservé à GAP-08 (zéro fallback sur Roseicollis)
-    if (normalizedSpecies === 'agapornis_fischeri' || normalizedSpecies === 'agapornis_personatus') {
+
+    // 4b. Agapornis fischeri : Catalogue non homologué (Zéro fallback sur Roseicollis)
+    if (normalizedSpecies === 'agapornis_fischeri') {
       return {
         resolved: false,
         speciesId: normalizedSpecies,
         inheritance: 'UNKNOWN',
         status: 'OUT_OF_SCOPE',
-        reason: `Catalogue génétique pour ${normalizedSpecies} non encore homologué (réservé à GAP-08 / HUMAN_REVIEW_REQUIRED). Aucun fallback sur Roseicollis.`
+        reason: 'Catalogue génétique pour agapornis_fischeri non encore homologué (réservé à GAP-08 / HUMAN_REVIEW_REQUIRED). Aucun fallback sur Roseicollis.'
       };
     }
 
-    // 5. Recherche dans le catalogue de l'espèce (Roseicollis utilise le catalogue canonique agapornis)
-    const catalogKey = CANONICAL_SPECIES_MUTATIONS[normalizedSpecies]
-      ? normalizedSpecies
-      : (normalizedSpecies === 'agapornis_roseicollis' ? 'agapornis' : normalizedSpecies);
+    // 4c. Roseicollis : Ambiguïté "bleu" (Parblue Aqua/Turquoise vs True Blue)
+    if (normalizedSpecies === 'agapornis_roseicollis') {
+      if (cleanMut === 'agap_bleu' || cleanMut === 'bleu' || cleanMut === 'blue') {
+        return {
+          resolved: false,
+          speciesId: 'agapornis_roseicollis',
+          inheritance: 'AUTOSOMAL_RECESSIVE',
+          status: 'HUMAN_REVIEW_REQUIRED',
+          reason: 'Ambiguïté scientifique (HRR-05.2) : le terme "bleu" chez Roseicollis désigne la série Parblue (ar_aqua ou ar_turquoise) et non un véritable bleu génomique. Sélection explicite requise.'
+        };
+      }
+    }
 
-    const catalog = CANONICAL_SPECIES_MUTATIONS[catalogKey];
+    // 5. Recherche dans le catalogue de l'espèce
+    const catalog = CANONICAL_SPECIES_MUTATIONS[normalizedSpecies];
     if (catalog) {
       // Résolution déterministe via table d'alias explicite scopée par espèce
-      const speciesAliases = CANONICAL_MUTATION_ALIASES[catalogKey];
+      const speciesAliases = CANONICAL_MUTATION_ALIASES[normalizedSpecies];
       const targetMutId = (speciesAliases && speciesAliases[cleanMut]) ? speciesAliases[cleanMut] : cleanMut;
 
       const match = catalog.find(m => {
@@ -252,9 +313,21 @@ export class CanonicalDataBridgeAdapter {
           speciesId: normalizedSpecies,
           mutationId: match.id,
           inheritance: match.inheritance,
-          status: 'CANONICAL'
+          status: match.status || 'CANONICAL',
+          reason: match.reason
         };
       }
+    }
+
+    // 5b. Cas particulier Personatus : mutation hors de son catalogue minimal -> OUT_OF_SCOPE (aucun report de Roseicollis)
+    if (normalizedSpecies === 'agapornis_personatus') {
+      return {
+        resolved: false,
+        speciesId: normalizedSpecies,
+        inheritance: 'UNKNOWN',
+        status: 'OUT_OF_SCOPE',
+        reason: `La mutation "${mutationIdOrName}" n'appartient pas au catalogue de l'espèce agapornis_personatus (réservé à GAP-08). Aucun report des mutations d'autres espèces.`
+      };
     }
 
     // 6. Non répertoriée pour cette espèce -> UNKNOWN (ZÉRO FALLBACK RÉCESSIF AUTOMATIQUE)
@@ -278,10 +351,7 @@ export class CanonicalDataBridgeAdapter {
       return mutationId;
     }
     const normSp = this.normalizeSpeciesId(speciesId);
-    const catalogKey = CANONICAL_MUTATION_ALIASES[normSp]
-      ? normSp
-      : (normSp.startsWith('agapornis') ? 'agapornis' : normSp);
-    const aliases = CANONICAL_MUTATION_ALIASES[catalogKey];
+    const aliases = CANONICAL_MUTATION_ALIASES[normSp];
     if (aliases && aliases[clean.toLowerCase()]) {
       return aliases[clean.toLowerCase()];
     }
