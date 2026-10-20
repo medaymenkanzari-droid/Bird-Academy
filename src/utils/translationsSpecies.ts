@@ -25,6 +25,9 @@ export const SPECIES_TRANSLATIONS: Record<Language, Record<string, string>> = {
     catGouldClassique: "Diamant de Gould",
     catPerrucheClassique: "Perruche ondulée",
     catAgapornisClassique: "Agapornis",
+    catAgapornisRoseicollis: "Agapornis roseicollis (Inséparable rosegorge)",
+    catAgapornisFischeri: "Agapornis fischeri (Inséparable de Fischer)",
+    catAgapornisPersonatus: "Agapornis personatus (Inséparable masqué)",
     catCalopsitteClassique: "Calopsitte élégante",
 
     // Races / Variétés
@@ -83,6 +86,9 @@ export const SPECIES_TRANSLATIONS: Record<Language, Record<string, string>> = {
     catGouldClassique: "Gouldian Finch",
     catPerrucheClassique: "Budgerigar",
     catAgapornisClassique: "Lovebird",
+    catAgapornisRoseicollis: "Peach-faced Lovebird (Agapornis roseicollis)",
+    catAgapornisFischeri: "Fischer's Lovebird (Agapornis fischeri)",
+    catAgapornisPersonatus: "Masked Lovebird (Agapornis personatus)",
     catCalopsitteClassique: "Cockatiel",
 
     // Breeds
@@ -141,6 +147,9 @@ export const SPECIES_TRANSLATIONS: Record<Language, Record<string, string>> = {
     catGouldClassique: "حسون غولد",
     catPerrucheClassique: "طائر البادجي",
     catAgapornisClassique: "طيور الحب",
+    catAgapornisRoseicollis: "طائر الحب روزيكوليس (Agapornis roseicollis)",
+    catAgapornisFischeri: "طائر الحب فيشر (Agapornis fischeri)",
+    catAgapornisPersonatus: "طائر الحب المقنع (Agapornis personatus)",
     catCalopsitteClassique: "الكوكاتيل",
 
     // السلالات
@@ -199,6 +208,9 @@ export const SPECIES_TRANSLATIONS: Record<Language, Record<string, string>> = {
     catGouldClassique: "Diamante de Gould",
     catPerrucheClassique: "Periquito común",
     catAgapornisClassique: "Inseparable",
+    catAgapornisRoseicollis: "Inseparable de cara melocotón (Agapornis roseicollis)",
+    catAgapornisFischeri: "Inseparable de Fischer (Agapornis fischeri)",
+    catAgapornisPersonatus: "Inseparable enmascarado (Agapornis personatus)",
     catCalopsitteClassique: "Ninfa / Carolina",
 
     // Razas
@@ -257,6 +269,9 @@ export const SPECIES_TRANSLATIONS: Record<Language, Record<string, string>> = {
     catGouldClassique: "Diamante di Gould",
     catPerrucheClassique: "Coccorita ondulata",
     catAgapornisClassique: "Inseparabile",
+    catAgapornisRoseicollis: "Inseparabile dal collo rosa (Agapornis roseicollis)",
+    catAgapornisFischeri: "Inseparabile di Fischer (Agapornis fischeri)",
+    catAgapornisPersonatus: "Inseparabile mascherato (Agapornis personatus)",
     catCalopsitteClassique: "Calopsite",
 
     // Razze

@@ -5,9 +5,27 @@
 
 import { CANARI_PROFILE } from './canari';
 import { CHARDONNERET_PROFILE } from './chardonneret';
+import { DIAMANT_MANDARIN_PROFILE } from './diamantMandarin';
+import { CALOPSITTE_PROFILE } from './calopsitte';
+import { AGAPORNIS_ROSEICOLLIS_PROFILE } from './agapornisRoseicollis';
+import { AGAPORNIS_FISCHERI_PROFILE } from './agapornisFischeri';
+import { AGAPORNIS_PERSONATUS_PROFILE } from './agapornisPersonatus';
+import { DIAMANT_GOULD_PROFILE } from './gould';
+import { PERRUCHE_ONDULEE_PROFILE } from './perrucheOndulee';
+import { COLOMBE_DIAMANT_PROFILE } from './colombeDiamant';
 import { BiologicalSpeciesProfile } from './types';
 
 export * from './types';
+export { CANARI_PROFILE } from './canari';
+export { CHARDONNERET_PROFILE } from './chardonneret';
+export { DIAMANT_MANDARIN_PROFILE } from './diamantMandarin';
+export { CALOPSITTE_PROFILE } from './calopsitte';
+export { AGAPORNIS_ROSEICOLLIS_PROFILE } from './agapornisRoseicollis';
+export { AGAPORNIS_FISCHERI_PROFILE } from './agapornisFischeri';
+export { AGAPORNIS_PERSONATUS_PROFILE } from './agapornisPersonatus';
+export { DIAMANT_GOULD_PROFILE } from './gould';
+export { PERRUCHE_ONDULEE_PROFILE } from './perrucheOndulee';
+export { COLOMBE_DIAMANT_PROFILE } from './colombeDiamant';
 
 function createUnverifiedProfile(
   id: string,
@@ -75,7 +93,6 @@ function createUnverifiedProfile(
     management: {
       hybridizationPossible: false,
       compatibleSpecies: [],
-      regulatoryStatus: { fr: 'Statut libre', en: 'Unrestricted', ar: 'غير مقيد', es: 'Libre', it: 'Libero' },
       breedingTips: { fr: 'Données à compléter / non validées', en: 'Data pending validation', ar: 'بيانات قيد التثبت', es: 'Datos a completar', it: 'Dati da completare' }
     },
     traceability: {
@@ -92,41 +109,19 @@ function createUnverifiedProfile(
   };
 }
 
-export const PERRUCHE_PROFILE = createUnverifiedProfile(
-  'perruche_ondulee', 'PERR-OND', 'Melopsittacus undulatus', 'Psittaculidae', 'Melopsittacus',
-  { fr: 'Perruche Ondulée', en: 'Budgerigar', ar: 'درة استرالية', es: 'Periquito común', it: 'Pappagallino ondulato' }
-);
+export const PERRUCHE_PROFILE = PERRUCHE_ONDULEE_PROFILE;
 
-export const AGAPORNIS_PROFILE = createUnverifiedProfile(
-  'agapornis', 'AGAP-ROSE', 'Agapornis roseicollis', 'Psittaculidae', 'Agapornis',
-  { fr: 'Inséparable / Agapornis', en: 'Lovebird', ar: 'طائر الحب', es: 'Inseparable', it: 'Inseparabile' }
-);
+export const AGAPORNIS_PROFILE = AGAPORNIS_ROSEICOLLIS_PROFILE;
 
-export const DIAMANT_MANDARIN_PROFILE = createUnverifiedProfile(
-  'diamant_mandarin', 'DIAM-MAN', 'Taeniopygia guttata', 'Estrildidae', 'Taeniopygia',
-  { fr: 'Diamant Mandarin', en: 'Zebra Finch', ar: 'زيبرا', es: 'Diamante mandarín', it: 'Diamante mandarino' }
-);
-
-export const DIAMANT_GOULD_PROFILE = createUnverifiedProfile(
-  'diamant_gould', 'DIAM-GOU', 'Erythrura gouldiae', 'Estrildidae', 'Erythrura',
-  { fr: 'Diamant de Gould', en: 'Gouldian Finch', ar: 'حسون กูลเดียน', es: 'Diamante de Gould', it: 'Diamante di Gould' }
-);
-
-export const CALOPSITTE_PROFILE = createUnverifiedProfile(
-  'calopsitte', 'CALO-ELE', 'Nymphicus hollandicus', 'Cacatuidae', 'Nymphicus',
-  { fr: 'Calopsitte Élégante', en: 'Cockatiel', ar: 'كوكاتيل', es: 'Ninfa', it: 'Calopsitta' }
-);
-
-export const COLOMBE_PROFILE = createUnverifiedProfile(
-  'colombe', 'COLO-DIA', 'Geopelia cuneata', 'Columbidae', 'Geopelia',
-  { fr: 'Colombe Diamant', en: 'Diamond Dove', ar: 'حمامة الماس', es: 'Tortolita diamante', it: 'Colombina diamante' }
-);
+export const COLOMBE_PROFILE = COLOMBE_DIAMANT_PROFILE;
 
 export const BIOLOGICAL_SPECIES_REGISTRY: BiologicalSpeciesProfile[] = [
   CANARI_PROFILE,
   CHARDONNERET_PROFILE,
   PERRUCHE_PROFILE,
-  AGAPORNIS_PROFILE,
+  AGAPORNIS_ROSEICOLLIS_PROFILE,
+  AGAPORNIS_FISCHERI_PROFILE,
+  AGAPORNIS_PERSONATUS_PROFILE,
   DIAMANT_MANDARIN_PROFILE,
   DIAMANT_GOULD_PROFILE,
   CALOPSITTE_PROFILE,

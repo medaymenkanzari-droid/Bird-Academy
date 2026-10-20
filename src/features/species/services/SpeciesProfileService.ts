@@ -54,7 +54,7 @@ export class SpeciesProfileService {
    */
   static setProfile(speciesIds: string[], breedIds?: Record<string, string[]>): void {
     const validSpeciesIds = speciesIds.filter(id => Boolean(id && typeof id === 'string'));
-    const sanitizedIds = validSpeciesIds.length > 0 ? validSpeciesIds : ['canari'];
+    const sanitizedIds = validSpeciesIds;
 
     const newProfile: UserSpeciesProfile = {
       activeSpeciesIds: Array.from(new Set(sanitizedIds)),
@@ -68,12 +68,21 @@ export class SpeciesProfileService {
 
   /**
    * Retrieve active species IDs as an array of strings (e.g. ['canari', 'chardonneret_elegant']).
+   * RÈGLE CRITIQUE : Zéro fallback sur 'canari' si la liste est vide.
    */
   static getActiveSpeciesIds(): string[] {
     const profile = this.getProfile();
-    return profile.activeSpeciesIds && profile.activeSpeciesIds.length > 0
+    return Array.isArray(profile.activeSpeciesIds)
       ? profile.activeSpeciesIds
-      : ['canari'];
+      : [];
+  }
+
+  /**
+   * Statut épistémique du profil d'espèces.
+   */
+  static getProfileStatus(): 'CONFIGURED' | 'UNKNOWN' | 'INSUFFICIENT_INFORMATION' {
+    const active = this.getActiveSpeciesIds();
+    return active.length > 0 ? 'CONFIGURED' : 'INSUFFICIENT_INFORMATION';
   }
 
   /**
@@ -124,8 +133,23 @@ export class SpeciesProfileService {
    */
   static getIncubationDays(speciesId?: string): number {
     if (!speciesId) return 13;
-    // Species-specific biological defaults
+    // Check certified biological profile first
+    const profile = getBiologicalProfileById(speciesId);
+    if (profile && profile.reproduction?.incubationPeriod) {
+      return profile.reproduction.incubationPeriod;
+    }
+
+    // Species-specific biological defaults (with canonical speciesIds)
     switch (speciesId) {
+      case 'agapornis_roseicollis':
+      case 'roseicollis':
+        return 23;
+      case 'agapornis_fischeri':
+      case 'fischeri':
+      case 'fischer':
+      case 'agapornis_personatus':
+      case 'personatus':
+        return 22;
       case 'chardonneret_elegant':
         return 12;
       case 'diamant_gould':
@@ -134,7 +158,6 @@ export class SpeciesProfileService {
       case 'mandarin':
         return 13;
       case 'perruche_ondulee':
-      case 'agapornis':
         return 18;
       case 'calopsitte':
       case 'calopsitte_elegante':

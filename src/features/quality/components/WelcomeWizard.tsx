@@ -591,7 +591,7 @@ export const WelcomeWizard: React.FC<WelcomeWizardProps> = ({ onClose, onComplet
                       { id: 'canari', speciesIds: ['canari'], name: t('wizardSpeciesCanari'), desc: t('wizardSpeciesCanariDesc') },
                       { id: 'chardonneret_elegant', speciesIds: ['chardonneret_elegant'], name: t('wizardSpeciesChardonneret'), desc: t('wizardSpeciesChardonneretDesc') },
                       { id: 'exotique', speciesIds: ['diamant_mandarin', 'diamant_gould'], name: t('wizardSpeciesExotique'), desc: t('wizardSpeciesExotiqueDesc') },
-                      { id: 'perruche', speciesIds: ['perruche_ondulee', 'agapornis', 'calopsitte'], name: t('wizardSpeciesCrochu'), desc: t('wizardSpeciesCrochuDesc') }
+                      { id: 'perruche', speciesIds: ['perruche_ondulee', 'agapornis_roseicollis', 'agapornis_fischeri', 'agapornis_personatus', 'calopsitte'], name: t('wizardSpeciesCrochu'), desc: t('wizardSpeciesCrochuDesc') }
                     ].map(spec => {
                       const isSel = spec.speciesIds.some(id => selectedSpecies.includes(id));
                       return (

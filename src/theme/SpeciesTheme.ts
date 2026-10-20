@@ -47,6 +47,39 @@ export const SPECIES_THEMES: Record<string, SpeciesThemeConfig> = {
     icon: Bird,
     emoji: '🦜'
   },
+  agapornis_roseicollis: {
+    id: 'agapornis_roseicollis',
+    colors: {
+      bg: 'bg-emerald-100 dark:bg-emerald-900/40',
+      text: 'text-emerald-800 dark:text-emerald-300',
+      border: 'border-emerald-200 dark:border-emerald-800/50',
+      icon: 'text-emerald-600 dark:text-emerald-400',
+    },
+    icon: Bird,
+    emoji: '🦜'
+  },
+  agapornis_fischeri: {
+    id: 'agapornis_fischeri',
+    colors: {
+      bg: 'bg-amber-100 dark:bg-amber-900/40',
+      text: 'text-amber-800 dark:text-amber-300',
+      border: 'border-amber-200 dark:border-amber-800/50',
+      icon: 'text-amber-600 dark:text-amber-400',
+    },
+    icon: Bird,
+    emoji: '🦜'
+  },
+  agapornis_personatus: {
+    id: 'agapornis_personatus',
+    colors: {
+      bg: 'bg-cyan-100 dark:bg-cyan-900/40',
+      text: 'text-cyan-800 dark:text-cyan-300',
+      border: 'border-cyan-200 dark:border-cyan-800/50',
+      icon: 'text-cyan-600 dark:text-cyan-400',
+    },
+    icon: Bird,
+    emoji: '🦜'
+  },
   chardonneret_elegant: {
     id: 'chardonneret_elegant',
     colors: {
