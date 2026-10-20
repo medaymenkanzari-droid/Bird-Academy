@@ -190,7 +190,7 @@ export class CanonicalDataBridgeAdapter {
     if (s.startsWith('agapornis') || s === 'inséparable' || s === 'lovebird') return 'agapornis';
     if (s === 'diamant mandarin' || s === 'mandarin' || s === 'taeniopygia guttata') return 'diamant_mandarin';
     if (s === 'diamant de gould' || s === 'gould' || s === 'erythrura gouldiae') return 'diamant_gould';
-    if (s === 'colombe diamant' || s === 'colombe_diamant' || s === 'geopelia cuneata' || s === 'diamond dove') return 'colombe_diamant';
+    if (s === 'colombe' || s === 'colombe diamant' || s === 'colombe_diamant' || s === 'geopelia cuneata' || s === 'diamond dove') return 'colombe_diamant';
     if (s === 'passer domesticus' || s === 'moineau domestique') return 'passer_domesticus';
     return rawSpecies;
   }

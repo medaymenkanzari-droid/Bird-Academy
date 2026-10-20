@@ -135,6 +135,17 @@ export const SPECIES_THEMES: Record<string, SpeciesThemeConfig> = {
     icon: Bird,
     emoji: '🕊️'
   },
+  colombe_diamant: {
+    id: 'colombe_diamant',
+    colors: {
+      bg: 'bg-stone-100 dark:bg-stone-900/40',
+      text: 'text-stone-800 dark:text-stone-300',
+      border: 'border-stone-200 dark:border-stone-800/50',
+      icon: 'text-stone-600 dark:text-stone-400',
+    },
+    icon: Bird,
+    emoji: '🕊️'
+  },
   fallback: {
     id: 'fallback',
     colors: {

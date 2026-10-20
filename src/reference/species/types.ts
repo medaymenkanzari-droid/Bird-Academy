@@ -84,7 +84,7 @@ export interface SpeciesHealth {
 export interface SpeciesManagement {
   hybridizationPossible: boolean;
   compatibleSpecies: string[]; // list of species IDs
-  regulatoryStatus: MultilingualText;
+  regulatoryStatus?: MultilingualText;
   breedingTips: MultilingualText;
 }
 

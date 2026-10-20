@@ -129,7 +129,10 @@ export const BIOLOGICAL_SPECIES_REGISTRY: BiologicalSpeciesProfile[] = [
 ];
 
 export function getBiologicalProfileById(id: string): BiologicalSpeciesProfile | undefined {
-  return BIOLOGICAL_SPECIES_REGISTRY.find(profile => profile.identity.id === id);
+  if (!id) return undefined;
+  // Legacy alias support: 'colombe' -> canonical 'colombe_diamant'
+  const targetId = id === 'colombe' ? 'colombe_diamant' : id;
+  return BIOLOGICAL_SPECIES_REGISTRY.find(profile => profile.identity.id === targetId);
 }
 
 export function getBiologicalProfileByCode(code: string): BiologicalSpeciesProfile | undefined {
