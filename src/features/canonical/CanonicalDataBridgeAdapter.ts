@@ -190,8 +190,34 @@ export class CanonicalDataBridgeAdapter {
     if (s.startsWith('agapornis') || s === 'inséparable' || s === 'lovebird') return 'agapornis';
     if (s === 'diamant mandarin' || s === 'mandarin' || s === 'taeniopygia guttata') return 'diamant_mandarin';
     if (s === 'diamant de gould' || s === 'gould' || s === 'erythrura gouldiae') return 'diamant_gould';
+    if (s === 'colombe diamant' || s === 'colombe_diamant' || s === 'geopelia cuneata' || s === 'diamond dove') return 'colombe_diamant';
     if (s === 'passer domesticus' || s === 'moineau domestique') return 'passer_domesticus';
     return rawSpecies;
+  }
+
+  private static readonly CANONICAL_KNOWN_SPECIES = new Set([
+    'canari',
+    'chardonneret_elegant',
+    'calopsitte',
+    'perruche_ondulee',
+    'agapornis_roseicollis',
+    'agapornis_fischeri',
+    'agapornis_personatus',
+    'agapornis_taranta',
+    'agapornis_nigrigenis',
+    'diamant_mandarin',
+    'diamant_gould',
+    'colombe_diamant',
+    'passer_domesticus'
+  ]);
+
+  /**
+   * Vérifie si l'espèce est répertoriée dans le référentiel biologique canonique.
+   */
+  public static isRecognizedSpecies(rawSpecies?: string): boolean {
+    if (!rawSpecies || typeof rawSpecies !== 'string') return false;
+    const norm = this.normalizeSpeciesId(rawSpecies);
+    return this.CANONICAL_KNOWN_SPECIES.has(norm);
   }
 
   /**

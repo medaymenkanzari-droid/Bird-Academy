@@ -225,8 +225,8 @@ describe('MISSION SUPPRESSION-MULTI-APPAREIL-V1 — Test Suite Officielle', () =
     });
 
     test('D.5 : Moteur de prédiction génétique opérationnel en local sans appel réseau', () => {
-      const male: Canari = { id: 10, nom: 'Male Agathe', sexe: 'Mâle', mutation: 'Agathe Pastel' } as any;
-      const female: Canari = { id: 11, nom: 'Femelle Agathe', sexe: 'Femelle', mutation: 'Agathe Pastel' } as any;
+      const male: Canari = { id: 10, nom: 'Male Agathe', sexe: 'Mâle', mutation: 'Agathe Pastel', espece: 'canari' } as any;
+      const female: Canari = { id: 11, nom: 'Femelle Agathe', sexe: 'Femelle', mutation: 'Agathe Pastel', espece: 'canari' } as any;
       const predictions = GeneticsEngine.predictOffspringOutcomes(male, female);
       assert.ok(predictions.phenotypes.length >= 1);
       assert.equal(predictions.phenotypes[0].probability, 100);

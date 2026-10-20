@@ -58,7 +58,16 @@ export interface OffspringOutcome {
   badgeColor?: string;
 }
 
+export type OffspringPredictionStatus =
+  | 'SUCCESS'
+  | 'HYBRID_CROSS_UNSUPPORTED'
+  | 'INSUFFICIENT_INFORMATION'
+  | 'OUT_OF_SCOPE'
+  | 'UNKNOWN';
+
 export interface OffspringPrediction {
+  status?: OffspringPredictionStatus;
+  reason?: string;
   phenotypes: OffspringOutcome[];
   carriers: OffspringOutcome[];
   summaryNotes: string[];

@@ -341,76 +341,67 @@ export const PairSimulation: React.FC<PairSimulationProps> = ({ birds }) => {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                {/* Visual Phenotypes Probabilities */}
-                <div className="space-y-3.5">
-                  <h4 className="text-xs font-extrabold uppercase tracking-wide text-sky-400 flex items-center justify-between">
-                    <span>Phénotypes Visuels Attendus</span>
-                    <span className="text-[10px] font-mono text-slate-400">{t('total100Percent')}</span>
+              {simulationResult.predictions.status === 'HYBRID_CROSS_UNSUPPORTED' ? (
+                <div className="p-6 bg-slate-950/80 rounded-2xl border border-rose-500/30 text-center space-y-2">
+                  <AlertOctagon className="w-8 h-8 text-rose-400 mx-auto" />
+                  <h4 className="text-sm font-bold text-rose-300">
+                    Croisement inter-espèces non pris en charge
                   </h4>
-
-                  <div className="space-y-3">
-                    {simulationResult.predictions.phenotypes.map((item) => (
-                      <div 
-                        key={item.id} 
-                        className="p-3.5 bg-slate-950/80 rounded-2xl border border-slate-800/80 space-y-2"
-                      >
-                        <div className="flex justify-between items-center text-xs font-bold">
-                          <span className="text-white flex items-center gap-2">
-                            {item.sexCondition === 'female' && <span className="text-pink-400 font-mono">♀ Femelles</span>}
-                            {item.sexCondition === 'male' && <span className="text-sky-400 font-mono">♂ Mâles</span>}
-                            {item.name}
-                          </span>
-                          <span className="font-mono text-indigo-400 font-black text-sm">
-                            {item.probability}%
-                          </span>
-                        </div>
-
-                        {/* Visual Percentage Bar */}
-                        <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
-                          <div 
-                            className="h-full rounded-full bg-linear-to-r from-indigo-500 to-sky-400 transition-all duration-700"
-                            style={{ width: `${item.probability}%` }}
-                          />
-                        </div>
-
-                        {item.description && (
-                          <p className="text-[11px] text-slate-400 leading-relaxed">
-                            {item.description}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                  <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
+                    {simulationResult.predictions.reason || 'Croisement inter-espèces non pris en charge par le référentiel génétique actuel.'}
+                  </p>
                 </div>
-
-                {/* Carrier Genotypes (Porteurs / Splits) */}
-                <div className="space-y-3.5">
-                  <h4 className="text-xs font-extrabold uppercase tracking-wide text-amber-400 flex items-center justify-between">
-                    <span>Génotypes Porteurs (Splits)</span>
-                    <span className="text-[10px] font-mono text-slate-400">Allèles masqués</span>
+              ) : simulationResult.predictions.status === 'INSUFFICIENT_INFORMATION' ? (
+                <div className="p-6 bg-slate-950/80 rounded-2xl border border-amber-500/30 text-center space-y-2">
+                  <AlertOctagon className="w-8 h-8 text-amber-400 mx-auto" />
+                  <h4 className="text-sm font-bold text-amber-300">
+                    Données taxonomiques insuffisantes
                   </h4>
+                  <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
+                    {simulationResult.predictions.reason || 'Informations d\'espèce insuffisantes pour simuler la transmission génétique.'}
+                  </p>
+                </div>
+              ) : simulationResult.predictions.status === 'OUT_OF_SCOPE' ? (
+                <div className="p-6 bg-slate-950/80 rounded-2xl border border-slate-800 text-center space-y-2">
+                  <AlertOctagon className="w-8 h-8 text-slate-400 mx-auto" />
+                  <h4 className="text-sm font-bold text-slate-300">
+                    Catalogue génétique hors périmètre
+                  </h4>
+                  <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
+                    {simulationResult.predictions.reason || 'Espèce ou mutation hors périmètre du calculateur génétique.'}
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  
+                  {/* Visual Phenotypes Probabilities */}
+                  <div className="space-y-3.5">
+                    <h4 className="text-xs font-extrabold uppercase tracking-wide text-sky-400 flex items-center justify-between">
+                      <span>Phénotypes Visuels Attendus</span>
+                      <span className="text-[10px] font-mono text-slate-400">{t('total100Percent')}</span>
+                    </h4>
 
-                  <div className="space-y-3">
-                    {simulationResult.predictions.carriers.length > 0 ? (
-                      simulationResult.predictions.carriers.map((item) => (
+                    <div className="space-y-3">
+                      {simulationResult.predictions.phenotypes.map((item) => (
                         <div 
                           key={item.id} 
                           className="p-3.5 bg-slate-950/80 rounded-2xl border border-slate-800/80 space-y-2"
                         >
                           <div className="flex justify-between items-center text-xs font-bold">
-                            <span className="text-amber-300 flex items-center gap-2">
+                            <span className="text-white flex items-center gap-2">
+                              {item.sexCondition === 'female' && <span className="text-pink-400 font-mono">♀ Femelles</span>}
+                              {item.sexCondition === 'male' && <span className="text-sky-400 font-mono">♂ Mâles</span>}
                               {item.name}
                             </span>
-                            <span className="font-mono text-amber-400 font-black text-sm">
+                            <span className="font-mono text-indigo-400 font-black text-sm">
                               {item.probability}%
                             </span>
                           </div>
 
+                          {/* Visual Percentage Bar */}
                           <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
                             <div 
-                              className="h-full rounded-full bg-linear-to-r from-amber-500 to-orange-400 transition-all duration-700"
+                              className="h-full rounded-full bg-linear-to-r from-indigo-500 to-sky-400 transition-all duration-700"
                               style={{ width: `${item.probability}%` }}
                             />
                           </div>
@@ -421,17 +412,58 @@ export const PairSimulation: React.FC<PairSimulationProps> = ({ birds }) => {
                             </p>
                           )}
                         </div>
-                      ))
-                    ) : (
-                      <div className="p-6 bg-slate-950/50 rounded-2xl border border-dashed border-slate-800 text-center text-xs text-slate-400 space-y-1">
-                        <p className="font-semibold text-slate-300">Aucun portage récessif attendu</p>
-                        <p className="text-[11px]">Les deux géniteurs n'induisent pas de mutation portée connue.</p>
-                      </div>
-                    )}
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-              </div>
+                  {/* Carrier Genotypes (Porteurs / Splits) */}
+                  <div className="space-y-3.5">
+                    <h4 className="text-xs font-extrabold uppercase tracking-wide text-amber-400 flex items-center justify-between">
+                      <span>Génotypes Porteurs (Splits)</span>
+                      <span className="text-[10px] font-mono text-slate-400">Allèles masqués</span>
+                    </h4>
+
+                    <div className="space-y-3">
+                      {simulationResult.predictions.carriers.length > 0 ? (
+                        simulationResult.predictions.carriers.map((item) => (
+                          <div 
+                            key={item.id} 
+                            className="p-3.5 bg-slate-950/80 rounded-2xl border border-slate-800/80 space-y-2"
+                          >
+                            <div className="flex justify-between items-center text-xs font-bold">
+                              <span className="text-amber-300 flex items-center gap-2">
+                                {item.name}
+                              </span>
+                              <span className="font-mono text-amber-400 font-black text-sm">
+                                {item.probability}%
+                              </span>
+                            </div>
+
+                            <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                              <div 
+                                className="h-full rounded-full bg-linear-to-r from-amber-500 to-orange-400 transition-all duration-700"
+                                style={{ width: `${item.probability}%` }}
+                              />
+                            </div>
+
+                            {item.description && (
+                              <p className="text-[11px] text-slate-400 leading-relaxed">
+                                {item.description}
+                              </p>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-6 bg-slate-950/50 rounded-2xl border border-dashed border-slate-800 text-center text-xs text-slate-400 space-y-1">
+                          <p className="font-semibold text-slate-300">Aucun portage récessif attendu</p>
+                          <p className="text-[11px]">Les deux géniteurs n'induisent pas de mutation portée connue.</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                </div>
+              )}
 
               {/* Summary Notes */}
               {simulationResult.predictions.summaryNotes.length > 0 && (

@@ -15,7 +15,7 @@ Status: Active Master Tracking
 | **HRR-03** | Zero Canary Fallback — 10 fallbacks identifiés | **OUVERT** | GAP-06-A | Audit complété, fallbacks répertoriés pour traitement dédié |
 | **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNICLEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
 | **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **OUVERT** | GAP-07-A / GAP-08-A / GAP-08-B | Implémenté techniquement par GAP-08-B (isolation stricte Roseicollis/Personatus/Fischeri, neutralisation de la clé `agapornis`, migration pure `ar_*`). Maintenu **OUVERT** pour validation scientifique humaine des mutations sans fiches EVD formelles (Masque Orange, Parblue Roseicollis, True Blue Personatus, Ino Fischer/Personatus). |
-| **HRR-06** | GeneticsEngine — Isolation interspécifique & hybridation | **OUVERT** | GAP-07-A | Strictement réservé à **GAP-09**. |
+| **HRR-06** | GeneticsEngine — Isolation interspécifique & hybridation | **RÉSOLU TECHNIQUEMENT / OUVERT SCIENTIFIQUEMENT** | GAP-07-A / GAP-09 | • Correction technique de sécurité : refus déterministe de tout croisement interspécifique (`HYBRID_CROSS_UNSUPPORTED`), des espèces inconnues/ambiguës (`INSUFFICIENT_INFORMATION`) et des espèces hors catalogue (`OUT_OF_SCOPE`).<br>• Aucune hybridation calculée : zéro règle d'hybridation inventée, zéro probabilité ou phénotype généré pour une paire interspécifique.<br>• Statut scientifique d'hybridation maintenu **UNSUPPORTED / HUMAN_REVIEW_REQUIRED** tant qu'aucun référentiel homologué n'existe. |
 | **HRR-07** | Bibliographie / Preuves scientifiques homologuées | **OUVERT** | GAP-07-A | Strictement réservé à **GAP-10**. |
 
 ---
@@ -61,4 +61,27 @@ Status: Active Master Tracking
   - `agapornis_fischeri` ne possède aucun catalogue de mutations dans GAP-08-B (`OUT_OF_SCOPE`). Les mutations historiques issues d'introgression restent distinguées de la génétique native.
   - Aucun ID `af_ino` ou `ap_ino` n'a été créé sans preuve suffisante.
   - Les artefacts QA `agap_dark`, `agap_vi`, `EVD-AGAP-GEN-001` et `EVD-AGAP-GEN-002` sont strictement maintenus hors production (non promus).
+
+---
+
+## Détails HRR-06 (Résolution GAP-09 — Isolation interspécifique du moteur génétique)
+
+- **Correction technique de sécurité (RÉSOLUE) :**
+  - `GeneticsEngine.predictOffspringOutcomes` et `GeneticsEngine.simulatePairInheritance` appliquent une hiérarchie stricte en 6 paliers de contrôle :
+    1. Espèces présentes (père et mère) ? Non → `INSUFFICIENT_INFORMATION`.
+    2. Espèces reconnues et non ambiguës (rejet de `agapornis` legacy et des espèces inconnues) ? Non → `INSUFFICIENT_INFORMATION`.
+    3. Espèces identiques (`maleSpecies === femaleSpecies`) ? Non → `HYBRID_CROSS_UNSUPPORTED`.
+    4. Catalogue génétique disponible pour l'espèce ? Non → `OUT_OF_SCOPE`.
+    5. Mutations reconnues par le catalogue homologué de l'espèce ? Non → `UNKNOWN` / `OUT_OF_SCOPE`.
+    6. Calcul génétique intra-spécifique appliqué UNIQUEMENT si l'ensemble des 5 paliers précédents est validé.
+  - Suppression formelle de tout couplage génétique inter-espèces par égalité textuelle de chaînes de mutations (`maleMutation === femaleMutation` hors-espèce est strictement neutralisé).
+  - Aucune logique par substring (`startsWith('agapornis')` ou `includes('agapornis')`) n'est autorisée pour déduire une identité génétique.
+  - `simulatePairing` émet les risques `differentSpecies` et `hybridCrossUnsupported` en bloquant toute analyse génétique interspécifique.
+
+- **Absence de moteur d'hybridation homologué (STATUT SCIENTIFIQUE MAINTENU : UNSUPPORTED / HUMAN_REVIEW_REQUIRED) :**
+  - Bird Academy ne calcule aucune hybridation interspécifique non homologuée par son référentiel scientifique.
+  - Zéro probabilité, zéro pourcentage, zéro phénotype ou génotype théorique n'est généré pour un croisement entre deux espèces distinctes.
+  - L'interface utilisateur affiche un état d'alerte explicite : *« Croisement inter-espèces non pris en charge par le référentiel génétique actuel. »* sans recommandations d'accouplement ni pourcentages inventés.
+  - Ce point scientifique reste explicitement **HUMAN_REVIEW_REQUIRED** tant qu'un référentiel scientifique d'hybridation n'a pas été formellement validé et documenté avec preuves bibliographiques (GAP-10).
+
 

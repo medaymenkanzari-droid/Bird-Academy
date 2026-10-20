@@ -12,8 +12,11 @@ import {
   LineageAnalysisResult,
   CommonAncestor,
   GeneticsMessage,
+  OffspringPrediction,
+  OffspringPredictionStatus,
 } from '../types';
 import { WrightCoefficientEngine } from './WrightCoefficientEngine';
+import { CanonicalDataBridgeAdapter } from '../../canonical/CanonicalDataBridgeAdapter';
 
 export class GeneticsEngine {
   /**
@@ -322,14 +325,35 @@ export class GeneticsEngine {
     const risks: PairSimulationResult['risks'] = [];
     const advantages: PairSimulationResult['advantages'] = [];
 
-    const sameSpecies = male.espece === female.espece;
-    if (!sameSpecies && male.espece && female.espece) {
+    const maleRawSpecies = male.espece || (male as any).speciesId;
+    const femaleRawSpecies = female.espece || (female as any).speciesId;
+    const maleSpNorm = CanonicalDataBridgeAdapter.normalizeSpeciesId(maleRawSpecies);
+    const femaleSpNorm = CanonicalDataBridgeAdapter.normalizeSpeciesId(femaleRawSpecies);
+
+    const speciesKnown = Boolean(
+      maleRawSpecies &&
+      femaleRawSpecies &&
+      maleSpNorm !== 'UNKNOWN' &&
+      maleSpNorm !== 'agapornis' &&
+      femaleSpNorm !== 'UNKNOWN' &&
+      femaleSpNorm !== 'agapornis' &&
+      CanonicalDataBridgeAdapter.isRecognizedSpecies(maleSpNorm) &&
+      CanonicalDataBridgeAdapter.isRecognizedSpecies(femaleSpNorm)
+    );
+
+    const sameSpecies = Boolean(speciesKnown && maleSpNorm === femaleSpNorm);
+
+    if (!speciesKnown) {
+      risks.push({ code: 'genetics.message.insufficientSpeciesData' });
+    } else if (!sameSpecies) {
       risks.push({ code: 'genetics.message.differentSpecies' });
+      risks.push({ code: 'genetics.message.hybridCrossUnsupported' });
     } else {
       advantages.push({ code: 'genetics.message.sameSpecies' });
     }
 
-    if (male.mutation && female.mutation) {
+    // STRICT ISOLATION GAP-09 : Ne comparer les mutations parentales QUE si les deux oiseaux sont de la même espèce !
+    if (sameSpecies && male.mutation && female.mutation) {
       if (male.mutation === female.mutation) {
         risks.push({
           code: 'genetics.message.sameMutationUnknownInheritance',
@@ -355,11 +379,18 @@ export class GeneticsEngine {
       risks.push({ code: 'genetics.message.highRecordedRelatedness', variables: { coefficient: F } });
     }
 
-    const summary: GeneticsMessage = F === null
-      ? { code: 'genetics.message.summaryInsufficient', variables: { male: male.nom || male.bague, female: female.nom || female.bague } }
-      : F < 6.25
-        ? { code: 'genetics.message.summaryMeasured', variables: { coefficient: F, coverage: wrightResult.pedigreeCoverage } }
-        : { code: 'genetics.message.summaryReview', variables: { coefficient: F, coverage: wrightResult.pedigreeCoverage } };
+    let summary: GeneticsMessage;
+    if (!speciesKnown) {
+      summary = { code: 'genetics.message.speciesIndeterminate' };
+    } else if (!sameSpecies) {
+      summary = { code: 'genetics.message.hybridCrossUnsupported' };
+    } else if (F === null) {
+      summary = { code: 'genetics.message.summaryInsufficient', variables: { male: male.nom || male.bague, female: female.nom || female.bague } };
+    } else if (F < 6.25) {
+      summary = { code: 'genetics.message.summaryMeasured', variables: { coefficient: F, coverage: wrightResult.pedigreeCoverage } };
+    } else {
+      summary = { code: 'genetics.message.summaryReview', variables: { coefficient: F, coverage: wrightResult.pedigreeCoverage } };
+    }
 
     const predictions = this.predictOffspringOutcomes(male, female);
 
@@ -376,91 +407,201 @@ export class GeneticsEngine {
   }
 
   /**
+   * Simulates inheritance for a given pair (alias for predictOffspringOutcomes with inter-species isolation).
+   * GAP-09 specification method.
+   */
+  static simulatePairInheritance(
+    male: Canari,
+    female: Canari
+  ): OffspringPrediction {
+    return this.predictOffspringOutcomes(male, female);
+  }
+
+  /**
    * Predicts potential offspring outcomes (phenotypes and carrier genotypes) based on parental traits and mutations.
+   * Enforces strict 6-tier epistemic validation & cross-species isolation (GAP-09).
    */
   static predictOffspringOutcomes(
     male: Canari,
     female: Canari
-  ): {
-    phenotypes: Array<{
-      id: string;
-      name: string;
-      probability: number;
-      type: 'phenotype' | 'carrier' | 'genotype';
-      sexCondition?: 'male' | 'female' | 'both';
-      description?: string;
-      badgeColor?: string;
-    }>;
-    carriers: Array<{
-      id: string;
-      name: string;
-      probability: number;
-      type: 'phenotype' | 'carrier' | 'genotype';
-      sexCondition?: 'male' | 'female' | 'both';
-      description?: string;
-      carrierDetails?: string;
-      badgeColor?: string;
-    }>;
-    summaryNotes: string[];
-  } {
-    const phenotypes: Array<{
-      id: string;
-      name: string;
-      probability: number;
-      type: 'phenotype' | 'carrier' | 'genotype';
-      sexCondition?: 'male' | 'female' | 'both';
-      description?: string;
-      badgeColor?: string;
-    }> = [];
-
-    const carriers: Array<{
-      id: string;
-      name: string;
-      probability: number;
-      type: 'phenotype' | 'carrier' | 'genotype';
-      sexCondition?: 'male' | 'female' | 'both';
-      description?: string;
-      carrierDetails?: string;
-      badgeColor?: string;
-    }> = [];
-
+  ): OffspringPrediction {
+    const phenotypes: OffspringPrediction['phenotypes'] = [];
+    const carriers: OffspringPrediction['carriers'] = [];
     const summaryNotes: string[] = [];
+
+    const maleRawSpecies = male?.espece || (male as any)?.speciesId;
+    const femaleRawSpecies = female?.espece || (female as any)?.speciesId;
+
+    // TIER 1 — Espèces présentes ?
+    if (
+      !maleRawSpecies ||
+      typeof maleRawSpecies !== 'string' ||
+      !maleRawSpecies.trim() ||
+      !femaleRawSpecies ||
+      typeof femaleRawSpecies !== 'string' ||
+      !femaleRawSpecies.trim()
+    ) {
+      return {
+        status: 'INSUFFICIENT_INFORMATION',
+        reason: 'Espèce non renseignée pour au moins un des partenaires. Simulation génétique impossible sans identité taxonomique.',
+        phenotypes,
+        carriers,
+        summaryNotes: [
+          '[INSUFFICIENT_INFORMATION] Espèce non renseignée pour au moins un des partenaires. Simulation génétique impossible sans identité taxonomique.'
+        ]
+      };
+    }
+
+    const maleSpNorm = CanonicalDataBridgeAdapter.normalizeSpeciesId(maleRawSpecies);
+    const femaleSpNorm = CanonicalDataBridgeAdapter.normalizeSpeciesId(femaleRawSpecies);
+
+    // TIER 2 — Espèces canoniques et reconnues ?
+    if (
+      maleSpNorm === 'UNKNOWN' ||
+      femaleSpNorm === 'UNKNOWN' ||
+      !CanonicalDataBridgeAdapter.isRecognizedSpecies(maleSpNorm) ||
+      !CanonicalDataBridgeAdapter.isRecognizedSpecies(femaleSpNorm)
+    ) {
+      return {
+        status: 'INSUFFICIENT_INFORMATION',
+        reason: 'Espèce indéterminée ou non reconnue dans le référentiel canonique. Simulation génétique impossible.',
+        phenotypes,
+        carriers,
+        summaryNotes: [
+          '[INSUFFICIENT_INFORMATION] Espèce indéterminée ou non reconnue dans le référentiel canonique. Simulation génétique impossible.'
+        ]
+      };
+    }
+
+    // Cas espèce générique ambiguë legacy (ex: 'agapornis' - Neutralisation stricte GAP-08)
+    if (maleSpNorm === 'agapornis' || femaleSpNorm === 'agapornis') {
+      return {
+        status: 'INSUFFICIENT_INFORMATION',
+        reason: 'Espèce générique agapornis ambiguë (LEGACY_SPECIES_AMBIGUITY). Préciser agapornis_roseicollis, agapornis_fischeri ou agapornis_personatus pour toute simulation génétique.',
+        phenotypes,
+        carriers,
+        summaryNotes: [
+          '[INSUFFICIENT_INFORMATION] Espèce générique agapornis ambiguë (LEGACY_SPECIES_AMBIGUITY). Préciser agapornis_roseicollis, agapornis_fischeri ou agapornis_personatus pour toute simulation génétique.'
+        ]
+      };
+    }
+
+    // Cas hors périmètre V1 (Test C : Passer domesticus)
+    if (maleSpNorm === 'passer_domesticus' || femaleSpNorm === 'passer_domesticus') {
+      return {
+        status: 'OUT_OF_SCOPE',
+        reason: 'Espèce hors périmètre d\'élevage standard V1 (Passer domesticus). Calculateur de transmission génétique désactivé.',
+        phenotypes,
+        carriers,
+        summaryNotes: [
+          '[OUT_OF_SCOPE] Espèce hors périmètre d\'élevage standard V1 (Passer domesticus). Calculateur de transmission génétique désactivé.'
+        ]
+      };
+    }
+
+    // TIER 3 — Espèces identiques ? (Barrière stricte d'hybridation GAP-09)
+    if (maleSpNorm !== femaleSpNorm) {
+      return {
+        status: 'HYBRID_CROSS_UNSUPPORTED',
+        reason: 'Croisement inter-espèces non pris en charge par le référentiel génétique actuel.',
+        phenotypes,
+        carriers,
+        summaryNotes: [
+          `[HYBRID_CROSS_UNSUPPORTED] Croisement inter-espèces (${maleSpNorm} × ${femaleSpNorm}) non pris en charge par le référentiel génétique actuel. Aucune prédiction ou probabilité d'hybridation non homologuée.`
+        ]
+      };
+    }
+
+    // TIER 4 — Catalogue génétique disponible pour cette espèce ?
+    const speciesId = maleSpNorm;
+
+    // Cas Agapornis fischeri : Catalogue non encore homologué (GAP-08)
+    if (speciesId === 'agapornis_fischeri') {
+      return {
+        status: 'OUT_OF_SCOPE',
+        reason: 'Catalogue génétique pour agapornis_fischeri non encore homologué (réservé à GAP-08 / HUMAN_REVIEW_REQUIRED). Aucun fallback sur Roseicollis.',
+        phenotypes,
+        carriers,
+        summaryNotes: [
+          '[OUT_OF_SCOPE] Catalogue génétique pour agapornis_fischeri non encore homologué (réservé à GAP-08 / HUMAN_REVIEW_REQUIRED). Aucun fallback sur Roseicollis. Calculateur désactivé.'
+        ]
+      };
+    }
 
     const maleMutation = (male.mutation || '').trim();
     const femaleMutation = (female.mutation || '').trim();
     const maleColor = (male.couleur || '').trim();
     const femaleColor = (female.couleur || '').trim();
 
-    // Known sex-linked mutations in canaries & finches
-    const sexLinkedMutations = ['pastel', 'agate', 'agathe', 'isabelle', 'satiné', 'satine', 'ivoire', 'ivory', 'brun', 'brown', 'lutino'];
-    const isSexLinked = (mut: string) => sexLinkedMutations.some(m => mut.toLowerCase().includes(m));
+    const isClassic = (m: string) => !m || m.toLowerCase() === 'classique' || m.toLowerCase() === 'standard' || m.toLowerCase() === 'sauvage';
+    const effectiveMaleMutation = isClassic(maleMutation) ? '' : maleMutation;
+    const effectiveFemaleMutation = isClassic(femaleMutation) ? '' : femaleMutation;
 
-    // Known dominant mutations
-    const dominantMutations = ['jaspe', 'blanc dominant', 'dominant white', 'huppé', 'crest'];
-    const isDominant = (mut: string) => dominantMutations.some(m => mut.toLowerCase().includes(m));
+    // Résolution canonique scopée par speciesId (AUDIT-31-02 & GAP-08)
+    const maleRes = effectiveMaleMutation ? CanonicalDataBridgeAdapter.resolveMutation(speciesId, effectiveMaleMutation) : null;
+    const femaleRes = effectiveFemaleMutation ? CanonicalDataBridgeAdapter.resolveMutation(speciesId, effectiveFemaleMutation) : null;
 
+    // TIER 5 — Mutations reconnues ?
+    // Cas OUT_OF_SCOPE spécifique (ex: mutation non répertoriée dans le catalogue minimal agapornis_personatus)
+    if (maleRes?.status === 'OUT_OF_SCOPE' || femaleRes?.status === 'OUT_OF_SCOPE') {
+      const outScopeReason = maleRes?.status === 'OUT_OF_SCOPE' ? maleRes.reason : femaleRes?.reason;
+      return {
+        status: 'OUT_OF_SCOPE',
+        reason: outScopeReason || 'Mutation hors du catalogue homologué pour cette espèce.',
+        phenotypes,
+        carriers,
+        summaryNotes: [
+          `[OUT_OF_SCOPE] ${outScopeReason || 'Mutation hors catalogue homologué pour cette espèce. Calculateur désactivé.'}`
+        ]
+      };
+    }
+
+    // Protection épistémique : mutation non résolue = UNKNOWN (AUDIT-31-01, Test A & Test B)
+    if (maleRes && !maleRes.resolved) {
+      summaryNotes.push(`Mutation père "${effectiveMaleMutation}" non répertoriée ou sans hérédité confirmée pour l'espèce (${speciesId}). Statut : ${maleRes.status}. Aucun porteur ni transmission inventé.`);
+    }
+    if (femaleRes && !femaleRes.resolved) {
+      summaryNotes.push(`Mutation mère "${effectiveFemaleMutation}" non répertoriée ou sans hérédité confirmée pour l'espèce (${speciesId}). Statut : ${femaleRes.status}. Aucun porteur ni transmission inventé.`);
+    }
+
+    const hasUnresolvedMutation = Boolean((maleRes && !maleRes.resolved) || (femaleRes && !femaleRes.resolved));
+
+    let status: OffspringPredictionStatus = 'SUCCESS';
+    if (hasUnresolvedMutation) {
+      status = 'UNKNOWN';
+    } else if (maleRes?.status === 'HUMAN_REVIEW_REQUIRED' || femaleRes?.status === 'HUMAN_REVIEW_REQUIRED') {
+      summaryNotes.push('Accouplement impliquant une mutation sous statut HUMAN_REVIEW_REQUIRED (en attente d\'homologation bibliographique formelle).');
+    }
+
+    // TIER 6 — Application de la logique génétique intra-spécifique existante
     // 1. Color / Phenotype Predictions
-    if (maleMutation && femaleMutation && maleMutation.toLowerCase() === femaleMutation.toLowerCase()) {
-      // Both parents express identical visual mutation
+    if (
+      effectiveMaleMutation &&
+      effectiveFemaleMutation &&
+      maleRes?.resolved &&
+      femaleRes?.resolved &&
+      maleRes.mutationId === femaleRes.mutationId
+    ) {
+      // Both parents express identical verified visual mutation
       phenotypes.push({
         id: 'pheno-homo-mutation',
-        name: `${maleMutation} (100%)`,
+        name: `${effectiveMaleMutation} (100%)`,
         probability: 100,
         type: 'phenotype',
         sexCondition: 'both',
-        description: `100% des jeunes (mâles et femelles) exprimeront visuellement la mutation ${maleMutation}.`,
+        description: `100% des jeunes (mâles et femelles) exprimeront visuellement la mutation ${effectiveMaleMutation}.`,
         badgeColor: 'indigo',
       });
-      summaryNotes.push(`Fixation de la mutation ${maleMutation} à 100% dans la descendance.`);
-    } else if (maleMutation && isSexLinked(maleMutation) && (!femaleMutation || !isSexLinked(femaleMutation))) {
+      summaryNotes.push(`Fixation de la mutation ${effectiveMaleMutation} à 100% dans la descendance.`);
+    } else if (maleRes?.resolved && maleRes.inheritance === 'SEX_LINKED_RECESSIVE' && (!femaleRes?.resolved || femaleRes.inheritance !== 'SEX_LINKED_RECESSIVE')) {
       // Sex-linked mutation in Sire (Father mutated, Mother standard/other)
       phenotypes.push({
         id: 'pheno-sl-daughters',
-        name: `Femelles : ${maleMutation}`,
+        name: `Femelles : ${effectiveMaleMutation}`,
         probability: 50,
         type: 'phenotype',
         sexCondition: 'female',
-        description: `100% des femelles nées seront visuellement ${maleMutation} (hérédité liée au sexe).`,
+        description: `100% des femelles nées seront visuellement ${effectiveMaleMutation} (hérédité liée au sexe).`,
         badgeColor: 'pink',
       });
       phenotypes.push({
@@ -474,16 +615,16 @@ export class GeneticsEngine {
       });
       carriers.push({
         id: 'carrier-sl-sons',
-        name: `Mâles porteurs / / ${maleMutation}`,
+        name: `Mâles porteurs / / ${effectiveMaleMutation}`,
         probability: 50,
         type: 'carrier',
         sexCondition: 'male',
-        description: `100% des mâles seront génotypiquement porteurs (split) de la mutation ${maleMutation}.`,
-        carrierDetails: `Porteur / ${maleMutation}`,
+        description: `100% des mâles seront génotypiquement porteurs (split) de la mutation ${effectiveMaleMutation}.`,
+        carrierDetails: `Porteur / ${effectiveMaleMutation}`,
         badgeColor: 'amber',
       });
-      summaryNotes.push(`Accouplement autosexable : distinction visuelle immédiate du sexe des jeunes par la mutation ${maleMutation}.`);
-    } else if (femaleMutation && isSexLinked(femaleMutation) && (!maleMutation || !isSexLinked(maleMutation))) {
+      summaryNotes.push(`Accouplement autosexable : distinction visuelle immédiate du sexe des jeunes par la mutation ${effectiveMaleMutation}.`);
+    } else if (femaleRes?.resolved && femaleRes.inheritance === 'SEX_LINKED_RECESSIVE' && (!maleRes?.resolved || maleRes.inheritance !== 'SEX_LINKED_RECESSIVE')) {
       // Sex-linked mutation in Dam (Mother mutated, Father standard/other)
       phenotypes.push({
         id: 'pheno-sl-dam-all',
@@ -496,17 +637,17 @@ export class GeneticsEngine {
       });
       carriers.push({
         id: 'carrier-sl-dam-sons',
-        name: `Mâles porteurs / / ${femaleMutation}`,
+        name: `Mâles porteurs / / ${effectiveFemaleMutation}`,
         probability: 50,
         type: 'carrier',
         sexCondition: 'male',
-        description: `100% des mâles seront porteurs (split) de la mutation maternelle ${femaleMutation}.`,
-        carrierDetails: `Porteur / ${femaleMutation}`,
+        description: `100% des mâles seront porteurs (split) de la mutation maternelle ${effectiveFemaleMutation}.`,
+        carrierDetails: `Porteur / ${effectiveFemaleMutation}`,
         badgeColor: 'amber',
       });
-      summaryNotes.push(`Transmission de la mutation liée au sexe ${femaleMutation} sous forme portée chez les fils uniquement.`);
-    } else if ((maleMutation && isDominant(maleMutation)) || (femaleMutation && isDominant(femaleMutation))) {
-      const domMut = maleMutation && isDominant(maleMutation) ? maleMutation : femaleMutation;
+      summaryNotes.push(`Transmission de la mutation liée au sexe ${effectiveFemaleMutation} sous forme portée chez les fils uniquement.`);
+    } else if ((maleRes?.resolved && maleRes.inheritance === 'AUTOSOMAL_DOMINANT') || (femaleRes?.resolved && femaleRes.inheritance === 'AUTOSOMAL_DOMINANT')) {
+      const domMut = (maleRes?.resolved && maleRes.inheritance === 'AUTOSOMAL_DOMINANT') ? effectiveMaleMutation : effectiveFemaleMutation;
       phenotypes.push({
         id: 'pheno-dom-50',
         name: `${domMut} (50%)`,
@@ -526,9 +667,9 @@ export class GeneticsEngine {
         badgeColor: 'slate',
       });
       summaryNotes.push(`Mutation dominante ${domMut} : répartition mendélienne 1/2 mutés et 1/2 classiques.`);
-    } else if (maleMutation || femaleMutation) {
-      // Autosomal recessive mutation single parent
-      const recMut = maleMutation || femaleMutation;
+    } else if ((maleRes?.resolved && maleRes.inheritance === 'AUTOSOMAL_RECESSIVE') || (femaleRes?.resolved && femaleRes.inheritance === 'AUTOSOMAL_RECESSIVE')) {
+      // Autosomal recessive mutation single parent (UNIQUEMENT SI CONFIRMÉE CANONIQUEMENT - ZERO FALLBACK INVENTÉ)
+      const recMut = (maleRes?.resolved && maleRes.inheritance === 'AUTOSOMAL_RECESSIVE') ? effectiveMaleMutation : effectiveFemaleMutation;
       phenotypes.push({
         id: 'pheno-rec-all-classic',
         name: `Classique / Phénotype standard (100%)`,
@@ -549,6 +690,8 @@ export class GeneticsEngine {
         badgeColor: 'amber',
       });
       summaryNotes.push(`Génération F1 porteuse à 100% de la mutation récessive autosomique ${recMut}.`);
+    } else if (hasUnresolvedMutation) {
+      // Si une mutation non résolue est présente et qu'aucun mécanisme connu ne s'applique, ne pas inventer de phénotype
     } else if (maleColor && femaleColor) {
       if (maleColor.toLowerCase() === femaleColor.toLowerCase()) {
         phenotypes.push({
@@ -596,6 +739,7 @@ export class GeneticsEngine {
     }
 
     return {
+      status,
       phenotypes: phenotypes.sort((a, b) => b.probability - a.probability),
       carriers: carriers.sort((a, b) => b.probability - a.probability),
       summaryNotes,
