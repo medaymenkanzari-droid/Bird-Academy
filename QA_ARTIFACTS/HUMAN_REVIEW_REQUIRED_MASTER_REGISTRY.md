@@ -11,7 +11,7 @@ Status: Active Master Tracking
 | ID | Domaine / Sujet | Statut | Mission d'origine | Résolution / Statut Actuel |
 |---|---|---|---|---|
 | **HRR-01** | Perruche ondulée — Profil V2 | **RÉSOLU** | GAP-01 | Homologué et intégré |
-| **HRR-02** | Colombe diamant — Profil V2 | **DÉCISION HUMAINE ENREGISTRÉE** (Conceptuellement résolu) | GAP-02 / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : maintien d'une structure multi-standard pour le diamètre de bague (3,8 mm CDE/Aviornis vs 3,5 mm UOF/COM France sans vérité unique) et séparation explicite in situ (23–37 g, moy. ~35 g) / ex situ (35–45 g) pour la masse corporelle. Implémentation technique du modèle multi-standard/in situ différée à une mission ultérieure. Profil maintenu temporairement en draft jusqu'à implémentation technique. |
+| **HRR-02** | Colombe diamant — Profil V2 | **TECHNICALLY IMPLEMENTED — SCIENTIFIC DECISION RECORDED** | GAP-02 / GAP-10-C / GAP-10-E / GAP-12 | Décision scientifique humaine enregistrée et implémentée techniquement en GAP-12 : modèle de bagues multi-standard (3,5 mm UOF/COM France et 3,8 mm CDE/Aviornis sans vérité unique universelle) et distinction stricte de masse corporelle in situ (23–37 g, moy. indicative ~35 g) / ex situ (35–45 g). Aucune fusion de plages (23–45 g interdit), aucune promotion de 32–45 g. Profil maintenu en draft sous gouvernance V2. |
 | **HRR-03** | Zero Canary Fallback — 10 fallbacks identifiés | **OUVERT** | GAP-06-A | Audit complété, fallbacks répertoriés pour traitement dédié |
 | **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNIQUEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
 | **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **PARTIELLEMENT HOMOLOGUÉ** (`ap_blue` actif / allèles complexes et Masque Orange restent HRR) | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C / GAP-10-E / GAP-11 | Homologation technique réalisée en GAP-11 pour `ap_blue` (blue1 / bl, autosomique récessive, status: CANONICAL) dans le catalogue d'*Agapornis personatus*, avec migration species-scoped et support des alias avicoles. Les allèles complexes (`blue2 / bl2`, `turquoise`, `sapphire`), `ar_masque_orange` et les catalogues Fischeri restent formellement **HUMAN_REVIEW_REQUIRED** / non homologués. HRR-05 non clôturé globalement. |
@@ -496,7 +496,7 @@ BIO_REF_V2_CLOSURE_STATUS = READY_FOR_FINAL_HUMAN_SCIENTIFIC_APPROVAL
 | HRR | Sujet | Statut Post-GAP-10-E | Arbitrage Humain Enregistré | Action Technique Requise |
 |---|---|---|---|---|
 | **HRR-01** | Perruche ondulée | **CLOSABLE / HOMOLOGUÉ** | Validé | Aucune (fermé) |
-| **HRR-02** | Colombe diamant | **DÉCISION HUMAINE ENREGISTRÉE** | Multi-standard (3,8 / 3,5 mm) & In situ (23–37 g) / Ex situ (35–45 g) | Implémentation du schéma multi-standard / in situ |
+| **HRR-02** | Colombe diamant | **TECHNICALLY IMPLEMENTED — SCIENTIFIC DECISION RECORDED** | Multi-standard (3,5 / 3,8 mm) & In situ (23–37 g) / Ex situ (35–45 g) | Implémenté techniquement en GAP-12 (modèle multi-standard et contextes de poids) |
 | **HRR-03** | Zero Canary Fallback | **DEFERRED** | Maintenu pour lot de maintenance externe | Traitement périphérique externe |
 | **HRR-04** | Agapornis (Taxonomie) | **CLOSABLE / HOMOLOGUÉ** | Validé | Aucune (fermé) |
 | **HRR-05** | Agapornis (Génétique) | **DÉCISION HUMAINE ENREGISTRÉE** | `ap_blue` homologuée ; allèles complexes restent HRR | Ajout de `ap_blue` au catalogue Personatus |
@@ -582,6 +582,67 @@ BIO_REF_V2_STATUS = HUMAN_DECISIONS_RECORDED_AWAITING_TECHNICAL_IMPLEMENTATION
 - **HRR-05.3 Catalogue Fischeri :** Reste **OUT_OF_SCOPE** (non homologué).
 - **Statut Global HRR-05 :** `PARTIELLEMENT HOMOLOGUÉ` (HRR-05 ne peut être marqué clos tant que les allèles complexes et Masque Orange n'ont pas été traités).
 
+---
 
+## Détails GAP-12 — Colombe Diamant : Multi-Standard Bague & Poids In Situ / Ex Situ
 
+### 1. Synthèse de l'Implémentation Technique
+- **Date d'exécution :** 2026-10-21
+- **Phase :** Biological Reference V2 — GAP-12
+- **Espèce :** `colombe_diamant` (*Geopelia cuneata*)
+- **Objectif :** Implémentation technique stricte des 2 décisions scientifiques humaines officiellement validées dans GAP-10-E.
+- **Statut HRR-02 :** `TECHNICALLY IMPLEMENTED — SCIENTIFIC DECISION RECORDED`
 
+---
+
+### 2. Décisions Scientifiques et Architecture Implémentée
+
+#### A. Diamètre de bague multi-standard
+- **Architecture de données :**
+  - Ajout du type extensible `FederationRingStandard` dans `src/reference/species/types.ts`.
+  - Ajout du champ optionnel typé `ringStandards?: FederationRingStandard[]` dans `SpeciesBreeding`.
+  - Fonction helper dédiée `getSpeciesRingStandards(speciesId)` dans `src/reference/species/index.ts`.
+- **Standards canoniques enregistrés dans `COLOMBE_DIAMANT_PROFILE.breeding` :**
+  1. `UOF_COM_FRANCE` : diamètre 3.5 mm (`label: '3.5 mm'`), Fédération UOF / COM France.
+  2. `CDE_AVIORNIS` : diamètre 3.8 mm (`label: '3.8 mm'`), Fédérations CDE / Aviornis France International.
+- **Règles épistémiques respectées :**
+  - Aucun standard ne remplace l'autre.
+  - `bandSize` présente explicitement les deux contextes fédéraux : `'3.5 mm (UOF / COM France) / 3.8 mm (CDE / Aviornis France International)'`.
+  - Zéro réduction unilatérale à une valeur universelle unique (ni 3.5 mm seul, ni 3.8 mm seul).
+  - FFO 4.0 mm formellement exclu du modèle canonique GAP-12.
+
+#### B. Poids adulte séparé in situ / ex situ
+- **Architecture de données :**
+  - Ajout des types extensibles `WeightContextRange` et `SpeciesWeightContexts` dans `src/reference/species/types.ts`.
+  - Ajout du champ optionnel typé `weightContexts?: SpeciesWeightContexts` dans `SpeciesBiology`.
+  - Fonction helper dédiée `getSpeciesWeightContexts(speciesId)` dans `src/reference/species/index.ts`.
+- **Contextes enregistrés dans `COLOMBE_DIAMANT_PROFILE.biology.weightContexts` :**
+  1. `in_situ` (sauvage) :
+     - `minWeight`: 23 g
+     - `maxWeight`: 37 g
+     - `averageWeight`: 35 g
+     - `indicativeAverage`: 35 g
+     - Sources primaires : Frith (1982), HANZAB Vol. 3 (1996).
+  2. `ex_situ` (captivité / aviculture domestique) :
+     - `minWeight`: 35 g
+     - `maxWeight`: 45 g
+- **Règles épistémiques respectées :**
+  - Zéro fusion en une plage canonique combinée (23–45 g strictement interdit).
+  - Zéro promotion de la plage intermédiaire 32–45 g au rang de valeur canonique.
+  - La moyenne indicative ~35 g n'est ni le minimum ni le maximum in situ.
+  - Zéro logique d'alerte sanitaire ou diagnostic vétérinaire inventé (aucun seuil 24–27 g).
+
+---
+
+### 3. Traçabilité et Gouvernance
+
+- **Fichiers modifiés :**
+  - `src/reference/species/types.ts`
+  - `src/reference/species/index.ts`
+  - `src/reference/species/colombeDiamant.ts`
+  - `tests/colombe-diamant-profile.test.ts`
+  - `tests/bio-ref-v2-gap10-b1.test.ts`
+  - `tests/bio-ref-v2-gap10-c.test.ts`
+  - `tests/bio-ref-v2-gap12.test.ts` (nouvelle suite dédiée de 18 tests)
+  - `QA_ARTIFACTS/HUMAN_REVIEW_REQUIRED_MASTER_REGISTRY.md`
+- **Statut de validation Colombe :** `draft` maintenu sous gouvernance Biological Reference V2 en attente de clôture globale.

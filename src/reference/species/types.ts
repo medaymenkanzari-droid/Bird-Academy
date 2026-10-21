@@ -32,11 +32,27 @@ export interface SpeciesIdentity {
   status: 'domestique' | 'sauvage' | 'hybride';
 }
 
+export interface WeightContextRange {
+  context: 'in_situ' | 'ex_situ';
+  minWeight: number; // in grams
+  maxWeight: number; // in grams
+  averageWeight?: number; // in grams (e.g. ~35 g for in_situ)
+  indicativeAverage?: number; // alias for averageWeight
+  label?: MultilingualText;
+  notes?: MultilingualText;
+}
+
+export interface SpeciesWeightContexts {
+  in_situ: WeightContextRange;
+  ex_situ: WeightContextRange;
+}
+
 export interface SpeciesBiology {
   lifespan: number; // in years
   averageLength: number; // in cm
   minWeight: number; // in grams
   maxWeight: number; // in grams
+  weightContexts?: SpeciesWeightContexts;
   sexualDimorphism: MultilingualText;
   sexualMaturity: MultilingualText;
   minAgeReproduction: number; // in months
@@ -55,8 +71,17 @@ export interface SpeciesReproduction {
   weaningAge: number; // in days
 }
 
+export interface FederationRingStandard {
+  federationCode: string; // e.g. 'UOF_COM_FRANCE' | 'CDE_AVIORNIS'
+  federationName: string; // e.g. 'UOF / COM France' | 'CDE / Aviornis France International'
+  diameterMm: number; // e.g. 3.5 | 3.8
+  label: string; // e.g. '3.5 mm' | '3.8 mm'
+  notes?: MultilingualText;
+}
+
 export interface SpeciesBreeding {
   bandSize: string; // in mm
+  ringStandards?: FederationRingStandard[];
   minIdealTemp: number; // in °C
   maxIdealTemp: number; // in °C
   minHumidity: number; // in %

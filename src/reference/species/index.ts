@@ -163,3 +163,22 @@ export function getBiologicalTraceability(id: string) {
     }
   };
 }
+
+/**
+ * Retourne les standards officiels de baguage pour une espèce donnée.
+ * Pour la colombe diamant : structure multi-standard (UOF/COM France 3.5 mm et CDE/Aviornis 3.8 mm).
+ */
+export function getSpeciesRingStandards(speciesId: string) {
+  const profile = getBiologicalProfileById(speciesId);
+  return profile?.breeding.ringStandards;
+}
+
+/**
+ * Retourne les contextes de poids (in situ / ex situ) pour une espèce donnée.
+ * Pour la colombe diamant : in situ (23–37 g, moy. ~35 g) et ex situ (35–45 g).
+ */
+export function getSpeciesWeightContexts(speciesId: string) {
+  const profile = getBiologicalProfileById(speciesId);
+  return profile?.biology.weightContexts;
+}
+

@@ -31,8 +31,50 @@ export const COLOMBE_DIAMANT_PROFILE: BiologicalSpeciesProfile = {
   biology: {
     lifespan: 10, // 8 à 12 ans en captivité
     averageLength: 20, // 19 à 21 cm (queue longue et graduée comprise)
-    minWeight: 35, // 30 à 45 g (l'un des plus petits columbidés du monde)
+    minWeight: 35, // Poids indicatif captivité / ex situ (35 à 45 g)
     maxWeight: 45,
+    weightContexts: {
+      in_situ: {
+        context: 'in_situ',
+        minWeight: 23,
+        maxWeight: 37,
+        averageWeight: 35,
+        indicativeAverage: 35,
+        label: {
+          fr: 'Poids sauvage (in situ)',
+          en: 'Wild weight (in situ)',
+          ar: 'الوزن البري (in situ)',
+          es: 'Peso silvestre (in situ)',
+          it: 'Peso selvatico (in situ)'
+        },
+        notes: {
+          fr: 'Poids sauvage / in situ : 23–37 g, moyenne indicative ~35 g (Frith 1982, HANZAB 1996). Ne pas fusionner avec les données de captivité.',
+          en: 'Wild / in situ weight: 23–37 g, indicative mean ~35 g (Frith 1982, HANZAB 1996). Do not merge with captive data.',
+          ar: 'الوزن في البرية: 23-37 غرام، متوسط تقريبي ~35 غرام.',
+          es: 'Peso silvestre / in situ: 23–37 g, promedio indicativo ~35 g.',
+          it: 'Peso selvatico / in situ: 23–37 g, media indicativa ~35 g.'
+        }
+      },
+      ex_situ: {
+        context: 'ex_situ',
+        minWeight: 35,
+        maxWeight: 45,
+        label: {
+          fr: 'Poids en captivité (ex situ)',
+          en: 'Captive weight (ex situ)',
+          ar: 'الوزن في الأسر (ex situ)',
+          es: 'Peso en cautividad (ex situ)',
+          it: 'Peso in cattività (ex situ)'
+        },
+        notes: {
+          fr: 'Poids indicatif en captivité / ex situ : 35–45 g. Élevage domestique de sélection.',
+          en: 'Indicative captive / ex situ weight: 35–45 g. Domestic aviary stock.',
+          ar: 'الوزن النموذجي في الأسر: 35-45 غرام.',
+          es: 'Peso indicativo en cautividad / ex situ: 35–45 g.',
+          it: 'Peso indicativo in cattività / ex situ: 35–45 g.'
+        }
+      }
+    },
     sexualDimorphism: {
       fr: 'Dimorphisme sexuel basé sur le cercle oculaire charnu périorbitale : chez le mâle adulte mature en période de reproduction, le cercle oculaire est épais (2-3 mm), charnu et d\'une teinte rouge corail vif à orangé éclatant. Chez la femelle, le cercle oculaire est plus mince, moins proéminent et de couleur rouge orangé pâle ou rosâtre. Le mâle parade activement en roucoulant, queue déployée en éventail dressée à la verticale.',
       en: 'Sexual dimorphism based on fleshy periophthalmic eye-ring: adult breeding males display a noticeably thicker (2-3 mm), fleshy, vivid coral-red to bright orange eye-ring. In females, the eye-ring is thinner, flatter, and paler orange-red or pinkish. Males perform distinctive courtship displays with deep cooing and fanned vertical tail feathers.',
@@ -68,7 +110,35 @@ export const COLOMBE_DIAMANT_PROFILE: BiologicalSpeciesProfile = {
     weaningAge: 28 // Sevrage complet et autonomie vers 28 jours
   },
   breeding: {
-    bandSize: '3.5 mm', // Diamètre officiel C.O.M. / UOF pour Geopelia cuneata
+    bandSize: '3.5 mm (UOF / COM France) / 3.8 mm (CDE / Aviornis France International)',
+    ringStandards: [
+      {
+        federationCode: 'UOF_COM_FRANCE',
+        federationName: 'UOF / COM France',
+        diameterMm: 3.5,
+        label: '3.5 mm',
+        notes: {
+          fr: 'Standard officiel UOF / COM France (3,5 mm)',
+          en: 'Official UOF / COM France standard (3.5 mm)',
+          ar: 'المعيار الرسمي UOF / COM فرنسا (3.5 مم)',
+          es: 'Estándar oficial UOF / COM Francia (3.5 mm)',
+          it: 'Standard ufficiale UOF / COM Francia (3.5 mm)'
+        }
+      },
+      {
+        federationCode: 'CDE_AVIORNIS',
+        federationName: 'CDE / Aviornis France International',
+        diameterMm: 3.8,
+        label: '3.8 mm',
+        notes: {
+          fr: 'Standard officiel CDE / Aviornis France International (3,8 mm)',
+          en: 'Official CDE / Aviornis France International standard (3.8 mm)',
+          ar: 'المعيار الرسمي CDE / Aviornis فرنسا الدولية (3.8 مم)',
+          es: 'Estándar oficial CDE / Aviornis Francia Internacional (3.8 mm)',
+          it: 'Standard ufficiale CDE / Aviornis Francia Internazionale (3.8 mm)'
+        }
+      }
+    ],
     minIdealTemp: 15,
     maxIdealTemp: 26,
     minHumidity: 45,
@@ -108,7 +178,7 @@ export const COLOMBE_DIAMANT_PROFILE: BiologicalSpeciesProfile = {
       fr: '1 fois par semaine en entretien, 2 fois par semaine pendant la reproduction.',
       en: 'Once weekly for maintenance, twice weekly during breeding season.',
       ar: 'مرة واحدة أسبوعياً للصيانة، ومرتان أسبوعياً أثناء موسم التكاثر.',
-      es: '1 vez por semana en mantenimiento, 2 veces por semana durante la reproducción.',
+      es: '1 vez por semana en mantenimiento, 2 veces par semana durante la reproducción.',
       it: '1 volta a settimana a riposo, 2 volte a settimana in riproduzione.'
     },
     specificNeeds: {
@@ -156,16 +226,16 @@ export const COLOMBE_DIAMANT_PROFILE: BiologicalSpeciesProfile = {
     }
   },
   traceability: {
-    source: 'Standard C.O.M. / Monographie Columbidae (revue scientifique et homologation bibliographique requise)',
-    revisionDate: '2026-10-20',
+    source: 'Standards C.O.M. / UOF (3,5 mm) / CDE / Aviornis (3,8 mm) / Monographie Columbidae / Frith 1982 / HANZAB 1996 / Décision scientifique humaine GAP-10-E',
+    revisionDate: '2026-10-21',
     validationStatus: 'draft',
     author: 'Comité Scientifique Bird Academy',
     disclaimer: {
-      fr: 'Fiche biologique dédiée structurée (2 œufs, incubation 13j, nid soucoupe). Source bibliographique formelle en attente de validation humaine (HUMAN_REVIEW_REQUIRED).',
-      en: 'Dedicated biological profile structured (2 eggs, 13d incubation, saucer nest). Formal bibliographic source pending human review (HUMAN_REVIEW_REQUIRED).',
-      ar: 'بطاقة بيولوجية مخصصة ومحدثة (بيضتان، حضن 13 يوماً، عش صحن). المصدر الببليوغرافي بانتظار المراجعة العلمية البشرية.',
-      es: 'Ficha biológica dedicada estructurada (2 huevos, incubación 13d, nido plato). Fuente bibliográfica formal pendiente de revisión humana (HUMAN_REVIEW_REQUIRED).',
-      it: 'Scheda biologica dedicata strutturata (2 uova, incubazione 13gg, nido a piattello). Fonte bibliografica formale in attesa di revisione umana (HUMAN_REVIEW_REQUIRED).'
+      fr: 'Fiche biologique dédiée structurée (2 œufs, incubation 13j, nid soucoupe, bague multi-standard 3.5/3.8 mm, poids in situ 23-37g et ex situ 35-45g). Source bibliographique validée GAP-10-E sous statut draft avant clôture globale (HUMAN_REVIEW_REQUIRED).',
+      en: 'Dedicated biological profile structured (2 eggs, 13d incubation, saucer nest, multi-standard band 3.5/3.8 mm, in situ weight 23-37g and ex situ 35-45g). Bibliographic source validated GAP-10-E in draft status pending global closure (HUMAN_REVIEW_REQUIRED).',
+      ar: 'بطاقة بيولوجية مخصصة ومحدثة (بيضتان، حضن 13 يوماً، عش صحن، تحجيل متعدد المعايير 3.5/3.8 مم، وزن بيئي 23-37 غ ووزن أسري 35-45 غ).',
+      es: 'Ficha biológica dedicada estructurada (2 huevos, incubación 13d, nido plato, anillado multi-estándar 3.5/3.8 mm, peso in situ 23-37g y ex situ 35-45g).',
+      it: 'Scheda biologica dedicata strutturata (2 uova, incubazione 13gg, nido a piattello, inanellamento multi-standard 3.5/3.8 mm, peso in situ 23-37g ed ex situ 35-45g).'
     }
   }
 };

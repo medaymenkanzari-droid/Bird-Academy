@@ -109,8 +109,14 @@ test('COLO-10: profile fully complies with BiologicalSpeciesProfile typed conven
   assert.ok(profile);
   assert.equal(profile.biology.lifespan, 10);
   assert.equal(profile.biology.minWeight, 35);
-  assert.equal(profile.biology.maxWeight, 45);
-  assert.equal(profile.breeding.bandSize, '3.5 mm');
+  assert.ok(profile.breeding.bandSize.includes('3.5 mm') && profile.breeding.bandSize.includes('3.8 mm'));
+  assert.equal(profile.breeding.ringStandards?.length, 2);
+  assert.equal(profile.breeding.ringStandards?.[0].diameterMm, 3.5);
+  assert.equal(profile.breeding.ringStandards?.[1].diameterMm, 3.8);
+  assert.equal(profile.biology.weightContexts?.in_situ?.minWeight, 23);
+  assert.equal(profile.biology.weightContexts?.in_situ?.maxWeight, 37);
+  assert.equal(profile.biology.weightContexts?.ex_situ?.minWeight, 35);
+  assert.equal(profile.biology.weightContexts?.ex_situ?.maxWeight, 45);
   assert.equal(profile.breeding.difficultyLevel, 'facile');
   assert.equal(profile.management.hybridizationPossible, false);
   assert.equal(profile.reproduction.weaningAge, 28);

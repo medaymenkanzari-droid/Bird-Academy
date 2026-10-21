@@ -48,7 +48,8 @@ test('GAP10C-01: Colombe diamant - Statut documentaire draft et données biologi
   assert.equal(profile.reproduction.avgEggsPerClutch, 2);
   assert.equal(profile.reproduction.maxEggsPerClutch, 2);
   assert.equal(profile.reproduction.incubationPeriod, 13);
-  assert.equal(profile.breeding.bandSize, '3.5 mm');
+  assert.ok(profile.breeding.bandSize.includes('3.5 mm') && profile.breeding.bandSize.includes('3.8 mm'));
+  assert.equal(profile.breeding.ringStandards?.length, 2);
   assert.equal(profile.biology.minWeight, 35);
   assert.equal(profile.biology.maxWeight, 45);
   assert.equal(profile.management.hybridizationPossible, false);
