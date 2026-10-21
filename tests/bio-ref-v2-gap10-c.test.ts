@@ -104,10 +104,14 @@ test('GAP10C-03: Agapornis - Cloisonnement comportemental et morphométrique abs
   assert.equal(personatus.reproduction.incubationPeriod, 22);
 });
 
-test('GAP10C-04: Mutation ap_blue - Statut HUMAN_REVIEW_REQUIRED maintenu sans promotion prématurée', () => {
+test('GAP10C-04: Mutation ap_blue - Statut CANONICAL homologué en GAP-11 (blue1 / bl)', () => {
   const resolution = CanonicalDataBridgeAdapter.resolveMutation('agapornis_personatus', 'ap_blue');
   assert.ok(resolution, 'ap_blue doit être résolu pour agapornis_personatus');
-  assert.equal(resolution.status, 'HUMAN_REVIEW_REQUIRED', 'ap_blue doit rester sous HUMAN_REVIEW_REQUIRED');
+  assert.equal(resolution.status, 'CANONICAL', 'ap_blue est sous statut CANONICAL post-homologation GAP-11');
+  assert.equal(resolution.inheritance, 'AUTOSOMAL_RECESSIVE', 'ap_blue doit être autosomique récessif');
+  assert.equal(resolution.mutationId, 'ap_blue');
+  assert.equal(resolution.nomenclature, 'blue1');
+  assert.equal(resolution.symbol, 'bl');
 
   // Vérifier qu'aucun EVD-AGA-PERS n'a été inséré artificiellement
   assert.equal(hasEvidenceRecord('EVD-AGA-PERS-001'), false);
@@ -273,9 +277,9 @@ test('GAP10D-01: Consolidation finale — Invariants de sécurité et état de c
   assert.notEqual(fischeri.identity.id, personatus.identity.id);
   assert.equal(getBiologicalProfileById('agapornis'), undefined, 'agapornis legacy ne doit pas faire de fallback');
 
-  // 3. ap_blue sous HUMAN_REVIEW_REQUIRED, Fischeri sans catalogue
+  // 3. ap_blue homologué CANONICAL (GAP-11), Fischeri sans catalogue
   const apBlue = CanonicalDataBridgeAdapter.resolveMutation('agapornis_personatus', 'ap_blue');
-  assert.equal(apBlue?.status, 'HUMAN_REVIEW_REQUIRED');
+  assert.equal(apBlue?.status, 'CANONICAL');
   const afBlue = CanonicalDataBridgeAdapter.resolveMutation('agapornis_fischeri', 'ap_blue');
   assert.equal(afBlue?.status, 'OUT_OF_SCOPE');
 

@@ -84,14 +84,13 @@ describe('MISSION UNIQUE : BIO-REF-V2-GAP-08-B — AGAPORNIS GENETIC CATALOGS', 
   // =========================================================================
   describe('2. Catalogue Agapornis Personatus', () => {
 
-    it('GAP08-E: agapornis_personatus + ap_blue -> HUMAN_REVIEW_REQUIRED (True Blue)', () => {
+    it('GAP08-E: agapornis_personatus + ap_blue -> CANONICAL (True Blue homologué GAP-11)', () => {
       const res = CanonicalDataBridgeAdapter.resolveMutation('agapornis_personatus', 'ap_blue');
       assert.strictEqual(res.resolved, true);
       assert.strictEqual(res.speciesId, 'agapornis_personatus');
       assert.strictEqual(res.mutationId, 'ap_blue');
       assert.strictEqual(res.inheritance, 'AUTOSOMAL_RECESSIVE');
-      assert.strictEqual(res.status, 'HUMAN_REVIEW_REQUIRED');
-      assert.ok(res.reason?.includes('HRR-05.2'));
+      assert.strictEqual(res.status, 'CANONICAL');
     });
 
     it('GAP08-E2: agapornis_personatus résout "véritable bleu" vers ap_blue sans jamais fuiter sur Roseicollis', () => {

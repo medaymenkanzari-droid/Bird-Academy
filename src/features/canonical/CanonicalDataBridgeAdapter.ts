@@ -70,7 +70,10 @@ export const CANONICAL_MUTATION_ALIASES: Record<string, Record<string, string>> 
   },
   agapornis_personatus: {
     'personatus_blue': 'ap_blue',
-    'true_blue': 'ap_blue'
+    'true_blue': 'ap_blue',
+    'agap_blue': 'ap_blue',
+    'blue1': 'ap_blue',
+    'bl': 'ap_blue'
   }
 };
 
@@ -83,6 +86,9 @@ const CANONICAL_SPECIES_MUTATIONS: Record<
     inheritance: 'SEX_LINKED_RECESSIVE' | 'AUTOSOMAL_DOMINANT' | 'AUTOSOMAL_RECESSIVE';
     status?: CanonicalMutationResolution['status'];
     reason?: string;
+    nomenclature?: string;
+    symbol?: string;
+    homozygousState?: string;
   }>
 > = {
   canari: [
@@ -146,10 +152,13 @@ const CANONICAL_SPECIES_MUTATIONS: Record<
   agapornis_personatus: [
     {
       id: 'ap_blue',
-      names: ['ap_blue', 'bleu', 'blue', 'véritable bleu', 'true blue', 'personatus_blue'],
+      names: ['ap_blue', 'bleu', 'blue', 'blue1', 'bl', 'véritable bleu', 'true blue', 'personatus_blue', 'agap_blue'],
       inheritance: 'AUTOSOMAL_RECESSIVE',
-      status: 'HUMAN_REVIEW_REQUIRED',
-      reason: 'Véritable bleu autosomique récessif documenté chez Agapornis personatus, en attente d\'homologation bibliographique formelle (HRR-05.2).'
+      status: 'CANONICAL',
+      nomenclature: 'blue1',
+      symbol: 'bl',
+      homozygousState: 'bl/bl',
+      reason: 'Mutation bleue homologuée (blue1 / bl, autosomique récessive, Dirk Van den Abeele / Terry Martin 2002) — Décision scientifique humaine validée GAP-10-E.'
     }
   ],
   diamant_mandarin: [
@@ -266,14 +275,17 @@ export class CanonicalDataBridgeAdapter {
       };
     }
 
-    // 3. Mutation absente ou explicitement UNKNOWN
-    if (!mutationIdOrName || mutationIdOrName.trim() === '' || mutationIdOrName.toUpperCase() === 'UNKNOWN') {
+    // 3. Mutation absente ou explicitement UNKNOWN / NOT_TESTED
+    const upperMut = (mutationIdOrName || '').trim().toUpperCase();
+    if (!mutationIdOrName || upperMut === '' || upperMut === 'UNKNOWN' || upperMut === 'NOT_TESTED') {
       return {
         resolved: false,
         speciesId: normalizedSpecies,
         inheritance: 'UNKNOWN',
         status: 'UNKNOWN',
-        reason: 'Mutation non renseignée ou maintenue UNKNOWN par décision opérateur.'
+        reason: upperMut === 'NOT_TESTED'
+          ? 'Mutation non testée (NOT_TESTED) : aucun mode d\'hérédité présumé.'
+          : 'Mutation non renseignée ou maintenue UNKNOWN par décision opérateur.'
       };
     }
 
@@ -340,13 +352,26 @@ export class CanonicalDataBridgeAdapter {
           mutationId: match.id,
           inheritance: match.inheritance,
           status: match.status || 'CANONICAL',
-          reason: match.reason
+          reason: match.reason,
+          nomenclature: match.nomenclature,
+          symbol: match.symbol,
+          homozygousState: match.homozygousState
         };
       }
     }
 
-    // 5b. Cas particulier Personatus : mutation hors de son catalogue minimal -> OUT_OF_SCOPE (aucun report de Roseicollis)
+    // 5b. Cas particulier Personatus : protection stricte des allèles complexes et rejet des mutations hors catalogue
     if (normalizedSpecies === 'agapornis_personatus') {
+      const cleanUpper = cleanMut.toUpperCase();
+      if (['BLUE2', 'BL2', 'TURQUOISE', 'SAPPHIRE'].includes(cleanUpper)) {
+        return {
+          resolved: false,
+          speciesId: normalizedSpecies,
+          inheritance: 'UNKNOWN',
+          status: 'HUMAN_REVIEW_REQUIRED',
+          reason: `Allèle complexe "${mutationIdOrName}" d'Agapornis personatus non homologué en V2 (reste strictement HUMAN_REVIEW_REQUIRED, décision GAP-10-E).`
+        };
+      }
       return {
         resolved: false,
         speciesId: normalizedSpecies,

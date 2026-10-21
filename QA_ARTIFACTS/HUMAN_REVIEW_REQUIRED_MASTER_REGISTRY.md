@@ -14,7 +14,7 @@ Status: Active Master Tracking
 | **HRR-02** | Colombe diamant — Profil V2 | **DÉCISION HUMAINE ENREGISTRÉE** (Conceptuellement résolu) | GAP-02 / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : maintien d'une structure multi-standard pour le diamètre de bague (3,8 mm CDE/Aviornis vs 3,5 mm UOF/COM France sans vérité unique) et séparation explicite in situ (23–37 g, moy. ~35 g) / ex situ (35–45 g) pour la masse corporelle. Implémentation technique du modèle multi-standard/in situ différée à une mission ultérieure. Profil maintenu temporairement en draft jusqu'à implémentation technique. |
 | **HRR-03** | Zero Canary Fallback — 10 fallbacks identifiés | **OUVERT** | GAP-06-A | Audit complété, fallbacks répertoriés pour traitement dédié |
 | **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNIQUEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
-| **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **DÉCISION HUMAINE ENREGISTRÉE** (`ap_blue` homologuée ; allèles complexes réservés) | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : homologation scientifique de `ap_blue` (blue1 / bl, autosomique récessif) pour *A. personatus*. Les systèmes multi-alléliques complexes (`blue2 / bl2`, `turquoise`, `sapphire`) et autres mutations restent **HUMAN_REVIEW_REQUIRED**. Implémentation dans le catalogue différée à une mission technique dédiée. |
+| **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **PARTIELLEMENT HOMOLOGUÉ** (`ap_blue` actif / allèles complexes et Masque Orange restent HRR) | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C / GAP-10-E / GAP-11 | Homologation technique réalisée en GAP-11 pour `ap_blue` (blue1 / bl, autosomique récessive, status: CANONICAL) dans le catalogue d'*Agapornis personatus*, avec migration species-scoped et support des alias avicoles. Les allèles complexes (`blue2 / bl2`, `turquoise`, `sapphire`), `ar_masque_orange` et les catalogues Fischeri restent formellement **HUMAN_REVIEW_REQUIRED** / non homologués. HRR-05 non clôturé globalement. |
 | **HRR-06** | GeneticsEngine — Isolation interspécifique & hybridation | **DÉCISION HUMAINE ENREGISTRÉE** (Politique moteur scellée) | GAP-07-A / GAP-09 / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : maintien permanent et définitif du blocage fail-closed `HYBRID_CROSS_UNSUPPORTED` dans le moteur génétique (aucun calcul mendélien interspécifique). Validation produit d'un futur module informatif/préventif (pédagogique/conservation) strictement découplé du moteur (différé, hors périmètre). |
 | **HRR-07** | Bibliographie / Preuves scientifiques & Infrastructure | **RÉSERVES DOCUMENTAIRES MAINTENUES** | GAP-07-A / GAP-10-A / GAP-10-B1 / GAP-10-C / GAP-10-C1 / GAP-10-C2 / GAP-10-E | Traçabilité à 100% assurée. Les réserves documentaires préalablement identifiées (`SRC-TAYLOR-WARNER-1986`, ISBN Van den Abeele, forum) restent maintenues conformément à la décision GAP-10-E (aucune levée artificielle sans nouvelle preuve d'archive). |
 
@@ -514,6 +514,74 @@ BIO_REF_V2_STATUS = HUMAN_DECISIONS_RECORDED_AWAITING_TECHNICAL_IMPLEMENTATION
 > **Note de gouvernance scientifique :**
 > La mission GAP-10-E a transformé avec succès les 4 arbitrages scientifiques humains en décisions officiellement tracées, scellées et opposables.
 > Biological Reference V2 ne peut être déclaré `CLOSED` au niveau applicatif tant que les décisions pour HRR-02 (modèle multi-standard/poids) et HRR-05 (`ap_blue`) n'ont pas été implémentées dans le code de production lors des missions techniques dédiées.
+
+---
+
+## Détails GAP-11 — Homologation Technique ap_blue / blue1 (Agapornis personatus)
+
+### 1. Métadonnées de l'Implémentation
+- **Date d'exécution :** 2026-10-21
+- **Phase :** BIO-REF-V2 GAP-11
+- **Type de mission :** Implémentation technique de décision scientifique humaine (GAP-10-E)
+- **Espèce cible :** `agapornis_personatus` (*Agapornis personatus*)
+- **Fichiers modifiés :**
+  - `src/features/canonical/types.ts` (enrichissement optionnel de `CanonicalMutationResolution` avec `nomenclature`, `symbol`, `homozygousState`)
+  - `src/features/canonical/CanonicalDataBridgeAdapter.ts` (catalogue Personatus actif, aliases et migration species-scoped, garde-fou allèles complexes)
+  - `tests/bio-ref-v2-gap11.test.ts` (suite complète de tests unitaires et d'intégration GAP-11)
+  - `tests/bio-ref-v2-gap10-c.test.ts` et `tests/agapornis-genetic-catalogs.test.ts` (alignement sur statut CANONICAL)
+  - `QA_ARTIFACTS/HUMAN_REVIEW_REQUIRED_MASTER_REGISTRY.md` (mise à jour HRR-05 et registre)
+
+---
+
+### 2. Spécification de la Mutation Homologuée
+- **Production ID :** `ap_blue`
+- **Nomenclature officielle :** `blue1`
+- **Symbole génétique :** `bl`
+- **Mode de transmission :** Autosomique récessif (`AUTOSOMAL_RECESSIVE`)
+- **État homozygote :** `bl/bl`
+- **Statut canonique :** `CANONICAL`
+- **Synonymes & alias résolus :** `blue1`, `bl`, `blue`, `bleu`, `true blue`, `véritable bleu`, `personatus_blue`, `agap_blue`
+- **Hérédité confirmée :** Décision scientifique humaine enregistrée GAP-10-E (fondée sur Dirk Van den Abeele / Terry Martin 2002).
+
+---
+
+### 3. Garde-fous et Invariants de Sécurité
+
+1. **Species-scoping strict :**
+   - Seule l'espèce `agapornis_personatus` résout `ap_blue`.
+   - `agapornis_fischeri + ap_blue` retourne formellement `OUT_OF_SCOPE` (`resolved: false`).
+   - `agapornis_roseicollis + ap_blue` retourne formellement `UNKNOWN` (`resolved: false`).
+   - Autres espèces (`canari`, `calopsitte`, `diamant_mandarin`, `colombe_diamant`) retournent `UNKNOWN`.
+   - Aucun fallback silencieux ni recherche partielle par `startsWith('agapornis')`.
+
+2. **Neutralisation du legacy ambigu `agapornis` :**
+   - Requête sur l'identifiant générique `agapornis` retourne immédiatement `INSUFFICIENT_INFORMATION` avec marquage `LEGACY_SPECIES_AMBIGUITY`.
+
+3. **Protection absolue des allèles complexes (HUMAN_REVIEW_REQUIRED) :**
+   - `blue2`, `bl2`, `turquoise`, `sapphire` sont formellement exclus du catalogue actif.
+   - Toute requête sur ces allèles pour `agapornis_personatus` retourne `resolved: false` sous statut explicite `HUMAN_REVIEW_REQUIRED`.
+
+4. **Préservation épistémique :**
+   - Les identifiants `UNKNOWN` et `NOT_TESTED` restent strictement non résolus et sont préservés intacts par `migrateMutationId`.
+   - Zéro création d'évidence artificielle (`EVD-AGA-PERS-*`) : strict respect du registre scellé à 28 entrées.
+
+5. **Migration pure et idempotente :**
+   - `migrateMutationId('agapornis_personatus', 'agap_blue')` → `'ap_blue'`.
+   - Idempotence garantie : `'ap_blue'` reste `'ap_blue'`.
+   - Aucune conversion appliquée si l'espèce est `agapornis_roseicollis` ou `agapornis` ambigu.
+
+---
+
+### 4. Statut HRR-05 Post-GAP-11
+
+- **HRR-05.1 Masque Orange (`ar_masque_orange`) :** Reste **HUMAN_REVIEW_REQUIRED** (Roseicollis).
+- **HRR-05.2 Série Bleue :**
+  - `ap_blue` (*Agapornis personatus*) : **HOMOLOGUÉ ET ACTIF** (`CANONICAL`).
+  - Allèles complexes Personatus (`blue2 / bl2`, `turquoise`, `sapphire`) : Restent **HUMAN_REVIEW_REQUIRED**.
+  - Parblue Roseicollis (`ar_aqua`, `ar_turquoise`) : Restent **HUMAN_REVIEW_REQUIRED**.
+- **HRR-05.3 Catalogue Fischeri :** Reste **OUT_OF_SCOPE** (non homologué).
+- **Statut Global HRR-05 :** `PARTIELLEMENT HOMOLOGUÉ` (HRR-05 ne peut être marqué clos tant que les allèles complexes et Masque Orange n'ont pas été traités).
+
 
 
 

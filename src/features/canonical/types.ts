@@ -69,6 +69,9 @@ export interface CanonicalMutationResolution {
   inheritance: 'SEX_LINKED_RECESSIVE' | 'AUTOSOMAL_DOMINANT' | 'AUTOSOMAL_RECESSIVE' | 'UNKNOWN';
   status: 'CANONICAL' | 'UNKNOWN' | 'OUT_OF_SCOPE' | 'AMBIGUOUS' | 'INSUFFICIENT_INFORMATION' | 'HUMAN_REVIEW_REQUIRED';
   reason?: string;
+  nomenclature?: string;
+  symbol?: string;
+  homozygousState?: string;
 }
 
 export interface ShadowComparisonResult {
