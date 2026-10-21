@@ -9,7 +9,7 @@ import { SpeciesProfileService } from '../src/features/species/services/SpeciesP
 import { SpeciesProfileRepository } from '../src/features/species/repositories/SpeciesProfileRepository.js';
 import { SPECIES_REGISTRY, getSpeciesById } from '../src/data/speciesRegistry.js';
 import { BIOLOGICAL_SPECIES_REGISTRY } from '../src/reference/species/index.js';
-import { DemoDataGenerator } from '../src/features/quality/utils/demoGenerator.js';
+import { DemoDataGenerator } from '../src/qa/demo/DemoGenerator.js';
 
 // Setup Mock LocalStorage for isolated Node.js test execution
 const mockLocalStorage: Record<string, string> = {};
@@ -22,13 +22,14 @@ if (typeof globalThis.localStorage === 'undefined') {
   };
 }
 
-test('SPECIES-SCOPE-01: SpeciesProfileService defaults to canari when uninitialized', () => {
+test('SPECIES-SCOPE-01: SpeciesProfileService maintains empty list when uninitialized without forcing canari (AUDIT-31-06)', () => {
   globalThis.localStorage.clear();
   SpeciesProfileRepository.clearMemoryCache();
   
   const activeIds = SpeciesProfileService.getActiveSpeciesIds();
-  assert.deepEqual(activeIds, ['canari'], 'Default active species should be strictly [canari]');
-  assert.equal(SpeciesProfileService.isSpeciesActive('canari'), true);
+  assert.deepEqual(activeIds, [], 'Default active species should be strictly empty [] (AUDIT-31-06)');
+  assert.equal(SpeciesProfileService.getProfileStatus(), 'INSUFFICIENT_INFORMATION');
+  assert.equal(SpeciesProfileService.isSpeciesActive('canari'), false);
   assert.equal(SpeciesProfileService.isSpeciesActive('mandarin'), false);
 });
 
@@ -162,7 +163,7 @@ test('SPECIES-SCOPE-11: getIncubationDays returns biologically accurate periods'
   assert.equal(SpeciesProfileService.getIncubationDays('chardonneret_elegant'), 12);
   assert.equal(SpeciesProfileService.getIncubationDays('diamant_gould'), 14);
   assert.equal(SpeciesProfileService.getIncubationDays('perruche_ondulee'), 18);
-  assert.equal(SpeciesProfileService.getIncubationDays('unknown_species'), 13); // fallback
+  assert.equal(SpeciesProfileService.getIncubationDays('unknown_species'), undefined); // GAP-13: no generic canary fallback
 });
 
 test('SPECIES-SCOPE-12: addSpecies and removeSpecies dynamically update profile with safe limits', () => {
@@ -220,12 +221,13 @@ test('SPECIES-SCOPE-15: Subscription listener triggers on profile modifications'
   assert.equal(listenerFiredCount, 1, 'Listener should not fire after unsubscribe');
 });
 
-test('NEGATIVE-01: Setting empty profile falls back safely to default [canari]', () => {
+test('NEGATIVE-01: Setting empty profile maintains empty list without forcing [canari] (AUDIT-31-06)', () => {
   globalThis.localStorage.clear();
   SpeciesProfileRepository.clearMemoryCache();
 
   SpeciesProfileService.setProfile([]);
-  assert.deepEqual(SpeciesProfileService.getActiveSpeciesIds(), ['canari']);
+  assert.deepEqual(SpeciesProfileService.getActiveSpeciesIds(), []);
+  assert.equal(SpeciesProfileService.getProfileStatus(), 'INSUFFICIENT_INFORMATION');
 });
 
 test('NEGATIVE-02: Adding duplicate species does not produce duplicates in profile', () => {

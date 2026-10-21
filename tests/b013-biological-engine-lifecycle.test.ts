@@ -102,32 +102,32 @@ describe('CAMPAGNE QA FONCTIONNELLE B-013 — MOTEUR BIOLOGIQUE & CYCLE DE VIE',
   // B-013-002 — MATURITÉ MÂLE (Seuil : 10 mois)
   it('B-013-002 — Maturité mâle : seuil biologique exact de 10 mois', () => {
     // 1. Sous seuil : 9 mois
-    const maleYoung = ReproductionEngine.isReproductiveAge('Mâle', offsetDate(-9, -15));
+    const maleYoung = ReproductionEngine.isReproductiveAge('Mâle', offsetDate(-9, -15), 'canari');
     assert.equal(maleYoung.ready, false, 'Mâle de 9 mois doit être non prêt');
     assert.equal(maleYoung.requiredMonths, 10);
 
     // 2. Seuil exact : 10 mois révolus
-    const maleExact = ReproductionEngine.isReproductiveAge('Mâle', offsetDate(-10, -2));
+    const maleExact = ReproductionEngine.isReproductiveAge('Mâle', offsetDate(-10, -2), 'canari');
     assert.equal(maleExact.ready, true, 'Mâle de 10 mois doit être prêt');
 
     // 3. Au-dessus : 14 mois
-    const maleAdult = ReproductionEngine.isReproductiveAge('Mâle', offsetDate(-14, 0));
+    const maleAdult = ReproductionEngine.isReproductiveAge('Mâle', offsetDate(-14, 0), 'canari');
     assert.equal(maleAdult.ready, true, 'Mâle de 14 mois prêt');
   });
 
   // B-013-003 — MATURITÉ FEMELLE (Seuil : 9 mois)
   it('B-013-003 — Maturité femelle : seuil biologique exact de 9 mois', () => {
     // 1. Sous seuil : 8 mois
-    const femaleYoung = ReproductionEngine.isReproductiveAge('Femelle', offsetDate(-8, -10));
+    const femaleYoung = ReproductionEngine.isReproductiveAge('Femelle', offsetDate(-8, -10), 'canari');
     assert.equal(femaleYoung.ready, false, 'Femelle de 8 mois non prête');
     assert.equal(femaleYoung.requiredMonths, 9);
 
     // 2. Seuil exact : 9 mois révolus
-    const femaleExact = ReproductionEngine.isReproductiveAge('Femelle', offsetDate(-9, -2));
+    const femaleExact = ReproductionEngine.isReproductiveAge('Femelle', offsetDate(-9, -2), 'canari');
     assert.equal(femaleExact.ready, true, 'Femelle de 9 mois prête');
 
     // 3. Au-dessus : 12 mois
-    const femaleAdult = ReproductionEngine.isReproductiveAge('Femelle', offsetDate(-12, 0));
+    const femaleAdult = ReproductionEngine.isReproductiveAge('Femelle', offsetDate(-12, 0), 'canari');
     assert.equal(femaleAdult.ready, true, 'Femelle de 12 mois prête');
   });
 
@@ -322,6 +322,7 @@ describe('CAMPAGNE QA FONCTIONNELLE B-013 — MOTEUR BIOLOGIQUE & CYCLE DE VIE',
   // B-013-015 — CALENDRIER D'INCUBATION
   it('B-013-015 — Calcul des jalons biologiques de l\'incubation (Mirage J+6, Contrôle J+10, Éclosion J+13)', () => {
     const calendar = ReproductionEngine.calculateIncubationCalendar(offsetDate(0, -8), 13);
+    assert.ok(calendar);
     assert.ok(calendar.candlingDate, 'Date de mirage calculée');
     assert.ok(calendar.expectedHatchDate, 'Date prévue d éclosion calculée');
     assert.equal(calendar.progressPercent > 0, true, 'Progression calculée');
@@ -331,6 +332,7 @@ describe('CAMPAGNE QA FONCTIONNELLE B-013 — MOTEUR BIOLOGIQUE & CYCLE DE VIE',
   it('B-013-016 — Détection et alerte de retard d\'incubation', () => {
     // Démarrée il y a 16 jours pour une durée de 13 jours
     const overdueCalendar = ReproductionEngine.calculateIncubationCalendar(offsetDate(0, -16), 13);
+    assert.ok(overdueCalendar);
     assert.ok(overdueCalendar.delayDays > 0, 'Retard d éclosion détecté');
     assert.equal(overdueCalendar.daysRemaining, 0);
   });
@@ -612,10 +614,12 @@ describe('CAMPAGNE QA FONCTIONNELLE B-013 — MOTEUR BIOLOGIQUE & CYCLE DE VIE',
   it('B-013-038 — Durées biologiques adaptées selon l\'espèce', () => {
     // Canari standard : 13 jours
     const canariCal = ReproductionEngine.calculateIncubationCalendar(today, 13);
+    assert.ok(canariCal);
     assert.ok(canariCal.expectedHatchDate);
 
     // Perruche ondulée standard : 18 jours
     const budgieCal = ReproductionEngine.calculateIncubationCalendar(today, 18);
+    assert.ok(budgieCal);
     assert.notEqual(canariCal.expectedHatchDate, budgieCal.expectedHatchDate);
   });
 

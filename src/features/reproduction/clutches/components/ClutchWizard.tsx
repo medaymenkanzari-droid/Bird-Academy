@@ -9,8 +9,11 @@ import { ClutchService } from '../services/ClutchService';
 import { EggService } from '../../eggs/services/EggService';
 import { IncubationService } from '../../incubation/services/IncubationService';
 import { IncubationMode } from '../../incubation/types';
-import { ReproductionEngine } from '../../engines/ReproductionEngine';
 import { ReproductionService } from '../../services/ReproductionService';
+import { ReproductionEngine } from '../../engines/ReproductionEngine';
+import { BirdRepository } from '../../../birds/repositories/BirdRepository';
+import { SpeciesProfileService } from '../../../species/services/SpeciesProfileService';
+import { getBiologicalProfileById } from '../../../../reference/species';
 import { useLanguage } from '../../../../context/LanguageContext';
 import { BIO_TRANSLATIONS } from '../../utils/bioTranslations';
 import { 
@@ -42,6 +45,7 @@ export default function ClutchWizard({ isOpen, onClose, onSuccess, preSelectedPa
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
 
   // Active couples list
+  // Active couples list
   const activeCouples = useMemo(() => {
     const all = ReproductionService.getPairs();
     return all.filter(p => p.status === 'active' && !p.archived);
@@ -51,8 +55,39 @@ export default function ClutchWizard({ isOpen, onClose, onSuccess, preSelectedPa
   const [selectedPairId, setSelectedPairId] = useState<string>(preSelectedPairId || '');
   const [startDate, setStartDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [observations, setObservations] = useState('');
-  const [eggCount, setEggCount] = useState<number>(4);
   const [incubationMode, setIncubationMode] = useState<IncubationMode>('Naturelle');
+
+  const selectedPair = useMemo(() => {
+    return activeCouples.find(p => p.id === selectedPairId);
+  }, [activeCouples, selectedPairId]);
+
+  const pairSpecies = useMemo(() => {
+    if (!selectedPair) return undefined;
+    const female = BirdRepository.getById(selectedPair.femaleId);
+    const male = BirdRepository.getById(selectedPair.maleId);
+    return female?.espece || male?.espece;
+  }, [selectedPair]);
+
+  const speciesProfile = useMemo(() => {
+    return pairSpecies ? getBiologicalProfileById(pairSpecies) : undefined;
+  }, [pairSpecies]);
+
+  const speciesIncubationDays = useMemo(() => {
+    return pairSpecies ? SpeciesProfileService.getIncubationDays(pairSpecies) : undefined;
+  }, [pairSpecies]);
+
+  const [eggCount, setEggCount] = useState<number>(() => {
+    if (pairSpecies === 'canari') return 4;
+    return speciesProfile?.reproduction?.avgEggsPerClutch || 2;
+  });
+
+  React.useEffect(() => {
+    if (pairSpecies === 'canari') {
+      setEggCount(4);
+    } else if (speciesProfile?.reproduction?.avgEggsPerClutch) {
+      setEggCount(speciesProfile.reproduction.avgEggsPerClutch);
+    }
+  }, [pairSpecies, speciesProfile]);
 
   // Set default couple if only one or pre-selected
   React.useEffect(() => {
@@ -63,11 +98,11 @@ export default function ClutchWizard({ isOpen, onClose, onSuccess, preSelectedPa
     }
   }, [preSelectedPairId, activeCouples, selectedPairId]);
 
-  // Forecast milestones based on Clutch start date
+  // Forecast milestones based on Clutch start date and species
   const forecasts = useMemo(() => {
     if (!startDate) return null;
-    return ReproductionEngine.calculateIncubationCalendar(startDate);
-  }, [startDate]);
+    return ReproductionEngine.calculateIncubationCalendar(startDate, speciesIncubationDays, pairSpecies);
+  }, [startDate, speciesIncubationDays, pairSpecies]);
 
   const handleNext = () => {
     if (step === 1 && !selectedPairId) return;
@@ -91,24 +126,25 @@ export default function ClutchWizard({ isOpen, onClose, onSuccess, preSelectedPa
         eggLayingDate.setDate(baseDate.getDate() + (i - 1));
         const dateStr = eggLayingDate.toISOString().split('T')[0];
 
+        const estimatedEggWeight = pairSpecies === 'canari' ? 1.5 : undefined;
         EggService.addEgg(
           clutch.id,
           dateStr,
           `Nid - Position ${i}`,
-          1.5, // default estimated egg weight
+          estimatedEggWeight,
           `Œuf de ponte initiale #${i}`
         );
       }
 
       // 3. Start Incubation
-      IncubationService.startIncubation(clutch.id, startDate, incubationMode);
+      IncubationService.startIncubation(clutch.id, startDate, incubationMode, speciesIncubationDays);
 
       onSuccess(clutch.id);
       onClose();
       // Reset Wizard state
       setStep(1);
       setObservations('');
-      setEggCount(4);
+      setEggCount(pairSpecies === 'canari' ? 4 : (speciesProfile?.reproduction?.avgEggsPerClutch || 2));
     } catch (err: any) {
       alert(err.message || "Erreur de création globale");
     }
@@ -294,6 +330,7 @@ export default function ClutchWizard({ isOpen, onClose, onSuccess, preSelectedPa
                 <div>• Nombre d'œufs : <strong>{eggCount}</strong></div>
                 <div>{t('wizardSummaryLayingDate')} <strong>{startDate}</strong></div>
                 <div>• Mode d'incubation : <strong className="text-amber-600 font-bold">{t(`incubation${incubationMode.charAt(0).toUpperCase() + incubationMode.slice(1)}`)}</strong></div>
+                <div>• Observations : <strong className="italic text-slate-700">{observations ? observations : "Non renseigné"}</strong></div>
               </div>
             </div>
           )}

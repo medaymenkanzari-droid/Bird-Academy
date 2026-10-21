@@ -51,7 +51,7 @@ export default function IncubationCalendarView({ clutchId, onRefreshClutches }: 
 
   const calendarData = useMemo(() => {
     if (!incubation) return null;
-    return ReproductionEngine.calculateIncubationCalendar(incubation.startDate);
+    return ReproductionEngine.calculateIncubationCalendar(incubation.startDate, incubation.theoreticalDuration);
   }, [incubation]);
 
   const progressPercent = useMemo(() => {

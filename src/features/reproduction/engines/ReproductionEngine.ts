@@ -9,6 +9,8 @@ import { ReproductionRepository } from '../repositories/ReproductionRepository';
 import { BreedingRepository } from '../../breeding/repositories/BreedingRepository';
 import { IncubationBiologicalCalendar } from '../incubation/types';
 import { Egg, EggStatus } from '../eggs/types';
+import { getBiologicalProfileById } from '../../../reference/species';
+import { SpeciesProfileService } from '../../species/services/SpeciesProfileService';
 
 export class ReproductionEngine {
   static isValidHistoricalDate(dateStr: string): boolean {
@@ -60,19 +62,61 @@ export class ReproductionEngine {
 
   /**
    * Checks if a bird has reached the minimum reproductive age.
-   * Standard: 9 months for females, 10 months for males.
+   * Standard Canary: 9 months for females, 10 months for males.
+   * Species-scoped when speciesId is provided; returns applicable=false without Canary fallback if species is absent or has no defined age rule.
    */
-  static isReproductiveAge(sex: 'Mâle' | 'Femelle' | 'Indéterminé', birthDateStr: string): {
+  static isReproductiveAge(
+    sex: 'Mâle' | 'Femelle' | 'Indéterminé',
+    birthDateStr: string,
+    speciesId?: string
+  ): {
     ready: boolean;
     ageMonths: number;
-    requiredMonths: number;
+    requiredMonths?: number;
+    applicable: boolean;
   } {
+    if (!birthDateStr) {
+      return {
+        ready: false,
+        ageMonths: 0,
+        requiredMonths: speciesId === 'canari' ? (sex === 'Mâle' ? 10 : 9) : undefined,
+        applicable: speciesId === 'canari',
+      };
+    }
     const ageMonths = this.calculateAgeInMonths(birthDateStr);
-    const requiredMonths = sex === 'Mâle' ? 10 : 9;
+    if (speciesId === 'canari') {
+      const requiredMonths = sex === 'Mâle' ? 10 : 9;
+      return {
+        ready: ageMonths >= requiredMonths,
+        ageMonths,
+        requiredMonths,
+        applicable: true,
+      };
+    }
+    if (speciesId) {
+      const profile = getBiologicalProfileById(speciesId);
+      if (profile?.biology?.minAgeReproduction) {
+        const requiredMonths = profile.biology.minAgeReproduction;
+        return {
+          ready: ageMonths >= requiredMonths,
+          ageMonths,
+          requiredMonths,
+          applicable: true,
+        };
+      }
+      return {
+        ready: true,
+        ageMonths,
+        requiredMonths: undefined,
+        applicable: false,
+      };
+    }
+    // speciesId absent: no Canary assumption (Zero Canary Fallback)
     return {
-      ready: ageMonths >= requiredMonths,
+      ready: true,
       ageMonths,
-      requiredMonths,
+      requiredMonths: undefined,
+      applicable: false,
     };
   }
 
@@ -184,7 +228,7 @@ export class ReproductionEngine {
       rule: 'REPRO_SPECIES_MATCH',
       passed: speciesMatch,
       message: speciesMatch
-        ? t('repro_val_species_ok', { defaultValue: `Même espèce d'oiseau (${male.espece || 'Canari'}).` })
+        ? t('repro_val_species_ok', { defaultValue: `Même espèce d'oiseau (${male.espece || 'Espèce non renseignée'}).` })
         : t('repro_val_species_warning', { defaultValue: `Espèces différentes : Risque d'hybridation (ex: Canari x Chardonneret). Descendants généralement stériles.` })
     });
     if (!speciesMatch) {
@@ -256,39 +300,52 @@ export class ReproductionEngine {
     }
 
     // --- RULE 6: Minimum Reproductive Age Check ---
-    const maleAgeCheck = this.isReproductiveAge('Mâle', male.date_naissance);
-    const femaleAgeCheck = this.isReproductiveAge('Femelle', female.date_naissance);
-    const ageValid = maleAgeCheck.ready && femaleAgeCheck.ready;
-
-    let ageMessage = '';
-    if (ageValid) {
-      ageMessage = t('repro_val_age_ok', { defaultValue: 'Âge de maturité reproductive atteint pour les deux partenaires.' });
-    } else {
-      const parts: string[] = [];
-      if (!maleAgeCheck.ready) {
-        parts.push(t('repro_val_age_male_young', {
-          defaultValue: `le mâle est trop jeune (${maleAgeCheck.ageMonths}/${maleAgeCheck.requiredMonths} mois)`
-        }));
-      }
-      if (!femaleAgeCheck.ready) {
-        parts.push(t('repro_val_age_female_young', {
-          defaultValue: `la femelle est trop jeune (${femaleAgeCheck.ageMonths}/${femaleAgeCheck.requiredMonths} mois)`
-        }));
-      }
-      ageMessage = t('repro_val_age_error', {
-        defaultValue: `Maturité reproductive insuffisante : ${parts.join(' et ')}.`
+    if (!male.date_naissance || !female.date_naissance) {
+      validations.push({
+        type: 'warning',
+        rule: 'REPRO_MIN_AGE',
+        passed: false,
+        message: t('repro_val_age_missing', { defaultValue: 'Date de naissance non renseignée : âge non vérifiable.' })
       });
-    }
-
-    validations.push({
-      type: ageValid ? 'info' : 'warning',
-      rule: 'REPRO_MIN_AGE',
-      passed: ageValid,
-      message: ageMessage
-    });
-    if (!ageValid) {
       score -= 1;
-      recommendations.push(t('repro_rec_age', { defaultValue: 'Un accouplement trop précoce peut provoquer une rétention d\'œuf ou des pontes claires.' }));
+      recommendations.push(t('repro_rec_age_missing', { defaultValue: 'Renseignez la date de naissance des reproducteurs pour vérifier leur maturité.' }));
+    } else {
+      const maleAgeCheck = this.isReproductiveAge('Mâle', male.date_naissance, male.espece);
+      const femaleAgeCheck = this.isReproductiveAge('Femelle', female.date_naissance, female.espece);
+      const ageValid = maleAgeCheck.ready && femaleAgeCheck.ready;
+
+      let ageMessage = '';
+      if (!maleAgeCheck.applicable && !femaleAgeCheck.applicable) {
+        ageMessage = t('repro_val_age_not_applicable', { defaultValue: 'Âge de maturité non assujetti à une règle stricte pour cette espèce.' });
+      } else if (ageValid) {
+        ageMessage = t('repro_val_age_ok', { defaultValue: 'Âge de maturité reproductive atteint pour les deux partenaires.' });
+      } else {
+        const parts: string[] = [];
+        if (!maleAgeCheck.ready && maleAgeCheck.applicable) {
+          parts.push(t('repro_val_age_male_young', {
+            defaultValue: `le mâle est trop jeune (${maleAgeCheck.ageMonths}/${maleAgeCheck.requiredMonths} mois)`
+          }));
+        }
+        if (!femaleAgeCheck.ready && femaleAgeCheck.applicable) {
+          parts.push(t('repro_val_age_female_young', {
+            defaultValue: `la femelle est trop jeune (${femaleAgeCheck.ageMonths}/${femaleAgeCheck.requiredMonths} mois)`
+          }));
+        }
+        ageMessage = t('repro_val_age_error', {
+          defaultValue: `Maturité reproductive insuffisante : ${parts.join(' et ')}.`
+        });
+      }
+
+      validations.push({
+        type: ageValid ? 'info' : 'warning',
+        rule: 'REPRO_MIN_AGE',
+        passed: ageValid,
+        message: ageMessage
+      });
+      if (!ageValid) {
+        score -= 1;
+        recommendations.push(t('repro_rec_age', { defaultValue: 'Un accouplement trop précoce peut provoquer une rétention d\'œuf ou des pontes claires.' }));
+      }
     }
 
     // --- RULE 7: Health Status ---
@@ -334,12 +391,22 @@ export class ReproductionEngine {
   }
 
   /**
-   * Computes biological milestones for an incubation period
+   * Computes biological milestones for an incubation period.
+   * Requires an explicit theoreticalDuration or resolves from speciesId (Zero Canary Fallback).
    */
   static calculateIncubationCalendar(
     startDate: string,
-    theoreticalDuration: number = 13
-  ): IncubationBiologicalCalendar {
+    theoreticalDuration?: number,
+    speciesId?: string
+  ): IncubationBiologicalCalendar | null {
+    let duration = theoreticalDuration;
+    if (duration === undefined && speciesId) {
+      duration = SpeciesProfileService.getIncubationDays(speciesId);
+    }
+    if (duration === undefined || !Number.isInteger(duration) || duration <= 0) {
+      return null;
+    }
+
     if (!startDate) {
       const nowStr = new Date().toISOString().split('T')[0];
       startDate = nowStr;
@@ -353,10 +420,10 @@ export class ReproductionEngine {
     control.setDate(start.getDate() + 10); // Contrôle à J+10
 
     const hatch = new Date(start);
-    hatch.setDate(start.getDate() + theoreticalDuration); // Éclosion prévue à J+theoreticalDuration
+    hatch.setDate(start.getDate() + duration); // Éclosion prévue à J+duration
 
     const endIncub = new Date(start);
-    endIncub.setDate(start.getDate() + theoreticalDuration + 2); // Fin d'incubation (sécurité J+theoreticalDuration+2)
+    endIncub.setDate(start.getDate() + duration + 2); // Fin d'incubation (sécurité J+duration+2)
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);

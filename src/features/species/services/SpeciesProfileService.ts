@@ -119,20 +119,15 @@ export class SpeciesProfileService {
    */
   static getScopedBiologicalProfiles(): BiologicalSpeciesProfile[] {
     const activeIds = new Set(this.getActiveSpeciesIds());
-    const scoped = BIOLOGICAL_SPECIES_REGISTRY.filter(profile => activeIds.has(profile.identity.id));
-    // If no matching profile exists, return Canari as safe fallback
-    if (scoped.length === 0) {
-      const fallback = getBiologicalProfileById('canari');
-      return fallback ? [fallback] : BIOLOGICAL_SPECIES_REGISTRY.slice(0, 1);
-    }
-    return scoped;
+    return BIOLOGICAL_SPECIES_REGISTRY.filter(profile => activeIds.has(profile.identity.id));
   }
 
   /**
    * Resolve incubation duration in days for a specific bird species.
+   * Returns undefined if speciesId is absent or not recognized (Zero Canary Fallback).
    */
-  static getIncubationDays(speciesId?: string): number {
-    if (!speciesId) return 13;
+  static getIncubationDays(speciesId?: string): number | undefined {
+    if (!speciesId) return undefined;
     // Check certified biological profile first
     const profile = getBiologicalProfileById(speciesId);
     if (profile && profile.reproduction?.incubationPeriod) {
@@ -166,8 +161,9 @@ export class SpeciesProfileService {
       case 'colombe_diamant':
         return 13;
       case 'canari':
-      default:
         return 13;
+      default:
+        return undefined;
     }
   }
 

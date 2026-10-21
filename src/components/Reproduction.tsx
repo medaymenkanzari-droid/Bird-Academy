@@ -364,10 +364,12 @@ export default function ReproductionComponent({
       const birthDate = targetPonte ? targetPonte.date : '2026-07-08';
       
       // Calculate hatching date using dynamic species incubation period
-      const speciesId = maleBird?.espece || femaleBird?.espece || 'canari';
+      const speciesId = maleBird?.espece || femaleBird?.espece;
       const incDays = SpeciesProfileService.getIncubationDays(speciesId);
       const hatchEst = new Date(birthDate);
-      hatchEst.setDate(hatchEst.getDate() + incDays);
+      if (incDays) {
+        hatchEst.setDate(hatchEst.getDate() + incDays);
+      }
       const formattedHatchDate = hatchEst.toISOString().split('T')[0];
 
       for (let i = 0; i < eggsEclos; i++) {

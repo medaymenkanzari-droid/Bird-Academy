@@ -19,13 +19,14 @@ import { BirdService } from '../features/birds/services/BirdService';
 import { BirdEngine } from '../business/BirdEngine';
 import { ActivityLogger, EventType } from '../storage/ActivityLogger';
 import { CapabilityResolver } from '../features/subscription/services/CapabilityResolver';
-import { DemoDataClassifier } from '../features/quality/utils/demoDataClassifier';
 import { HorizontalScrollContainer } from './ui/HorizontalScrollContainer';
 
 import { 
   AppInput, AppSelect, AppCard, AppAlert, AppButton, AppTable, AppBadge, SpeciesBadge, AppEmptyState, AppModal
 } from './design-system';
 import { BirdDetailModal } from './BirdDetailModal';
+import { BirdPhotoUploader } from './ui/BirdPhotoUploader';
+import { ProgressiveBirdPassportForm } from '../features/birds/components/ProgressiveBirdPassportForm';
 
 // Local translation dictionary for French, English, Arabic, Spanish, Italian
 export const LOCAL_I18N: Record<string, Record<string, string>> = {
@@ -801,8 +802,9 @@ export default function Canaris({
 
   // Dynamic values based on selected Species/Category in the Formulaire V2
   const currentFormSpeciesData = useMemo(() => {
-    return getSpeciesById(formData.espece || activeSpeciesList[0]?.id || 'canari');
-  }, [formData.espece, activeSpeciesList]);
+    const sp = formData.espece || (filterSpecies && filterSpecies !== 'all' ? filterSpecies : undefined);
+    return sp ? getSpeciesById(sp) : null;
+  }, [formData.espece, filterSpecies]);
 
   const currentFormCategories = useMemo(() => {
     return currentFormSpeciesData?.categories || [];
@@ -1338,7 +1340,7 @@ export default function Canaris({
       key: 'espece',
       header: localT('speciesCol'),
       render: (row: Canari) => {
-        return <SpeciesBadge speciesId={row.espece || 'canari'} size="sm" />;
+        return <SpeciesBadge speciesId={row.espece} size="sm" />;
       }
     },
     {
@@ -1397,392 +1399,47 @@ export default function Canaris({
     }
   ], [paginatedBirds, selectedBirdIds, sortField, sortDirection, handleToggleSelectAll, handleToggleSelectBird, localT, handleSort, getCageName]);
 
-  // Active form view structure
+  // Active form view structure (V1.9.3 - Saisie Progressive du Bird Passport)
   if (isAdding || isEditing) {
     return (
       <div className="space-y-6 animate-fadeIn" dir={isRtl ? 'rtl' : 'ltr'}>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h1 className="text-2xl font-black text-slate-800 tracking-tight">
-              {formData.id ? localT('editFormTitle', { name: formData.nom }) : localT('addFormTitle')}
-            </h1>
-            <p className="text-slate-500 text-xs mt-1">
-              {localT('subtitle')}
-            </p>
-          </div>
-          <AppButton variant="outline" startIcon={<X className="w-4 h-4" />} onClick={() => { setIsAdding(false); setIsEditing(false); }}>
-            {localT('btnCancel')}
-          </AppButton>
-        </div>
-
         {formGeneralError && (
           <AppAlert type="danger" onClose={() => setFormGeneralError(null)}>
             {formGeneralError}
           </AppAlert>
         )}
+        <ProgressiveBirdPassportForm
+          initialBird={isEditing ? (formData as Canari) : null}
+          allBirds={allBirdsList}
+          cages={cages}
+          onSave={(savedBird) => {
+            let result;
+            if (isEditing) {
+              result = onEditCanari(savedBird);
+            } else {
+              result = onAddCanari(savedBird);
+            }
 
-        <form onSubmit={handleSaveForm} className="space-y-6">
-          {/* Sub tabs for Form categories */}
-          <div className="grid grid-cols-2 sm:flex border-b border-slate-100 overflow-x-visible sm:overflow-x-auto shrink-0 pb-1 gap-2">
-            {(['identity', 'origin', 'localisation', 'state'] as const).map(tab => (
-              <button
-                key={tab}
-                type="button"
-                onClick={() => setFormTab(tab)}
-                className={`
-                  w-full sm:w-auto px-2 sm:px-4 py-2.5 font-bold text-xs uppercase tracking-wider border-b-2 transition-all shrink-0 cursor-pointer whitespace-normal sm:whitespace-nowrap
-                  ${formTab === tab ? 'border-emerald-600 text-emerald-800' : 'border-transparent text-slate-400 hover:text-slate-600'}
-                `}
-              >
-                {tab === 'identity' ? localT('tabIdentity') : tab === 'origin' ? localT('tabOrigin') : tab === 'localisation' ? localT('tabLocalisation') : localT('tabState')}
-              </button>
-            ))}
-          </div>
-
-          <AppCard padding="xl">
-            {formTab === 'identity' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <AppInput 
-                  label={localT('labelName')}
-                  value={formData.nom || ''}
-                  onChange={(e) => handleInputChange('nom', e.target.value)}
-                  error={formErrors.nom}
-                  placeholder="ex. Rubis"
-                />
-
-                <AppInput 
-                  label={localT('labelRing')}
-                  value={formData.bague || ''}
-                  onChange={(e) => handleInputChange('bague', e.target.value)}
-                  error={formErrors.bague}
-                  placeholder="ex. BE-2026-908"
-                />
-
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">{localT('labelSpecies')}</label>
-                    {setCurrentTab && (
-                      <button 
-                        type="button" 
-                        onClick={() => setCurrentTab('parametres')} 
-                        className="text-[10px] font-bold text-amber-600 dark:text-amber-400 hover:underline cursor-pointer"
-                      >
-                        + Gérer les espèces
-                      </button>
-                    )}
-                  </div>
-                  <AppSelect 
-                    label=""
-                    value={formData.espece || activeSpeciesList[0]?.id || 'canari'}
-                    onChange={(e) => handleSpeciesChange(e.target.value)}
-                    error={formErrors.espece}
-                    options={activeSpeciesList.map(s => ({ value: s.id, label: s.defaultLabel }))}
-                  />
-                </div>
-
-                <AppSelect 
-                  label={localT('labelCategory')}
-                  value={formData.categorie || ''}
-                  onChange={(e) => handleCategoryChange(e.target.value)}
-                  error={formErrors.categorie}
-                  options={currentFormCategories.map(c => ({ value: c.id, label: c.defaultLabel }))}
-                />
-
-                <AppSelect 
-                  label={localT('labelBreed')}
-                  value={formData.race || ''}
-                  onChange={(e) => handleInputChange('race', e.target.value)}
-                  error={formErrors.race}
-                  options={currentFormBreeds.map(b => ({ value: b.id, label: b.defaultLabel }))}
-                />
-
-                <AppInput 
-                  label={localT('labelMutation')}
-                  value={formData.mutation || ''}
-                  onChange={(e) => handleInputChange('mutation', e.target.value)}
-                  placeholder="ex. Satiné, Opale (Optionnel)"
-                />
-
-                <AppInput 
-                  label={localT('labelColor')}
-                  value={formData.couleur_base || ''}
-                  onChange={(e) => handleInputChange('couleur_base', e.target.value)}
-                  error={formErrors.couleur_base}
-                  placeholder="ex. Jaune Mosaïque"
-                />
-
-                <AppSelect 
-                  label={localT('labelGender')}
-                  value={formData.sexe || 'Mâle'}
-                  onChange={(e) => handleInputChange('sexe', e.target.value)}
-                  options={[
-                    { value: 'Mâle', label: '♂ ' + localT('male') },
-                    { value: 'Femelle', label: '♀ ' + localT('female') },
-                    { value: 'Indéterminé', label: '❓ ' + localT('undetermined') }
-                  ]}
-                />
-
-                <div className="flex flex-col gap-1 w-full">
-                  <AppInput 
-                    label={localT('labelBirthDate')}
-                    type="date"
-                    value={formData.date_naissance || ''}
-                    onChange={(e) => handleInputChange('date_naissance', e.target.value)}
-                    error={formErrors.date_naissance}
-                  />
-                  <span className="text-3xs text-slate-400 mt-1 font-semibold">
-                    {localT('labelAgeCalculated')} : {BirdEngine.calculateAge(formData.date_naissance || '').stringVal}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {formTab === 'origin' && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex items-center gap-3 py-2">
-                    <input 
-                      type="checkbox" 
-                      id="acquisition"
-                      checked={!!formData.acquisition}
-                      onChange={(e) => handleInputChange('acquisition', e.target.checked)}
-                      className="w-5 h-5 accent-emerald-600 rounded cursor-pointer"
-                    />
-                    <label htmlFor="acquisition" className="text-xs font-bold text-slate-700 cursor-pointer">
-                      {localT('labelIsAcquisition')}
-                    </label>
-                  </div>
-
-                  {formData.acquisition && (
-                    <div className="space-y-4">
-                      <AppInput 
-                        label={localT('labelOriginalBreeder')}
-                        value={formData.eleveur_origine || ''}
-                        onChange={(e) => handleInputChange('eleveur_origine', e.target.value)}
-                        placeholder={localT('placeholderOriginalBreeder')}
-                      />
-                      <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 space-y-4">
-                        <h5 className="text-xs font-bold text-amber-800 flex items-center gap-2">
-                          <AlertTriangle className="w-4 h-4" />
-                          {localT('quarantineProtocol')}
-                        </h5>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <AppSelect
-                            label={localT('quarantineCage')}
-                            value={formData.cage_id || ''}
-                            onChange={(e) => {
-                              handleInputChange('cage_id', e.target.value ? Number(e.target.value) : undefined);
-                              handleInputChange('statut_sante', 'Quarantaine');
-                            }}
-                            options={[
-                              { value: '', label: localT('quarantineAssignLater') },
-                              ...cages.filter(c => c.nom.toLowerCase().includes('quarant')).map(c => ({ value: c.id, label: c.nom }))
-                            ]}
-                          />
-                          <AppInput 
-                            label={localT('quarantineEntryDate')}
-                            type="date"
-                            value={formData.quarantaine?.date_entree || new Date().toISOString().split('T')[0]}
-                            onChange={(e) => handleInputChange('quarantaine', { ...formData.quarantaine, date_entree: e.target.value, duree_recommandee: formData.quarantaine?.duree_recommandee || 30 })}
-                          />
-                          <AppSelect
-                            label={localT('quarantineDuration')}
-                            value={formData.quarantaine?.duree_recommandee || 30}
-                            onChange={(e) => handleInputChange('quarantaine', { ...formData.quarantaine, duree_recommandee: Number(e.target.value), date_entree: formData.quarantaine?.date_entree || new Date().toISOString().split('T')[0] })}
-                            options={[
-                              { value: 7, label: localT('quarantineDays', { count: 7 }) },
-                              { value: 14, label: localT('quarantineDays', { count: 14 }) },
-                              { value: 21, label: localT('quarantineDays', { count: 21 }) },
-                              { value: 30, label: localT('quarantineDays', { count: 30 }) }
-                            ]}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="border-t border-slate-100 pt-6">
-                  <h4 className="text-xs uppercase font-black tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
-                    <Workflow className="w-4 h-4" /> {localT('sectionBiologicalAncestry')}
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <AppSelect 
-                      label={localT('labelBiologicalFather')}
-                      value={formData.pere_id || ''}
-                      onChange={(e) => handleInputChange('pere_id', e.target.value ? Number(e.target.value) : null)}
-                    >
-                      <option value="">-- Inconnu / Non spécifié --</option>
-                      {potentialFathers.map(b => (
-                        <option key={b.id} value={b.id}>{b.nom} ({b.bague})</option>
-                      ))}
-                    </AppSelect>
-
-                    <AppSelect 
-                      label={localT('labelBiologicalMother')}
-                      value={formData.mere_id || ''}
-                      onChange={(e) => handleInputChange('mere_id', e.target.value ? Number(e.target.value) : null)}
-                    >
-                      <option value="">-- Inconnue / Non spécifiée --</option>
-                      {potentialMothers.map(b => (
-                        <option key={b.id} value={b.id}>{b.nom} ({b.bague})</option>
-                      ))}
-                    </AppSelect>
-                  </div>
-
-                  {/* Consanguinity warning prepared but NOT blocking (Part 4) */}
-                  {formConsanguinityResult && (
-                    <div className="mt-4">
-                      {formConsanguinityResult.isConsanguineous ? (
-                        <AppAlert type="warning" title="Consanguinité Détectée (Calculateur COI)">
-                          {localT('consanguinityWarn', {
-                            coi: formConsanguinityResult.coi.toFixed(2),
-                            level: formConsanguinityResult.level,
-                            rec: formConsanguinityResult.recommendation
-                          })}
-                        </AppAlert>
-                      ) : (
-                        <AppAlert type="success" title="Accouplement Sécurisé">
-                          {localT('consanguinitySuccess', {
-                            coi: formConsanguinityResult.coi.toFixed(2),
-                            rec: formConsanguinityResult.recommendation
-                          })}
-                        </AppAlert>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <div className="border-t border-slate-100 pt-6">
-                  <h4 className="text-xs uppercase font-black tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
-                    <User className="w-4 h-4" /> {localT('sectionFosterLineage')}
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <AppSelect 
-                      label={localT('labelFosterFather')}
-                      value={formData.parent_pere_nourricier_id || ''}
-                      onChange={(e) => handleInputChange('parent_pere_nourricier_id', e.target.value ? Number(e.target.value) : null)}
-                    >
-                      <option value="">-- Aucun --</option>
-                      {potentialFathers.map(b => (
-                        <option key={b.id} value={b.id}>{b.nom} ({b.bague})</option>
-                      ))}
-                    </AppSelect>
-
-                    <AppSelect 
-                      label={localT('labelFosterMother')}
-                      value={formData.parent_mere_nourriciere_id || ''}
-                      onChange={(e) => handleInputChange('parent_mere_nourriciere_id', e.target.value ? Number(e.target.value) : null)}
-                    >
-                      <option value="">-- Aucune --</option>
-                      {potentialMothers.map(b => (
-                        <option key={b.id} value={b.id}>{b.nom} ({b.bague})</option>
-                      ))}
-                    </AppSelect>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {formTab === 'localisation' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <AppInput 
-                  label={localT('labelElevageName')}
-                  value={formData.elevage || ''}
-                  onChange={(e) => handleInputChange('elevage', e.target.value)}
-                  placeholder="ex. Volière Principale Ouest"
-                />
-
-                <AppInput 
-                  label={localT('labelZone')}
-                  value={formData.zone || ''}
-                  onChange={(e) => handleInputChange('zone', e.target.value)}
-                  placeholder="ex. Zone A (Reproduction)"
-                />
-
-                <AppInput 
-                  label={localT('labelVoliere')}
-                  value={formData.voliere || ''}
-                  onChange={(e) => handleInputChange('voliere', e.target.value)}
-                  placeholder="ex. Volière extérieure #2"
-                />
-
-                <AppSelect 
-                  label={localT('labelCage')}
-                  value={formData.cageId || (formData.cage_id !== undefined && formData.cage_id !== null ? String(formData.cage_id) : '')}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (!val) {
-                      handleInputChange('cage_id', undefined);
-                      handleInputChange('cageId', undefined);
-                      handleInputChange('zoneId', undefined);
-                      handleInputChange('facilityId', undefined);
-                    } else {
-                      const numVal = parseInt(val, 10);
-                      handleInputChange('cage_id', !isNaN(numVal) ? numVal : undefined);
-                      handleInputChange('cageId', val);
-                    }
-                  }}
-                  error={formErrors.cage_id}
-                  options={[
-                    { value: '', label: 'Aucune affectation' },
-                    ...cages.map(c => ({ value: c.id, label: `${c.nom} (max ${c.capacite_max || 6})` }))
-                  ]}
-                />
-
-                <AppInput 
-                  label={localT('labelCompartiment')}
-                  value={formData.compartiment || ''}
-                  onChange={(e) => handleInputChange('compartiment', e.target.value)}
-                  placeholder="ex. Box Supérieur Droit"
-                />
-              </div>
-            )}
-
-            {formTab === 'state' && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <AppSelect 
-                    label={localT('labelStatus')}
-                    value={formData.statut_sante || 'Actif'}
-                    onChange={(e) => handleInputChange('statut_sante', e.target.value)}
-                    options={[
-                      { value: 'Actif', label: localT('statusActive') },
-                      { value: 'Quarantaine', label: localT('statusQuarantine') },
-                      { value: 'Malade', label: localT('statusSick') },
-                      { value: 'Reproduction', label: localT('statusReproduction') },
-                      { value: 'Vendu', label: localT('statusSold') },
-                      { value: 'Décédé', label: localT('statusDeceased') },
-                      { value: 'Repos', label: localT('statusRest') }
-                    ]}
-                  />
-                </div>
-
-                <div className="flex flex-col w-full">
-                  <label className="text-xs font-bold text-slate-500 mb-2">{localT('labelObservations')}</label>
-                  <textarea
-                    value={formData.observations || ''}
-                    onChange={(e) => handleInputChange('observations', e.target.value)}
-                    className="w-full h-32 text-sm border border-slate-200 rounded-xl p-3.5 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-600 outline-none transition-colors"
-                    placeholder="Saisissez des notes sur le phénotype, le comportement..."
-                  />
-                </div>
-              </div>
-            )}
-          </AppCard>
-
-          <div className="flex justify-end gap-3 pt-4">
-            <AppButton variant="outline" onClick={() => { setIsAdding(false); setIsEditing(false); }}>
-              {localT('btnCancel')}
-            </AppButton>
-            <AppButton type="submit" variant="primary">
-              {localT('btnSaveBird')}
-            </AppButton>
-          </div>
-        </form>
+            if (result === true) {
+              setIsAdding(false);
+              setIsEditing(false);
+              if (savedBird.id) {
+                const updated = BirdService.getById(savedBird.id);
+                if (updated) setSelectedBird(updated);
+              }
+            } else {
+              setFormGeneralError(typeof result === 'string' ? result : "Une erreur est survenue lors de l'enregistrement.");
+            }
+          }}
+          onCancel={() => {
+            setIsAdding(false);
+            setIsEditing(false);
+          }}
+        />
       </div>
     );
   }
+
 
   return (
     <div className="space-y-6 animate-fadeIn" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -1818,11 +1475,10 @@ export default function Canaris({
               setIsAdding(true);
               setIsEditing(false);
               setSelectedBird(null);
-              setFormTab('identity');
-              const defaultSpecies = activeSpeciesList[0]?.id || 'canari';
-              const defaultSpecData = getSpeciesById(defaultSpecies);
-              const defaultCategory = defaultSpecData?.categories[0]?.id || 'canari_couleur';
-              const defaultBreed = defaultSpecData?.categories[0]?.breeds[0]?.id || 'Classique';
+              const defaultSpecies = (filterSpecies && filterSpecies !== 'all') ? filterSpecies : (activeSpeciesList[0]?.id || '');
+              const defaultSpecData = defaultSpecies ? getSpeciesById(defaultSpecies) : null;
+              const defaultCategory = defaultSpecData?.categories[0]?.id || '';
+              const defaultBreed = defaultSpecData?.categories[0]?.breeds[0]?.id || '';
 
               setFormData({
                 nom: '',
@@ -1875,27 +1531,6 @@ export default function Canaris({
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            data-testid="cleanup-demo-data-btn"
-            onClick={() => {
-              if (window.confirm(localT('demoDataCleanupConfirm'))) {
-                const res = DemoDataClassifier.cleanupDemoData();
-                if (res.removedDemoBirds > 0) {
-                  alert(localT('demoDataCleanupSuccess', {
-                    removed: res.removedDemoBirds,
-                    preserved: res.userBirdsPreserved + res.indeterminateBirdsPreserved
-                  }));
-                  onBirdsChanged();
-                } else {
-                  alert("Aucun oiseau de démonstration identifié dans le cheptel.");
-                }
-              }
-            }}
-            className="shrink-0 px-3.5 py-2 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-xl transition-colors cursor-pointer shadow-xs"
-          >
-            {localT('demoDataCleanupAction')}
-          </button>
         </div>
       )}
       {!isOverEntitlement && isLimitReached && (
@@ -2107,7 +1742,7 @@ export default function Canaris({
                       }
                       subtitle={
                         <div className="flex items-center gap-2">
-                          <SpeciesBadge speciesId={bird.espece || 'canari'} size="sm" showLabel={false} />
+                          <SpeciesBadge speciesId={bird.espece} size="sm" showLabel={false} />
                           <span>{bird.race}</span>
                         </div>
                       }

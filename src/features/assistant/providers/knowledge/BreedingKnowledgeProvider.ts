@@ -21,25 +21,19 @@ export class BreedingKnowledgeProvider {
   /**
    * Resolves exact incubation duration for a given species.
    */
-  static getIncubationDuration(speciesId?: string): number {
+  static getIncubationDuration(speciesId?: string): number | undefined {
     return SpeciesProfileService.getIncubationDays(speciesId);
   }
 
   /**
    * Retrieves structured breeding parameters from the central biological profile.
+   * Returns null if speciesId is absent or no profile is found (Zero Canary Fallback).
    */
-  static getBreedingParameters(speciesId: string, language: Language = 'fr'): BreedingParameters | null {
+  static getBreedingParameters(speciesId?: string, language: Language = 'fr'): BreedingParameters | null {
+    if (!speciesId) return null;
     const profile = BiologicalKnowledgeProvider.getSpeciesProfile(speciesId);
     if (!profile) {
-      return {
-        speciesId: speciesId || 'canari',
-        incubationDays: this.getIncubationDuration(speciesId),
-        bandingAgeDays: 6,
-        weaningAgeDays: 30,
-        clutchSize: { avg: 4, max: 6 },
-        nestType: 'Nid standard',
-        minCageSize: 'Cage 60cm'
-      };
+      return null;
     }
 
     return {

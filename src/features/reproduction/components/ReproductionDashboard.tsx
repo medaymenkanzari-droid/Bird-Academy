@@ -78,8 +78,8 @@ export default function ReproductionDashboard({ onSelectCouple }: ReproductionDa
       // 2. Overdue hatching alerts
       const incubation = IncubationService.getIncubationByClutch(c.id);
       if (incubation) {
-        const cal = ReproductionEngine.calculateIncubationCalendar(incubation.startDate);
-        if (cal.delayDays > 0) {
+        const cal = ReproductionEngine.calculateIncubationCalendar(incubation.startDate, incubation.theoreticalDuration);
+        if (cal && cal.delayDays > 0) {
           list.push({
             id: `overdue-${incubation.id}`,
             type: 'overdue',

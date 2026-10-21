@@ -52,6 +52,10 @@ function seedPair(overrides: Partial<BreedingPair> = {}): BreedingPair {
     ...overrides,
   };
   localStorage.setItem('ba_breeding_pairs', JSON.stringify([pair]));
+  localStorage.setItem('canaris', JSON.stringify([
+    { id: 1, nom: 'Mâle Test', espece: 'canari', sexe: 'Mâle', date_naissance: dateOffset(-365) },
+    { id: 2, nom: 'Femelle Test', espece: 'canari', sexe: 'Femelle', date_naissance: dateOffset(-365) },
+  ]));
   return pair;
 }
 

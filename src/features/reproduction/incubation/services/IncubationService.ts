@@ -9,6 +9,9 @@ import { Incubation, IncubationEvent, IncubationMode, IncubationBiologicalCalend
 import { ReproductionEngine } from '../../engines/ReproductionEngine';
 import { ActivityLogger, EventType } from '../../../../storage/ActivityLogger';
 import { ClutchRepository } from '../../clutches/repositories/ClutchRepository';
+import { ReproductionRepository } from '../../repositories/ReproductionRepository';
+import { BirdRepository } from '../../../birds/repositories/BirdRepository';
+import { SpeciesProfileService } from '../../../species/services/SpeciesProfileService';
 
 export class IncubationService {
   /**
@@ -26,13 +29,14 @@ export class IncubationService {
   }
 
   /**
-   * Start a new incubation period for a clutch
+   * Start a new incubation period for a clutch.
+   * Resolves theoretical duration from the clutch's species or explicit duration (Zero Canary Fallback).
    */
   static startIncubation(
     clutchId: string,
     startDate: string,
     mode: IncubationMode = 'Naturelle',
-    theoreticalDuration: number = 13,
+    theoreticalDuration?: number,
     observations: string = ''
   ): Incubation {
     const clutch = ClutchRepository.getById(clutchId);
@@ -42,11 +46,30 @@ export class IncubationService {
     if (!ReproductionEngine.isValidHistoricalDate(startDate) || startDate < clutch.startDate) {
       throw new Error('La date d’incubation doit être valide, non future et postérieure au début de la ponte.');
     }
-    if (!Number.isInteger(theoreticalDuration) || theoreticalDuration < 1 || theoreticalDuration > 90) {
-      throw new Error('La durée théorique d’incubation doit être comprise entre 1 et 90 jours.');
-    }
+
     if (EggRepository.getByClutchId(clutchId).length === 0) {
       throw new Error('Impossible de démarrer l’incubation : aucun œuf n’est enregistré dans cette ponte.');
+    }
+
+    let resolvedDuration = theoreticalDuration;
+    if (resolvedDuration === undefined) {
+      const pair = ReproductionRepository.getById(clutch.pairId);
+      if (pair) {
+        const female = BirdRepository.getById(pair.femaleId);
+        const male = BirdRepository.getById(pair.maleId);
+        const speciesId = female?.espece || male?.espece;
+        if (speciesId) {
+          resolvedDuration = SpeciesProfileService.getIncubationDays(speciesId);
+        }
+      }
+    }
+
+    if (resolvedDuration === undefined) {
+      throw new Error('Impossible de démarrer l’incubation : durée théorique indéterminée pour cette espèce.');
+    }
+
+    if (!Number.isInteger(resolvedDuration) || resolvedDuration < 1 || resolvedDuration > 90) {
+      throw new Error('La durée théorique d’incubation doit être comprise entre 1 et 90 jours.');
     }
 
     const existing = IncubationRepository.getByClutchId(clutchId);
@@ -58,7 +81,7 @@ export class IncubationService {
       clutchId,
       startDate,
       mode,
-      theoreticalDuration,
+      theoreticalDuration: resolvedDuration,
       observations,
     });
 

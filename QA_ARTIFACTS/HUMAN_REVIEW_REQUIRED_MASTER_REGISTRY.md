@@ -12,12 +12,39 @@ Status: Active Master Tracking
 |---|---|---|---|---|
 | **HRR-01** | Perruche ondulée — Profil V2 | **RÉSOLU** | GAP-01 | Homologué et intégré |
 | **HRR-02** | Colombe diamant — Profil V2 | **TECHNICALLY IMPLEMENTED — SCIENTIFIC DECISION RECORDED** | GAP-02 / GAP-10-C / GAP-10-E / GAP-12 | Décision scientifique humaine enregistrée et implémentée techniquement en GAP-12 : modèle de bagues multi-standard (3,5 mm UOF/COM France et 3,8 mm CDE/Aviornis sans vérité unique universelle) et distinction stricte de masse corporelle in situ (23–37 g, moy. indicative ~35 g) / ex situ (35–45 g). Aucune fusion de plages (23–45 g interdit), aucune promotion de 32–45 g. Profil maintenu en draft sous gouvernance V2. |
-| **HRR-03** | Zero Canary Fallback — 10 fallbacks identifiés | **OUVERT** | GAP-06-A | Audit complété, fallbacks répertoriés pour traitement dédié |
+| **HRR-03** | Zero Canary Fallback — Éradication des fallbacks génériques | **TECHNICALLY RESOLVED — ZERO CANARY FALLBACK REMEDIATED** | GAP-06-A / GAP-13 | Éradication technique intégrale des 12 fallbacks implicites vers le Canari. Strictement species-scoped : toute espèce absente/inconnue/autre ne fait l'objet d'aucune hypothèse Canary. Comportements Canary explicitement sélectionnés (`speciesId === 'canari'`) préservés intacts. |
 | **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNIQUEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
 | **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **PARTIELLEMENT HOMOLOGUÉ** (`ap_blue` actif / allèles complexes et Masque Orange restent HRR) | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C / GAP-10-E / GAP-11 | Homologation technique réalisée en GAP-11 pour `ap_blue` (blue1 / bl, autosomique récessive, status: CANONICAL) dans le catalogue d'*Agapornis personatus*, avec migration species-scoped et support des alias avicoles. Les allèles complexes (`blue2 / bl2`, `turquoise`, `sapphire`), `ar_masque_orange` et les catalogues Fischeri restent formellement **HUMAN_REVIEW_REQUIRED** / non homologués. HRR-05 non clôturé globalement. |
 | **HRR-06** | GeneticsEngine — Isolation interspécifique & hybridation | **DÉCISION HUMAINE ENREGISTRÉE** (Politique moteur scellée) | GAP-07-A / GAP-09 / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : maintien permanent et définitif du blocage fail-closed `HYBRID_CROSS_UNSUPPORTED` dans le moteur génétique (aucun calcul mendélien interspécifique). Validation produit d'un futur module informatif/préventif (pédagogique/conservation) strictement découplé du moteur (différé, hors périmètre). |
 | **HRR-07** | Bibliographie / Preuves scientifiques & Infrastructure | **RÉSERVES DOCUMENTAIRES MAINTENUES** | GAP-07-A / GAP-10-A / GAP-10-B1 / GAP-10-C / GAP-10-C1 / GAP-10-C2 / GAP-10-E | Traçabilité à 100% assurée. Les réserves documentaires préalablement identifiées (`SRC-TAYLOR-WARNER-1986`, ISBN Van den Abeele, forum) restent maintenues conformément à la décision GAP-10-E (aucune levée artificielle sans nouvelle preuve d'archive). |
 
+---
+
+## Détails HRR-03 (Remédiation Technique GAP-13 — Zero Canary Fallback)
+
+- **Objectif exécuté :** Éradication formelle de tous les fallbacks génériques implicites vers le Canari identifiés dans GAP-06-A.
+- **Principe invariant appliqué :**
+  - `speciesId explicitement 'canari'` → données/règles Canary homologuées préservées.
+  - `speciesId absent ou inconnu` → aucune hypothèse d'espèce, aucun paramètre biologique par défaut inventé (`undefined`, `null`, `applicable: false`, `INSUFFICIENT_INFORMATION`).
+  - `autre espèce reconnue` → utilisation exclusive des données homologuées du profil de l'espèce ou `applicable: false` si non couvert.
+- **Périmètre des 12 remédiations techniques :**
+  1. `SpeciesProfileService.getScopedBiologicalProfiles()` : suppression du fallback vers `BIOLOGICAL_SPECIES_REGISTRY.slice(0, 1)` ou `canari`. Retourne un tableau vide si aucune espèce n'est active.
+  2. `SpeciesProfileService.getIncubationDays(speciesId?)` : suppression du défaut `13`. Retourne `undefined` si `speciesId` est absent ou inconnu.
+  3. `BreedingKnowledgeProvider.getBreedingParameters(speciesId?)` : suppression de `speciesId || 'canari'` et des constantes Canary en dur (4 œufs, 13 jours, bague 3.0). Retourne `null` si non trouvé.
+  4. `IncubationService.startIncubation()` : suppression du paramètre par défaut `theoreticalDuration = 13`. Résolution via l'espèce du couple ; rejet explicite si durée indéterminée ou non renseignée.
+  5. `ReproductionEngine.calculateIncubationCalendar(startDate, duration?, speciesId?)` : suppression du défaut `theoreticalDuration = 13`. Retourne `null` si la durée est impossible à déterminer.
+  6. `ClutchWizard.tsx` : résolution dynamique de l'espèce à partir du couple sélectionné (`pairSpecies`) ; passage des jours d'incubation réels ; `eggCount` et poids d'œuf non imposés selon les valeurs Canary si l'espèce est différente.
+  7. `IncubationCalendarView.tsx` : passage explicite de `incubation.theoreticalDuration` à `calculateIncubationCalendar`.
+  8. `Canaris.tsx` : suppression de `|| 'canari'` dans les badges d'espèces, les formulaires dynamiques et les listes déroulantes de filtrage.
+  9. `ProgressiveBirdPassportForm.tsx` : suppression du default `SPECIES_REGISTRY[0]?.id || 'canari'`. L'espèce démarre vide (`''`) si non fournie. Facteurs/couleurs Canary appliqués uniquement si `speciesId === 'canari'`.
+  10. `PassportSuggestionService.generateSuggestions()` : suppression de `|| 'canari'` dans la résolution d'espèce. Arrêt précoce sans suggestions phénotypiques/génétiques Canary si l'espèce n'est pas explicitement Canary.
+  11. `DecisionSupportEngine.buildCrossDecisionSupport()` : attribution de `source.engineOrTable` conditionnée à `crossResult.speciesId === 'canari' ? 'CanaryCrossEngine' : 'GeneticsEngine'`. Les explications de violations cytogénétiques ZW ne sont attribuées spécifiquement au Canari que si `speciesId === 'canari'`.
+  12. `ReproductionEngine.isReproductiveAge()` : suppression du fallback 9 mois (femelle) / 10 mois (mâle) pour les espèces non-canari. Retourne `applicable: false` sans inventer d'âge pour les espèces sans règle stricte. `REPRO_MIN_AGE` traite l'absence de règle comme une information neutre (`applicable: false`) et l'absence de date de naissance comme non vérifiable (`passed: false`).
+- **Comportements Canary conservés :**
+  - Toutes les règles canoniques Canary (`speciesId === 'canari'`) fonctionnent de manière identique à l'état antérieur (durée d'incubation 13j, maturité 9/10 mois, CanaryCrossEngine, suggestions spécifiques lipochrome/facteurs).
+- **Points scientifiques résiduels pour revue humaine :**
+  - Aucun point technique résiduel.
+  - Le référentiel n'invente aucune valeur biologique pour les espèces non documentées (UNKNOWN reste UNKNOWN).
 
 ---
 
