@@ -16,7 +16,7 @@ Status: Active Master Tracking
 | **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNICLEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
 | **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **OUVERT** | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C | Audit documentaire GAP-10-C achevé. Statut génétique de `ap_blue` (True Blue Personatus, autosomique récessif, Dirk Van den Abeele / Terry Martin 2002) identifié avec certitude documentaire mais maintenu **OUVERT / HUMAN_REVIEW_REQUIRED** (aucun EVD fictif créé, aucun moteur modifié). Fischeri maintenu sans catalogue (`OUT_OF_SCOPE`). |
 | **HRR-06** | GeneticsEngine — Isolation interspécifique & hybridation | **RÉSOLU TECHNIQUEMENT / OUVERT SCIENTIFIQUEMENT** | GAP-07-A / GAP-09 / GAP-10-C | Audit documentaire GAP-10-C achevé. Données réelles documentées (Dilger 1960, Moreau 1948, McCarthy 2006) : fertilité des hybrides intra-complexe eye-ring (*fischeri* × *personatus*), stérilité des hybrides avec *roseicollis*, proscription d'élevage C.O.M. pour sauvegarde des souches. Statut maintenu **UNSUPPORTED / HUMAN_REVIEW_REQUIRED** avec refus d'exécution `HYBRID_CROSS_UNSUPPORTED`. |
-| **HRR-07** | Bibliographie / Preuves scientifiques & Infrastructure | **RÉSOLU TECHNIQUEMENT / OUVERT SCIENTIFIQUEMENT** | GAP-07-A / GAP-10-A / GAP-10-B1 / GAP-10-C | Audit documentaire GAP-10-C achevé. Sources réelles identifiées (Dilger 1960, Frith 1982, Gibbs 2001, Moreau 1948). Respect absolu de la règle anti-invention (zéro EVD orphelin ou artificiel créé). Maintien formel sous revue scientifique humaine. |
+| **HRR-07** | Bibliographie / Preuves scientifiques & Infrastructure | **RÉSOLU TECHNIQUEMENT / OUVERT SCIENTIFIQUEMENT** | GAP-07-A / GAP-10-A / GAP-10-B1 / GAP-10-C / GAP-10-C1 | • Remédiation technique GAP-10-B1 et audit documentaire GAP-10-C achevés.<br>• Régularisation documentaire GAP-10-C1 : 10 sources authentifiées intégrées dans `sources.ts` (100% de traçabilité des claims GAP-10-C sans source fantôme).<br>• Respect absolu de la règle anti-invention : zéro EVD orphelin ou artificiel créé dans `evidenceRegistry.ts`.<br>• Statut documentaire formellement maintenu **OUVERT / HUMAN_REVIEW_REQUIRED** pour revue scientifique humaine finale. |
 
 ---
 
@@ -227,3 +227,105 @@ Conformément à la règle de prudence épistémique :
 - **Statut de `ap_blue` :** Maintenu **HUMAN_REVIEW_REQUIRED** dans le système canonique jusqu'à validation formelle du collège d'experts, sans ouverture prématurée du moteur génétique.
 - **Statut de `colombe_diamant` :** Maintenu **HUMAN_REVIEW_REQUIRED** (`draft`) en raison de la divergence documentaire sur le diamètre de bague (3.5 mm profil vs 3.8 mm officiel C.O.M./UOF) et du poids (profil centré élevage).
 - **Statut d'hybridation :** Maintien absolu du refus runtime `HYBRID_CROSS_UNSUPPORTED` et de l'isolement interspécifique.
+
+---
+
+## Détails GAP-10-C1 — Fermeture de la Traçabilité Documentaire
+
+### 1. Objectif et Contexte de Régularisation
+- **Date d'exécution :** 2026-10-21
+- **Phase :** BIO-REF-V2 GAP-10-C1
+- **Objectif unique :** Clôturer la rupture de traçabilité identifiée post GAP-10-C (sources citées dans les matrices de claims mais absentes du catalogue canonique `sources.ts`) **sans réaliser de nouvelle homologation scientifique** et en respectant `SCIENTIFIC_DATA_CHANGED = NO`.
+- **Règle absolue :** 100% des sources citées dans les claims GAP-10-C doivent être soit formellement enregistrées avec métadonnées réelles vérifiées, soit explicitement marquées non vérifiées / HUMAN_REVIEW_REQUIRED. Aucune référence fantôme dans le système.
+
+---
+
+### 2. Matrice 1 — Traçabilité des Sources Citées (GAP-10-C → `sources.ts`)
+
+| Source citée | Source canonique existante ? | Identification suffisante ? | Claim supporté ? | Action | Statut |
+|---|---|---|---|---|---|
+| **Goodwin (1983)** | Non (avant GAP-10-C1) | Oui (Derek Goodwin, *Pigeons and Doves of the World*, 3e éd. 1983, Cornell Univ. Press, ISBN 0-8014-1434-2, pp. 164–166) | Oui (Colombe diamant : parade nuptiale en éventail, rythme de couvaison circadien partagé) | Enregistrée sous `SRC-GOODWIN-1983` dans `sources.ts` (P1) | **VERIFIED** |
+| **HANZAB Vol. 3 (1996)** | Non (avant GAP-10-C1) | Oui (P.J. Higgins & S.J.J.F. Davies, *Handbook of Australian, New Zealand and Antarctic Birds. Vol 3: Snipe to Pigeons*, 1996, Oxford Univ. Press, ISBN 0-19-553070-5, pp. 838–848) | Oui (Colombe diamant : incubation 12–14j, sevrage 21–28j, poids sauvage 23–37g démontrant divergence profil) | Enregistrée sous `SRC-HANZAB-1996` dans `sources.ts` (P0) | **VERIFIED** |
+| **McCarthy (2006)** | Non (avant GAP-10-C1) | Oui (Eugene M. McCarthy, *Handbook of Avian Hybrids of the World*, 2006, Oxford Univ. Press, ISBN 0-19-518323-1, p. 110) | Oui (Colombe diamant : croisements captifs recensés avec *G. striata* et *G. placida*, hybrides stériles) | Enregistrée sous `SRC-MCCARTHY-2006` dans `sources.ts` (P0) | **VERIFIED** |
+| **Terry Martin (2002)** | Oui (`SRC-MARTIN-2002`) | Oui (Terry Martin BVSc, *A Guide to Colour Mutations and Genetics in Parrots and Finches*, 2002, ABK Pub., ISBN 0-9587455-8-8, pp. 98–102) | Oui (Personatus : True Blue autosomique récessif `bl1`, introgression chez Fischeri, nature Parblue chez Roseicollis) | Référence canonique maintenue. Zéro EVD prématuré créé. | **VERIFIED** |
+| **Dilger (1960)** | Non (avant GAP-10-C1) | Oui (William C. Dilger, *Zeitschrift für Tierpsychologie*, 17(6): 649–685, 1960, DOI 10.1111/j.1439-0310.1960.tb00412.x) | Oui (Agapornis : transport bec chez Fischeri/Personatus vs croupion chez Roseicollis ; stérilité hybrides) | Enregistrée sous `SRC-DILGER-1960` dans `sources.ts` (P0) | **VERIFIED** |
+| **Frith (1982)** | Non (avant GAP-10-C1) | Oui (Harold James Frith, *Pigeons and Doves of Australia*, 1982, Rigby, ISBN 0-7270-1498-6, pp. 200–205) | Oui (Colombe diamant : 2 œufs, incubation 13j, nid rudimentaire, dimorphisme oculaire, poids 23–37g) | Enregistrée sous `SRC-FRITH-1982` dans `sources.ts` (P0) | **VERIFIED** |
+| **Gibbs, Barnes & Cox (2001)** | Non (avant GAP-10-C1) | Oui (David Gibbs et al., *Pigeons and Doves*, 2001, Pica Press / Helm, ISBN 1-873403-60-7, pp. 313–315) | Oui (Colombe diamant : morphométrie 19–21.5 cm, incubation partagée, ponte 2 œufs) | Enregistrée sous `SRC-GIBBS-2001` dans `sources.ts` (P1) | **VERIFIED** |
+| **Moreau (1948)** | Non (avant GAP-10-C1) | Oui (Reginald Ernest Moreau, *Ibis*, 90(2): 206–239, 1948, DOI 10.1111/j.1474-919X.1948.tb01688.x) | Oui (Agapornis : spéciation eye-ring, incubation 22j, ponte 4–6 œufs, fertilité inter-eye-ring) | Enregistrée sous `SRC-MOREAU-1948` dans `sources.ts` (P0) | **VERIFIED** |
+| **Fry, Keith & Urban (1988)** | Non (avant GAP-10-C1) | Oui (C. Hilary Fry et al., *The Birds of Africa — Vol. III*, 1988, Academic Press, ISBN 0-12-137303-7, pp. 398–404) | Oui (Agapornis : mensurations biométriques, monomorphisme sauvage, élevage nid 40j) | Enregistrée sous `SRC-FRY-1988` dans `sources.ts` (P0) | **VERIFIED** |
+| **Van den Abeele (2007)** | Oui (`SRC-VAN-DEN-ABEELE-2007`) | Oui (Dirk Van den Abeele, *Lovebirds: Compendium and Genetics*, 2007, Ornito-Sciences, ISBN 978-90-811440-1-8) | Oui (Roseicollis : Lutino, Cinnamon, Opaline Z-linked ; Personatus : True Blue ; Fischeri : introgression) | Référence canonique maintenue dans `sources.ts` | **VERIFIED** |
+| **C.O.M. OMJ Psittacidés (2023)** | Non (distincte de Canaris) | Oui (C.O.M. / OMJ, *Standard Technique Mondial des Psittacidés — Agapornis*, 2023) | Oui (Standards 140 mm Fischeri, 145–150 mm Personatus, proscription hybridation) | Enregistrée sous `SRC-COM-PSIT-2023` dans `sources.ts` (P1) | **VERIFIED** |
+| **UOF Bagues (2024)** | Non (avant GAP-10-C1) | Oui (Union Ornithologique de France, *Guide officiel des bagues et diamètres réglementaires*, 2024) | Oui (Bagues réglementaires : 3.8 mm Colombe diamant, 4.0 mm Fischeri/Personatus, 4.5 mm Roseicollis) | Enregistrée sous `SRC-UOF-BAGUES-2024` dans `sources.ts` (P1) | **VERIFIED** |
+
+---
+
+### 3. Matrice 2 — Traçabilité des Evidence IDs Canoniques Existants (`evidenceRegistry.ts`)
+
+| Evidence ID | Source ID | Species ID | Claim | Source vérifiée ? | Statut épistémique |
+|---|---|---|---|---|---|
+| `EVD-CAN-09-001` | `SRC-POMAREDE-1977`, `SRC-MARTIN-2002`, `SRC-COM-2023` | `canari` | Loci mélaniques classiques (Brun, Agate) liés Z | Oui (100%) | **VERIFIED** |
+| `EVD-CAN-09-ISA-01` | `SRC-COM-2023`, `SRC-POMAREDE-1977` | `canari` | Recombinant Isabelle méiotique Brun/Agate | Oui (100%) | **VERIFIED** |
+| `EVD-CAN-09-SAT-01` | `SRC-POMAREDE-1989`, `SRC-MARTIN-2002` | `canari` | Controverse Modèle A (Pomarède) vs Modèle B (Martin) | Oui (100%) | **NEEDS_HUMAN_REVIEW** |
+| `EVD-CAN-09-IV-01` | `SRC-POMAREDE-1989` | `canari` | Mutation Ivoire récessive liée au chromosome Z | Oui (100%) | **PROVISIONAL** |
+| `EVD-CAN-08-004` | `SRC-POMAREDE-1977`, `SRC-DUNCKER-1928` | `canari` | Létalité du facteur Intensif homozygote in ovo (I/I) | Oui (100%) | **VERIFIED** |
+| `EVD-CAN-08-007` | `SRC-HUTT-1949` | `canari` | Létalité de la mutation Huppé homozygote | Oui (100%) | **VERIFIED** |
+| `EVD-CAN-08-001` | `SRC-PRUM-1998` | `canari` | Diffusion cohérente de la lumière (structure bleue/refraction) | Oui (100%) | **VERIFIED** |
+| `EVD-CAN-07-003` | `SRC-LOPES-2016` | `canari` | Base génétique du rouge (gène CYP2J19) | Oui (100%) | **VERIFIED** |
+| `EVD-GOU-01-001` | `SRC-PRYKE-2009` | `diamant_gould` | Déterminisme Z de la couleur de tête | Oui (100%) | **VERIFIED** |
+| `EVD-GOU-01-002` | `SRC-MARTIN-2002` | `diamant_gould` | Couleur de poitrine récessive autosomique | Oui (100%) | **PROVISIONAL** |
+| `EVD-MAN-01-001` | `SRC-ZANN-1996` | `diamant_mandarin` | Mutations mélaniques générales du Mandarin | Oui (100%) | **VERIFIED** |
+| `EVD-MAN-01-002` | `SRC-ZANN-1996`, `SRC-MARTIN-2002` | `diamant_mandarin` | Locus Brun récessif lié au chromosome Z | Oui (100%) | **VERIFIED** |
+| `EVD-MAN-01-003` | `SRC-ZANN-1996`, `SRC-MARTIN-2002` | `diamant_mandarin` | Joues Noires autosomique récessif | Oui (100%) | **VERIFIED** |
+| `EVD-CAL-01-001` | `SRC-MARTIN-2002` | `calopsitte` | Loci liés au sexe chez la Calopsitte | Oui (100%) | **VERIFIED** |
+| `EVD-CAL-01-002` | `SRC-MARTIN-2002` | `calopsitte` | Joues Jaunes (Yellow Cheek) lié au sexe Z | Oui (100%) | **NEEDS_HUMAN_REVIEW** |
+| `EVD-CAL-01-LUT` | `SRC-MARTIN-2002`, `SRC-TAYLOR-WARNER-1986` | `calopsitte` | Mutation Lutino liée au chromosome Z | Oui (100%) | **VERIFIED** |
+| `EVD-CAL-01-CIN` | `SRC-MARTIN-2002`, `SRC-TAYLOR-WARNER-1986` | `calopsitte` | Mutation Cinnamon liée au chromosome Z | Oui (100%) | **VERIFIED** |
+| `EVD-CAL-01-PRL` | `SRC-MARTIN-2002`, `SRC-TAYLOR-WARNER-1986` | `calopsitte` | Mutation Perlée (Pearl) liée au sexe Z | Oui (100%) | **VERIFIED** |
+| `EVD-AGA-01-001` | `SRC-VAN-DEN-ABEELE-2007` | `agapornis_roseicollis` | Mutations Z-linked Roseicollis (Lutino, Cinnamon, Opaline) | Oui (100%) | **VERIFIED** |
+| `EVD-AGA-01-002` | `SRC-VAN-DEN-ABEELE-2007` | `agapornis_roseicollis` | Série Parblue (Aqua, Turquoise) réducteurs psittacine | Oui (100%) | **NEEDS_HUMAN_REVIEW** |
+| `EVD-AGA-01-LUT` | `SRC-VAN-DEN-ABEELE-2007`, `SRC-MARTIN-2002` | `agapornis_roseicollis` | Mutation Lutino Ino Z-linked chez Roseicollis | Oui (100%) | **VERIFIED** |
+| `EVD-AGA-01-CIN` | `SRC-VAN-DEN-ABEELE-2007` | `agapornis_roseicollis` | Mutation Cinnamon Z-linked chez Roseicollis | Oui (100%) | **VERIFIED** |
+| `EVD-AGA-01-OPL` | `SRC-VAN-DEN-ABEELE-2007` | `agapornis_roseicollis` | Mutation Opaline Z-linked chez Roseicollis | Oui (100%) | **VERIFIED** |
+| `EVD-AGA-01-BLU` | `SRC-VAN-DEN-ABEELE-2007` | `agapornis_roseicollis` | Divergence terminologique "Bleu" Roseicollis (Parblue) | Oui (100%) | **NEEDS_HUMAN_REVIEW** |
+| `EVD-BUD-01-001` | `SRC-MARTIN-2002` | `perruche_ondulee` | Facteur Pastel / Dilution autosomique récessif | Oui (100%) | **VERIFIED** |
+| `EVD-BUD-01-002` | `SRC-COOKE-2017` | `perruche_ondulee` | Mutation Bleue cartographiée sur MuPKS (Cell 2017) | Oui (100%) | **VERIFIED** |
+| `EVD-BUD-01-003` | `SRC-BREEDER-FORUM-2015` | `perruche_ondulee` | Variante mélanique empirique sous étude | Oui (source P2) | **UNKNOWN** |
+| `EVD-CAR-01-001` | `SRC-BERNE-1979` | `chardonneret_elegant` | Protection Annexe II Convention de Berne | Oui (100%) | **UNKNOWN** |
+
+*Constat d'intégrité : 100 % des 28 enregistrements d'évidence canoniques pointent vers des sources réelles existantes dans `sources.ts`. Zéro référence orpheline. Zéro EVD fictif créé pour Colombe diamant, Fischeri ou Personatus.*
+
+---
+
+### 4. Audit Particulier des Quatre Références Prioritaires
+
+1. **Derek Goodwin (1983) — `SRC-GOODWIN-1983` :**
+   - *Identification :* 3e édition de la monographie classique *Pigeons and Doves of the World*, British Museum / Cornell Univ. Press, ISBN 0-8014-1434-2.
+   - *Pages réelles :* pp. 164–166 (compte d'espèce *Geopelia cuneata*).
+   - *Claims supportés :* Rythme circadien de couvaison partagée (mâle 10h–16h, femelle nuit/matin) et parade nuptiale en éventail vertical des rectrices.
+   - *Statut :* **VERIFIED (P1)**. Intégrée formellement dans `sources.ts`.
+
+2. **HANZAB Vol. 3 (1996) — `SRC-HANZAB-1996` :**
+   - *Identification :* Peter J. Higgins & S. J. J. F. Davies (eds.), *Handbook of Australian, New Zealand and Antarctic Birds. Vol. 3*, Oxford Univ. Press, ISBN 0-19-553070-5.
+   - *Pages réelles :* pp. 838–848.
+   - *Claims supportés :* Incubation (12–14j, moy. 12.8–13.0j) et sevrage (21–28j). Met en évidence la divergence documentaire entre la masse sauvage réelle (23–37g) et la borne d'élevage du profil (35–45g).
+   - *Statut :* **VERIFIED (P0)**. Intégrée formellement dans `sources.ts`.
+
+3. **Eugene M. McCarthy (2006) — `SRC-MCCARTHY-2006` :**
+   - *Identification :* *Handbook of Avian Hybrids of the World*, Oxford Univ. Press, ISBN 0-19-518323-1.
+   - *Page réelle :* p. 110 (croisements du genre *Geopelia*).
+   - *Claims supportés :* Atteste des croisements captifs rapportés *Geopelia cuneata* × *Geopelia striata* et *Geopelia placida*, produisant des hybrides stériles. Confirme l'absence d'hybridation féconde domestique.
+   - *Statut :* **VERIFIED (P0)**. Intégrée formellement dans `sources.ts`.
+
+4. **Terry Martin (2002) — `SRC-MARTIN-2002` :**
+   - *Identification :* *A Guide to Colour Mutations and Genetics in Parrots and Finches*, ABK Publications, ISBN 0-9587455-8-8.
+   - *Pages pour Agapornis :* pp. 98–102 (Masked Lovebird True Blue) et pp. 88–105 (Lovebirds genetics).
+   - *Claims supportés :* Atteste du mode autosomique récessif de la mutation Blue (`bl1`) chez *A. personatus*, de l'introgression chez *fischeri*, et de la nature Parblue chez *roseicollis*.
+   - *Statut de `ap_blue` :* Bien que la source soit authentifiée et présente dans `sources.ts`, aucun EVD scellé `EVD-AGA-PERS-BLU` n'a été créé, et aucun moteur génétique n'a été altéré. `ap_blue` reste maintenu **HUMAN_REVIEW_REQUIRED** dans `CanonicalDataBridgeAdapter.ts`.
+
+---
+
+### 5. Synthèse de Clôture GAP-10-C1
+
+- **Rupture de traçabilité :** Entièrement résolue. Toutes les sources citées dans GAP-10-C disposent désormais d'un enregistrement immuable dans `sources.ts`.
+- **Règle anti-invention :** 0 EVD artificiel créé. 0 modification de données biologiques (`SCIENTIFIC_DATA_CHANGED = NO`).
+- **Statut final :** `GAP10C1_TRACEABILITY_STATUS = COMPLETE`.

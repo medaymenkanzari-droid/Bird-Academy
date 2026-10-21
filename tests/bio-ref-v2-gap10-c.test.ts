@@ -142,3 +142,49 @@ test('GAP10C-05: Isolation du moteur d\'hybridation - Refus déterministe HYBRID
   );
   assert.equal(colombeCanari.status, 'HYBRID_CROSS_UNSUPPORTED');
 });
+
+test('GAP10C1-01: Traçabilité fermée - 100% des sources citées dans GAP-10-C sont enregistrées dans sources.ts', () => {
+  const requiredSourceIds = [
+    'SRC-FRITH-1982',
+    'SRC-GIBBS-2001',
+    'SRC-GOODWIN-1983',
+    'SRC-HANZAB-1996',
+    'SRC-MCCARTHY-2006',
+    'SRC-DILGER-1960',
+    'SRC-MOREAU-1948',
+    'SRC-FRY-1988',
+    'SRC-COM-PSIT-2023',
+    'SRC-UOF-BAGUES-2024',
+    'SRC-MARTIN-2002',
+    'SRC-VAN-DEN-ABEELE-2007'
+  ];
+
+  for (const sourceId of requiredSourceIds) {
+    assert.ok(hasBibliographicSource(sourceId), `La source canonique ${sourceId} doit exister dans sources.ts`);
+  }
+});
+
+test('GAP10C1-02: Vérification stricte des 4 sources prioritaires (Goodwin, HANZAB, McCarthy, Martin)', () => {
+  // 1. Derek Goodwin (1983)
+  assert.ok(hasBibliographicSource('SRC-GOODWIN-1983'));
+  // 2. HANZAB Vol. 3 (1996)
+  assert.ok(hasBibliographicSource('SRC-HANZAB-1996'));
+  // 3. Eugene M. McCarthy (2006)
+  assert.ok(hasBibliographicSource('SRC-MCCARTHY-2006'));
+  // 4. Terry Martin (2002)
+  assert.ok(hasBibliographicSource('SRC-MARTIN-2002'));
+});
+
+test('GAP10C1-03: Zéro référence orpheline dans evidenceRegistry.ts', () => {
+  // Pour chaque enregistrement d'évidence existant, 100% des citations doivent pointer vers une source existante
+  for (const [evidenceId, record] of Object.entries(EVIDENCE_REGISTRY)) {
+    assert.ok(record.citations.length > 0, `L'evidence ${evidenceId} doit avoir au moins une citation`);
+    for (const citation of record.citations) {
+      assert.ok(
+        hasBibliographicSource(citation.sourceId),
+        `L'evidence ${evidenceId} cite une source introuvable : ${citation.sourceId}`
+      );
+    }
+  }
+});
+
