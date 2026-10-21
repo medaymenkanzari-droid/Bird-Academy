@@ -329,3 +329,46 @@ Conformément à la règle de prudence épistémique :
 - **Rupture de traçabilité :** Entièrement résolue. Toutes les sources citées dans GAP-10-C disposent désormais d'un enregistrement immuable dans `sources.ts`.
 - **Règle anti-invention :** 0 EVD artificiel créé. 0 modification de données biologiques (`SCIENTIFIC_DATA_CHANGED = NO`).
 - **Statut final :** `GAP10C1_TRACEABILITY_STATUS = COMPLETE`.
+
+---
+
+## Détails GAP-10-C2 — Audit d'Intégrité des Métadonnées Bibliographiques
+
+### 1. Tableau de Contrôle des Métadonnées
+
+| Source ID | Métadonnée | Valeur antérieure | Valeur vérifiée | Statut | Source de vérification |
+|---|---|---|---|---|---|
+| `SRC-MOREAU-1948` | Titre, DOI, Pages | *Aspects of evolution in the parrot genus Agapornis*, DOI `10.1111/j.1474-919X.1948.tb01688.x`, pp. 206–239 | Identique (concordance 100% démontrée) | **VERIFIED** | CrossRef / Wiley Online Library / Ibis (1948) |
+| `SRC-MARTIN-2002` | Titre exact | *... in Parrots and Finches* | *A Guide to Colour Mutations and Genetics in Parrots* | **CORRECTION_REQUIRED** (résolu) | ABK Publications / Australian National Library |
+| `SRC-MARTIN-2002` | ISBN | `0-9587455-8-8` (erroné/inventé) | `0-9577024-6-9` (Paperback) / `0-9577024-7-7` (Hardback) | **CORRECTION_REQUIRED** (résolu) | ABK Publications / ISBN Agency |
+| `SRC-GOODWIN-1983` | Titre, Édition, ISBN, Pages | *Pigeons and Doves of the World* (3e éd.), Cornell / BMNH, ISBN `0-8014-1434-2`, pp. 164–166 | Identique (concordance 100% démontrée) | **VERIFIED** | Cornell University Press / OpenLibrary |
+| `SRC-DILGER-1960` | Titre, Journal, DOI, Pages | *The comparative ethology...*, Z. Tierpsychol., 17(6): 649–685, DOI `10.1111/j.1439-0310.1960.tb00412.x` | Identique (concordance 100% démontrée) | **VERIFIED** | Wiley / Ethology / CrossRef |
+| `SRC-PRUM-1998` | Journal & Pages | *Journal of Experimental Biology*, 201(7): 951–965 | *Nature*, 396(6706): 28–29, DOI `10.1038/23838` | **CORRECTION_REQUIRED** (résolu) | Nature Publishing Group / PubMed / CrossRef |
+| `SRC-LOPES-2016` | DOI | `10.1016/j.cub.2016.04.005` (pointait vers "Mimicry in plants") | `10.1016/j.cub.2016.03.076` | **CORRECTION_REQUIRED** (résolu) | Cell Press / Current Biology / CrossRef |
+| `SRC-PRYKE-2009` | Titre, DOI, Pages | *... drives mate choice...*, DOI `10.1126/science.1168577`, pp. 1624–1627 | *... drives sex allocation and maternal investment...*, DOI `10.1126/science.1168928`, pp. 1605–1607 | **CORRECTION_REQUIRED** (résolu) | Science (AAAS) / PubMed / CrossRef |
+| `SRC-COOKE-2017` | Liste des auteurs | Noms corrompus ('Carlos R. Fischer', 'Pinling Chen', etc.) | Thomas F. Cooke, Curt R. Fischer, Ping Wu, Ting-Xin Jiang, Kathleen T. Xie, et al., Carlos D. Bustamante | **CORRECTION_REQUIRED** (résolu) | Cell (2017) 171(2): 427–439 / PubMed |
+| `SRC-VAN-DEN-ABEELE-2007` | ISBN | `978-90-811440-1-8` (non attribué) | Retiré (règle anti-invention, pas d'ISBN deviné) | **CORRECTION_REQUIRED** (résolu) | Registres ISBN internationaux / KBR |
+| `SRC-TAYLOR-WARNER-1986` | Authenticité ouvrage Calopsitte | Déclaré `VERIFIED` avec titre "Genetics for Cockatiel Breeders" | Reclassé `NOT_VERIFIED` (confusion avec leur traité Budgerigar 1961) | **HUMAN_REVIEW_REQUIRED** | British National Bibliography / The Parrot Society |
+| `SRC-POMAREDE-1989` | Éditeur | *Éditions Bornemann* | *Éditions du Point Vétérinaire* (Maisons-Alfort) | **CORRECTION_REQUIRED** (résolu) | Bibliothèque Nationale de France (BnF) |
+| `SRC-FRITH-1982` | Métadonnées complètes | H. J. Frith, Rigby, ISBN `0-7270-1498-6`, pp. 200–205 | 100% Conforme | **VERIFIED** | National Library of Australia |
+| `SRC-GIBBS-2001` | Métadonnées complètes | Gibbs, Barnes & Cox, Pica Press, ISBN `1-873403-60-7`, pp. 313–315 | 100% Conforme | **VERIFIED** | British Library / Christopher Helm |
+| `SRC-HANZAB-1996` | Métadonnées complètes | Higgins & Davies, Oxford Univ. Press, ISBN `0-19-553070-5`, pp. 838–848 | 100% Conforme | **VERIFIED** | Oxford University Press / BirdLife Australia |
+| `SRC-MCCARTHY-2006` | Métadonnées complètes | E. M. McCarthy, Oxford Univ. Press, ISBN `0-19-518323-1`, p. 110 | 100% Conforme | **VERIFIED** | Oxford University Press |
+| `SRC-FRY-1988` | Métadonnées complètes | Fry, Keith & Urban, Academic Press, ISBN `0-12-137303-7`, pp. 398–404 | 100% Conforme | **VERIFIED** | Academic Press / Bloomsbury |
+| `SRC-ZANN-1996` | Métadonnées complètes | R. A. Zann, Oxford Univ. Press, ISBN `0-19-854079-5` | 100% Conforme | **VERIFIED** | Oxford University Press |
+| `SRC-HUTT-1949` | Métadonnées complètes | F. B. Hutt, McGraw-Hill Book Company | 100% Conforme | **VERIFIED** | Cornell University / McGraw-Hill |
+| `SRC-BERNE-1979` | Métadonnées complètes | Conseil de l'Europe, Convention de Berne, Annexe II | 100% Conforme | **VERIFIED** | Conseil de l'Europe (Traité officiel) |
+| `SRC-COM-2023` | Métadonnées complètes | C.O.M. / OMJ, Standard Mondial Canaris de Couleur | 100% Conforme | **VERIFIED** | Confédération Ornithologique Mondiale |
+| `SRC-COM-PSIT-2023` | Métadonnées complètes | C.O.M. / OMJ, Standard Psittacidés — Agapornis | 100% Conforme | **VERIFIED** | Confédération Ornithologique Mondiale |
+| `SRC-UOF-BAGUES-2024` | Métadonnées complètes | UOF (COM France), Guide officiel des bagues | 100% Conforme | **VERIFIED** | Union Ornithologique de France |
+
+---
+
+### 2. Synthèse de Clôture GAP-10-C2
+
+- **Contrôle Moreau (1948) :** Confirmé sans ambiguïté. Le DOI `10.1111/j.1474-919X.1948.tb01688.x` est le DOI officiel d'Ibis pour l'article de R. E. Moreau intitulé *Aspects of evolution in the parrot genus Agapornis*, Volume 90, Issue 2, pages 206–239.
+- **Contrôle Martin (2002) :** Titre rectifié en *A Guide to Colour Mutations and Genetics in Parrots*. Faux ISBN `0-9587455-8-8` purgé et remplacé par le véritable ISBN broché `0-9577024-6-9`.
+- **Règle anti-invention appliquée :** ISBN inventé retiré pour Van den Abeele (`SRC-VAN-DEN-ABEELE-2007`), et déclassement en `NOT_VERIFIED` sous revue humaine pour Taylor & Warner (`SRC-TAYLOR-WARNER-1986`).
+- **DOIs et références peer-reviewed rectifiés :** Correction de Prum 1998 (vers Nature 396: 28–29, DOI 10.1038/23838), Lopes 2016 (vers Current Biology DOI 10.1016/j.cub.2016.03.076), Pryke 2009 (vers Science DOI 10.1126/science.1168928, pp. 1605–1607) et auteurs de Cooke 2017 (Cell).
+- **Statut final :** `GAP10C2_INTEGRITY_AUDIT = COMPLETE`.
+

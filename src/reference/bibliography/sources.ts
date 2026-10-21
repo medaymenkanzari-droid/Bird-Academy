@@ -42,12 +42,12 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     authors: ['Maurice Pomarède'],
     title: 'Le Canari : précis de canariculture',
     year: 1989,
-    publisher: 'Éditions Bornemann',
+    publisher: 'Éditions du Point Vétérinaire',
     pages: '62-98',
     language: 'fr',
     verificationStatus: 'VERIFIED',
     consultedAt: '2026-10-09',
-    notes: 'Modèle à 3 loci liés sur le chromosome Z pour le complexe mélanique (Modèle A pour Satiné).'
+    notes: 'Traité de référence de la canariculture (1re éd. 1983, 2e éd. 1992, Éditions du Point Vétérinaire). Modèle à 3 loci liés sur le chromosome Z pour le complexe mélanique (Modèle A pour Satiné).'
   }),
 
   'SRC-MARTIN-2002': Object.freeze({
@@ -55,15 +55,15 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     sourceType: 'SPECIALIST_BOOK',
     sourceLevel: 'P1',
     authors: ['Terry Martin, BVSc'],
-    title: 'A Guide to Colour Mutations and Genetics in Parrots and Finches',
+    title: 'A Guide to Colour Mutations and Genetics in Parrots',
     year: 2002,
     publisher: 'ABK Publications',
-    isbn: '0-9587455-8-8',
+    isbn: '0-9577024-6-9',
     pages: '84-89',
     language: 'en',
     verificationStatus: 'VERIFIED',
     consultedAt: '2026-10-09',
-    notes: 'Modèle comparatif aviaire à 2 loci (Ino polyallélique ino+ > ino_ag > ino_sat, Modèle B pour Satiné).'
+    notes: 'Monographie vétérinaire et avicole de référence sur la génétique des psittacidés (ISBN broché 0-9577024-6-9, relié 0-9577024-7-7). Modèle comparatif des mutations liées au sexe Z et autosomiques.'
   }),
 
   'SRC-COM-2023': Object.freeze({
@@ -115,14 +115,15 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     authors: ['Richard O. Prum', 'Rodolfo H. Torres', 'Scott Williamson', 'Jan Dyck'],
     title: 'Coherent light scattering by blue feather barbs',
     year: 1998,
-    journal: 'Journal of Experimental Biology',
-    volume: '201',
-    issue: '7',
-    pages: '951-965',
+    journal: 'Nature',
+    volume: '396',
+    issue: '6706',
+    pages: '28-29',
+    doi: '10.1038/23838',
     language: 'en',
     verificationStatus: 'VERIFIED',
     consultedAt: '2026-10-08',
-    notes: 'Preuve biophysique de la diffusion cohérente de lumière dans les barbes des plumes.'
+    notes: 'Publication princeps (Nature) établissant la diffusion cohérente de lumière par les matrices nanostructurées de kératine médullaire des barbes bleues.'
   }),
 
   'SRC-LOPES-2016': Object.freeze({
@@ -136,7 +137,7 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     volume: '26',
     issue: '11',
     pages: '1427-1434',
-    doi: '10.1016/j.cub.2016.04.005',
+    doi: '10.1016/j.cub.2016.03.076',
     language: 'en',
     verificationStatus: 'VERIFIED',
     consultedAt: '2026-10-08',
@@ -178,13 +179,13 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     sourceType: 'PEER_REVIEWED',
     sourceLevel: 'P0',
     authors: ['Sarah R. Pryke', 'Simon C. Griffith'],
-    title: 'Genetic incompatibility drives mate choice in a polymorphic finch',
+    title: 'Genetic incompatibility drives sex allocation and maternal investment in a polymorphic finch',
     year: 2009,
     journal: 'Science',
     volume: '323',
     issue: '5921',
-    pages: '1624-1627',
-    doi: '10.1126/science.1168577',
+    pages: '1605-1607',
+    doi: '10.1126/science.1168928',
     language: 'en',
     verificationStatus: 'VERIFIED',
     consultedAt: '2026-10-08',
@@ -220,11 +221,10 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     title: 'Lovebirds: Compendium and Genetics',
     year: 2007,
     publisher: 'Ornito-Sciences',
-    isbn: '978-90-811440-1-8',
     language: 'en',
     verificationStatus: 'VERIFIED',
     consultedAt: '2026-10-08',
-    notes: 'Référence internationale pour Agapornis (Lutino, Cinnamon, Opaline, Parblue).'
+    notes: 'Référence internationale d\'élevage pour Agapornis (Lutino, Cinnamon, Opaline, Parblue). Note d\'intégrité : l\'ISBN antérieur 978-90-811440-1-8 était non vérifié et a été retiré conformément aux règles anti-invention (voir Lovebirds Compendium 2016 ISBN 978-90-5821-639-7).'
   }),
 
   // =========================================================================
@@ -256,9 +256,9 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     year: 1986,
     publisher: 'The Parrot Society',
     language: 'en',
-    verificationStatus: 'VERIFIED',
+    verificationStatus: 'NOT_VERIFIED',
     consultedAt: '2026-10-09',
-    notes: 'Monographie avicole consacrée aux mutations liées au sexe (Lutino, Cinnamon, Pearl) et autosomiques.'
+    notes: 'Référence historique d\'élevage sur les mutations de Calopsitte. Note d\'intégrité : Taylor & Warner sont les auteurs renommés de "Genetics for Budgerigar Breeders" (1961). L\'existence d\'une monographie séparée 1986 "Genetics for Cockatiel Breeders" chez The Parrot Society restant incertaine dans les registres bibliographiques nationaux, cette source est basculée en NOT_VERIFIED sous HUMAN_REVIEW_REQUIRED.'
   }),
 
   // =========================================================================
@@ -270,12 +270,15 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     sourceLevel: 'P0',
     authors: [
       'Thomas F. Cooke',
-      'Carlos R. Fischer',
-      'Pinling Chen',
-      'Courtney A. Roberto',
-      'Jerome Schaar',
-      'Bence Viola',
-      'Michael W. Baldwin',
+      'Curt R. Fischer',
+      'Ping Wu',
+      'Ting-Xin Jiang',
+      'Kathleen T. Xie',
+      'James Kuo',
+      'Elizabeth Doctorov',
+      'Ashley Zehnder',
+      'Chaitan Khosla',
+      'Cheng-Ming Chuong',
       'Carlos D. Bustamante'
     ],
     title: 'Genetic Mapping and Biochemical Basis of Yellow Feather Pigmentation in Budgerigars',

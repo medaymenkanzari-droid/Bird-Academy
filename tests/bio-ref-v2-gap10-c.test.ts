@@ -24,7 +24,8 @@ import {
 import {
   EVIDENCE_REGISTRY,
   hasEvidenceRecord,
-  hasBibliographicSource
+  hasBibliographicSource,
+  getBibliographicSource
 } from '../src/reference/bibliography/evidenceRegistry.js';
 import { CanonicalDataBridgeAdapter } from '../src/features/canonical/CanonicalDataBridgeAdapter.js';
 import { GeneticsEngine } from '../src/features/genetics/engines/GeneticsEngine.js';
@@ -187,4 +188,74 @@ test('GAP10C1-03: Zéro référence orpheline dans evidenceRegistry.ts', () => {
     }
   }
 });
+
+test('GAP10C2-01: Audit d\'intégrité métadonnées — Martin 2002 titre et ISBN exacts', () => {
+  const martin = getBibliographicSource('SRC-MARTIN-2002');
+  assert.ok(martin);
+  assert.equal(martin.title, 'A Guide to Colour Mutations and Genetics in Parrots');
+  assert.equal(martin.isbn, '0-9577024-6-9');
+  assert.equal(martin.verificationStatus, 'VERIFIED');
+});
+
+test('GAP10C2-02: Audit d\'intégrité métadonnées — Moreau 1948 DOI, titre et pages concordants', () => {
+  const moreau = getBibliographicSource('SRC-MOREAU-1948');
+  assert.ok(moreau);
+  assert.equal(moreau.title, 'Aspects of evolution in the parrot genus Agapornis');
+  assert.equal(moreau.doi, '10.1111/j.1474-919X.1948.tb01688.x');
+  assert.equal(moreau.journal, 'Ibis');
+  assert.equal(moreau.volume, '90');
+  assert.equal(moreau.issue, '2');
+  assert.equal(moreau.pages, '206-239');
+  assert.equal(moreau.verificationStatus, 'VERIFIED');
+});
+
+test('GAP10C2-03: Audit d\'intégrité métadonnées — Dilger 1960 et Goodwin 1983 vérifiés', () => {
+  const dilger = getBibliographicSource('SRC-DILGER-1960');
+  assert.ok(dilger);
+  assert.equal(dilger.doi, '10.1111/j.1439-0310.1960.tb00412.x');
+  assert.equal(dilger.journal, 'Zeitschrift für Tierpsychologie');
+  assert.equal(dilger.pages, '649-685');
+  assert.equal(dilger.verificationStatus, 'VERIFIED');
+
+  const goodwin = getBibliographicSource('SRC-GOODWIN-1983');
+  assert.ok(goodwin);
+  assert.equal(goodwin.isbn, '0-8014-1434-2');
+  assert.equal(goodwin.pages, '164-166');
+  assert.equal(goodwin.verificationStatus, 'VERIFIED');
+});
+
+test('GAP10C2-04: Audit d\'intégrité métadonnées — Corrections Prum 1998, Lopes 2016, Pryke 2009 et Cooke 2017', () => {
+  const prum = getBibliographicSource('SRC-PRUM-1998');
+  assert.ok(prum);
+  assert.equal(prum.journal, 'Nature');
+  assert.equal(prum.doi, '10.1038/23838');
+  assert.equal(prum.pages, '28-29');
+
+  const lopes = getBibliographicSource('SRC-LOPES-2016');
+  assert.ok(lopes);
+  assert.equal(lopes.doi, '10.1016/j.cub.2016.03.076');
+
+  const pryke = getBibliographicSource('SRC-PRYKE-2009');
+  assert.ok(pryke);
+  assert.equal(pryke.title, 'Genetic incompatibility drives sex allocation and maternal investment in a polymorphic finch');
+  assert.equal(pryke.doi, '10.1126/science.1168928');
+  assert.equal(pryke.pages, '1605-1607');
+
+  const cooke = getBibliographicSource('SRC-COOKE-2017');
+  assert.ok(cooke);
+  assert.ok(cooke.authors.includes('Curt R. Fischer'));
+  assert.ok(cooke.authors.includes('Carlos D. Bustamante'));
+});
+
+test('GAP10C2-05: Règle anti-invention — Statut NOT_VERIFIED pour Taylor & Warner 1986 et assainissement Van den Abeele', () => {
+  const tw = getBibliographicSource('SRC-TAYLOR-WARNER-1986');
+  assert.ok(tw);
+  assert.equal(tw.verificationStatus, 'NOT_VERIFIED');
+
+  const vda = getBibliographicSource('SRC-VAN-DEN-ABEELE-2007');
+  assert.ok(vda);
+  // L'ISBN non vérifié 978-90-811440-1-8 doit être absent
+  assert.equal(vda.isbn, undefined);
+});
+
 
