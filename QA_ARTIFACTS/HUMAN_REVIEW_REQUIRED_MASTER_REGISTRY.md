@@ -11,12 +11,13 @@ Status: Active Master Tracking
 | ID | Domaine / Sujet | Statut | Mission d'origine | Résolution / Statut Actuel |
 |---|---|---|---|---|
 | **HRR-01** | Perruche ondulée — Profil V2 | **RÉSOLU** | GAP-01 | Homologué et intégré |
-| **HRR-02** | Colombe diamant — Profil V2 | **OUVERT** (Draft) | GAP-02 / GAP-10-C | Audit documentaire GAP-10-C achevé. Données de reproduction (2 œufs, incubation 13j, nid soucoupe, dimorphisme périorbital) vérifiées par sources réelles (Frith 1982, Gibbs 2001). Réserve maintenue sur diamètre de bague (3.5 mm profil vs 3.8 mm officiel C.O.M./UOF) et poids (35-45g profil vs 23-35g sauvage). Statut maintenu **OUVERT / HUMAN_REVIEW_REQUIRED** (`draft`) sans altération unilatérale. |
+| **HRR-02** | Colombe diamant — Profil V2 | **DÉCISION HUMAINE ENREGISTRÉE** (Conceptuellement résolu) | GAP-02 / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : maintien d'une structure multi-standard pour le diamètre de bague (3,8 mm CDE/Aviornis vs 3,5 mm UOF/COM France sans vérité unique) et séparation explicite in situ (23–37 g, moy. ~35 g) / ex situ (35–45 g) pour la masse corporelle. Implémentation technique du modèle multi-standard/in situ différée à une mission ultérieure. Profil maintenu temporairement en draft jusqu'à implémentation technique. |
 | **HRR-03** | Zero Canary Fallback — 10 fallbacks identifiés | **OUVERT** | GAP-06-A | Audit complété, fallbacks répertoriés pour traitement dédié |
-| **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNICLEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
-| **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **OUVERT** | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C | Audit documentaire GAP-10-C achevé. Statut génétique de `ap_blue` (True Blue Personatus, autosomique récessif, Dirk Van den Abeele / Terry Martin 2002) identifié avec certitude documentaire mais maintenu **OUVERT / HUMAN_REVIEW_REQUIRED** (aucun EVD fictif créé, aucun moteur modifié). Fischeri maintenu sans catalogue (`OUT_OF_SCOPE`). |
-| **HRR-06** | GeneticsEngine — Isolation interspécifique & hybridation | **RÉSOLU TECHNIQUEMENT / OUVERT SCIENTIFIQUEMENT** | GAP-07-A / GAP-09 / GAP-10-C | Audit documentaire GAP-10-C achevé. Données réelles documentées (Dilger 1960, Moreau 1948, McCarthy 2006) : fertilité des hybrides intra-complexe eye-ring (*fischeri* × *personatus*), stérilité des hybrides avec *roseicollis*, proscription d'élevage C.O.M. pour sauvegarde des souches. Statut maintenu **UNSUPPORTED / HUMAN_REVIEW_REQUIRED** avec refus d'exécution `HYBRID_CROSS_UNSUPPORTED`. |
-| **HRR-07** | Bibliographie / Preuves scientifiques & Infrastructure | **RÉSOLU TECHNIQUEMENT / OUVERT SCIENTIFIQUEMENT** | GAP-07-A / GAP-10-A / GAP-10-B1 / GAP-10-C / GAP-10-C1 | • Remédiation technique GAP-10-B1 et audit documentaire GAP-10-C achevés.<br>• Régularisation documentaire GAP-10-C1 : 10 sources authentifiées intégrées dans `sources.ts` (100% de traçabilité des claims GAP-10-C sans source fantôme).<br>• Respect absolu de la règle anti-invention : zéro EVD orphelin ou artificiel créé dans `evidenceRegistry.ts`.<br>• Statut documentaire formellement maintenu **OUVERT / HUMAN_REVIEW_REQUIRED** pour revue scientifique humaine finale. |
+| **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNIQUEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
+| **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **DÉCISION HUMAINE ENREGISTRÉE** (`ap_blue` homologuée ; allèles complexes réservés) | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : homologation scientifique de `ap_blue` (blue1 / bl, autosomique récessif) pour *A. personatus*. Les systèmes multi-alléliques complexes (`blue2 / bl2`, `turquoise`, `sapphire`) et autres mutations restent **HUMAN_REVIEW_REQUIRED**. Implémentation dans le catalogue différée à une mission technique dédiée. |
+| **HRR-06** | GeneticsEngine — Isolation interspécifique & hybridation | **DÉCISION HUMAINE ENREGISTRÉE** (Politique moteur scellée) | GAP-07-A / GAP-09 / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : maintien permanent et définitif du blocage fail-closed `HYBRID_CROSS_UNSUPPORTED` dans le moteur génétique (aucun calcul mendélien interspécifique). Validation produit d'un futur module informatif/préventif (pédagogique/conservation) strictement découplé du moteur (différé, hors périmètre). |
+| **HRR-07** | Bibliographie / Preuves scientifiques & Infrastructure | **RÉSERVES DOCUMENTAIRES MAINTENUES** | GAP-07-A / GAP-10-A / GAP-10-B1 / GAP-10-C / GAP-10-C1 / GAP-10-C2 / GAP-10-E | Traçabilité à 100% assurée. Les réserves documentaires préalablement identifiées (`SRC-TAYLOR-WARNER-1986`, ISBN Van den Abeele, forum) restent maintenues conformément à la décision GAP-10-E (aucune levée artificielle sans nouvelle preuve d'archive). |
+
 
 ---
 
@@ -417,7 +418,7 @@ Conformément à la règle de prudence épistémique :
 
 ---
 
-### 4. Statut Global de Clôture de Biological Reference V2
+### 4. Statut Global de Clôture de Biological Reference V2 (État GAP-10-D)
 
 ```text
 BIO_REF_V2_CLOSURE_STATUS = READY_FOR_FINAL_HUMAN_SCIENTIFIC_APPROVAL
@@ -425,5 +426,94 @@ BIO_REF_V2_CLOSURE_STATUS = READY_FOR_FINAL_HUMAN_SCIENTIFIC_APPROVAL
 
 - **Justification :** L'ensemble des fondations techniques, des gardes-fous d'intégrité, de la séparation taxonomique et de la traçabilité documentaire (GAP-01 à GAP-10-C2) est désormais rigoureusement achevé, vérifié par tests automatiques et exempt de toute erreur TypeScript ou build.
 - **Principe d'indépendance scientifique :** Conformément aux règles directrices du projet, le statut `CLOSED` ne peut être proclamé unilatéralement par un agent automatisé ; il est strictement réservé à la validation finale du collège d'experts scientifiques humains.
+
+---
+
+## Détails GAP-10-E — Enregistrement des Décisions Scientifiques Humaines Finales
+
+### 1. Métadonnées de l'Enregistrement
+- **Date d'exécution :** 2026-10-21
+- **Phase :** BIO-REF-V2 GAP-10-E
+- **Type de mission :** Documentation & Gouvernance Scientifique
+- **Validateur officiel :** `Human scientific decision recorded in project validation workflow`
+- **Dossier de référence :** `QA_ARTIFACTS/BIO_REF_V2_FINAL_HUMAN_SCIENTIFIC_APPROVAL.md` (Sections 10 et 11)
+
+---
+
+### 2. Enregistrement Formel des 4 Décisions Scientifiques Arbitrées
+
+#### A. Décision 1 — HRR-02 (Colombe diamant : Bagues et Masse corporelle)
+- **Espèce :** `colombe_diamant` (*Geopelia cuneata*)
+- **Décision humaine enregistrée :**
+  1. *Diamètre de bague :* Le référentiel ne doit pas imposer une valeur unique lorsque plusieurs standards fédéraux officiels existent. Conservation d'une structure multi-standard contextualisée par standard/fédération :
+     - 3,8 mm : CDE / Aviornis France International
+     - 3,5 mm : UOF / COM France
+     Aucune valeur n'est érigée en vérité biologique universelle.
+  2. *Masse corporelle adulte :* Séparation explicite entre les données *in situ* (milieu sauvage : 23–37 g, moyenne indicative ~35 g d'après Frith 1982 / HANZAB 1996) et *ex situ* (captivité : 35–45 g). Interdiction stricte de fusionner ces valeurs en une plage confuse 23–45 g. La plage intermédiaire 32–45 g ne devient pas canonique.
+- **Statut HRR-02 mis à jour :** `DÉCISION HUMAINE ENREGISTRÉE` (Conceptuellement résolu). L'historique d'audit GAP-02 / GAP-10-C est intégralement préservé.
+- **Ce qui reste HUMAN_REVIEW_REQUIRED :** Aucun arbitrage taxonomique ou biologique supplémentaire requis pour ces deux points.
+- **Ce qui est volontairement différé :** L'adaptation du schéma TypeScript et des profils en production (`src/reference/species/colombeDiamant.ts`). Le profil reste temporairement sous statut `draft` jusqu'au déploiement de l'évolution technique.
+- **Conséquences techniques futures :** Définir une interface supportant `ringSizes: FederationRingStandard[]` et `adultWeight: { wild: WeightRange; captivity: WeightRange }`.
+
+#### B. Décision 2 — HRR-05 (Agapornis personatus : Homologation de ap_blue)
+- **Espèce :** `agapornis_personatus`
+- **Décision humaine enregistrée :**
+  - **Homologation scientifique formelle** de la mutation `ap_blue`, correspondant à `blue1 / bl` (autosomique récessive, historique 1927 / Dirk Van den Abeele / Terry Martin 2002).
+- **Statut HRR-05 mis à jour :** `DÉCISION HUMAINE ENREGISTRÉE` (`ap_blue` autorisée pour homologation ; allèles complexes et autres mutations réservés).
+- **Ce qui reste HUMAN_REVIEW_REQUIRED :** Les allèles et mutations complexes non couverts (`blue2 / bl2`, `turquoise`, `sapphire` et systèmes multi-alléliques associés) restent strictement sous statut `HUMAN_REVIEW_REQUIRED`. `ar_masque_orange` et les catalogues Fischeri restent non homologués en production.
+- **Ce qui est volontairement différé :** L'injection effective de `ap_blue` dans `CANONICAL_SPECIES_MUTATIONS` et la création de sa fiche `EVD-AGA-01-xxx` dans `evidenceRegistry.ts` sont différées à la mission technique d'implémentation.
+- **Conséquences techniques futures :** Ajout de `ap_blue` dans le catalogue `agapornis_personatus` et mise à jour des tests d'isolation génétique.
+
+#### C. Décision 3 — HRR-06 (Hybridation interspécifique & GeneticsEngine)
+- **Domaine :** Moteur génétique & croisements interspécifiques (*Agapornis*)
+- **Décision humaine enregistrée :**
+  - **Politique moteur pérenne :** Le moteur génétique conserve de manière permanente et définitive le blocage fail-closed :
+    `HYBRID_CROSS_UNSUPPORTED`
+    Aucun calcul mendélien, pourcentage phénotypique, génotype ou prédiction génétique ne sera produit pour un croisement interspécifique.
+  - **Décision produit :** Validation du principe d'un futur module informatif/préventif abordant la biologie des hybrides (types d'hybridation, groupes d'Agapornis, risques de pollution génétique, stérilité/fertilité F1, sauvegarde des souches pures). Ce module sera strictement pédagogique et séparé du moteur génétique.
+- **Statut HRR-06 mis à jour :** `DÉCISION HUMAINE ENREGISTRÉE` (Politique moteur scellée).
+- **Ce qui reste HUMAN_REVIEW_REQUIRED :** Tout modèle qui prétendrait prédire des descendances d'hybrides reste non homologué.
+- **Ce qui est volontairement différé :** Conception et développement du module informatif (hors périmètre de Biological Reference V2).
+- **Conséquences techniques futures :** Le garde-fou `HYBRID_CROSS_UNSUPPORTED` dans `GeneticsEngine.ts` est scellé comme invariant architectural permanent.
+
+#### D. Décision 4 — HRR-07 (Bibliographie & Preuves : Maintien des Réserves)
+- **Domaine :** Référentiel bibliographique (`sources.ts`, `evidenceRegistry.ts`)
+- **Décision humaine enregistrée :**
+  - Maintien strict de toutes les réserves documentaires préalablement identifiées dans GAP-10-C1 et GAP-10-C2 :
+    - `SRC-TAYLOR-WARNER-1986` reste classé `NOT_VERIFIED` (confusion avec leur monographie Perruche ondulée de 1961).
+    - ISBN non attribué retiré de `SRC-VAN-DEN-ABEELE-2007`.
+    - `SRC-BREEDER-FORUM-2015` maintenu au niveau P2 (preuve secondaire non certifiante).
+  - Interdiction de déclarer artificiellement ces réserves "résolues" du simple fait de la validation des 4 arbitrages.
+- **Statut HRR-07 mis à jour :** `RÉSERVES DOCUMENTAIRES MAINTENUES` (Traçabilité fermée, intégrité épistémique préservée).
+- **Ce qui reste HUMAN_REVIEW_REQUIRED :** Localisation d'un exemplaire physique original ou notice certifiée pour Taylor & Warner (1986).
+- **Ce qui est volontairement différé :** Tout enrichissement bibliographique supplémentaire sans source primaire d'archive.
+- **Conséquences techniques futures :** Conservation de la suite de tests bibliographiques GAP-10-C / GAP-10-C2 comme contrat de non-régression.
+
+---
+
+### 3. Tableau Récapitulatif Post-GAP-10-E
+
+| HRR | Sujet | Statut Post-GAP-10-E | Arbitrage Humain Enregistré | Action Technique Requise |
+|---|---|---|---|---|
+| **HRR-01** | Perruche ondulée | **CLOSABLE / HOMOLOGUÉ** | Validé | Aucune (fermé) |
+| **HRR-02** | Colombe diamant | **DÉCISION HUMAINE ENREGISTRÉE** | Multi-standard (3,8 / 3,5 mm) & In situ (23–37 g) / Ex situ (35–45 g) | Implémentation du schéma multi-standard / in situ |
+| **HRR-03** | Zero Canary Fallback | **DEFERRED** | Maintenu pour lot de maintenance externe | Traitement périphérique externe |
+| **HRR-04** | Agapornis (Taxonomie) | **CLOSABLE / HOMOLOGUÉ** | Validé | Aucune (fermé) |
+| **HRR-05** | Agapornis (Génétique) | **DÉCISION HUMAINE ENREGISTRÉE** | `ap_blue` homologuée ; allèles complexes restent HRR | Ajout de `ap_blue` au catalogue Personatus |
+| **HRR-06** | Hybridation / Moteur | **DÉCISION HUMAINE ENREGISTRÉE** | `HYBRID_CROSS_UNSUPPORTED` permanent ; module informatif séparé | Aucune sur le moteur (maintien du verrou) |
+| **HRR-07** | Bibliographie / Preuves | **RÉSERVES MAINTENUES** | Traçabilité fermée, réserves épistémiques conservées | Aucune modification sans archive primaire |
+
+---
+
+### 4. Statut Global Post-GAP-10-E
+
+```text
+BIO_REF_V2_STATUS = HUMAN_DECISIONS_RECORDED_AWAITING_TECHNICAL_IMPLEMENTATION
+```
+
+> **Note de gouvernance scientifique :**
+> La mission GAP-10-E a transformé avec succès les 4 arbitrages scientifiques humains en décisions officiellement tracées, scellées et opposables.
+> Biological Reference V2 ne peut être déclaré `CLOSED` au niveau applicatif tant que les décisions pour HRR-02 (modèle multi-standard/poids) et HRR-05 (`ap_blue`) n'ont pas été implémentées dans le code de production lors des missions techniques dédiées.
+
 
 

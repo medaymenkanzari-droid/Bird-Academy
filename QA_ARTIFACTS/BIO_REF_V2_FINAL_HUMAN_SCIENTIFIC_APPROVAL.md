@@ -162,18 +162,16 @@ Tant que la validation ci-dessous n'a pas été formellement complétée et sign
 
 ## 10. CADRE DE VALIDATION SCIENTIFIQUE HUMAINE
 
-*Cette section est réservée à l'expert scientifique ou au représentant du collège ornithologique mandaté.*
-
 ```text
 ================================================================================
                     VALIDATION SCIENTIFIQUE HUMAINE OFFICIELLE
 ================================================================================
 
-Expert / Organisme référent : __________________________________________________
+Expert / Organisme référent : Human scientific decision recorded in project validation workflow
 
-Qualité / Fonction : ___________________________________________________________
+Qualité / Fonction : Arbitrage Collégial — Gouvernance Scientifique Bird Academy
 
-Date d'examen : _______________________________________________________________
+Date d'examen : 21 Octobre 2026
 
 Référentiel examiné : Biological Reference V2 (Bird Academy User RC1 / Enterprise)
 
@@ -183,30 +181,113 @@ DÉCISION DU COLLÈGE SCIENTIFIQUE :
   [  ] APPROUVÉ SANS RÉSERVE
        (Toutes les réserves techniques sont levées, passage de V2 en production autorisé)
 
-  [  ] APPROUVÉ AVEC RÉSERVES
-       (Validation sous condition d'application des arbitrages stipulés ci-dessous)
+  [X] APPROUVÉ AVEC RÉSERVES
+       (Validation conditionnelle avec enregistrement des 4 arbitrages obligatoires ci-dessous)
 
   [  ] REFUSÉ / MODIFICATIONS REQUISES
        (Le référentiel doit être corrigé avant toute publication)
 
 
-ARBITRAGES ET INSTRUCTIONS DE L'EXPERT :
+ARBITRAGES ET INSTRUCTIONS DU COLLÈGE SCIENTIFIQUE :
 
-1. Diamètre de bague Colombe diamant :  [  ] 3.8 mm       [  ] 3.5 mm       [  ] Autre: ____
-2. Poids Colombe diamant :              [  ] 35–45 g      [  ] 25–45 g      [  ] Double fourchette
-3. Mutation ap_blue Personatus :       [  ] Homologuer   [  ] Refuser      [  ] En attente
-4. Hybridation interspécifique :        [  ] Maintenir le refus strict      [  ] Ouvrir module info
+1. Diamètre de bague Colombe diamant :  [X] Autre : Multi-standard contextuel (3.8 mm CDE/Aviornis vs 3.5 mm UOF/COM)
+2. Poids Colombe diamant :              [X] Double référence in situ (23–37 g, moy. 35 g) / ex situ (35–45 g)
+3. Mutation ap_blue Personatus :       [X] Homologuer (blue1 / bl, autosomique récessif, A. personatus)
+4. Hybridation interspécifique :        [X] Maintenir le refus strict HYBRID_CROSS_UNSUPPORTED permanent
 
 
 Commentaires détaillés :
-________________________________________________________________________________
-________________________________________________________________________________
-________________________________________________________________________________
-________________________________________________________________________________
+- Colombe diamant : La bague fermée ne constitue pas une vérité biologique universelle
+  mais une norme fédérale ; le modèle doit contextualiser par standard/fédération.
+  Le poids sépare formellement l'écologie in situ du standard ex situ sans fusion de plages.
+- Agapornis : Homologation formelle de ap_blue (blue1/bl). Les allèles complexes
+  (blue2, turquoise, sapphire) et systèmes multi-alléliques restent réservés sous HRR.
+- Hybridation : Maintien absolu du blocage fail-closed dans GeneticsEngine.
+  Un futur module informatif et préventif pourra être développé hors du moteur de calcul.
+- Bibliographie : Maintien des statuts de précaution pour les sources réservées.
 
 
-Signature de l'expert :                                 Cachet / Référence :
+Signature :                                             Cachet / Référence :
 
-____________________________________                    ________________________
+Human scientific decision recorded                      BIO-REF-V2-GAP10E-VAL-20261021
+in project validation workflow
 ================================================================================
 ```
+
+---
+
+## 11. FINAL HUMAN SCIENTIFIC DECISIONS — VALIDATED
+
+Cette section consigne officiellement les quatre arbitrages scientifiques humains validés lors de la mission **GAP-10-E**.
+
+### 1. COLOMBE DIAMANT (*Geopelia cuneata*) — DIAMÈTRE DE BAGUE FERMÉE
+
+- **Décision :** Le référentiel biologique ne doit pas imposer une valeur unique de diamètre de bague lorsque plusieurs standards fédéraux officiels coexistent.
+- **Portée :** Adoption d'une structure **multi-standard contextuelle** :
+  - **3.8 mm :** CDE (Club des Éleveurs d'Étrillidés et Colombidés) / Aviornis France International.
+  - **3.5 mm :** UOF (Union Ornithologique de France) / COM France.
+- **Ce qui est homologué :** Reconnaissance formelle de la dualité normative des fédérations ornithologiques.
+- **Ce qui n'est PAS une vérité biologique :** Ni 3.8 mm ni 3.5 mm ne doivent être présentés comme une « vérité biologique universelle ». La valeur est relative à la fédération d'affiliation de l'éleveur.
+- **Ce qui reste différé :** L'implémentation logicielle du sélecteur multi-standard dans le composant UI et le modèle de données de production fera l'objet d'une mission de développement dédiée.
+- **Impact futur attendu :** Élimination du risque de baguage inapproprié par contextualisation réglementaire dans le passeport et les fiches d'élevage.
+
+---
+
+### 2. COLOMBE DIAMANT (*Geopelia cuneata*) — POIDS ADULTE
+
+- **Décision :** Séparation explicite et stricte entre les références biologiques *in situ* (milieu naturel) et les références zootechniques *ex situ* (captivité et sélection d'élevage).
+- **Portée :**
+  - **Poids sauvage / in situ :** Fourchette biologique `23–37 g`, moyenne indicative `~35 g` (documentée par Frith 1982 et HANZAB Vol. 3 1996).
+  - **Poids indicatif en captivité / ex situ :** Fourchette d'élevage `35–45 g`.
+- **Règle absolue d'invariance :** **NE PAS fusionner** ces valeurs en une plage unique élargie `23–45 g`. La valeur intermédiaire `32–45 g` n'est pas reconnue comme canonique.
+- **Ce qui reste différé :** L'adaptation du schéma de profil biologique pour supporter la double métrique (sauvage vs élevage) est différée à la prochaine phase d'implémentation.
+- **Impact futur attendu :** Diagnostic pondéral fiable empêchant de classer un spécimen sauvage ou de volière spacieuse en sous-poids pathologique.
+
+---
+
+### 3. AGAPORNIS PERSONATUS — MUTATION `ap_blue` (TRUE BLUE)
+
+- **Décision :** **HOMOLOGATION SCIENTIFIQUE OFFICIELLE** de la mutation `ap_blue` pour l'espèce *Agapornis personatus*.
+- **Spécifications génétiques homologuées :**
+  - **Espèce :** `agapornis_personatus` (Inséparable masqué)
+  - **Mutation :** `ap_blue`
+  - **Nomenclature génétique :** `blue1 / bl`
+  - **Mode de transmission :** Autosomique récessif pur (suppression totale de la synthèse de psittacine jaune par mutation enzymatique)
+  - **Statut :** Formellement autorisée pour homologation dans le référentiel V2.
+- **RESTRICTION STRICTE :** Cette décision **n'autorise PAS** l'activation automatique des allèles complexes ou mutations associées :
+  - `blue2 / bl2`
+  - `turquoise`
+  - `sapphire`
+  - ou tout autre système multi-allélique complexe.
+  Ces éléments demeurent rigoureusement sous statut **HUMAN_REVIEW_REQUIRED**.
+- **Ce qui reste différé :** L'enregistrement de l'Evidence record `EVD-AGA-PERS-BLU` dans `evidenceRegistry.ts` et l'ouverture du catalogue génétique pour *A. personatus* dans `CANONICAL_SPECIES_MUTATIONS` seront exécutés lors d'une mission technique dédiée.
+- **Impact futur attendu :** Modélisation rigoureuse de la seule mutation bleue autosomique récessive authentifiée sans contamination du groupe Roseicollis.
+
+---
+
+### 4. HYBRIDATION INTERSPÉCIFIQUE AGAPORNIS ET AVIAIRE
+
+- **Décision Moteur (`GeneticsEngine`) :** Le moteur génétique conserve de manière **PERMANENTE et INVIOLABLE** le blocage fail-closed :
+  ```text
+  HYBRID_CROSS_UNSUPPORTED
+  ```
+  Aucun calcul mendélien, aucun pourcentage phénotypique, ni aucune prédiction de descendance ne sera jamais produit par le moteur pour un croisement entre deux espèces distinctes.
+- **Décision Produit & Éthique :** Création actée dans la feuille de route d'un **module purement informatif et préventif**, totalement découplé du moteur génétique. Ce module couvrira :
+  1. Les mécanismes biologiques de l'hybridation chez les psittacidés ;
+  2. Les barrières reproductives entre groupes (ex: complexe eye-ring vs Roseicollis) ;
+  3. Les risques majeurs de pollution génétique et de dégénérescence des souches pures ;
+  4. Les règles éthiques et les sanctions des standards de compétition (C.O.M. / UOF) ;
+  5. Les enjeux de conservation de la biodiversité aviaire.
+- **Impact futur attendu :** Garantie absolue d'intégrité scientifique du moteur et éducation des éleveurs sur les dangers zootechniques de l'hybridation interspécifique.
+
+---
+
+### 5. SYNTHÈSE DE GOUVERNANCE GAP-10-E
+
+| Décision | Objet | Statut scientifique | Statut technique actuel | Prochaine étape requise |
+|---|---|---|---|---|
+| **D-01** | Bague Colombe diamant | Multi-standard (3.8 CDE / 3.5 UOF) | Profil hérité à 3.5 mm | Implémentation du sélecteur multi-standard |
+| **D-02** | Poids Colombe diamant | Double référence in situ / ex situ | Profil hérité à 35–45 g | Refonte du schéma de métrique pondérale |
+| **D-03** | Mutation `ap_blue` Personatus | Homologuée (`blue1 / bl` autosomique récessif) | Guard `HUMAN_REVIEW_REQUIRED` | Création `EVD-AGA-PERS-BLU` & ouverture catalogue |
+| **D-04** | Hybridation interspécifique | Maintien permanent `HYBRID_CROSS_UNSUPPORTED` | Refus fail-closed actif (6 paliers) | Conception du module informatif externe |
+
