@@ -258,4 +258,42 @@ test('GAP10C2-05: Règle anti-invention — Statut NOT_VERIFIED pour Taylor & Wa
   assert.equal(vda.isbn, undefined);
 });
 
+test('GAP10D-01: Consolidation finale — Invariants de sécurité et état de clôture technique de Biological Reference V2', () => {
+  // 1. Profil Colombe diamant préservé sous draft
+  const colombe = getBiologicalProfileById('colombe_diamant');
+  assert.ok(colombe, 'Le profil canonique colombe_diamant doit exister');
+  assert.equal(colombe.traceability?.validationStatus, 'draft', 'Colombe doit rester en draft sous revue humaine');
+
+  // 2. Séparation stricte et absence de fallback pour Agapornis
+  const roseicollis = getBiologicalProfileById('agapornis_roseicollis');
+  const fischeri = getBiologicalProfileById('agapornis_fischeri');
+  const personatus = getBiologicalProfileById('agapornis_personatus');
+  assert.ok(roseicollis && fischeri && personatus, 'Les 3 profils Agapornis doivent exister séparément');
+  assert.notEqual(roseicollis.identity.id, fischeri.identity.id);
+  assert.notEqual(fischeri.identity.id, personatus.identity.id);
+  assert.equal(getBiologicalProfileById('agapornis'), undefined, 'agapornis legacy ne doit pas faire de fallback');
+
+  // 3. ap_blue sous HUMAN_REVIEW_REQUIRED, Fischeri sans catalogue
+  const apBlue = CanonicalDataBridgeAdapter.resolveMutation('agapornis_personatus', 'ap_blue');
+  assert.equal(apBlue?.status, 'HUMAN_REVIEW_REQUIRED');
+  const afBlue = CanonicalDataBridgeAdapter.resolveMutation('agapornis_fischeri', 'ap_blue');
+  assert.equal(afBlue?.status, 'OUT_OF_SCOPE');
+
+  // 4. Barrière absolue contre l'hybridation interspécifique
+  const cross = GeneticsEngine.predictOffspringOutcomes(
+    { id: 1, sexe: 'Mâle', espece: 'agapornis_roseicollis', mutation: 'wild' } as unknown as Canari,
+    { id: 2, sexe: 'Femelle', espece: 'agapornis_personatus', mutation: 'wild' } as unknown as Canari
+  );
+  assert.equal(cross.status, 'HYBRID_CROSS_UNSUPPORTED');
+
+  // 5. Intégrité des 28 enregistrements d'évidence et traçabilité des sources
+  assert.equal(Object.keys(EVIDENCE_REGISTRY).length, 28);
+  for (const record of Object.values(EVIDENCE_REGISTRY)) {
+    for (const citation of record.citations) {
+      assert.ok(hasBibliographicSource(citation.sourceId));
+    }
+  }
+});
+
+
 

@@ -372,3 +372,58 @@ Conformément à la règle de prudence épistémique :
 - **DOIs et références peer-reviewed rectifiés :** Correction de Prum 1998 (vers Nature 396: 28–29, DOI 10.1038/23838), Lopes 2016 (vers Current Biology DOI 10.1016/j.cub.2016.03.076), Pryke 2009 (vers Science DOI 10.1126/science.1168928, pp. 1605–1607) et auteurs de Cooke 2017 (Cell).
 - **Statut final :** `GAP10C2_INTEGRITY_AUDIT = COMPLETE`.
 
+---
+
+## Détails GAP-10-D — Consolidation Finale du Master Registry (Clôture Technique)
+
+### 1. Objectif de Consolidation
+- **Date d'exécution :** 2026-10-21
+- **Phase :** BIO-REF-V2 GAP-10-D
+- **Mission :** Audit final et consolidation exhaustive du registre `HUMAN_REVIEW_REQUIRED_MASTER_REGISTRY.md`.
+- **Règle épistémique absolue :** Aucune transformation abusive de `HUMAN_REVIEW_REQUIRED` en `CLOSABLE` sur la simple base du succès des tests logiciels. Délimitation stricte entre conformité logicielle (prouvée par les tests) et vérité scientifique (réservée à l'arbitrage humain).
+
+---
+
+### 2. Tableau Consolidé de TOUS les Points HRR
+
+| HRR | Sujet | État technique | État scientifique | Décision finale | Justification |
+|---|---|---|---|---|---|
+| **HRR-01** | Perruche ondulée (Profil V2) | Validé (profil complet, typé, tests unitaires et intégration) | Homologué (Cooke et al. 2017 Cell, Martin 2002) | **CLOSABLE** | Preuves génomiques peer-reviewed intégrées (`EVD-BUD-01-001`, `EVD-BUD-01-002`), aucune divergence biologique restante. |
+| **HRR-02** | Colombe diamant (Profil V2) | Validé (`colombe_diamant`, alias legacy `colombe`, isolation) | Partiellement vérifié (Frith 1982, Gibbs 2001, Goodwin 1983, HANZAB 1996) ; 2 divergences ouvertes | **OPEN — HUMAN SCIENTIFIC REVIEW REQUIRED** | Traçabilité 100% assurée mais arbitrage humain obligatoire sur le diamètre de bague (3.5 mm profil vs 3.8 mm officiel C.O.M.) et le poids (spectre sauvage 23–37g vs élevage 35–45g). Profil maintenu en `draft`. |
+| **HRR-03** | Zero Canary Fallback (10 fallbacks identifiés) | Répertorié et consigné (Audit GAP-06-A) | Hors périmètre immédiat des profils d'espèces V2 | **OUT OF SCOPE / DEFERRED** | Les 10 fallbacks concernent des couches applicatives périphériques externes et feront l'objet d'un ticket de maintenance dédié. |
+| **HRR-04** | Agapornis (Architecture taxonomique & profils) | Validé (3 profils indépendants, isolation, gestion `LEGACY_SPECIES_AMBIGUITY`) | Homologué (Dilger 1960, Moreau 1948, Fry 1988, C.O.M. 2023) | **CLOSABLE** | Séparation taxonomique, éthologique (transport bec vs croupion), biométrique et morphologique achevée et scellée. |
+| **HRR-05** | Agapornis (Catalogues génétiques & mutations) | Validé (Roseicollis scopé, Fischeri `OUT_OF_SCOPE`, Personatus `OUT_OF_SCOPE` sauf `ap_blue` sous guard) | Preuves documentées mais non homologuées en production (zéro EVD fictif créé) | **TECHNICALLY RESOLVED — SCIENTIFIC REVIEW STILL REQUIRED** | Protection logicielle complète en place. L'homologation de `ap_blue`, `ar_masque_orange`, Parblue et l'ouverture éventuelle de catalogues dédiés requièrent la validation d'un collège d'experts. |
+| **HRR-06** | GeneticsEngine (Isolation interspécifique & hybridation) | Validé (blocage déterministe 6 paliers, refus runtime `HYBRID_CROSS_UNSUPPORTED`, 0 calcul) | Non homologué (la protection technique ne constitue pas un moteur d'hybridation biologique) | **TECHNICALLY RESOLVED — SCIENTIFIC REVIEW STILL REQUIRED** | Intégrité fail-closed absolue garantie dans le code. Tout calcul d'hybridation reste suspendu tant qu'un référentiel scientifique n'a pas été formellement validé. |
+| **HRR-07** | Bibliographie / Preuves & Infrastructure | Validé (26 sources dans `sources.ts`, 0 source orpheline dans `evidenceRegistry.ts`, audit métadonnées achevé) | Traçable à 100%, 3 sources restant réservées sous revue humaine | **TECHNICALLY RESOLVED — SCIENTIFIC REVIEW STILL REQUIRED** | Traçabilité documentaire fermée sans invention, mais réserve documentaire maintenue sur `SRC-TAYLOR-WARNER-1986`, l'ISBN 2007 de `SRC-VAN-DEN-ABEELE-2007` et `SRC-BREEDER-FORUM-2015`. |
+
+---
+
+### 3. Ventilation par Décision
+
+#### A. HRR Clôturables (`CLOSABLE`)
+- **HRR-01 (Perruche ondulée) :** Le profil biologique et les preuves associées sont formellement homologués.
+- **HRR-04 (Agapornis — Profils et Architecture taxonomique) :** Les trois espèces (*roseicollis*, *fischeri*, *personatus*) disposent de profils étanches sans aucun fallback implicite. L'ambiguïté de l'identifiant legacy `agapornis` est déterministement traitée.
+
+#### B. HRR Restant Ouverts sous Revue Humaine (`OPEN — HUMAN SCIENTIFIC REVIEW REQUIRED`)
+- **HRR-02 (Colombe diamant) :** Maintien du statut `draft`. Les éléments biologiques sont traçables, mais les divergences de baguage (3.5 mm profil vs 3.8 mm officiel) et de masse corporelle (sauvage vs captivité) nécessitent un arbitrage scientifique humain formel avant toute validation `published`.
+
+#### C. HRR Techniquement Résolus mais Scientifiquement Réservés (`TECHNICALLY RESOLVED — SCIENTIFIC REVIEW STILL REQUIRED`)
+- **HRR-05 (Agapornis — Catalogues génétiques) :** Verrous techniques actifs interdisant toute fuite de mutation. L'homologation de `ap_blue` et l'activation des catalogues Fischeri/Personatus restent soumises à décision d'experts.
+- **HRR-06 (Hybridation interspécifique) :** Le moteur génétique applique un rejet fail-closed absolu (`HYBRID_CROSS_UNSUPPORTED`). Aucune hybridation n'est homologuée scientifiquement dans le produit.
+- **HRR-07 (Bibliographie & Preuves) :** 100% de traçabilité garantie sans source fictive. Les incertitudes documentaires sont explicitement déclarées (`NOT_VERIFIED` pour Taylor & Warner 1986, retrait de l'ISBN non vérifié de Van den Abeele, P2 non certifiant pour Forum 2015).
+
+#### D. HRR Hors Périmètre / Reportés (`OUT OF SCOPE / DEFERRED`)
+- **HRR-03 (Zero Canary Fallback) :** Les 10 fallbacks identifiés dans GAP-06-A sont documentés pour être traités dans un lot ultérieur de refactorisation des services annexes.
+
+---
+
+### 4. Statut Global de Clôture de Biological Reference V2
+
+```text
+BIO_REF_V2_CLOSURE_STATUS = READY_FOR_FINAL_HUMAN_SCIENTIFIC_APPROVAL
+```
+
+- **Justification :** L'ensemble des fondations techniques, des gardes-fous d'intégrité, de la séparation taxonomique et de la traçabilité documentaire (GAP-01 à GAP-10-C2) est désormais rigoureusement achevé, vérifié par tests automatiques et exempt de toute erreur TypeScript ou build.
+- **Principe d'indépendance scientifique :** Conformément aux règles directrices du projet, le statut `CLOSED` ne peut être proclamé unilatéralement par un agent automatisé ; il est strictement réservé à la validation finale du collège d'experts scientifiques humains.
+
+
