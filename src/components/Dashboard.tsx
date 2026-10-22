@@ -4,12 +4,13 @@
  */
 
 import React, { useState } from 'react';
-import { Bird, Heart, Egg, Grid, Activity, Calendar, TrendingDown, TrendingUp, BarChart3, Plus, Clock, Info, Check, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Bird, Heart, Egg, Grid, Activity, Calendar, TrendingDown, TrendingUp, BarChart3, Plus, Clock, Info, Check, CheckCircle, AlertTriangle, QrCode } from 'lucide-react';
 import { Canari, Couple, Reproduction, Ponte, Sante, Depense, Vente, Cage } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { CapabilityResolver } from '../features/subscription/services/CapabilityResolver';
 import { AppButton, AppCard, AppBadge, AppKpiCard } from './design-system';
 import { HorizontalScrollContainer } from './ui/HorizontalScrollContainer';
+import { FlockStatisticsOverview } from '../features/analytics/components/FlockStatisticsOverview';
 
 interface DashboardProps {
   canaris: Canari[];
@@ -25,6 +26,7 @@ interface DashboardProps {
   onQuickAddCanari: () => void;
   onQuickAddDepense: () => void;
   onQuickAddCouple: () => void;
+  onOpenQrScanner?: () => void;
 }
 
 export default function Dashboard({
@@ -40,7 +42,8 @@ export default function Dashboard({
   onCompleteSanteRecord,
   onQuickAddCanari,
   onQuickAddDepense,
-  onQuickAddCouple
+  onQuickAddCouple,
+  onOpenQrScanner
 }: DashboardProps) {
   const { t } = useLanguage();
   
@@ -309,6 +312,16 @@ export default function Dashboard({
         />
       </div>
 
+      {/* V1.9.7 — Intelligent Descriptive Statistics & Flock Overview */}
+      <FlockStatisticsOverview
+        canaris={canaris}
+        cages={cages}
+        couples={couples}
+        pontes={pontes}
+        sante={sante}
+        onNavigateTab={setCurrentTab}
+      />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Alerts section */}
         <div className="lg:col-span-2 space-y-4">
@@ -468,6 +481,22 @@ export default function Dashboard({
                 </div>
                 <Plus className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </button>
+
+              {onOpenQrScanner && (
+                <button
+                  onClick={onOpenQrScanner}
+                  data-testid="dashboard-quick-scan-qr-btn"
+                  className="w-full flex items-center justify-between p-3.5 bg-emerald-50/80 hover:bg-emerald-100/80 dark:bg-slate-800/80 dark:hover:bg-slate-750 text-slate-900 dark:text-white font-semibold rounded-xl border border-emerald-100 dark:border-slate-700 transition-colors text-left cursor-pointer min-h-[48px]"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-lg">
+                      <QrCode className="w-4.5 h-4.5" />
+                    </div>
+                    <span className="text-sm font-bold">{t('scanQrCode') || 'Scanner un QR Code'}</span>
+                  </div>
+                  <Plus className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                </button>
+              )}
             </div>
             
             <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 text-center">

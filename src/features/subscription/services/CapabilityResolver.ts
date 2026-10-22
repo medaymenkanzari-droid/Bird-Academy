@@ -11,9 +11,9 @@ import { SubscriptionTierResolver } from './SubscriptionTierResolver';
 import { appStorage } from '../../../storage';
 
 export const PLAN_LIMITS: PlanLimits = {
-  FREE: { maxBirds: 20, demoGeneratorAvailable: false },
-  PREMIUM: { maxBirds: Infinity, demoGeneratorAvailable: true },
-  PRO: { maxBirds: Infinity, demoGeneratorAvailable: true }
+  FREE: { maxBirds: 20 },
+  PREMIUM: { maxBirds: Infinity },
+  PRO: { maxBirds: Infinity }
 };
 
 export const TIER_CAPABILITIES: Record<SubscriptionTier, SubscriptionCapability[]> = {
@@ -61,7 +61,7 @@ export const TIER_CAPABILITIES: Record<SubscriptionTier, SubscriptionCapability[
     // Intelligence
     'INTELLIGENCE_VIEW_BASIC',
 
-    // Assistant IA
+    // Assistant local
     'AI_ASSISTANT_GENERAL_BIO',
     'AI_ASSISTANT_QUOTA_10'
   ],
@@ -103,8 +103,7 @@ export const TIER_CAPABILITIES: Record<SubscriptionTier, SubscriptionCapability[
     'GENETICS_WRIGHT_INBREEDING',
     'INTELLIGENCE_DIAGNOSTIC_FICHES',
     'AI_ASSISTANT_FARM_CONTEXT',
-    'AI_ASSISTANT_QUOTA_100',
-    'DEMO_GENERATOR_ACCESS'
+    'AI_ASSISTANT_QUOTA_100'
   ],
 
   PRO: [
@@ -150,8 +149,7 @@ export const TIER_CAPABILITIES: Record<SubscriptionTier, SubscriptionCapability[
     'GENETICS_ADVANCED_TREE',
     'INTELLIGENCE_FULL_ENGINE',
     'AI_ASSISTANT_INTELLIGENCE_GENEALOGY',
-    'AI_ASSISTANT_QUOTA_UNLIMITED',
-    'DEMO_GENERATOR_ACCESS'
+    'AI_ASSISTANT_QUOTA_UNLIMITED'
   ]
 };
 
@@ -301,15 +299,6 @@ export class CapabilityResolver {
    */
   static setMockTierOverride(tier: SubscriptionTier | null): void {
     SubscriptionTierResolver.setMockTierOverride(tier);
-  }
-
-  /**
-   * Checks if the demo generator can be used for the given or current tier.
-   * FREE tier has demo generator disabled.
-   */
-  static canUseDemoGenerator(tier?: SubscriptionTier): boolean {
-    const activeTier = tier || this.getCurrentTierSync();
-    return PLAN_LIMITS[activeTier]?.demoGeneratorAvailable ?? false;
   }
 
   /**

@@ -54,6 +54,7 @@ async function createValidTestLicense(
     enterprise: 'ENTP',
     association: 'ASSO',
     veterinary: 'VETE',
+    test: 'TEST',
   };
 
   const tag = typeTagMap[type] || 'COMM';

@@ -8,6 +8,12 @@ import { IntelligenceScore, RuleResult, DataQualityResult, TopPerformer, BirdInt
 import { Language } from '../../../utils/translations';
 import { AssistantCapability, AssistantTier } from './permissions';
 import { KnowledgeSource } from './knowledge';
+import { 
+  AssistantActionType, 
+  MinimalLocusContext, 
+  MinimalPassportContext, 
+  MinimalCrossResultContext 
+} from './assistant';
 
 export interface BiologicalContext {
   speciesId: string;
@@ -177,12 +183,17 @@ export interface AssistantContextSummary {
   hasGenealogyContext: boolean;
   hasFinanceContext: boolean;
   hasIntelligenceContext: boolean;
+  hasTextContext?: boolean;
+  hasLocusContext?: boolean;
+  hasPassportContext?: boolean;
+  hasCrossResultContext?: boolean;
   loadedSources: KnowledgeSource[];
   loadedEntityIds: {
     speciesId?: string;
     birdId?: number;
     pairId?: string;
     cageId?: string | number;
+    locusId?: string;
   };
 }
 
@@ -199,5 +210,12 @@ export interface AssistantContext {
   genealogy?: GenealogyContext;
   finance?: FinanceContext;
   intelligence?: IntelligenceContext;
+  textContext?: {
+    targetText: string;
+    action: AssistantActionType;
+  };
+  locusContext?: MinimalLocusContext;
+  passportContext?: MinimalPassportContext;
+  crossResultContext?: MinimalCrossResultContext;
   summary: AssistantContextSummary;
 }

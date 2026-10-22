@@ -143,6 +143,7 @@ export interface LmseFilePayload {
   features: string[];
   allowOfflineActivation: boolean;
   mode: 'OFFLINE_BETA' | 'COMMERCIAL' | 'ENTERPRISE';
+  activations?: ActivationRecord[];
 }
 
 export interface LmseLicenseFile {

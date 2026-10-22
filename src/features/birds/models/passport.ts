@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Re-export du modèle BirdPassport depuis le sous-répertoire passport/
+// (TypeScript résout ce fichier en priorité sur le dossier éponyme)
+export type { BirdPassport } from './passport/BirdPassport';
+
 export interface ComCriteriaDefinition {
   id: string;
   name: string;

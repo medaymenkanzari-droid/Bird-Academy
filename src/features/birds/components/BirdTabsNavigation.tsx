@@ -6,7 +6,7 @@
 import React, { useState, useMemo } from 'react';
 import { 
   GitBranch, Award, Activity, Trophy, Image, FileText, User, 
-  ChevronRight, Upload, Plus, FileCheck, X, Sparkles, Heart, BookOpen, Home
+  ChevronRight, Upload, Plus, FileCheck, X, Sparkles, Heart, BookOpen, Home, Dna
 } from 'lucide-react';
 import { Canari, Sante } from '../../../types';
 import { AppTabs, TabItem } from '../../../components/design-system/AppTabs';
@@ -20,6 +20,17 @@ import { BirdService } from '../services/BirdService';
 import { HabitatService } from '../../habitat/services/HabitatService';
 import { AppButton, AppInput, AppSelect } from '../../../components/design-system';
 import { useLanguage } from '../../../context/LanguageContext';
+import { ImageOptimizer } from '../../../utils/imageOptimizer';
+import {
+  CanonicalGeneticsSummaryCard,
+  CanonicalLocusDetailDrawer,
+  CanonicalGeneticsEditor,
+  CanonicalLocusItem,
+  GouldCrossSimulator,
+  CanaryCrossSimulator
+} from '../../../components/genetics';
+import { exportBirdPassportPdf } from '../services/BirdPassportPdfReportService';
+import { AssistantPassportDrawer } from '../../assistant/components/AssistantPassportDrawer';
 
 export interface BirdTabsNavigationProps {
   bird: Canari;
@@ -57,6 +68,40 @@ export const BirdTabsNavigation: React.FC<BirdTabsNavigationProps> = ({
   const fosterFather = bird.parent_pere_nourricier_id ? allBirds.find(b => b.id === bird.parent_pere_nourricier_id) : null;
   const fosterMother = bird.parent_mere_nourriciere_id ? allBirds.find(b => b.id === bird.parent_mere_nourriciere_id) : null;
 
+  // Espèce et scope taxonomique
+  const speciesId = bird?.espece || (bird as any)?.speciesId || (bird as any)?.species || '';
+  const isGouldian = speciesId.toLowerCase() === 'diamant_gould';
+  const isCanary = ['canari', 'serinus_canaria', 'serinus_canaria_domestica', 'canary'].includes(speciesId.toLowerCase().trim());
+
+  // Genetics drawer, editor, and cross simulator state
+  const [selectedLocusForDetail, setSelectedLocusForDetail] = useState<CanonicalLocusItem | null>(null);
+  const [isGeneticsEditorOpen, setIsGeneticsEditorOpen] = useState<boolean>(false);
+  const [isCrossSimulatorOpen, setIsCrossSimulatorOpen] = useState<boolean>(false);
+  const [isCanaryCrossSimulatorOpen, setIsCanaryCrossSimulatorOpen] = useState<boolean>(false);
+  const [isPassportAssistantOpen, setIsPassportAssistantOpen] = useState<boolean>(false);
+
+  const handleSaveCanonicalGenetics = (updatedLoci: CanonicalLocusItem[]) => {
+    const updatedBird: Canari = {
+      ...bird,
+      passport: {
+        ...(bird.passport || {}),
+        canonicalLoci: updatedLoci
+      } as any
+    };
+    BirdService.editBird(updatedBird);
+    if (onUpdateBird) onUpdateBird(updatedBird);
+    setIsGeneticsEditorOpen(false);
+  };
+
+  const handleExportPassportPdf = async () => {
+    if (!bird) return;
+    try {
+      await exportBirdPassportPdf(bird, language);
+    } catch (err) {
+      console.error('[BirdTabsNavigation] Erreur export PDF :', err);
+    }
+  };
+
   // Documents form state for Tab 5
   const [newDocName, setNewDocName] = useState('');
   const [newDocType, setNewDocType] = useState<'certificat' | 'analyse' | 'facture' | 'autre'>('certificat');
@@ -64,23 +109,32 @@ export const BirdTabsNavigation: React.FC<BirdTabsNavigationProps> = ({
   const [newDocDesc, setNewDocDesc] = useState('');
 
   // Gallery handlers
-  const handleAddPhotoToGallery = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddPhotoToGallery = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = reader.result as string;
+
+    try {
+      // Compression systématique pour protéger le quota localStorage
+      const compressedBase64 = await ImageOptimizer.compressImageFile(file, {
+        maxWidth: 1024,
+        maxHeight: 1024,
+        quality: 0.82,
+      });
+
       const currentPhotos = bird.photos || (bird.photo ? [bird.photo] : []);
-      const updatedPhotos = [...currentPhotos, base64];
+      const updatedPhotos = [...currentPhotos, compressedBase64];
       const updated: Canari = {
         ...bird,
-        photo: bird.photo || base64,
+        photo: bird.photo || compressedBase64,
         photos: updatedPhotos
       };
       BirdService.editBird(updated);
       if (onUpdateBird) onUpdateBird(updated);
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      console.error('Erreur lors de la compression de la photo de galerie:', err);
+    } finally {
+      e.target.value = '';
+    }
   };
 
   const handleMakePhotoPrincipal = (idx: number) => {
@@ -155,6 +209,12 @@ export const BirdTabsNavigation: React.FC<BirdTabsNavigationProps> = ({
       icon: BookOpen
     },
     {
+      id: 'genetique',
+      label: t('passportGeneticsTab'),
+      icon: Dna,
+      badge: (bird.passport as any)?.canonicalLoci?.length > 0 ? (bird.passport as any).canonicalLoci.length : undefined
+    },
+    {
       id: 'habitat_mouvements',
       label: t('passportHabitatTab'),
       icon: Home,
@@ -207,6 +267,118 @@ export const BirdTabsNavigation: React.FC<BirdTabsNavigationProps> = ({
         </div>
       )}
 
+      {/* Tab: Génétique Canonique & Qualification Épistémique */}
+      {activeTab === 'genetique' && (
+        <div className="space-y-6 animate-fadeIn" data-testid="passport-genetics-tab">
+          <CanonicalGeneticsSummaryCard
+            canonicalLoci={(bird.passport as any)?.canonicalLoci}
+            onAddInfo={() => setIsGeneticsEditorOpen(true)}
+            onSelectLocus={(locus) => setSelectedLocusForDetail(locus)}
+            onExportPdf={handleExportPassportPdf}
+            onOpenAssistant={() => setIsPassportAssistantOpen(true)}
+            language={language}
+          />
+
+          <AssistantPassportDrawer
+            open={isPassportAssistantOpen}
+            onClose={() => setIsPassportAssistantOpen(false)}
+            bird={bird}
+            data-testid="passport-assistant-drawer"
+          />
+
+          <CanonicalLocusDetailDrawer
+            locus={selectedLocusForDetail}
+            open={Boolean(selectedLocusForDetail)}
+            onClose={() => setSelectedLocusForDetail(null)}
+            language={language}
+          />
+
+          <CanonicalGeneticsEditor
+            bird={bird}
+            open={isGeneticsEditorOpen}
+            onClose={() => setIsGeneticsEditorOpen(false)}
+            onSave={handleSaveCanonicalGenetics}
+            language={language}
+          />
+
+          {/* Action Simulation de Croisement Gould (Strictement réservé à diamant_gould) */}
+          {isGouldian && (
+            <>
+              <div className="p-4 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                    <Dna className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                      Simulation de croisement génétique Gould
+                    </h4>
+                    <p className="text-3xs text-slate-500 dark:text-slate-400">
+                      Connectez ce passeport au GouldianCrossEngine pour simuler les ségrégations réelles
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsCrossSimulatorOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white shadow-sm transition-all active:scale-[0.98] cursor-pointer shrink-0"
+                  data-testid="open-gould-cross-simulator-btn"
+                >
+                  <Dna className="w-3.5 h-3.5" />
+                  <span>Simuler un croisement</span>
+                </button>
+              </div>
+
+              <GouldCrossSimulator
+                initialParentA={bird}
+                allBirds={allBirds}
+                open={isCrossSimulatorOpen}
+                onClose={() => setIsCrossSimulatorOpen(false)}
+                language={language}
+              />
+            </>
+          )}
+
+          {/* Action Simulation de Croisement Canari (Strictement réservé à l'espèce canari) */}
+          {isCanary && (
+            <>
+              <div className="p-4 rounded-2xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                    <Dna className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                      Simulation de croisement génétique Canari (V1.7.6)
+                    </h4>
+                    <p className="text-3xs text-slate-500 dark:text-slate-400">
+                      Connectez ce passeport au CanaryCrossBridge pour simuler les ségrégations canoniques
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsCanaryCrossSimulatorOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-xs font-bold text-white shadow-sm transition-all active:scale-[0.98] cursor-pointer shrink-0"
+                  data-testid="open-canary-cross-simulator-btn"
+                >
+                  <Dna className="w-3.5 h-3.5" />
+                  <span>Simuler un croisement</span>
+                </button>
+              </div>
+
+              <CanaryCrossSimulator
+                initialParentA={bird}
+                allBirds={allBirds}
+                open={isCanaryCrossSimulatorOpen}
+                onClose={() => setIsCanaryCrossSimulatorOpen(false)}
+                language={language}
+              />
+            </>
+          )}
+        </div>
+      )}
+
       {/* Tab: Habitat & Déplacements (Traçabilité) */}
       {activeTab === 'habitat_mouvements' && (
         <div className="animate-fadeIn">
@@ -242,7 +414,7 @@ export const BirdTabsNavigation: React.FC<BirdTabsNavigationProps> = ({
                     </div>
                     <div>
                       <h4 className="font-bold text-xs text-white leading-tight">
-                        {father.nom || `${t('speciesCanari')} #${father.id}`}
+                        {father.nom || `${father.espece || 'Oiseau'} #${father.id}`}
                       </h4>
                       <div className="text-3xs font-mono text-emerald-400 mt-0.5">
                         {father.bague}
@@ -282,7 +454,7 @@ export const BirdTabsNavigation: React.FC<BirdTabsNavigationProps> = ({
                     </div>
                     <div>
                       <h4 className="font-bold text-xs text-white leading-tight">
-                        {mother.nom || `${t('speciesCanari')} #${mother.id}`}
+                        {mother.nom || `${mother.espece || 'Oiseau'} #${mother.id}`}
                       </h4>
                       <div className="text-3xs font-mono text-emerald-400 mt-0.5">
                         {mother.bague}
@@ -385,7 +557,7 @@ export const BirdTabsNavigation: React.FC<BirdTabsNavigationProps> = ({
               <label className="text-xs font-bold bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 px-3 py-1.5 rounded-xl border border-emerald-800 transition-colors cursor-pointer flex items-center gap-1.5 shrink-0">
                 <Upload className="w-3.5 h-3.5" />
                 {language === 'fr' ? 'Ajouter' : language === 'ar' ? 'إضافة' : 'Add'}
-                <input type="file" accept="image/*" onChange={handleAddPhotoToGallery} className="hidden" />
+                <input type="file" accept="image/*" data-testid="gallery-photo-input" onChange={handleAddPhotoToGallery} className="hidden" />
               </label>
             </div>
 
@@ -398,7 +570,7 @@ export const BirdTabsNavigation: React.FC<BirdTabsNavigationProps> = ({
               <div className="grid grid-cols-2 gap-3.5">
                 {(bird.photos || (bird.photo ? [bird.photo] : [])).map((pic, idx) => (
                   <div key={idx} className="group relative rounded-2xl overflow-hidden border border-slate-800 aspect-square bg-slate-950">
-                    <img src={pic} alt="" className="w-full h-full object-cover" />
+                    <img src={pic} alt="" data-testid="gallery-photo-item" className="w-full h-full object-cover" />
                     
                     <div className="absolute top-2 start-2 px-2 py-0.5 bg-slate-950/80 backdrop-blur-md rounded-md text-3xs font-mono font-bold text-white border border-slate-800">
                       {idx === 0 ? '★' : `#${idx + 1}`}

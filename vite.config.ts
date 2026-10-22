@@ -24,7 +24,9 @@ function downloadArtifactsPlugin() {
       const rootDir = configDirectory;
       const candidates = [
         path.join(rootDir, 'dist_binaries', filename),
+        path.join(rootDir, 'release', filename),
         path.join(rootDir, 'public', 'downloads', filename),
+        path.join(rootDir, 'dist', 'downloads', filename),
         path.join(rootDir, filename),
         path.join(rootDir, 'Release', 'Release-2026-Multilingual', filename),
         path.join(rootDir, 'Release', filename),
@@ -32,12 +34,20 @@ function downloadArtifactsPlugin() {
 
       if (filename === 'Bird-Academy-User-Windows-Setup.exe') {
         candidates.push(
+          path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
           path.join(rootDir, 'Release', 'Release-2026-Multilingual', 'Bird-Academy-Avian-ERP-Setup.exe'),
           path.join(rootDir, 'Release', 'Bird-Academy-Avian-ERP-Setup.exe')
         );
       }
+      if (filename === 'Bird-Academy-Avian-ERP-Setup.exe') {
+        candidates.push(
+          path.join(rootDir, 'dist_binaries', 'Bird-Academy-User-Windows-Setup.exe'),
+          path.join(rootDir, 'release', 'Bird-Academy-Avian-ERP-Setup.exe')
+        );
+      }
       if (filename === 'Bird-Academy-User.apk') {
         candidates.push(
+          path.join(rootDir, 'dist_binaries', 'Bird-Academy-User.apk'),
           path.join(rootDir, 'Release', 'Release-2026-Multilingual', 'Bird-Academy-User.apk'),
           path.join(rootDir, 'Release', 'Bird-Academy-User-Release.apk')
         );
@@ -108,6 +118,27 @@ function lmseAdminBackendPlugin() {
   };
 }
 
+function excludeBinaryArtifactsFromBundlePlugin() {
+  return {
+    name: 'exclude-binary-artifacts-from-bundle',
+    closeBundle() {
+      const distDir = path.resolve(configDirectory, 'dist');
+      const downloadsDir = path.join(distDir, 'downloads');
+      if (fs.existsSync(downloadsDir)) {
+        for (const file of fs.readdirSync(downloadsDir)) {
+          if (file.endsWith('.exe') || file.endsWith('.apk')) {
+            try {
+              fs.rmSync(path.join(downloadsDir, file), { force: true });
+            } catch (e) {
+              // Ignore
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
 export default defineConfig(() => {
   return {
     base: './',
@@ -115,6 +146,7 @@ export default defineConfig(() => {
       react(), 
       tailwindcss(),
       downloadArtifactsPlugin(),
+      excludeBinaryArtifactsFromBundlePlugin(),
       lmseAdminBackendPlugin(),
       VitePWA({
         registerType: 'autoUpdate',

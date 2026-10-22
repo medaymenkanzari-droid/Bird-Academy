@@ -33,9 +33,12 @@ export const BirdStandardComTab: React.FC<BirdStandardComTabProps> = ({ bird }) 
   const resolvedSpeciesId = bird.espece || (bird as any).speciesId || (bird as any).species;
   const bioProfile = resolvedSpeciesId ? getBiologicalProfileById(resolvedSpeciesId) : undefined;
   const speciesMeta = resolvedSpeciesId ? getSpeciesById(resolvedSpeciesId) : undefined;
+  const declaredSpecies = (bird.espece && bird.espece.trim() !== '') ? bird.espece.trim() : '';
   const speciesName = bioProfile?.identity?.names?.[language] 
     || (speciesMeta ? t(speciesMeta.nameKey) : '')
-    || t('speciesCanari');
+    || declaredSpecies
+    || bioProfile?.identity?.scientificName
+    || 'Espèce indéterminée (UNKNOWN)';
 
   const totalScore = useMemo(() => {
     return Object.values(evaluation.scores).reduce((sum: number, val: any) => sum + (Number(val) || 0), 0);

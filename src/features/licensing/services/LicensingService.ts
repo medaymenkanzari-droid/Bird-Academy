@@ -132,15 +132,22 @@ export class LicensingService {
       }
     }
 
-    // Match identified legacy test patterns
+    // A valid cryptographically signed TEST license is NOT a legacy license
+    if (license && license.type === 'test' && license.signature && license.checksum && cleanKey.startsWith('LMSE-TEST-')) {
+      return false;
+    }
+
+    // Match identified legacy test patterns (old or unsigned keys)
     if (cleanKey.startsWith('LMSE-TEST-') || cleanKey.startsWith('TEST-')) {
       return true;
     }
 
-    // Secondary check on license metadata if present
+    // Secondary check on license metadata if present (unsigned legacy mock objects)
     if (license) {
-      if ((license as any).type === 'test') return true;
-      if ((license as any).metadata?.isPublicTest === true) return true;
+      if (!license.signature || !license.checksum) {
+        if ((license as any).type === 'test') return true;
+        if ((license as any).metadata?.isPublicTest === true) return true;
+      }
       if (typeof (license as any).notes === 'string' && (license as any).notes.includes('TEST') && !license.type) return true;
     }
 

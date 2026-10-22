@@ -26,7 +26,7 @@ export class LicenseLifecycleEngine {
    * Defines every legal transition between license lifecycle states.
    */
   public static readonly ALLOWED_TRANSITIONS: Record<LicenseStatus, LicenseStatus[]> = {
-    pending_activation: ['active', 'invalid', 'revoked', 'expired', 'trial', 'OFFLINE_BETA', 'suspended', 'replaced'],
+    pending_activation: ['active', 'invalid', 'revoked', 'expired', 'trial', 'OFFLINE_BETA', 'suspended'],
     active: ['expired', 'revoked', 'suspended', 'replaced', 'active'],
     trial: ['active', 'expired', 'revoked', 'replaced'],
     OFFLINE_BETA: ['active', 'expired', 'replaced', 'revoked'],

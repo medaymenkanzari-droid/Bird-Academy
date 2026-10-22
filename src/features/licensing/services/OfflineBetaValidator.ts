@@ -9,6 +9,7 @@
 import { License, LicenseValidationResult, DeviceFingerprint, LmseLicenseFile, LicenseStatus } from '../types/licensing';
 import { CryptoService } from './CryptoService';
 import { KeyValidator } from '../validators/KeyValidator';
+import { ActivationCanonicalizer } from '../engines/ActivationCanonicalizer';
 
 export class OfflineBetaValidator {
   /**
@@ -63,13 +64,13 @@ export class OfflineBetaValidator {
       };
     }
 
-    if (parsed.version !== 1) {
+    if (parsed.version !== 1 && parsed.version !== 2) {
       return {
         isValid: false,
         status: 'suspended',
         license: null,
         code: 'UNSUPPORTED_VERSION',
-        message: `Version de fichier licence non supportée (${parsed.version}).`,
+        message: `Version de fichier licence non supportée (${parsed.version}). Attendu : version 1 ou 2.`,
         remainingDays: null,
         deviceRegistered: false,
       };
@@ -102,17 +103,70 @@ export class OfflineBetaValidator {
       };
     }
 
+    // 3.5. Legacy Format Activations Check (Étape 3: Pas d'activations non signées dans v1)
+    const hasActivations = Array.isArray(lic.activations) && lic.activations.length > 0;
+    if (parsed.version === 1 && hasActivations) {
+      return {
+        isValid: false,
+        status: 'suspended',
+        license: null,
+        code: 'UNAUTHENTICATED_ACTIVATIONS',
+        message: 'Format de licence v1 non sécurisé : les activations ne sont pas authentifiées cryptographiquement.',
+        remainingDays: null,
+        deviceRegistered: false,
+      };
+    }
+
+    // 3.6. Duplicate Activations Check (Test F)
+    if (hasActivations && ActivationCanonicalizer.hasDuplicates(lic.activations)) {
+      return {
+        isValid: false,
+        status: 'suspended',
+        license: null,
+        code: 'DUPLICATE_ACTIVATIONS',
+        message: 'Activations dupliquées détectées dans le fichier de licence.',
+        remainingDays: null,
+        deviceRegistered: false,
+      };
+    }
+
     // 4. Checksum Verification
-    const payloadToSign = `${lic.id}:${lic.key}:${lic.holderName}:${lic.type}:${lic.issuedAt}:${lic.expiresAt || 'NEVER'}:${lic.maxDevices}`;
-    const computedChecksum = await CryptoService.sha256(payloadToSign);
-    
-    if (computedChecksum.toLowerCase() !== parsed.checksum.toLowerCase()) {
+    let computedChecksum = '';
+    let isChecksumMatch = false;
+
+    if (parsed.version === 2 || hasActivations) {
+      const actHash = await ActivationCanonicalizer.computeHash(lic.activations);
+      const payload8 = `${lic.id}:${lic.key}:${lic.holderName}:${lic.type}:${lic.issuedAt}:${lic.expiresAt || 'NEVER'}:${lic.maxDevices}:${actHash}`;
+      const checksum8 = await CryptoService.sha256(payload8);
+      if (checksum8.toLowerCase() === parsed.checksum.toLowerCase()) {
+        computedChecksum = checksum8;
+        isChecksumMatch = true;
+      }
+    } else {
+      // Legacy v1 without activations (or v2 empty fallback)
+      const payload7 = `${lic.id}:${lic.key}:${lic.holderName}:${lic.type}:${lic.issuedAt}:${lic.expiresAt || 'NEVER'}:${lic.maxDevices}`;
+      const checksum7 = await CryptoService.sha256(payload7);
+      if (checksum7.toLowerCase() === parsed.checksum.toLowerCase()) {
+        computedChecksum = checksum7;
+        isChecksumMatch = true;
+      } else {
+        const actHash = await ActivationCanonicalizer.computeHash(lic.activations);
+        const payload8 = `${lic.id}:${lic.key}:${lic.holderName}:${lic.type}:${lic.issuedAt}:${lic.expiresAt || 'NEVER'}:${lic.maxDevices}:${actHash}`;
+        const checksum8 = await CryptoService.sha256(payload8);
+        if (checksum8.toLowerCase() === parsed.checksum.toLowerCase()) {
+          computedChecksum = checksum8;
+          isChecksumMatch = true;
+        }
+      }
+    }
+
+    if (!isChecksumMatch) {
       return {
         isValid: false,
         status: 'suspended',
         license: null,
         code: 'INVALID_CHECKSUM',
-        message: 'Checksum invalide : le contenu du fichier .lmse a été altéré.',
+        message: 'Checksum invalide : le contenu du fichier .lmse (ou ses activations) a été altéré.',
         remainingDays: null,
         deviceRegistered: false,
       };
@@ -148,6 +202,46 @@ export class OfflineBetaValidator {
       };
     }
 
+    // 6.5. Anti-Clock-Tampering Check (with issuedAt & authenticated activations anchors)
+    let baselineTimestamp: number | null = null;
+    let baselineSource = '';
+    if (lic.issuedAt) {
+      const issuedTime = new Date(lic.issuedAt).getTime();
+      if (!isNaN(issuedTime)) {
+        baselineTimestamp = issuedTime;
+        baselineSource = "date d'émission de la licence";
+      }
+    }
+    if (hasActivations) {
+      for (const act of lic.activations) {
+        if (act.lastVerifiedAt) {
+          const t = new Date(act.lastVerifiedAt).getTime();
+          if (!isNaN(t) && (baselineTimestamp === null || t > baselineTimestamp)) {
+            baselineTimestamp = t;
+            baselineSource = "dernier horodatage d'activité d'activation";
+          }
+        }
+        if (act.activatedAt) {
+          const t = new Date(act.activatedAt).getTime();
+          if (!isNaN(t) && (baselineTimestamp === null || t > baselineTimestamp)) {
+            baselineTimestamp = t;
+            baselineSource = "date d'activation d'un appareil";
+          }
+        }
+      }
+    }
+    if (baselineTimestamp !== null && now.getTime() < baselineTimestamp - 10 * 60 * 1000) {
+      return {
+        isValid: false,
+        status: 'suspended',
+        license: null,
+        code: 'CLOCK_TAMPERED',
+        message: `Altération de l'horloge système détectée. La date de l'appareil est antérieure à la référence (${baselineSource}).`,
+        remainingDays: null,
+        deviceRegistered: false,
+      };
+    }
+
     // 7. Expiration Check
     let remainingDays: number | null = null;
     if (lic.expiresAt) {
@@ -170,6 +264,12 @@ export class OfflineBetaValidator {
     // Construct valid License entity representation
     const maxDevices = lic.maxDevices || 1;
     const licenseStatus: LicenseStatus = 'OFFLINE_BETA';
+    
+    // Retain activations embedded in file or existing in repository
+    const priorActivations = Array.isArray(lic.activations) 
+      ? lic.activations 
+      : (Array.isArray(parsed.activations) ? parsed.activations : (existingLicense?.activations || []));
+
     const constructedLicense: License = {
       id: lic.id,
       key: lic.key,
@@ -185,7 +285,7 @@ export class OfflineBetaValidator {
         allowTransfer: false,
         features: lic.features || (lic.type === 'beta' ? ['core', 'beta_access', 'offline_mode'] : ['core', 'unlimited_birds', 'pedigree', 'statistics', 'export_pdf']),
       },
-      activations: [],
+      activations: [...priorActivations],
       revokedAt: null,
       revocationReason: null,
       checksum: parsed.checksum,
@@ -195,36 +295,16 @@ export class OfflineBetaValidator {
         isCommercial: lic.type !== 'beta',
         commercialTier: lic.features?.includes('tier:pro') ? 'PRO' : (lic.features?.includes('tier:free') ? 'FREE' : (lic.features?.includes('tier:premium') ? 'PREMIUM' : (lic.type === 'enterprise' ? 'PRO' : (lic.type === 'evaluation' ? 'FREE' : 'PREMIUM')))),
         activatedOfflineAt: now.toISOString(),
+        authenticatedActivations: [...priorActivations],
       },
     };
 
     // 8. Device Binding & Limit Check
-    if (existingLicense && existingLicense.id === lic.id && existingLicense.activations.length > 0) {
-      // Retain existing activations
-      constructedLicense.activations = existingLicense.activations;
-      
-      const isAlreadyBoundToThisDevice = existingLicense.activations.some(
-        a => a.fingerprint.deviceId === currentDevice.deviceId
-      );
+    const isAlreadyBoundToThisDevice = constructedLicense.activations.some(
+      (a: any) => a.fingerprint?.deviceId === currentDevice.deviceId
+    );
 
-      if (!isAlreadyBoundToThisDevice) {
-        if (existingLicense.activations.length >= maxDevices) {
-          return {
-            isValid: false,
-            status: 'suspended',
-            license: constructedLicense,
-            code: 'DEVICE_LIMIT_EXCEEDED',
-            message: `Nombre maximal d'appareils (${maxDevices}) atteint. Importation refusée sur ce second appareil.`,
-            remainingDays,
-            deviceRegistered: false,
-          };
-        }
-      }
-    }
-
-    // Add current device activation if not present
-    const alreadyRegistered = constructedLicense.activations.some(a => a.fingerprint.deviceId === currentDevice.deviceId);
-    if (!alreadyRegistered) {
+    if (!isAlreadyBoundToThisDevice) {
       if (constructedLicense.activations.length >= maxDevices) {
         return {
           isValid: false,
@@ -236,7 +316,10 @@ export class OfflineBetaValidator {
           deviceRegistered: false,
         };
       }
+    }
 
+    // Add current device activation if not present
+    if (!isAlreadyBoundToThisDevice) {
       constructedLicense.activations.push({
         id: `act_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
         licenseId: lic.id,

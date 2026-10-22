@@ -94,6 +94,8 @@ export const HABITAT_TRANSLATIONS: Record<Language, Record<string, string>> = {
     
     // Hierarchy Tree View
     hierarchyTree: "Arborescence Hiérarchique",
+    hierarchyOverview: "Arborescence d'Élevage",
+    structuresManagement: "Gestion des Structures",
     emptyHierarchy: "Aucune structure créée pour le moment. Commencez par créer un élevage.",
     allStructures: "Toutes les Structures",
     details: "Détails",
@@ -188,6 +190,8 @@ export const HABITAT_TRANSLATIONS: Record<Language, Record<string, string>> = {
     
     // Hierarchy Tree View
     hierarchyTree: "Hierarchical Structure View",
+    hierarchyOverview: "Breeding Hierarchy",
+    structuresManagement: "Structures Management",
     emptyHierarchy: "No structure created yet. Start by creating a breeding facility.",
     allStructures: "All Structures",
     details: "Details",
@@ -282,6 +286,8 @@ export const HABITAT_TRANSLATIONS: Record<Language, Record<string, string>> = {
     
     // Hierarchy Tree View
     hierarchyTree: "عرض الهيكل الهرمي",
+    hierarchyOverview: "الهيكل الهرمي للمأوى",
+    structuresManagement: "إدارة الهياكل",
     emptyHierarchy: "لم يتم إنشاء أي هيكل بعد. ابدأ بإنشاء منشأة تربية.",
     allStructures: "جميع الهياكل",
     details: "التفاصيل",
@@ -376,6 +382,8 @@ export const HABITAT_TRANSLATIONS: Record<Language, Record<string, string>> = {
     
     // Hierarchy Tree View
     hierarchyTree: "Estructura Jerárquica",
+    hierarchyOverview: "Jerarquía de Cría",
+    structuresManagement: "Gestión de Estructuras",
     emptyHierarchy: "Aún no se ha creado ninguna estructura. Comience por crear un criadero.",
     allStructures: "Todas las Estructuras",
     details: "Detalles",
@@ -470,6 +478,8 @@ export const HABITAT_TRANSLATIONS: Record<Language, Record<string, string>> = {
     
     // Hierarchy Tree View
     hierarchyTree: "Struttura Gerarchica",
+    hierarchyOverview: "Gerarchia di Allevamento",
+    structuresManagement: "Gestione delle Strutture",
     emptyHierarchy: "Nessuna struttura creata. Inizia creando un allevamento.",
     allStructures: "Tutte le Strutture",
     details: "Dettagli",

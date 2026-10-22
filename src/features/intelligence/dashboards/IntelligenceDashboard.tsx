@@ -8,6 +8,7 @@ import { IntelligenceService } from '../services/IntelligenceService';
 import { ScoreCard, AlertCard, RecommendationCard } from '../widgets/Widgets';
 import { IntelligenceFiche } from '../components/IntelligenceFiche';
 import { ReportGenerator } from '../components/ReportGenerator';
+import { DecisionSupportViewer } from '../components/DecisionSupportViewer';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
@@ -20,13 +21,16 @@ import { HorizontalScrollContainer } from '../../../components/ui/HorizontalScro
 
 export const IntelligenceDashboard: React.FC = () => {
   const { t, language } = useLanguage();
-  const [activeSubTab, setActiveSubTab] = useState<'overview' | 'fiche' | 'reports'>('overview');
+  const [activeSubTab, setActiveSubTab] = useState<'overview' | 'decision_support' | 'fiche' | 'reports'>('overview');
   const [scoreboard, setScoreboard] = useState<ReturnType<typeof IntelligenceService.getGeneralScoreboard> | null>(null);
+  const [flockDSS, setFlockDSS] = useState<ReturnType<typeof IntelligenceService.getFlockDecisionSupport> | null>(null);
 
   useEffect(() => {
     const data = IntelligenceService.getGeneralScoreboard();
     setScoreboard(data);
-  }, []);
+    const dss = IntelligenceService.getFlockDecisionSupport(language);
+    setFlockDSS(dss);
+  }, [language]);
 
   if (!scoreboard) {
     return (
@@ -97,6 +101,17 @@ export const IntelligenceDashboard: React.FC = () => {
         >
           <LayoutDashboard className="w-4 h-4 shrink-0" />
           <span className="whitespace-nowrap">{t('intelOverview')}</span>
+        </button>
+        <button
+          onClick={() => setActiveSubTab('decision_support')}
+          className={`shrink-0 px-4 py-2.5 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            activeSubTab === 'decision_support' 
+              ? 'border-amber-500 text-slate-900 dark:text-white font-black' 
+              : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+          }`}
+        >
+          <Sparkles className="w-4 h-4 shrink-0 text-amber-500" />
+          <span className="whitespace-nowrap">{t('intelDecisionSupportTab') || 'Aide à la décision'}</span>
         </button>
         <button
           onClick={() => setActiveSubTab('fiche')}
@@ -294,6 +309,16 @@ export const IntelligenceDashboard: React.FC = () => {
               </div>
             </div>
 
+          </div>
+        )}
+
+        {activeSubTab === 'decision_support' && flockDSS && (
+          <div className="animate-fade-in">
+            <DecisionSupportViewer
+              items={flockDSS.items}
+              title={t('intelDecisionSupport') || "Aide à la décision"}
+              subtitle={t('intelDecisionSupportSub') || "Assistance contextuelle basée exclusivement sur les résultats officiels."}
+            />
           </div>
         )}
 

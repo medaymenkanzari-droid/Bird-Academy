@@ -117,3 +117,88 @@ export interface IntelligenceReport {
     metrics?: { label: string; value: string | number }[];
   }[];
 }
+
+// =========================================================================
+// MISSION V1.9.2 — BIRD INTELLIGENCE : ASSISTANCE À LA DÉCISION (DSS)
+// =========================================================================
+
+/**
+ * Niveaux d'assistance obligatoires (Section 5)
+ */
+export type AssistanceLevel =
+  | 'INFORMATION'     // "Voici ce que les données indiquent."
+  | 'INTERPRETATION'  // "Voici comment comprendre ce résultat."
+  | 'VIGILANCE'       // "Cette information mérite une vérification."
+  | 'MISSING_DATA'    // "Il manque telle information pour aller plus loin."
+  | 'USER_ACTION';    // "Vous pouvez vérifier / compléter / consulter telle donnée."
+
+/**
+ * États épistémiques stricts (Section 4)
+ */
+export type EpistemicStatus =
+  | 'UNKNOWN'
+  | 'NOT_TESTED'
+  | 'OBSERVED'
+  | 'DECLARED'
+  | 'INFERRED'
+  | 'GENETICALLY_CONFIRMED'
+  | 'PROVISIONAL'
+  | 'BLOCKED'
+  | 'POSSIBLE_SET'
+  | 'CONFIRMED'
+  | 'NEEDS_HUMAN_REVIEW'
+  | 'CONFLICTING'
+  | 'INSUFFICIENT_INFORMATION';
+
+/**
+ * Traçabilité de la source de vérité (Section 3)
+ */
+export interface DecisionSupportSource {
+  domain: 'genetics' | 'cross' | 'canonical' | 'genealogy' | 'reproduction' | 'health' | 'habitat' | 'data_quality';
+  engineOrTable: string;
+  evidenceIds?: string[];
+  referenceKey?: string;
+}
+
+/**
+ * Structure normalisée d'assistance à la décision (Section 6)
+ */
+export interface DecisionSupportItem {
+  id: string;
+  title: string;
+  level: AssistanceLevel;
+  source: DecisionSupportSource;
+  epistemicStatus?: EpistemicStatus;
+  situation: string;           // SITUATION : ce qui est actuellement connu
+  result: string;              // RÉSULTAT : résultat officiel déjà calculé
+  meaning: string;             // CE QUE CELA SIGNIFIE : explication simple
+  vigilancePoints: string[];   // POINTS DE VIGILANCE : limites / incertitudes
+  missingData: string[];       // INFORMATIONS MANQUANTES : données nécessaires
+  nextVerification: string;    // PROCHAINE VÉRIFICATION POSSIBLE : action utilisateur non destructive
+}
+
+/**
+ * Détection et qualification de donnée manquante (Section 11)
+ */
+export interface MissingDataItem {
+  id: string;
+  entityType: 'bird' | 'pair' | 'clutch' | 'cage' | 'locus';
+  entityId: string | number;
+  entityLabel: string;
+  missingField: string;
+  severity: 'high' | 'medium' | 'low';
+  description: string;
+  suggestedAction: string;
+}
+
+/**
+ * Synthèse globale d'aide à la décision
+ */
+export interface DecisionSupportSummary {
+  flockScore: number;
+  items: DecisionSupportItem[];
+  missingDataItems: MissingDataItem[];
+  totalAlerts: number;
+  generatedAt: string;
+}
+

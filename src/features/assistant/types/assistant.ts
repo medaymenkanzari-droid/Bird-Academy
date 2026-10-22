@@ -25,6 +25,46 @@ export type AssistantEngineStatus =
   | 'INITIALIZING'
   | 'ERROR';
 
+export type AssistantActionType =
+  | 'SIMPLIFY'
+  | 'SUMMARIZE'
+  | 'REPHRASE'
+  | 'EXPLAIN'
+  | 'STRUCTURE_NOTE'
+  | 'EXPLAIN_STATUS'
+  | 'EXPLAIN_RESULT'
+  | 'GENERAL_QUERY';
+
+export interface MinimalLocusContext {
+  locusId: string;
+  locusName?: string;
+  epistemicStatus?: 'CONFIRMED' | 'PROVISIONAL' | 'UNKNOWN' | 'NOT_TESTED' | 'BLOCKED' | 'POSSIBLE_SET' | string;
+  alleles?: string[];
+  possibleSet?: string[][];
+  provenance?: string;
+  confidence?: number;
+  humanReviewRequired?: boolean;
+  blockedReason?: string;
+  rationale?: string;
+}
+
+export interface MinimalPassportContext {
+  birdId?: number;
+  birdNom?: string;
+  bague?: string;
+  espece?: string;
+  statut?: string;
+  canonicalLociCount?: number;
+  canonicalLoci?: MinimalLocusContext[];
+}
+
+export interface MinimalCrossResultContext {
+  parentMale?: string;
+  parentFemale?: string;
+  outcomeCount?: number;
+  officialSummary?: string;
+}
+
 export type QuestionCategory =
   | 'GENERAL_BIOLOGY'
   | 'GENERAL_BREEDING'
@@ -41,6 +81,13 @@ export type QuestionCategory =
   | 'USER_GENEALOGY'
   | 'INTELLIGENCE_EXPLANATION'
   | 'REPORT_EXPLANATION'
+  | 'TEXT_SIMPLIFICATION'
+  | 'TEXT_SUMMARIZATION'
+  | 'TEXT_REPHRASING'
+  | 'TEXT_EXPLANATION'
+  | 'NOTE_STRUCTURING'
+  | 'EPISTEMIC_STATUS_EXPLANATION'
+  | 'CROSS_RESULT_EXPLANATION'
   | 'UNKNOWN';
 
 export interface AssistantRequestOptions {
@@ -52,6 +99,11 @@ export interface AssistantRequestOptions {
 export interface AssistantRequest {
   query: string;
   language: Language;
+  action?: AssistantActionType;
+  targetText?: string;
+  locusContext?: MinimalLocusContext;
+  passportContext?: MinimalPassportContext;
+  crossResultContext?: MinimalCrossResultContext;
   birdId?: number;
   pairId?: string;
   cageId?: string | number;

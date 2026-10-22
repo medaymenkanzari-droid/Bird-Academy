@@ -43,7 +43,7 @@ export const FeatureLockedCard: React.FC<FeatureLockedCardProps> = ({
     if (requiredTier === 'PRO') {
       return [
         t('benefit_bird_intelligence') || "Moteur complet Bird Intelligence & scores prédictifs",
-        t('benefit_ai_unlimited') || "Assistant IA 100% hors-ligne illimité avec analyses de généalogie",
+        t('benefit_ai_unlimited') || "Assistant local 100% hors-ligne illimité avec analyses de généalogie",
         t('benefit_pro_reports') || "Rapports d'élevage avancés et alertes sanitaires intelligentes"
       ];
     }

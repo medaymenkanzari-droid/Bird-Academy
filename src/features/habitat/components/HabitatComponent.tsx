@@ -26,6 +26,9 @@ import { HabitatService } from '../services/HabitatService';
 import { QRCodeManager } from '../services/QRCodeManager';
 import { BirdService } from '../../birds/services/BirdService';
 import { BirdDetailModal } from '../../../components/BirdDetailModal';
+import { HabitatHierarchyViewer } from './HabitatHierarchyViewer';
+import { BirdMoveModal } from './BirdMoveModal';
+import { HabitatIntegrityService } from '../services/HabitatIntegrityService';
 
 // Types
 import { 
@@ -36,14 +39,26 @@ import {
 export interface HabitatComponentProps {
   canaris?: Canari[];
   cages?: any[];
+  /** QR navigation: pre-select a specific entity on mount */
+  initialSelectedType?: 'facility' | 'zone' | 'aviary' | 'cage' | 'compartment' | 'quarantineArea';
+  initialSelectedId?: string;
+  initialSelectedData?: any;
+  initialSelectedTimestamp?: number;
 }
 
-export default function HabitatComponent({ canaris: propCanaris, cages: propCages }: HabitatComponentProps = {}) {
+export default function HabitatComponent({
+  canaris: propCanaris,
+  cages: propCages,
+  initialSelectedType,
+  initialSelectedId,
+  initialSelectedData,
+  initialSelectedTimestamp
+}: HabitatComponentProps = {}) {
   const { t, isRtl } = useLanguage();
   const activeUser = "Lead Éleveur";
 
   // Navigation & Tabs
-  const [activeSubTab, setActiveSubTab] = useState<'structures' | 'movements' | 'quarantine'>('structures');
+  const [activeSubTab, setActiveSubTab] = useState<'hierarchy' | 'structures' | 'movements' | 'quarantine'>('hierarchy');
 
   // Trigger state updates
   const [tick, setTick] = useState(0);
@@ -79,10 +94,64 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  // QR navigation: auto-select entity when initialSelectedType/Id provided
+  useEffect(() => {
+    if (initialSelectedType && initialSelectedId) {
+      setActiveSubTab('structures');
+      selectNode(initialSelectedType, initialSelectedId);
+    }
+    // Only run on mount (or when QR focus changes)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialSelectedType, initialSelectedId, initialSelectedTimestamp]);
+
   const selectNode = (type: typeof selectedType, id: string) => {
     console.log(`[BUG08-RUNTIME-11] Selected hierarchy node: type=${type}, id=${id}`);
     setSelectedType(type);
     setSelectedId(id);
+
+    // Auto-expand ancestors in hierarchy tree so selected node is highlighted and visible
+    setExpandedNodes(prev => {
+      const next = { ...prev };
+      if (type === 'zone') {
+        const allZones = zones.length > 0 ? zones : HabitatRepository.getAll<Zone>('zone');
+        const z = allZones.find(item => item.id === id);
+        if (z?.facilityId) next[`facility-${z.facilityId}`] = true;
+        next[`zone-${id}`] = true;
+      } else if (type === 'aviary') {
+        const allAviaries = aviaries.length > 0 ? aviaries : HabitatRepository.getAll<Aviary>('aviary');
+        const allZones = zones.length > 0 ? zones : HabitatRepository.getAll<Zone>('zone');
+        const a = allAviaries.find(item => item.id === id);
+        if (a?.zoneId) {
+          next[`zone-${a.zoneId}`] = true;
+          const z = allZones.find(item => item.id === a.zoneId);
+          if (z?.facilityId) next[`facility-${z.facilityId}`] = true;
+        }
+      } else if (type === 'cage') {
+        const allCages = cages.length > 0 ? cages : HabitatRepository.getAll<HabitatCage>('cage');
+        const allZones = zones.length > 0 ? zones : HabitatRepository.getAll<Zone>('zone');
+        const c = allCages.find(item => item.id === id);
+        if (c?.zoneId) {
+          next[`zone-${c.zoneId}`] = true;
+          const z = allZones.find(item => item.id === c.zoneId);
+          if (z?.facilityId) next[`facility-${z.facilityId}`] = true;
+        }
+      } else if (type === 'compartment') {
+        const allComps = compartments.length > 0 ? compartments : HabitatRepository.getAll<Compartment>('compartment');
+        const allCages = cages.length > 0 ? cages : HabitatRepository.getAll<HabitatCage>('cage');
+        const allZones = zones.length > 0 ? zones : HabitatRepository.getAll<Zone>('zone');
+        const comp = allComps.find(item => item.id === id);
+        if (comp?.cageId) {
+          const c = allCages.find(item => item.id === comp.cageId);
+          if (c?.zoneId) {
+            next[`zone-${c.zoneId}`] = true;
+            const z = allZones.find(item => item.id === c.zoneId);
+            if (z?.facilityId) next[`facility-${z.facilityId}`] = true;
+          }
+        }
+      }
+      return next;
+    });
+
     if (type !== 'all' || id !== 'all') {
       if (window.history.state?.habitatDetail) {
         window.history.replaceState({ habitatDetail: { type, id } }, '');
@@ -287,6 +356,59 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
     const cage = (cages || []).find(c => String(c.id) === String(cageId));
     if (!cage) return [];
     return calculateCageOccupancy(cage, birds || [], compartments || []).presentBirds;
+  };
+
+  // Helper: Retrieve the full object of the currently selected entity
+  const getSelectedEntity = () => {
+    if (selectedType === 'cage') {
+      return (cages || []).find(c => String(c.id) === String(selectedId))
+        || (initialSelectedData?.id === selectedId ? initialSelectedData : null)
+        || HabitatRepository.getById<HabitatCage>('cage', selectedId);
+    }
+    if (selectedType === 'aviary') {
+      return (aviaries || []).find(a => String(a.id) === String(selectedId))
+        || (initialSelectedData?.id === selectedId ? initialSelectedData : null)
+        || HabitatRepository.getById<Aviary>('aviary', selectedId);
+    }
+    if (selectedType === 'zone') {
+      return (zones || []).find(z => String(z.id) === String(selectedId))
+        || (initialSelectedData?.id === selectedId ? initialSelectedData : null)
+        || HabitatRepository.getById<Zone>('zone', selectedId);
+    }
+    if (selectedType === 'compartment') {
+      return (compartments || []).find(c => String(c.id) === String(selectedId))
+        || (initialSelectedData?.id === selectedId ? initialSelectedData : null)
+        || HabitatRepository.getById<Compartment>('compartment', selectedId);
+    }
+    if (selectedType === 'facility') {
+      return (facilities || []).find(f => String(f.id) === String(selectedId))
+        || (initialSelectedData?.id === selectedId ? initialSelectedData : null)
+        || HabitatRepository.getById<Facility>('facility', selectedId);
+    }
+    if (selectedType === 'quarantineArea') {
+      return (quarantineAreas || []).find(q => String(q.id) === String(selectedId))
+        || (initialSelectedData?.id === selectedId ? initialSelectedData : null)
+        || HabitatRepository.getById<QuarantineArea>('quarantineArea', selectedId);
+    }
+    return null;
+  };
+
+  // Helper: Get birds belonging to an aviary
+  const getAviaryBirds = (aviaryId: string) => {
+    const aviaryCageIds = new Set((cages || []).filter(c => c.aviaryId === aviaryId).map(c => String(c.id)));
+    return (birds || []).filter(b => {
+      if (!b || b.archived || b.statut_sante === 'Décédé' || (b as any).statut !== 'Vendu') return false;
+      const bCageId = b.cageId ? String(b.cageId) : (b.cage_id ? String(b.cage_id) : undefined);
+      return (b as any).aviaryId === aviaryId || (bCageId && aviaryCageIds.has(bCageId));
+    });
+  };
+
+  // Helper: Get birds belonging to a compartment
+  const getCompartmentBirds = (compCode: string) => {
+    return (birds || []).filter(b => {
+      if (!b || b.archived || b.statut_sante === 'Décédé' || (b as any).statut !== 'Vendu') return false;
+      return String((b as any).compartmentId) === String(compCode);
+    });
   };
 
   // QR Code Generation Trigger
@@ -522,7 +644,8 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
           targetCageId = availableCages[0].id;
         }
         
-        HabitatService.endQuarantine(recordId, 'release', 0, "Oiseau guéri", targetCageId || undefined, activeUser);
+        const obs = prompt("Observations de sortie (optionnel) :", "Fin de période d'observation sanitaire") || "Sortie de quarantaine enregistrée";
+        HabitatService.endQuarantine(recordId, 'release', 0, obs, targetCageId || undefined, activeUser);
         forceUpdate();
       }
     }
@@ -682,12 +805,21 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
 
       {/* Primary Navigation Tabs */}
       <div className="border-b border-slate-200">
-        <div className="flex gap-6">
+        <div className="flex gap-6 overflow-x-auto pb-1">
+          <button
+            onClick={() => setActiveSubTab('hierarchy')}
+            className={`pb-3.5 text-xs font-bold transition-all relative cursor-pointer ${activeSubTab === 'hierarchy' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-800'}`}
+          >
+            <span>{t('hierarchyOverview', { defaultValue: "Arborescence d'Élevage" })}</span>
+            {activeSubTab === 'hierarchy' && (
+              <motion.div layoutId="subtab_bar" className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500" />
+            )}
+          </button>
           <button
             onClick={() => setActiveSubTab('structures')}
             className={`pb-3.5 text-xs font-bold transition-all relative cursor-pointer ${activeSubTab === 'structures' ? 'text-amber-500' : 'text-slate-500 hover:text-slate-800'}`}
           >
-            <span>{t('hierarchyTree')}</span>
+            <span>{t('structuresManagement', { defaultValue: "Gestion des Structures" })}</span>
             {activeSubTab === 'structures' && (
               <motion.div layoutId="subtab_bar" className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber-500" />
             )}
@@ -712,6 +844,23 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
           </button>
         </div>
       </div>
+
+      {/* TAB CONTENT: HIERARCHY OVERVIEW (V1.9.6) */}
+      {activeSubTab === 'hierarchy' && (
+        <HabitatHierarchyViewer
+          zones={zones}
+          aviaries={aviaries}
+          cages={cages}
+          birds={birds}
+          quarantineAreas={quarantineAreas}
+          quarantineRecords={quarantines}
+          onSelectNode={(type, id) => {
+            setActiveSubTab('structures');
+            selectNode(type, id);
+          }}
+          onSelectBird={(bird) => setSelectedBirdForModal(bird)}
+        />
+      )}
 
       {/* TAB CONTENT: STRUCTURES */}
       {activeSubTab === 'structures' && (
@@ -861,9 +1010,13 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
                 )}
                 <div>
                   <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                    {selectedType === 'all' ? t('allStructures') : `${t(selectedType)} : ${selectedId}`}
+                    {selectedType === 'all' 
+                      ? t('allStructures') 
+                      : (getSelectedEntity()?.nom || `${t(selectedType)} : ${selectedId}`)}
                   </h3>
-                  <span className="text-[10px] text-slate-400">{filteredStructures.length} éléments correspondants</span>
+                  <span className="text-[10px] text-slate-400">
+                    {filteredStructures.length} {selectedType === 'all' ? 'éléments correspondants' : 'sous-structure(s)'}
+                  </span>
                 </div>
               </div>
 
@@ -902,6 +1055,61 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
                 </AppButton>
               </div>
             </div>
+
+            {/* Dedicated Fiche Card for Selected Entity */}
+            {selectedType !== 'all' && (() => {
+              const selectedEntity = getSelectedEntity();
+              if (!selectedEntity) return null;
+              return (
+                <div 
+                  className="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  data-testid={`fiche-${selectedType}`}
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">
+                        {selectedType === 'cage' ? '🕸️' : selectedType === 'aviary' ? '🕊️' : selectedType === 'zone' ? '🧭' : selectedType === 'compartment' ? '🚪' : '🏨'}
+                      </span>
+                      <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">
+                        {selectedEntity.nom}
+                      </h3>
+                      <span className="capitalize text-[10px] bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-bold">
+                        {t(selectedType)}
+                      </span>
+                    </div>
+                    {selectedEntity.description && (
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {selectedEntity.description}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-3 text-xs text-slate-500 pt-1">
+                      <span>
+                        Occupation : <strong className="text-slate-800 dark:text-slate-200">{getBirdCountForNode(selectedType, selectedEntity.id)}</strong>
+                        {((selectedEntity as any).capacite || (selectedEntity as any).capacite_max) ? ` / ${(selectedEntity as any).capacite || (selectedEntity as any).capacite_max}` : ''}
+                      </span>
+                      {selectedEntity.statut && (
+                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
+                          selectedEntity.statut === 'Actif' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-amber-50 text-amber-700'
+                        }`}>
+                          {selectedEntity.statut}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 self-start sm:self-center">
+                    <button
+                      onClick={() => handleShowQR(selectedType, selectedEntity.id, selectedEntity.nom)}
+                      title="Smart QR Code"
+                      className="p-2 text-slate-600 hover:text-amber-600 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 text-xs font-semibold shadow-2xs"
+                    >
+                      <QrCode className="w-4 h-4 text-amber-500" />
+                      <span>QR Code</span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Structured Grid Table / Empty State Logic */}
             {selectedType === 'cage' ? (
@@ -997,6 +1205,8 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
               )
             ) : filteredStructures.length === 0 ? (
               ((selectedType === 'zone' && getZoneBirds(selectedId).length > 0) ||
+               (selectedType === 'aviary' && getAviaryBirds(selectedId).length > 0) ||
+               (selectedType === 'compartment') ||
                (selectedType === 'facility' && HabitatEngine.calculateStats('facility', selectedId, birds).oiseauxPresents > 0)) ? null : (
                 <AppEmptyState 
                   title="Aucun résultat"
@@ -1162,6 +1372,110 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
                   <HorizontalScrollContainer innerClassName="min-w-[320px] md:min-w-[650px]">
                     <AppTable
                       data={getCageBirds(selectedId)}
+                      keyExtractor={(b: any) => String(b.id)}
+                      onRowClick={(b: any) => setSelectedBirdForModal(b)}
+                      hoverable={true}
+                      columns={[
+                        { key: 'bague', header: 'Bague', render: (b: any) => <span className="font-bold text-slate-800 font-mono">{b.bague || 'Sans bague'}</span> },
+                        { key: 'nom', header: t('nameCol'), render: (b: any) => <span className="font-semibold text-slate-700">{b.nom || 'Sans nom'}</span> },
+                        { key: 'espece', header: 'Espèce / Race', className: 'hidden md:table-cell', headerClassName: 'hidden md:table-cell', render: (b: any) => <span className="text-slate-500">{b.espece || 'canari'} - {b.race || 'Classique'}</span> },
+                        { key: 'sexe', header: t('genderCol'), render: (b: any) => <span className="text-slate-600 font-medium">{b.sexe || '-'}</span> },
+                        { key: 'age', header: 'Âge', className: 'hidden md:table-cell', headerClassName: 'hidden md:table-cell', render: (b: any) => <span className="text-slate-500">{BirdEngine.calculateAge(b.date_naissance).stringVal}</span> },
+                        { key: 'statut', header: 'Santé', render: (b: any) => <span className="text-xs font-semibold text-emerald-600">{b.statut_sante || 'Actif'}</span> },
+                        { 
+                          key: 'actions', 
+                          header: 'Actions', 
+                          className: 'hidden md:table-cell text-right', 
+                          headerClassName: 'hidden md:table-cell text-right', 
+                          render: (b: any) => (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setSelectedBirdForModal(b); }}
+                              className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded text-xs font-bold transition-colors cursor-pointer"
+                            >
+                              Fiche
+                            </button>
+                          ) 
+                        }
+                      ]}
+                    />
+                  </HorizontalScrollContainer>
+                )}
+              </div>
+            )}
+
+            {/* Aviary Birds Section */}
+            {selectedType === 'aviary' && (
+              <div className="mt-6 border-t border-slate-100 pt-4 space-y-3">
+                <div className="flex justify-between items-center flex-wrap gap-2">
+                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                    <User className="w-4 h-4 text-amber-500" />
+                    Oiseaux présents dans la volière ({getAviaryBirds(selectedId).length})
+                  </h4>
+                  <span className="text-[10px] text-slate-400 font-medium md:hidden">
+                    ← Glisser pour tout voir →
+                  </span>
+                </div>
+                {getAviaryBirds(selectedId).length === 0 ? (
+                  <AppEmptyState 
+                    title="Aucun oiseau dans cette volière"
+                    description="Cette volière est actuellement vide."
+                  />
+                ) : (
+                  <HorizontalScrollContainer innerClassName="min-w-[320px] md:min-w-[650px]">
+                    <AppTable
+                      data={getAviaryBirds(selectedId)}
+                      keyExtractor={(b: any) => String(b.id)}
+                      onRowClick={(b: any) => setSelectedBirdForModal(b)}
+                      hoverable={true}
+                      columns={[
+                        { key: 'bague', header: 'Bague', render: (b: any) => <span className="font-bold text-slate-800 font-mono">{b.bague || 'Sans bague'}</span> },
+                        { key: 'nom', header: t('nameCol'), render: (b: any) => <span className="font-semibold text-slate-700">{b.nom || 'Sans nom'}</span> },
+                        { key: 'espece', header: 'Espèce / Race', className: 'hidden md:table-cell', headerClassName: 'hidden md:table-cell', render: (b: any) => <span className="text-slate-500">{b.espece || 'canari'} - {b.race || 'Classique'}</span> },
+                        { key: 'sexe', header: t('genderCol'), render: (b: any) => <span className="text-slate-600 font-medium">{b.sexe || '-'}</span> },
+                        { key: 'age', header: 'Âge', className: 'hidden md:table-cell', headerClassName: 'hidden md:table-cell', render: (b: any) => <span className="text-slate-500">{BirdEngine.calculateAge(b.date_naissance).stringVal}</span> },
+                        { key: 'statut', header: 'Santé', render: (b: any) => <span className="text-xs font-semibold text-emerald-600">{b.statut_sante || 'Actif'}</span> },
+                        { 
+                          key: 'actions', 
+                          header: 'Actions', 
+                          className: 'hidden md:table-cell text-right', 
+                          headerClassName: 'hidden md:table-cell text-right', 
+                          render: (b: any) => (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setSelectedBirdForModal(b); }}
+                              className="px-2 py-1 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded text-xs font-bold transition-colors cursor-pointer"
+                            >
+                              Fiche
+                            </button>
+                          ) 
+                        }
+                      ]}
+                    />
+                  </HorizontalScrollContainer>
+                )}
+              </div>
+            )}
+
+            {/* Compartment Birds Section */}
+            {selectedType === 'compartment' && (
+              <div className="mt-6 border-t border-slate-100 pt-4 space-y-3">
+                <div className="flex justify-between items-center flex-wrap gap-2">
+                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                    <User className="w-4 h-4 text-amber-500" />
+                    Oiseaux présents dans le compartiment ({getCompartmentBirds(selectedId).length})
+                  </h4>
+                  <span className="text-[10px] text-slate-400 font-medium md:hidden">
+                    ← Glisser pour tout voir →
+                  </span>
+                </div>
+                {getCompartmentBirds(selectedId).length === 0 ? (
+                  <AppEmptyState 
+                    title="Aucun oiseau dans ce compartiment"
+                    description="Ce compartiment est actuellement vide."
+                  />
+                ) : (
+                  <HorizontalScrollContainer innerClassName="min-w-[320px] md:min-w-[650px]">
+                    <AppTable
+                      data={getCompartmentBirds(selectedId)}
                       keyExtractor={(b: any) => String(b.id)}
                       onRowClick={(b: any) => setSelectedBirdForModal(b)}
                       hoverable={true}
@@ -1544,96 +1858,19 @@ export default function HabitatComponent({ canaris: propCanaris, cages: propCage
         </form>
       </AppModal>
 
-      {/* BIRD MOVEMENT MODAL */}
-      <AppModal
+      {/* BIRD MOVEMENT MODAL (V1.9.6 Contextuel & Progressif) */}
+      <BirdMoveModal
         isOpen={moveModalOpen}
         onClose={() => setMoveModalOpen(false)}
-        title="Déplacement d'Oiseau (Contrôlé)"
-      >
-        {birds.length === 0 ? (
-          <AppEmptyState
-            title="Aucun oiseau enregistré"
-            description="Veuillez d'abord ajouter des oiseaux dans votre volière avant d'effectuer un déplacement."
-          />
-        ) : (
-          <form onSubmit={handleMoveSubmit} className="space-y-4">
-            <div>
-              <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Oiseau à transférer</label>
-              <AppSelect
-                value={moveForm.birdId}
-                onChange={(e) => setMoveForm({ ...moveForm, birdId: e.target.value })}
-                required
-              >
-                <option value="">Sélectionner un oiseau</option>
-                {birds.map(b => (
-                  <option key={b.id} value={b.id}>
-                    {b.nom || 'Sans nom'} ({b.bague || 'Sans bague'}) - {typeof b.statut_sante === 'string' ? b.statut_sante : 'Actif'}
-                  </option>
-                ))}
-              </AppSelect>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Type de Destination</label>
-              <AppSelect
-                value={moveForm.destType}
-                onChange={(e) => setMoveForm({ ...moveForm, destType: e.target.value as any, destId: '' })}
-                required
-              >
-                <option value="cage">Cage</option>
-                <option value="aviary">Volière</option>
-                <option value="compartment">Compartiment</option>
-                <option value="zone">Zone libre</option>
-                <option value="quarantineArea">Zone de Quarantaine</option>
-              </AppSelect>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Destination Exacte</label>
-              <AppSelect
-                value={moveForm.destId}
-                onChange={(e) => setMoveForm({ ...moveForm, destId: e.target.value })}
-                required
-              >
-                <option value="">Choisir l'emplacement cible</option>
-                {moveForm.destType === 'cage' && (cages || []).map(c => <option key={c.id} value={c.id}>{c.nom} (Cap. {(c as any).capacite_max || (c as any).capacite || 6})</option>)}
-                {moveForm.destType === 'aviary' && (aviaries || []).map(a => <option key={a.id} value={a.id}>{a.nom} (Cap. {(a as any).capacite || 20})</option>)}
-                {moveForm.destType === 'compartment' && (compartments || []).map(comp => <option key={comp.id} value={comp.id}>{comp.nom} (Cap. {(comp as any).capacite || 2})</option>)}
-                {moveForm.destType === 'zone' && (zones || []).map(z => <option key={z.id} value={z.id}>{z.nom}</option>)}
-                {moveForm.destType === 'quarantineArea' && (quarantineAreas || []).map(q => <option key={q.id} value={q.id}>{q.nom} (Cap. {(q as any).capacite || 10})</option>)}
-              </AppSelect>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Motif du transfert</label>
-              <AppSelect
-                value={moveForm.motif}
-                onChange={(e) => setMoveForm({ ...moveForm, motif: e.target.value })}
-                required
-              >
-                <option value="Optimisation de couple">Optimisation de couple</option>
-                <option value="Ajustement de densité">Ajustement de densité</option>
-                <option value="Traitement Sanitaire">Isolement Sanitaire</option>
-                <option value="Nettoyage et Maintenance">Nettoyage / Maintenance</option>
-                <option value="Autre">Autre</option>
-              </AppSelect>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-slate-600 dark:text-slate-300 block mb-1">Commentaires</label>
-              <AppInput 
-                placeholder="Précisions..." 
-                value={moveForm.comment}
-                onChange={(e) => setMoveForm({ ...moveForm, comment: e.target.value })}
-              />
-            </div>
-
-            <AppButton type="submit" variant="primary" className="w-full cursor-pointer py-2.5">
-              Enregistrer le déplacement
-            </AppButton>
-          </form>
-        )}
-      </AppModal>
+        birds={birds}
+        zones={zones}
+        aviaries={aviaries}
+        cages={cages}
+        quarantineAreas={quarantineAreas}
+        onMoveSuccess={() => {
+          forceUpdate();
+        }}
+      />
 
       {/* START QUARANTINE MODAL */}
       <AppModal

@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Bell, Moon, Sun, ChevronRight, ShieldCheck, Sparkles, MessageSquare } from 'lucide-react';
+import { Search, Bell, Moon, Sun, ChevronRight, ShieldCheck, Sparkles, MessageSquare, QrCode } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { LicenseStatusBadge } from '../../features/licensing/components/LicenseStatusBadge';
 import { useSubscription } from '../../features/subscription/hooks/useSubscription';
@@ -19,6 +19,7 @@ export interface DesktopTopBarProps {
   currentTab: string;
   onOpenActivationModal?: () => void;
   onOpenUpgradeModal?: () => void;
+  onOpenQrScanner?: () => void;
   onSearchQueryChange?: (query: string) => void;
   className?: string;
 }
@@ -27,6 +28,7 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
   currentTab,
   onOpenActivationModal,
   onOpenUpgradeModal,
+  onOpenQrScanner,
   onSearchQueryChange,
   className = '',
 }) => {
@@ -71,7 +73,6 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
       case 'depenses': return t('depenses');
       case 'ventes': return t('ventes');
       case 'parametres': return t('parametres');
-      case 'demo_shortcut': return t('demoSandbox');
       default: return 'Bird Academy';
     }
   };
@@ -130,6 +131,20 @@ export const DesktopTopBar: React.FC<DesktopTopBarProps> = ({
             aria-label={t('desktopQuickSearch')}
           />
         </div>
+
+        {/* Smart QR Code Scanner Button */}
+        {onOpenQrScanner && (
+          <button
+            type="button"
+            data-testid="topbar-qr-scanner-btn"
+            onClick={onOpenQrScanner}
+            className="p-2 text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer flex items-center justify-center"
+            title="Scanner un Smart QR Code"
+            aria-label="Scanner un Smart QR Code"
+          >
+            <QrCode className="w-4.5 h-4.5" />
+          </button>
+        )}
 
         {/* Notifications Icon Button with Popover */}
         <div className="relative">

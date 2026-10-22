@@ -47,7 +47,7 @@ export class SpeciesProfileRepository {
       }
 
       const parsed = JSON.parse(raw);
-      if (!parsed || !Array.isArray(parsed.activeSpeciesIds) || parsed.activeSpeciesIds.length === 0) {
+      if (!parsed || !Array.isArray(parsed.activeSpeciesIds)) {
         return { ...DEFAULT_SPECIES_PROFILE };
       }
 
@@ -70,9 +70,8 @@ export class SpeciesProfileRepository {
         updatedAt: new Date().toISOString()
       };
 
-      if (sanitized.activeSpeciesIds.length === 0) {
-        sanitized.activeSpeciesIds = ['canari'];
-      }
+      // ZÉRO FALLBACK FORCÉ SUR CANARI (AUDIT-31-06)
+      // Une liste vide reste vide et correspond à INSUFFICIENT_INFORMATION / UNKNOWN.
 
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem(SPECIES_PROFILE_STORAGE_KEY, JSON.stringify(sanitized));

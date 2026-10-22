@@ -131,7 +131,16 @@ export const LicenseProvider: React.FC<LicenseProviderProps> = ({ children }) =>
     if (licenseState !== 'LICENSE_VALID' || !activeLicense) {
       return featureKey === 'core';
     }
-    if (activeLicense.status === 'revoked') return false;
+
+    // Strict security check: If license is expired, revoked, suspended, or validation failed, NEVER allow PRO/PREMIUM features
+    const isExpired = validation?.code === 'EXPIRED' ||
+      activeLicense.status === 'expired' ||
+      (activeLicense.expiresAt ? new Date(activeLicense.expiresAt).getTime() <= Date.now() : false);
+
+    if (isExpired || activeLicense.status === 'revoked' || activeLicense.status === 'suspended' || validation?.isValid === false) {
+      return featureKey === 'core';
+    }
+
     if (activeLicense.type === 'permanent' || activeLicense.type === 'enterprise') return true;
     return activeLicense.policy?.features?.includes(featureKey) ?? true;
   };

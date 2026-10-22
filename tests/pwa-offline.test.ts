@@ -35,7 +35,7 @@ test('all mandatory install and demo assets are packaged locally', () => {
 test('offline screens do not depend on Google Fonts or remote demo photos', () => {
   const css = readFileSync(projectFile('src/index.css'), 'utf8');
   const generator = readFileSync(
-    projectFile('src/features/quality/utils/demoGenerator.ts'),
+    projectFile('src/qa/demo/DemoGenerator.ts'),
     'utf8',
   );
 

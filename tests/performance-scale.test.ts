@@ -16,7 +16,7 @@ Object.defineProperty(globalThis, 'localStorage', {
   value: new MemoryStorage(),
 });
 
-const { DemoDataGenerator } = await import('../src/features/quality/utils/demoGenerator');
+const { DemoDataGenerator } = await import('../src/qa/demo/DemoGenerator');
 const { BirdRepository } = await import('../src/features/birds/repositories/BirdRepository');
 const { PerformanceEngine } = await import('../src/features/platform/engines/PerformanceEngine');
 

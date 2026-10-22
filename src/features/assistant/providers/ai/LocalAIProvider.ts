@@ -14,12 +14,16 @@ import {
 import { AssistantContext } from '../../types/context';
 import { KnowledgeSource } from '../../types/knowledge';
 import { Language } from '../../../../utils/translations';
+import { LocalTextAssistantEngine } from '../../services/LocalTextAssistantEngine';
+import { QuestionClassifier } from '../../services/QuestionClassifier';
 
 export interface LocalAIProviderConfig {
   engineInstalled?: boolean;
   modelName?: string;
   version?: string;
   isMockEnabled?: boolean;
+  textEngineEnabled?: boolean;
+  statusOverride?: AssistantEngineStatus;
 }
 
 const UNKNOWN_SPECIES_MESSAGES: Record<Language, string> = {
@@ -31,11 +35,11 @@ const UNKNOWN_SPECIES_MESSAGES: Record<Language, string> = {
 };
 
 const UNAVAILABLE_ENGINE_MESSAGES: Record<Language, string> = {
-  fr: "Le moteur IA local n'est pas disponible sur cet appareil.",
-  en: "The local AI engine is not available on this device.",
-  ar: "محرك الذكاء الاصطناعي المحلي غير متوفر على هذا الجهاز.",
-  es: "El motor de IA local no está disponible en este dispositivo.",
-  it: "Il motore IA locale non è disponibile su questo dispositivo."
+  fr: "L'assistant local n'est pas disponible sur cet appareil.",
+  en: "The local assistant is not available on this device.",
+  ar: "المساعد المحلي غير متوفر على هذا الجهاز.",
+  es: "El asistente local no está disponible en este dispositivo.",
+  it: "L'assistente locale non è disponibile su questo dispositivo."
 };
 
 export class LocalAIProvider implements AIProvider {
@@ -43,12 +47,16 @@ export class LocalAIProvider implements AIProvider {
   private modelName: string;
   private version: string;
   private isMockEnabled: boolean;
+  private textEngineEnabled: boolean;
+  private statusOverride?: AssistantEngineStatus;
 
   constructor(config: LocalAIProviderConfig = {}) {
     this.engineInstalled = config.engineInstalled ?? false;
     this.modelName = config.modelName ?? 'BirdAcademy-Local-Tiny';
-    this.version = config.version ?? '0.1.0-foundation';
+    this.version = config.version ?? '1.9.0-assistant';
     this.isMockEnabled = config.isMockEnabled ?? false;
+    this.textEngineEnabled = config.textEngineEnabled ?? true;
+    this.statusOverride = config.statusOverride;
   }
 
   getProviderId(): string {
@@ -60,8 +68,18 @@ export class LocalAIProvider implements AIProvider {
   }
 
   getStatus(): AssistantEngineStatus {
-    if (!this.engineInstalled && !this.isMockEnabled) {
-      return 'UNAVAILABLE';
+    if (this.statusOverride) {
+      return this.statusOverride;
+    }
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('bird_academy_assistant_engine_status');
+        if (stored === 'UNAVAILABLE' || stored === 'AVAILABLE' || stored === 'ERROR') {
+          return stored as AssistantEngineStatus;
+        }
+      } catch {
+        // Ignore storage access issues
+      }
     }
     return 'AVAILABLE';
   }
@@ -70,12 +88,62 @@ export class LocalAIProvider implements AIProvider {
     this.engineInstalled = installed;
   }
 
+  setMockEnabled(enabled: boolean): void {
+    this.isMockEnabled = enabled;
+  }
+
+  setStatus(status: AssistantEngineStatus): void {
+    this.statusOverride = status;
+  }
+
+  setStatusOverride(status?: AssistantEngineStatus): void {
+    this.statusOverride = status;
+  }
+
+  setTextEngineEnabled(enabled: boolean): void {
+    this.textEngineEnabled = enabled;
+  }
+
   generateResponse(request: AssistantRequest, context: AssistantContext): AssistantResponse {
     const isRtl = context.language.isRtl;
     const lang = request.language || 'fr';
     const sources: KnowledgeSource[] = [...context.summary.loadedSources];
 
-    // Check for explicit unknown species query
+    // 1. Strict override or engine disabled check
+    const isUnavailable = this.statusOverride === 'UNAVAILABLE' || (
+      typeof localStorage !== 'undefined' && 
+      localStorage.getItem('bird_academy_assistant_engine_status') === 'UNAVAILABLE'
+    );
+    if (isUnavailable) {
+      return this.buildUnavailableResponse(request, context, isRtl, sources);
+    }
+
+    // 2. Text Assistance & Epistemic/Passport/Cross actions (Priority V1.9.0)
+    const classifiedCategory = QuestionClassifier.classify(request.query || '').category;
+    const isTextAction = [
+      'TEXT_SIMPLIFICATION',
+      'TEXT_SUMMARIZATION',
+      'TEXT_REPHRASING',
+      'TEXT_EXPLANATION',
+      'NOTE_STRUCTURING',
+      'EPISTEMIC_STATUS_EXPLANATION',
+      'CROSS_RESULT_EXPLANATION'
+    ].includes(classifiedCategory) ||
+    Boolean(request.action && request.action !== 'GENERAL_QUERY') ||
+    Boolean(request.locusContext) ||
+    Boolean(request.passportContext) ||
+    Boolean(request.crossResultContext) ||
+    Boolean(context.textContext) ||
+    /^(?:simplifi|résum|resum|reformul|expliqu|que signifie|structur)/i.test(request.query || '');
+
+    if (isTextAction) {
+      if (!this.textEngineEnabled) {
+        return this.buildUnavailableResponse(request, context, isRtl, sources);
+      }
+      return this.buildTextAssistanceResponse(request, context, isRtl, sources);
+    }
+
+    // 3. Check for explicit unknown species query
     const queryLower = (request.query || '').toLowerCase();
     if (
       request.speciesId?.startsWith('inconnu') || 
@@ -98,23 +166,89 @@ export class LocalAIProvider implements AIProvider {
       };
     }
 
-    // Deterministic Registry Resolution for Biological inquiries
+    // 4. Deterministic Registry Resolution for Biological inquiries
     if (context.biological) {
       return this.buildBiologicalDeterministicResponse(request, context, isRtl, sources);
     }
 
-    // Deterministic Resolution for User Bird / Farm inquiries
+    // 5. Deterministic Resolution for User Bird / Farm inquiries
     if (context.bird || context.intelligence || context.breeding || context.habitat || context.finance) {
       return this.buildUserDataDeterministicResponse(request, context, isRtl, sources);
     }
 
-    // If a local LLM runtime is installed or mock is enabled, process locally
+    // 6. If a local LLM runtime is installed or mock is enabled, process locally
     if (this.engineInstalled || this.isMockEnabled) {
       return this.buildStandardResponse(request, context, isRtl, sources);
     }
 
-    // When no local LLM runtime is installed and query cannot be resolved deterministically
+    // 7. When query cannot be resolved deterministically (e.g. general off-topic question without engine)
     return this.buildUnavailableResponse(request, context, isRtl, sources);
+  }
+
+  private buildTextAssistanceResponse(
+    request: AssistantRequest,
+    context: AssistantContext,
+    isRtl: boolean,
+    sources: KnowledgeSource[]
+  ): AssistantResponse {
+    const lang = request.language || 'fr';
+    let action = request.action || context.textContext?.action;
+    if (!action) {
+      const q = (request.query || '').toLowerCase().trim();
+      if (q.startsWith('simplifi')) action = 'SIMPLIFY';
+      else if (q.startsWith('résum') || q.startsWith('resum')) action = 'SUMMARIZE';
+      else if (q.startsWith('reformul')) action = 'REPHRASE';
+      else if (q.startsWith('expliqu')) action = 'EXPLAIN';
+      else if (q.startsWith('structur')) action = 'STRUCTURE_NOTE';
+      else if (q.includes('statut') || q.includes('status')) action = 'EXPLAIN_STATUS';
+    }
+    const targetText = request.targetText || context.textContext?.targetText || request.query;
+
+    let answer = '';
+    let responseType: AssistantResponseType = 'GENERAL_INFORMATION';
+
+    if (action === 'SIMPLIFY') {
+      answer = LocalTextAssistantEngine.simplify(targetText, lang);
+      sources.push('AI_GENERATED_EXPLANATION');
+    } else if (action === 'SUMMARIZE') {
+      answer = LocalTextAssistantEngine.summarize(targetText, lang);
+      sources.push('AI_GENERATED_EXPLANATION');
+    } else if (action === 'REPHRASE') {
+      answer = LocalTextAssistantEngine.rephrase(targetText, lang);
+      sources.push('AI_GENERATED_EXPLANATION');
+    } else if (action === 'STRUCTURE_NOTE') {
+      answer = LocalTextAssistantEngine.structureNote(targetText, lang);
+      sources.push('AI_GENERATED_EXPLANATION');
+      responseType = 'RECOMMENDATION';
+    } else if (action === 'EXPLAIN_STATUS' || request.locusContext) {
+      const locus = request.locusContext;
+      const status = locus?.epistemicStatus || request.query;
+      answer = LocalTextAssistantEngine.explainStatus(status, locus?.locusName || locus?.locusId, lang);
+      sources.push('CANONICAL_GENETICS_REGISTRY');
+    } else if (action === 'EXPLAIN_RESULT' || request.crossResultContext) {
+      answer = LocalTextAssistantEngine.explainCrossResult(request.crossResultContext || {}, lang);
+      sources.push('CALCULATED_DATA');
+    } else if (request.passportContext) {
+      answer = LocalTextAssistantEngine.explainPassport(request.passportContext, lang);
+      sources.push('BIRD_PASSPORT_CONTEXT');
+    } else {
+      // EXPLAIN
+      answer = LocalTextAssistantEngine.explain(targetText, lang, request.locusContext);
+      sources.push('AI_GENERATED_EXPLANATION');
+    }
+
+    return {
+      answer,
+      language: lang,
+      confidence: 'HIGH',
+      sources: Array.from(new Set(sources)),
+      contextUsed: context.summary,
+      warnings: [],
+      generatedAt: new Date().toISOString(),
+      responseType,
+      status: 'AVAILABLE',
+      isRtl
+    };
   }
 
   private buildBiologicalDeterministicResponse(
@@ -133,8 +267,6 @@ export class LocalAIProvider implements AIProvider {
     const isIncubationQuery = text.includes('incubation') || text.includes('couvaison') || text.includes('حضانة') || text.includes('cova');
     const isBandingQuery = text.includes('bague') || text.includes('baguage') || text.includes('ring') || text.includes('banding') || text.includes('تحجيل') || text.includes('anillado');
     const isWeightQuery = text.includes('poids') || text.includes('weight') || text.includes('وزن') || text.includes('peso');
-    const isClutchQuery = text.includes('ponte') || text.includes('œuf') || text.includes('oeuf') || text.includes('egg') || text.includes('clutch') || text.includes('بيض') || text.includes('puesta');
-    const isTempQuery = text.includes('température') || text.includes('temperature') || text.includes('حرارة') || text.includes('temperatura');
 
     if (isIncubationQuery) {
       const templates: Record<Language, string> = {
@@ -266,7 +398,7 @@ export class LocalAIProvider implements AIProvider {
     sources: KnowledgeSource[]
   ): AssistantResponse {
     const lang = request.language || 'fr';
-    let answer = `[${this.modelName} v${this.version}] Requête traitée localement en mode hors-ligne pour la langue ${lang}.`;
+    const answer = `[${this.modelName} v${this.version}] Requête traitée localement en mode hors-ligne pour la langue ${lang}.`;
     
     return {
       answer,

@@ -10,7 +10,9 @@ export type KnowledgeSource =
   | 'HEALTH_DATA'
   | 'USER_DATA'
   | 'CALCULATED_DATA'
-  | 'AI_GENERATED_EXPLANATION';
+  | 'AI_GENERATED_EXPLANATION'
+  | 'CANONICAL_GENETICS_REGISTRY'
+  | 'BIRD_PASSPORT_CONTEXT';
 
 export interface KnowledgeItem {
   id: string;

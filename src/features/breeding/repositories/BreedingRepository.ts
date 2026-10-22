@@ -5,6 +5,7 @@
 
 import { Couple, Reproduction, Ponte, Jeune } from '../../../types';
 import { appStorage } from '../../../storage';
+import { CanonicalDataBridgeAdapter } from '../../canonical/CanonicalDataBridgeAdapter';
 
 export class BreedingRepository {
   private static COUPLES_KEY = 'couples';
@@ -14,7 +15,21 @@ export class BreedingRepository {
 
   // --- COUPLES ---
   static getCouples(): Couple[] {
+    if (CanonicalDataBridgeAdapter.isBridgeEnabled()) {
+      return CanonicalDataBridgeAdapter.getCouples();
+    }
     return appStorage.getItem<Couple[]>(this.COUPLES_KEY, []);
+  }
+
+  static getAll(): Couple[] {
+    return this.getCouples();
+  }
+
+  static getCoupleById(id: number | string): Couple | undefined {
+    if (CanonicalDataBridgeAdapter.isBridgeEnabled()) {
+      return CanonicalDataBridgeAdapter.getCoupleById(id);
+    }
+    return this.getCouples().find(c => c.id === id || String(c.id) === String(id));
   }
 
   static saveCouples(couples: Couple[]): void {

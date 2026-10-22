@@ -20,6 +20,7 @@ export interface TranslationDict {
   ventes: string;
   statistiques: string;
   intelligence: string;
+  localAssistant: string;
   genetics: string;
   parametres: string;
   parametresTitle: string;
@@ -329,6 +330,7 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     ventes: "Ventes",
     statistiques: "Statistiques",
     intelligence: "Bird Intelligence",
+    localAssistant: "Assistant local",
     genetics: "Génétique",
     parametres: "Paramètres",
     parametresTitle: "Paramètres de l'Application",
@@ -357,11 +359,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     navigation: "Navigation principale",
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
-    demoSandbox: "Données de Démonstration",
-    demoGenerator: "Générateur de données de démonstration",
-    demoGeneratorShort: "Données de démonstration",
-    demoGeneratorDesc: "Simuler un élevage complet (oiseaux, couples, pontes, soins, finances) pour évaluer l'application.",
-    openDemoGenerator: "Ouvrir le Générateur Démo",
     notificationMarkAllRead: "Tout marquer comme lu",
     notificationArchiveAll: "Tout archiver",
     notificationNoUnread: "Aucune alerte non lue",
@@ -507,7 +504,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     importBackup: "Importer une sauvegarde (.json)",
     resetOpsTitle: "Opérations de Réinitialisation",
     resetOpsDesc: "Ces actions écrasent de façon permanente votre cheptel et vos transactions locales.",
-    loadDemoData: "Charger les données démo",
     clearDatabase: "Vider complètement la base",
     sysInfoTitle: "Informations système",
 
@@ -1003,6 +999,7 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     ventes: "Sales",
     statistiques: "Statistics",
     intelligence: "Bird Intelligence",
+    localAssistant: "Local assistant",
     genetics: "Genetics",
     parametres: "Settings",
     parametresTitle: "Application Settings",
@@ -1013,7 +1010,7 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     appDescription: "Canary breeding management software",
     languageSelect: "Application Language",
     resetData: "Reset Application Data",
-    resetWarning: "Warning, this will restore the original demo database!",
+    resetWarning: "Warning, this will reset your database to empty!",
     totalCanaris: "Total Birds",
     activeCouples: "Active Couples",
     totalCages: "Occupied Cages",
@@ -1031,11 +1028,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     navigation: "Main navigation",
     openMenu: "Open menu",
     closeMenu: "Close menu",
-    demoSandbox: "Demo Data Generator",
-    demoGenerator: "Demo Data Generator",
-    demoGeneratorShort: "Demo Data",
-    demoGeneratorDesc: "Simulate a complete breeding facility (birds, pairs, clutches, health, finances) to explore the application.",
-    openDemoGenerator: "Open Demo Generator",
     notificationMarkAllRead: "Mark all as read",
     notificationArchiveAll: "Archive all",
     notificationNoUnread: "No unread alerts",
@@ -1181,7 +1173,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     importBackup: "Import backup (.json)",
     resetOpsTitle: "Reset Operations",
     resetOpsDesc: "These actions permanently overwrite your stock and your local transactions.",
-    loadDemoData: "Load Demo Data",
     clearDatabase: "Empty Database Completely",
     sysInfoTitle: "System Information",
 
@@ -1677,6 +1668,7 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     ventes: "المبيعات",
     statistiques: "الإحصائيات",
     intelligence: "ذكاء الطيور",
+    localAssistant: "المساعد المحلي",
     genetics: "علم الوراثة",
     parametres: "الإعدادات",
     parametresTitle: "إعدادات التطبيق",
@@ -1705,11 +1697,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     navigation: "التنقل الرئيسي",
     openMenu: "فتح القائمة",
     closeMenu: "إغلاق القائمة",
-    demoSandbox: "بيانات العرض التجريبي",
-    demoGenerator: "مولد بيانات العرض التجريبي",
-    demoGeneratorShort: "بيانات العرض التجريبي",
-    demoGeneratorDesc: "محاكاة مزرعة طيور متكاملة (طيور، أزواج، أعشاش، صحة، مالية) لاختبار التطبيق.",
-    openDemoGenerator: "فتح مولد العرض التجريبي",
     notificationMarkAllRead: "تحديد الكل كمقروء",
     notificationArchiveAll: "أرشفة الكل",
     notificationNoUnread: "لا توجد تنبيهات غير مقروءة",
@@ -1855,7 +1842,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     importBackup: "استيراد نسخة احتياطية (json.)",
     resetOpsTitle: "عمليات إعادة الضبط",
     resetOpsDesc: "تؤدي هذه الإجراءات إلى الكتابة فوق مخزونك ومعاملاتك المحلية بشكل دائم.",
-    loadDemoData: "تحميل بيانات العرض",
     clearDatabase: "تفريغ قاعدة البيانات بالكامل",
     sysInfoTitle: "معلومات النظام",
 
@@ -2351,6 +2337,7 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     ventes: "Ventas",
     statistiques: "Estadísticas",
     intelligence: "Bird Intelligence",
+    localAssistant: "Asistente local",
     genetics: "Genética",
     parametres: "Ajustes",
     parametresTitle: "Ajustes de la Aplicación",
@@ -2379,11 +2366,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     navigation: "Navegación principal",
     openMenu: "Abrir el menú",
     closeMenu: "Cerrar el menú",
-    demoSandbox: "Datos de Demostración",
-    demoGenerator: "Generador de Datos de Demostración",
-    demoGeneratorShort: "Datos de Demostración",
-    demoGeneratorDesc: "Simular un criadero completo (aves, parejas, nidadas, salud, finanzas) para evaluar la aplicación.",
-    openDemoGenerator: "Abrir Generador de Demostración",
     notificationMarkAllRead: "Marcar todo como leído",
     notificationArchiveAll: "Archivar todo",
     notificationNoUnread: "No hay alertas sin leer",
@@ -2840,7 +2822,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     importBackup: "Importar copia de seguridad (.json)",
     resetOpsTitle: "Operaciones de restablecimiento",
     resetOpsDesc: "Estas acciones sobrescriben permanentemente su stock y sus transacciones locales.",
-    loadDemoData: "Cargar datos de demostración",
     clearDatabase: "Vaciar completamente la base de datos",
     sysInfoTitle: "Información del sistema",
     themeSelect: "Tema de la aplicación",
@@ -3019,6 +3000,7 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     ventes: "Vendite",
     statistiques: "Statistiche",
     intelligence: "Bird Intelligence",
+    localAssistant: "Assistente locale",
     genetics: "Genetica",
     parametres: "Impostazioni",
     parametresTitle: "Impostazioni dell'Applicazione",
@@ -3047,11 +3029,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     navigation: "Navigazione principale",
     openMenu: "Apri il menu",
     closeMenu: "Chiudi il menu",
-    demoSandbox: "Dati di Dimostrazione",
-    demoGenerator: "Generatore di Dati di Dimostrazione",
-    demoGeneratorShort: "Dati di Dimostrazione",
-    demoGeneratorDesc: "Simula un allevamento completo (volatili, coppie, covate, salute, finanze) per testare l'applicazione.",
-    openDemoGenerator: "Apri Generatore Demo",
     notificationMarkAllRead: "Segna tutti come letti",
     notificationArchiveAll: "Archivia tutto",
     notificationNoUnread: "Nessun avviso non letto",
@@ -3499,7 +3476,6 @@ export const TRANSLATIONS: Record<Language, TranslationDict> = {
     importBackup: "Importa backup (.json)",
     resetOpsTitle: "Operazioni di ripristino",
     resetOpsDesc: "Queste azioni sovrascrivono in modo permanente la tua scorta e le tue transazioni locali.",
-    loadDemoData: "Carica dati demo",
     clearDatabase: "Svuota completamente il database",
     sysInfoTitle: "Informazioni di sistema",
     themeSelect: "Tema dell'applicazione",
@@ -3666,6 +3642,14 @@ import { SPECIES_TRANSLATIONS } from './translationsSpecies';
 import { APP_EXTRAS_TRANSLATIONS } from './translationsAppExtras';
 import { NURSERY_TRANSLATIONS } from './translationsNursery';
 import { PDF_REPORTS_TRANSLATIONS } from './translationsPdfReports';
+import { MIGRATION_TRANSLATIONS } from '../features/genetics/migration/i18n/migrationTranslations';
+import { ADMIN_TRANSLATIONS } from '../features/administration/utils/adminTranslations';
+import { ANALYTICS_TRANSLATIONS } from '../features/analytics/utils/translations';
+import { PLATFORM_TRANSLATIONS } from '../features/platform/utils/translations';
+import { QUALITY_TRANSLATIONS } from '../features/quality/utils/translations';
+import { BIO_TRANSLATIONS } from '../features/reproduction/utils/bioTranslations';
+import { REPRODUCTION_TRANSLATIONS } from '../features/reproduction/utils/translations';
+import { V198_TRANSLATIONS } from './translationsV198';
 
 // Merge all sub-dictionaries into main TRANSLATIONS
 const ALL_SUB_DICTS = [
@@ -3680,6 +3664,14 @@ const ALL_SUB_DICTS = [
   APP_EXTRAS_TRANSLATIONS,
   NURSERY_TRANSLATIONS,
   PDF_REPORTS_TRANSLATIONS,
+  MIGRATION_TRANSLATIONS,
+  ADMIN_TRANSLATIONS,
+  ANALYTICS_TRANSLATIONS,
+  PLATFORM_TRANSLATIONS,
+  QUALITY_TRANSLATIONS,
+  BIO_TRANSLATIONS,
+  REPRODUCTION_TRANSLATIONS,
+  V198_TRANSLATIONS,
 ];
 
 ALL_SUB_DICTS.forEach((sub) => {

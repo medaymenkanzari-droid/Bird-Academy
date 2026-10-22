@@ -15,7 +15,6 @@ import { MonitoringTab } from './MonitoringTab';
 import { ReleaseTab } from './ReleaseTab';
 import { HelpDocTab } from './HelpDocTab';
 import { ImportExportPro } from './ImportExportPro';
-import { DemoModeTab } from './DemoModeTab';
 import { BrandingTab } from './BrandingTab';
 import { EnterpriseDataIntegrityTab } from './EnterpriseDataIntegrityTab';
 import { PrivateBetaReadinessTab } from './PrivateBetaReadinessTab';
@@ -45,7 +44,6 @@ export const QADashboard: React.FC = () => {
     | 'release'
     | 'help'
     | 'importexport'
-    | 'demo'
     | 'branding'
     | 'data_integrity'
     | 'beta_readiness'
@@ -82,7 +80,6 @@ export const QADashboard: React.FC = () => {
     { id: 'release', label: "Release Manager", icon: Settings, badge: null },
     { id: 'help', label: "Guides & FAQ Center", icon: HelpCircle, badge: null },
     { id: 'importexport', label: "Import/Export Pro", icon: FileSpreadsheet, badge: null },
-    { id: 'demo', label: "Mode Démo", icon: Database, badge: null },
     { id: 'branding', label: "Branding & Splash", icon: Sparkles, badge: null },
   ] as const;
 
@@ -157,7 +154,6 @@ export const QADashboard: React.FC = () => {
           {activeTab === 'release' && <ReleaseTab />}
           {activeTab === 'help' && <HelpDocTab />}
           {activeTab === 'importexport' && <ImportExportPro />}
-          {activeTab === 'demo' && <DemoModeTab />}
           {activeTab === 'branding' && <BrandingTab />}
         </div>
       </div>

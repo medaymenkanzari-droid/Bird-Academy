@@ -15,18 +15,20 @@ import { AssistantHeader } from './AssistantHeader';
 import { AssistantConversation } from './AssistantConversation';
 import { AssistantInput } from './AssistantInput';
 import { AssistantSuggestions } from './AssistantSuggestions';
+import { AssistantQuickActions } from './AssistantQuickActions';
 import { AssistantUpgradePrompt } from './AssistantUpgradePrompt';
+import { UpgradeModal } from '../../subscription/components/UpgradeModal';
 import { ChatMessageItem } from './AssistantMessage';
 import { AssistantService } from '../services/AssistantService';
 import { AssistantTier } from '../types/permissions';
 import { QuotaManager, QuotaUsageInfo } from '../services/QuotaManager';
-import { AssistantEngineStatus } from '../types/assistant';
+import { AssistantEngineStatus, AssistantActionType } from '../types/assistant';
 
 const HISTORY_STORAGE_KEY = 'bird_academy_assistant_history';
 
 export const AssistantView: React.FC = () => {
   const { language, t, isRtl } = useLanguage();
-  const { currentTier, setTierOverride } = useSubscription();
+  const { currentTier } = useSubscription();
   const assistantService = AssistantService.getInstance();
 
   const [engineStatus, setEngineStatus] = useState<AssistantEngineStatus>(() => assistantService.getStatus());
@@ -45,6 +47,8 @@ export const AssistantView: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState<boolean>(false);
   const [recommendedTier, setRecommendedTier] = useState<AssistantTier>('PRO');
+  const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState<boolean>(false);
+  const [inputQuery, setInputQuery] = useState<string>('');
 
   // Sync quota usage when tier or messages change
   const refreshQuota = useCallback(() => {
@@ -67,9 +71,6 @@ export const AssistantView: React.FC = () => {
     }
   }, [messages]);
 
-  const handleTierChange = (newTier: AssistantTier) => {
-    setTierOverride(newTier);
-  };
 
   const handleClearChat = () => {
     const confirmText = t('assistantClearConfirm') || 'Voulez-vous effacer l\'historique de cette conversation ?';
@@ -140,9 +141,9 @@ export const AssistantView: React.FC = () => {
     }
   };
 
-  const handleUpgrade = (targetTier: AssistantTier) => {
-    handleTierChange(targetTier);
+  const handleUpgrade = (_targetTier: AssistantTier) => {
     setShowUpgradePrompt(false);
+    setIsUpgradeModalOpen(true);
   };
 
   return (
@@ -154,7 +155,6 @@ export const AssistantView: React.FC = () => {
       {/* Header */}
       <AssistantHeader
         tier={currentTier}
-        onTierChange={handleTierChange}
         engineStatus={engineStatus}
         quotaUsage={quotaUsage}
         onClearChat={handleClearChat}
@@ -189,14 +189,42 @@ export const AssistantView: React.FC = () => {
         />
       )}
 
+      {/* Quick Actions Row */}
+      <div className="pt-2 shrink-0">
+        <AssistantQuickActions
+          tier={currentTier}
+          onSelectAction={(action, promptTemplate) => {
+            const prefix = promptTemplate || `Action ${action} : `;
+            const textToProcess = inputQuery.trim();
+            if (textToProcess) {
+              handleSendMessage(`${prefix}${textToProcess}`);
+              setInputQuery('');
+            } else {
+              setInputQuery(prefix);
+            }
+          }}
+          disabled={isLoading}
+        />
+      </div>
+
       {/* Input Form */}
       <div className="pt-2 shrink-0">
         <AssistantInput
+          value={inputQuery}
+          onChange={setInputQuery}
           onSendMessage={handleSendMessage}
           isLoading={isLoading}
           isQuotaExceeded={quotaUsage.isExceeded}
         />
       </div>
+
+      {/* Official Upgrade & License Modal */}
+      {isUpgradeModalOpen && (
+        <UpgradeModal
+          isOpen={isUpgradeModalOpen}
+          onClose={() => setIsUpgradeModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

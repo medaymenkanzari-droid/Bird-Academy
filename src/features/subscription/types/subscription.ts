@@ -70,16 +70,13 @@ export type SubscriptionCapability =
   | 'INTELLIGENCE_DIAGNOSTIC_FICHES'
   | 'INTELLIGENCE_FULL_ENGINE'
 
-  // 13. Assistant IA
+  // 13. Assistant local
   | 'AI_ASSISTANT_GENERAL_BIO'
   | 'AI_ASSISTANT_FARM_CONTEXT'
   | 'AI_ASSISTANT_INTELLIGENCE_GENEALOGY'
   | 'AI_ASSISTANT_QUOTA_10'
   | 'AI_ASSISTANT_QUOTA_100'
-  | 'AI_ASSISTANT_QUOTA_UNLIMITED'
-
-  // 14. Démonstration & Sandbox
-  | 'DEMO_GENERATOR_ACCESS';
+  | 'AI_ASSISTANT_QUOTA_UNLIMITED';
 
 export interface FeatureAccess {
   isAccessible: boolean;
@@ -100,7 +97,6 @@ export interface TierDefinition {
 
 export interface TierLimits {
   maxBirds: number;
-  demoGeneratorAvailable: boolean;
 }
 
 export type PlanLimits = Record<SubscriptionTier, TierLimits>;

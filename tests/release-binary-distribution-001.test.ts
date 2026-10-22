@@ -808,7 +808,7 @@ describe('MISSION RELEASE-BINARY-DISTRIBUTION-001 — Validation Distribution Bi
     });
 
     test('T06 — Isolation stricte entre builds de test et release publique', () => {
-      assert.strictEqual(BUILD_VERSION_NAME, '1.3.6-RC5');
+      assert.strictEqual(BUILD_VERSION_NAME, '1.3.6');
     });
   });
 

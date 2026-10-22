@@ -19,20 +19,20 @@ import path from 'node:path';
 
 const EXPECTED_RC6_SETUP = {
   filename: 'Bird-Academy-User-Windows-Setup.exe',
-  version: 'v1.3.6-RC6',
-  buildId: 'BA-V1.3.6-RC6',
-  sizeBytes: 112731374,
-  sha256: '746F6D99CF91802686D21A2F7632945730B96F2225B756AD2BF27B27B815754B',
-  releaseTag: 'v1.3.6-RC6',
+  version: 'v1.3.6-RC7',
+  buildId: 'BA-V1.3.6-RC7',
+  sizeBytes: 121547635,
+  sha256: '169CD534F7019EB0E8B698C92422848C58356E437FF65A5FF308A13524236F4D',
+  releaseTag: 'v1.3.6-RC7',
 };
 
 const EXPECTED_RC6_PORTABLE = {
   filename: 'Bird-Academy-User.exe',
-  version: 'v1.3.6-RC6',
-  buildId: 'BA-V1.3.6-RC6',
-  sizeBytes: 111233160,
-  sha256: 'EDDD283D2A212B7A0155B32FC8CA7B188E28C3ED0874C509DDE395DAAD37E1BE',
-  releaseTag: 'v1.3.6-RC6',
+  version: 'v1.3.6-RC7',
+  buildId: 'BA-V1.3.6-RC7',
+  sizeBytes: 121209111,
+  sha256: '9E402204E517E85DE2E9FA39174274021E7707CAD458BBFCA3CBFF66AB9CBF41',
+  releaseTag: 'v1.3.6-RC7',
 };
 
 test.describe('MISSION WINDOWS-FREE-FIX-002 — E2E Download Center RC6 Alignment', () => {
@@ -110,8 +110,8 @@ test.describe('MISSION WINDOWS-FREE-FIX-002 — E2E Download Center RC6 Alignmen
     });
 
     if (urls) {
-      expect(urls.setupUrl).toContain('releases/download/v1.3.6-RC6/Bird-Academy-User-Windows-Setup.exe');
-      expect(urls.portableUrl).toContain('releases/download/v1.3.6-RC6/Bird-Academy-User.exe');
+      expect(urls.setupUrl).toContain('releases/download/v1.3.6-RC7/Bird-Academy-User-Windows-Setup.exe');
+      expect(urls.portableUrl).toContain('releases/download/v1.3.6-RC7/Bird-Academy-User.exe');
       expect(urls.setupUrl).not.toContain('releases/download/v1.3.6/Bird-Academy-User-Windows-Setup.exe');
       expect(urls.portableUrl).not.toContain('releases/download/v1.3.6/Bird-Academy-User.exe');
     }

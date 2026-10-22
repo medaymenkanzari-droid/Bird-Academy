@@ -8,6 +8,7 @@ import { appStorage } from '../../../storage';
 import { BirdModel } from '../../../models/Bird';
 import { HabitatRepository } from '../../habitat/repositories/HabitatRepository';
 import { CapabilityResolver } from '../../subscription/services/CapabilityResolver';
+import { CanonicalDataBridgeAdapter } from '../../canonical/CanonicalDataBridgeAdapter';
 
 export interface BirdFilterCriteria {
   nom?: string;
@@ -30,6 +31,9 @@ export class BirdRepository {
   private static KEY = 'canaris';
 
   static getAll(includeArchived = false): Canari[] {
+    if (CanonicalDataBridgeAdapter.isBridgeEnabled()) {
+      return CanonicalDataBridgeAdapter.getBirds(includeArchived);
+    }
     const list = appStorage.getItem<Canari[]>(this.KEY, []);
     if (!Array.isArray(list)) {
       return [];
@@ -44,9 +48,12 @@ export class BirdRepository {
     appStorage.setItem(this.KEY, birds);
   }
 
-  static getById(id: number): Canari | undefined {
+  static getById(id: number | string): Canari | undefined {
+    if (CanonicalDataBridgeAdapter.isBridgeEnabled()) {
+      return CanonicalDataBridgeAdapter.getBirdById(id);
+    }
     const list = appStorage.getItem<Canari[]>(this.KEY, []);
-    return list.find(b => b.id === id);
+    return list.find(b => b.id === id || String(b.id) === String(id));
   }
 
   static create(bird: Omit<Canari, 'id'>): Canari {
@@ -77,10 +84,25 @@ export class BirdRepository {
     const birds = appStorage.getItem<Canari[]>(this.KEY, []);
     const index = birds.findIndex(b => b.id === updatedBird.id);
     if (index !== -1) {
+      const existing = birds[index];
+
+      // Merge passport field: keep existing if not provided, shallow merge if both exist
+      const mergedPassport = (() => {
+        if (updatedBird.passport === undefined) {
+          return existing.passport;
+        }
+        if (existing.passport) {
+          return { ...existing.passport, ...updatedBird.passport } as any;
+        }
+        return updatedBird.passport;
+      })();
+
       birds[index] = {
+        ...existing,
         ...updatedBird,
-        photos: updatedBird.photos || (updatedBird.photo ? [updatedBird.photo] : []),
-        documents: updatedBird.documents || []
+        photos: updatedBird.photos || (updatedBird.photo ? [updatedBird.photo] : existing.photos),
+        documents: updatedBird.documents || existing.documents || [],
+        ...(mergedPassport !== undefined ? { passport: mergedPassport } : {})
       };
       this.saveAll(birds);
       return true;

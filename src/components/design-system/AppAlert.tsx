@@ -13,6 +13,7 @@ export interface AppAlertProps {
   title?: string;
   className?: string;
   onClose?: () => void;
+  'data-testid'?: string;
 }
 
 export function AppAlert({
@@ -21,6 +22,7 @@ export function AppAlert({
   title,
   className = '',
   onClose,
+  'data-testid': testId,
 }: AppAlertProps) {
   const radiusClass = BORDER_RADIUS.lg;
 
@@ -54,6 +56,7 @@ export function AppAlert({
         ${className}
       `}
       role="alert"
+      data-testid={testId}
     >
       {icon}
 

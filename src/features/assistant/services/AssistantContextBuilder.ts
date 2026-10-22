@@ -149,6 +149,48 @@ export class AssistantContextBuilder {
       }
     }
 
+    // 4. Text Assistance & Epistemic/Passport Context
+    let textContext = undefined;
+    const isTextAction = [
+      'TEXT_SIMPLIFICATION',
+      'TEXT_SUMMARIZATION',
+      'TEXT_REPHRASING',
+      'TEXT_EXPLANATION',
+      'NOTE_STRUCTURING'
+    ].includes(classResult.category) || Boolean(request.action && request.action !== 'GENERAL_QUERY');
+
+    if (isTextAction || request.targetText) {
+      let resolvedAction = request.action;
+      if (!resolvedAction) {
+        if (classResult.category === 'TEXT_SIMPLIFICATION') resolvedAction = 'SIMPLIFY';
+        else if (classResult.category === 'TEXT_SUMMARIZATION') resolvedAction = 'SUMMARIZE';
+        else if (classResult.category === 'TEXT_REPHRASING') resolvedAction = 'REPHRASE';
+        else if (classResult.category === 'NOTE_STRUCTURING') resolvedAction = 'STRUCTURE_NOTE';
+        else resolvedAction = 'EXPLAIN';
+      }
+      textContext = {
+        targetText: request.targetText || query,
+        action: resolvedAction
+      };
+      loadedSources.push('AI_GENERATED_EXPLANATION');
+    }
+
+    const locusContext = request.locusContext;
+    if (locusContext) {
+      loadedSources.push('CANONICAL_GENETICS_REGISTRY');
+      loadedEntityIds.locusId = locusContext.locusId;
+    }
+
+    const passportContext = request.passportContext;
+    if (passportContext) {
+      loadedSources.push('BIRD_PASSPORT_CONTEXT');
+    }
+
+    const crossResultContext = request.crossResultContext;
+    if (crossResultContext) {
+      loadedSources.push('CALCULATED_DATA');
+    }
+
     const summary: AssistantContextSummary = {
       hasBiologicalContext: Boolean(biologicalContext),
       hasBirdContext: Boolean(birdContext),
@@ -159,6 +201,10 @@ export class AssistantContextBuilder {
       hasGenealogyContext: Boolean(genealogyContext),
       hasFinanceContext: Boolean(financeContext),
       hasIntelligenceContext: Boolean(intelligenceContext),
+      hasTextContext: Boolean(textContext),
+      hasLocusContext: Boolean(locusContext),
+      hasPassportContext: Boolean(passportContext),
+      hasCrossResultContext: Boolean(crossResultContext),
       loadedSources: Array.from(new Set(loadedSources)),
       loadedEntityIds
     };
@@ -176,6 +222,10 @@ export class AssistantContextBuilder {
       genealogy: genealogyContext,
       finance: financeContext,
       intelligence: intelligenceContext,
+      textContext,
+      locusContext,
+      passportContext,
+      crossResultContext,
       summary
     };
   }

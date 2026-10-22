@@ -56,4 +56,47 @@ export class IntelligenceContextProvider {
     const scoreboard = IntelligenceService.getGeneralScoreboard();
     return scoreboard.alerts;
   }
+
+  /**
+   * MISSION V1.9.2: Retrieves structured decision support for crosses.
+   */
+  static getDecisionSupportForCross(crossResult: any, language: Language = 'fr') {
+    return IntelligenceService.getDecisionSupportForCross(crossResult, language);
+  }
+
+  /**
+   * MISSION V1.9.2: Retrieves structured decision support for a canonical locus.
+   */
+  static getDecisionSupportForLocus(locus: any, birdContext?: any, language: Language = 'fr') {
+    return IntelligenceService.getDecisionSupportForLocus(locus, birdContext, language);
+  }
+
+  /**
+   * MISSION V1.9.2: Retrieves structured decision support for a pair.
+   */
+  static getDecisionSupportForPair(maleId: number, femaleId: number, language: Language = 'fr') {
+    return IntelligenceService.getDecisionSupportForPair(maleId, femaleId, language);
+  }
+
+  /**
+   * MISSION V1.9.2: Retrieves structured decision support for a bird.
+   */
+  static getDecisionSupportForBird(birdId: number, language: Language = 'fr') {
+    return IntelligenceService.getDecisionSupportForBird(birdId, language);
+  }
+
+  /**
+   * MISSION V1.9.2: Retrieves structured decision support for the entire flock.
+   */
+  static getFlockDecisionSupport(language: Language = 'fr') {
+    return IntelligenceService.getFlockDecisionSupport(language);
+  }
+
+  /**
+   * MISSION V1.9.2: Retrieves missing data list.
+   */
+  static getMissingData(language: Language = 'fr') {
+    return IntelligenceService.getMissingData(language);
+  }
 }
+

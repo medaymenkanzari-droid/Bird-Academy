@@ -29,8 +29,138 @@ export class QuestionClassifier {
     }
 
     const text = query.trim().toLowerCase();
+    const detectedSpeciesId = this.detectSpecies(text);
 
-    // 1. Detect personal / user-specific cues (safe against accented letters like symptômes)
+    // 1. Detect text assistance and epistemic status actions (Priority V1.9.0)
+    // 1.1 Simplification
+    const simplifyCues = [
+      'simplifier', 'simplifie', 'rendre plus simple', 'raccourcir',
+      'simplify', 'make simpler', 'shorten',
+      'بسط', 'تبسيط', 'اختصر',
+      'simplificar', 'simplifica', 'acortar',
+      'semplificare', 'semplifica', 'accorciare'
+    ];
+    if (simplifyCues.some(c => text.includes(c))) {
+      return {
+        category: 'TEXT_SIMPLIFICATION',
+        confidence: 0.98,
+        detectedSpeciesId,
+        isUserSpecific: false,
+        requiresIntelligence: false
+      };
+    }
+
+    // 1.2 Résumé / Summarize
+    const summarizeCues = [
+      'résumer', 'résume', 'synthetiser', 'synthétiser',
+      'summarize', 'summary',
+      'لخص', 'تلخيص', 'موجز',
+      'resumir', 'resumen',
+      'riassumere', 'riassunto', 'riassumi'
+    ];
+    if (summarizeCues.some(c => text.includes(c))) {
+      return {
+        category: 'TEXT_SUMMARIZATION',
+        confidence: 0.98,
+        detectedSpeciesId,
+        isUserSpecific: false,
+        requiresIntelligence: false
+      };
+    }
+
+    // 1.3 Reformulation / Rephrase
+    const rephraseCues = [
+      'reformuler', 'reformule', 'réécrire', 'reecrire',
+      'rephrase', 'paraphrase', 'rewrite',
+      'أعد صياغة', 'إعادة صياغة',
+      'reformular', 'reescribir',
+      'riformulare', 'riformula'
+    ];
+    if (rephraseCues.some(c => text.includes(c))) {
+      return {
+        category: 'TEXT_REPHRASING',
+        confidence: 0.98,
+        detectedSpeciesId,
+        isUserSpecific: false,
+        requiresIntelligence: false
+      };
+    }
+
+    // 1.4 Structuration de note / Assistance à la saisie
+    const noteCues = [
+      'structurer', 'structure note', 'aider à remplir', 'formater note',
+      'transformer en note', 'format note', 'observation :',
+      'تنظيم الملاحظة', 'صياغة الملاحظة', 'ملاحظة :',
+      'estructurar nota', 'struttura nota'
+    ];
+    if (noteCues.some(c => text.includes(c))) {
+      return {
+        category: 'NOTE_STRUCTURING',
+        confidence: 0.98,
+        detectedSpeciesId,
+        isUserSpecific: false,
+        requiresIntelligence: false
+      };
+    }
+
+    // 1.5 Explication de statut épistémique
+    const statusCues = [
+      'statut unknown', 'statut not_tested', 'statut provisional',
+      'statut blocked', 'statut possible_set', 'statut confirmed',
+      'que signifie ce statut', 'que signifie le statut',
+      'what does this status mean', 'status unknown', 'status provisional',
+      'status blocked', 'status not_tested', 'epistemic status',
+      'ماذا تعني هذه الحالة', 'حالة unknown', 'حالة provisional', 'حالة blocked',
+      'qué significa este estado', 'cosa significa questo stato'
+    ];
+    if (statusCues.some(c => text.includes(c))) {
+      return {
+        category: 'EPISTEMIC_STATUS_EXPLANATION',
+        confidence: 0.98,
+        detectedSpeciesId,
+        isUserSpecific: false,
+        requiresIntelligence: false
+      };
+    }
+
+    // 1.6 Explication de résultat de croisement
+    const crossResultCues = [
+      'résultat de croisement', 'resultat de croisement', 'expliquer le croisement',
+      'cross result', 'expliquer le résultat', 'explication croisement',
+      'نتيجة التزاوج', 'resultado del cruce', 'risultato dell\'incrocio'
+    ];
+    if (crossResultCues.some(c => text.includes(c))) {
+      return {
+        category: 'CROSS_RESULT_EXPLANATION',
+        confidence: 0.95,
+        detectedSpeciesId,
+        isUserSpecific: false,
+        requiresIntelligence: false
+      };
+    }
+
+    // 1.7 Explication générale (uniquement si non couvert par un domaine biologique spécifique)
+    const explainCues = [
+      'expliquer', 'explique', 'explain', 'c\'est quoi', 'qu\'est-ce que',
+      'explicar', 'spiega', 'اشرح'
+    ];
+    const isDomainQuery = [
+      'incubation', 'couvaison', 'حضانة', 'bague', 'baguage', 'poids',
+      'maladie', 'généalogie', 'cage', 'alimentation', 'canari', 'chardonneret',
+      'intelligence', 'alerte', 'score', 'rapport'
+    ].some(d => text.includes(d));
+
+    if (!isDomainQuery && explainCues.some(c => text.startsWith(c) || text.includes(` ${c} `))) {
+      return {
+        category: 'TEXT_EXPLANATION',
+        confidence: 0.90,
+        detectedSpeciesId,
+        isUserSpecific: false,
+        requiresIntelligence: false
+      };
+    }
+
+    // 2. Detect personal / user-specific cues (safe against accented letters like symptômes)
     const userPatterns = [
       /(?:^|[^a-zA-Z\u00C0-\u017F0-9])(mon|ma|mes|my|mi|mis|mio|mia|miei)\s+/i,
       /(?:^|[^a-zA-Z\u00C0-\u017F0-9])(mon oiseau|mon élevage|mon elevage|mes oiseaux|mon couple|mon mâle|mon male|ma femelle|mon nid|mon œuf|mon oeuf|mes pontes)(?:$|[^a-zA-Z\u00C0-\u017F0-9])/i,
@@ -43,10 +173,9 @@ export class QuestionClassifier {
     ];
     const isUserSpecific = userPatterns.some(pattern => pattern.test(text));
 
-    // 2. Detect species references
-    const detectedSpeciesId = this.detectSpecies(text);
 
-    // 3. Detect Intelligence & Explanation cues
+
+    // 4. Detect Intelligence & Explanation cues
     const intelligenceCues = [
       'bird intelligence', 'intelligence', 'pourquoi cette alerte', 'alerte', 'score',
       'pourquoi ce risque', 'explication alerte', 'recommandation', 'qualité des données',

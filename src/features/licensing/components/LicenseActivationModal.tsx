@@ -17,7 +17,7 @@ import {
   AppTabs,
   AppLoader
 } from '../../../components/design-system';
-import { Key, ShieldCheck, Cpu, CheckCircle2, AlertCircle, Copy, Check, QrCode } from 'lucide-react';
+import { Key, ShieldCheck, Cpu, CheckCircle2, AlertCircle, Copy, Check, QrCode, Upload } from 'lucide-react';
 import { QrCodeScannerModal } from './QrCodeScannerModal';
 
 export interface LicenseActivationModalProps {
@@ -29,7 +29,7 @@ export const LicenseActivationModal: React.FC<LicenseActivationModalProps> = ({ 
   const { t, isRtl } = useLanguage();
   const { activeLicense, refresh, activateKey } = useLicensing();
   
-  const [activeTab, setActiveTab] = useState<'online' | 'offline' | 'qr' | 'info'>('online');
+  const [activeTab, setActiveTab] = useState<'online' | 'file' | 'offline' | 'qr' | 'info'>('online');
   const [licenseKey, setLicenseKey] = useState('');
   const [holderName, setHolderName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -138,6 +138,58 @@ export const LicenseActivationModal: React.FC<LicenseActivationModalProps> = ({ 
     }
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setLoading(true);
+    setAlert(null);
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async (evt) => {
+        try {
+          const content = evt.target?.result as string;
+          const service = LicensingService.getInstance();
+          const res = await service.importOfflineBetaLicense(content);
+
+          if (res.isValid) {
+            setAlert({
+              type: 'success',
+              title: t('success') || 'Succès',
+              message: res.message || t('licenseLoadedSuccess') || 'Licence chargée et activée avec succès !',
+            });
+            await refresh();
+          } else {
+            setAlert({
+              type: 'danger',
+              title: t('error') || 'Erreur',
+              message: res.message || t('licenseLoadFailed') || 'Échec du chargement de la licence.',
+            });
+          }
+        } catch (err: any) {
+          setAlert({
+            type: 'danger',
+            title: t('error') || 'Erreur',
+            message: err?.message || t('licenseLoadFailed') || 'Erreur de lecture du fichier.',
+          });
+        } finally {
+          setLoading(false);
+          e.target.value = '';
+        }
+      };
+      reader.readAsText(file);
+    } catch (err: any) {
+      setAlert({
+        type: 'danger',
+        title: t('error') || 'Erreur',
+        message: err?.message || t('licenseLoadFailed') || 'Erreur inattendue.',
+      });
+      setLoading(false);
+      e.target.value = '';
+    }
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedChallenge(true);
@@ -146,6 +198,7 @@ export const LicenseActivationModal: React.FC<LicenseActivationModalProps> = ({ 
 
   const tabs = [
     { id: 'online', label: t('activateLicense'), icon: Key },
+    { id: 'file', label: t('importLmseFile') || 'Fichier .lmse', icon: Upload },
     { id: 'qr', label: 'Scanner QR', icon: QrCode },
     { id: 'offline', label: t('offlineActivationTitle'), icon: Cpu },
     { id: 'info', label: t('licensingStatusTitle'), icon: ShieldCheck },
@@ -231,6 +284,38 @@ export const LicenseActivationModal: React.FC<LicenseActivationModalProps> = ({ 
               </div>
             </AppCard>
           </form>
+        )}
+
+        {/* FILE IMPORT TAB */}
+        {activeTab === 'file' && (
+          <div className="space-y-4">
+            <AppCard className="space-y-4 p-5 text-center">
+              <h3 className="font-bold text-slate-900 dark:text-white flex items-center justify-center gap-2">
+                <Upload className="w-5 h-5 text-indigo-500" />
+                {t('loadExistingLicense') || 'Charger une licence existante (.lmse)'}
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                {t('loadExistingLicenseDesc') || 'Sélectionnez le fichier cryptographique .lmse généré sur votre PC pour activer votre licence sur cet appareil.'}
+              </p>
+
+              <label className="border-2 border-dashed border-indigo-500/40 hover:border-indigo-400 bg-indigo-950/20 hover:bg-indigo-900/30 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all">
+                <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                  <Upload className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="font-bold text-white block text-sm">{t('importLmseFile') || 'Sélectionner un fichier .lmse'}</span>
+                  <span className="text-xs text-slate-400 block mt-1">BirdAcademy-License-[ID].lmse</span>
+                </div>
+                <input
+                  type="file"
+                  accept="*/*,.lmse,.json,application/json,text/plain"
+                  onChange={handleFileUpload}
+                  disabled={loading}
+                  className="hidden"
+                />
+              </label>
+            </AppCard>
+          </div>
         )}
 
         {/* OFFLINE ACTIVATION TAB */}

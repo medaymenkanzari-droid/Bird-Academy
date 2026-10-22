@@ -1,26 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:pathData="M34,74C39,60 69,44 74,30"
-        android:strokeWidth="2.5"
-        android:strokeColor="#4F46E5"
-        android:strokeLineCap="round"/>
-    <path
-        android:pathData="M74,74C69,60 39,44 34,30"
-        android:strokeWidth="2.5"
-        android:strokeColor="#8A96A8"
-        android:strokeLineCap="round"/>
-    <path
-        android:pathData="M41.5,61h25M41.5,43h25"
-        android:strokeWidth="1.5"
-        android:strokeColor="#80FFFFFF"/>
-    <path
-        android:pathData="M74,30 L78.5,25 L91,30 L78.5,35 Z"
-        android:fillColor="#4F46E5"/>
-    <path
-        android:pathData="M34,30 L27,20 L38,25 Z"
-        android:fillColor="#8A96A8"/>
+    <group
+        android:scaleX="0.68"
+        android:scaleY="0.68"
+        android:translateX="17.28"
+        android:translateY="17.28">
+        <!-- 1. Outer rounded boundary -->
+        <path
+            android:pathData="M26,10 H74 A16,16 0 0 1 90,26 V74 A16,16 0 0 1 74,90 H26 A16,16 0 0 1 10,74 V26 A16,16 0 0 1 26,10 Z"
+            android:strokeColor="#668A96A8"
+            android:strokeWidth="1.5" />
+
+        <!-- 2. Aviary Grid Lines -->
+        <path
+            android:pathData="M10,20 H90 M10,40 H90 M10,60 H90 M10,80 H90 M20,10 V90 M40,10 V90 M60,10 V90 M80,10 V90"
+            android:strokeColor="#258A96A8"
+            android:strokeWidth="0.8" />
+
+        <!-- 3. Base pairs (Database rungs) -->
+        <path
+            android:pathData="M37.5,59 H62.5 M42,50 H58 M37.5,41 H62.5"
+            android:strokeColor="#40FFFFFF"
+            android:strokeWidth="2.0" />
+
+        <!-- 4. DNA Helix Strand A (Indigo) -->
+        <path
+            android:pathData="M30,72 C35,58 65,42 70,28"
+            android:strokeColor="#4F46E5"
+            android:strokeWidth="3.2"
+            android:strokeLineCap="round" />
+
+        <!-- 5. DNA Helix Strand B (Steel) -->
+        <path
+            android:pathData="M70,72 C65,58 35,42 30,28"
+            android:strokeColor="#8A96A8"
+            android:strokeWidth="3.2"
+            android:strokeLineCap="round" />
+
+        <!-- 6. DNA Nodes -->
+        <path
+            android:pathData="M30,67.5 A4.5,4.5 0 1 1 29.9,67.5 Z"
+            android:fillColor="#4F46E5" />
+        <path
+            android:pathData="M70,67.5 A4.5,4.5 0 1 1 69.9,67.5 Z"
+            android:fillColor="#8A96A8" />
+        <path
+            android:pathData="M37.5,55.5 A3.5,3.5 0 1 1 37.4,55.5 Z"
+            android:fillColor="#8A96A8" />
+        <path
+            android:pathData="M62.5,55.5 A3.5,3.5 0 1 1 62.4,55.5 Z"
+            android:fillColor="#4F46E5" />
+        <path
+            android:pathData="M37.5,37.5 A3.5,3.5 0 1 1 37.4,37.5 Z"
+            android:fillColor="#4F46E5" />
+        <path
+            android:pathData="M62.5,37.5 A3.5,3.5 0 1 1 62.4,37.5 Z"
+            android:fillColor="#8A96A8" />
+
+        <!-- 7. Bird Head (Top Right) -->
+        <path
+            android:pathData="M70,20.5 A7.5,7.5 0 1 1 69.9,20.5 Z"
+            android:fillColor="#4F46E5" />
+        <path
+            android:pathData="M74.5,23 L87,28 L74.5,33 Z"
+            android:fillColor="#4F46E5" />
+        <path
+            android:pathData="M71.5,25.5 A1.5,1.5 0 1 1 71.4,25.5 Z"
+            android:fillColor="#FFFFFF" />
+
+        <!-- 8. Wing Tip (Top Left) -->
+        <path
+            android:pathData="M30,28 L23,18 L34,23 Z"
+            android:fillColor="#8A96A8" />
+        <path
+            android:pathData="M30,23.5 A4.5,4.5 0 1 1 29.9,23.5 Z"
+            android:fillColor="#8A96A8" />
+    </group>
 </vector>

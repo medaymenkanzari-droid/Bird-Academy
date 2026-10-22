@@ -8,7 +8,7 @@ import assert from 'node:assert/strict';
 
 import { SpeciesProfileService } from '../src/features/species/services/SpeciesProfileService';
 import { SpeciesProfileRepository } from '../src/features/species/repositories/SpeciesProfileRepository';
-import { DemoDataGenerator } from '../src/features/quality/utils/demoGenerator';
+import { DemoDataGenerator } from '../src/qa/demo/DemoGenerator';
 import { SPECIES_REGISTRY, getSpeciesById, getBreedsBySpeciesId } from '../src/data/speciesRegistry';
 import { BIOLOGICAL_SPECIES_REGISTRY, getBiologicalProfileById } from '../src/reference/species/index';
 import { AnalyticsEngine } from '../src/features/analytics/engines/AnalyticsEngine';

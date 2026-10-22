@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { BirdPassport } from './features/birds/models/passport';
 export interface Canari {
   id: number;
   bague: string; // Unique, required
@@ -47,6 +48,7 @@ export interface Canari {
   compartmentId?: string;
   quarantineId?: string;
   isDemo?: boolean;
+  passport?: BirdPassport;
 }
 
 export interface Cage {

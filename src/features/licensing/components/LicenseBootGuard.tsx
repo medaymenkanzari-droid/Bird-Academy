@@ -76,8 +76,14 @@ export const LicenseBootGuard: React.FC<LicenseBootGuardProps> = ({ children }) 
   const isExplicitAppView = isNative || (typeof window !== 'undefined' && (
     window.location.search.includes('view=app') ||
     window.location.search.includes('mode=app') ||
+    window.location.search.includes('view=audit') ||
     window.location.hash === '#app'
   ));
+
+  // If view=audit is requested, mount the isolated expert audit station directly
+  if (typeof window !== 'undefined' && window.location.search.includes('view=audit')) {
+    return <>{children}</>;
+  }
 
   // If not explicitly viewing the application and not in a native app, default to Commercial Website
   if (!isExplicitAppView) {

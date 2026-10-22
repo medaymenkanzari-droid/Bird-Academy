@@ -13,6 +13,8 @@ import { BirdHeroPassportCard } from './BirdHeroPassportCard';
 import { BirdBiologicalKpiRow } from './BirdBiologicalKpiRow';
 import { BirdTabsNavigation } from './BirdTabsNavigation';
 import { BirdQrCodeModal } from './BirdQrCodeModal';
+import { BirdPassportProgressiveSummaryCard } from './BirdPassportProgressiveSummaryCard';
+import { ProgressiveBirdPassportForm } from './ProgressiveBirdPassportForm';
 import { useLanguage } from '../../../context/LanguageContext';
 
 export interface BirdPassportViewProps {
@@ -50,6 +52,7 @@ export const BirdPassportView: React.FC<BirdPassportViewProps> = ({
   const [currentBird, setCurrentBird] = useState<Canari | null>(bird);
   const [activeTab, setActiveTab] = useState<string>('profil_biologique');
   const [isQrCodeOpen, setIsQrCodeOpen] = useState<boolean>(false);
+  const [isProgressiveEditing, setIsProgressiveEditing] = useState<boolean>(false);
 
   // Sync internal state when bird prop updates
   useEffect(() => {
@@ -89,6 +92,29 @@ export const BirdPassportView: React.FC<BirdPassportViewProps> = ({
     setCurrentBird(updated);
   };
 
+  const handleSaveProgressiveEdit = (updated: Canari) => {
+    BirdService.editBird(updated);
+    setCurrentBird(updated);
+    setIsProgressiveEditing(false);
+    if (onEditBird) onEditBird(updated);
+  };
+
+  // Si l'édition progressive est ouverte directement dans le passeport
+  if (isProgressiveEditing) {
+    return (
+      <div className="p-2 sm:p-4">
+        <ProgressiveBirdPassportForm
+          initialBird={currentBird}
+          allBirds={allBirdsList}
+          cages={cagesList}
+          isModal={isModal}
+          onSave={handleSaveProgressiveEdit}
+          onCancel={() => setIsProgressiveEditing(false)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div 
       key={`passport-${currentBird.id}-${currentBird.bague}`}
@@ -101,7 +127,14 @@ export const BirdPassportView: React.FC<BirdPassportViewProps> = ({
         bird={currentBird}
         cageName={locationSummary.nom}
         locationSummary={locationSummary}
-        onEdit={onEditBird}
+        onPhotoChange={handleBirdUpdated}
+        onEdit={(b) => {
+          if (onEditBird) {
+            onEditBird(b);
+          } else {
+            setIsProgressiveEditing(true);
+          }
+        }}
         onPair={onPairBird}
         onOpenQrCode={() => setIsQrCodeOpen(true)}
         onDuplicate={onDuplicateBird}
@@ -112,7 +145,13 @@ export const BirdPassportView: React.FC<BirdPassportViewProps> = ({
         isModal={isModal}
       />
 
-      {/* 2. Biological KPI Metrics Row */}
+      {/* 2. Synthèse Progressive V1.9.3 */}
+      <BirdPassportProgressiveSummaryCard
+        bird={currentBird}
+        onEditPassport={() => setIsProgressiveEditing(true)}
+      />
+
+      {/* 3. Biological KPI Metrics Row */}
       <BirdBiologicalKpiRow
         bird={currentBird}
         allBirds={allBirdsList}
@@ -120,7 +159,7 @@ export const BirdPassportView: React.FC<BirdPassportViewProps> = ({
         onTabSelect={(tabId) => setActiveTab(tabId)}
       />
 
-      {/* 3. Tabbed Navigation Section */}
+      {/* 4. Tabbed Navigation Section */}
       <BirdTabsNavigation
         bird={currentBird}
         allBirds={allBirdsList}
@@ -131,7 +170,7 @@ export const BirdPassportView: React.FC<BirdPassportViewProps> = ({
         onUpdateBird={handleBirdUpdated}
       />
 
-      {/* 4. Smart QR Code Modal */}
+      {/* 5. Smart QR Code Modal */}
       {isQrCodeOpen && (
         <BirdQrCodeModal
           isOpen={isQrCodeOpen}
@@ -143,5 +182,6 @@ export const BirdPassportView: React.FC<BirdPassportViewProps> = ({
     </div>
   );
 };
+
 
 export default BirdPassportView;

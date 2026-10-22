@@ -10,5 +10,7 @@ export * from './AssistantInput';
 export * from './AssistantSuggestions';
 export * from './AssistantUpgradePrompt';
 export * from './AssistantUnavailableState';
+export * from './AssistantQuickActions';
+export * from './AssistantPassportDrawer';
 export * from './AssistantView';
 export { default } from './AssistantView';

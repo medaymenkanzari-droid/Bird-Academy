@@ -21,11 +21,13 @@ async function createValidTestLicense(
   holderName: string = 'Éleveur Test Playwright Pro'
 ): Promise<License> {
   const id = `lic_e2e_ai_${type}_${Date.now()}`;
-  const key = `LMSE-ENTP-9999-8888-7777`;
+  const key = type === 'enterprise' ? `LMSE-ENTP-9999-8888-7777` : `LMSE-COMM-9999-8888-7777`;
   const issuedAt = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString();
   const expiresAt = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString();
   const maxDevices = 10;
-  const features = ['core', 'unlimited_birds', 'pedigree', 'statistics', 'pro', 'intelligence'];
+  const features = type === 'enterprise'
+    ? ['core', 'unlimited_birds', 'pedigree', 'statistics', 'pro', 'intelligence', 'tier:pro']
+    : ['core', 'unlimited_birds', 'pedigree', 'statistics', 'tier:premium'];
 
   const payloadToSign = `${id}:${key}:${holderName}:${type}:${issuedAt}:${expiresAt}:${maxDevices}`;
   const checksum = await CryptoService.sha256(payloadToSign);
@@ -82,19 +84,24 @@ async function setupAppState(
     customHistory?: any[];
   } = {}
 ) {
-  const license = await createValidTestLicense('enterprise', 'active');
+  let license: License | null = null;
+  if (options.tier === 'PREMIUM') {
+    license = await createValidTestLicense('commercial', 'active');
+  } else if (options.tier === 'PRO' || !options.tier) {
+    license = await createValidTestLicense('enterprise', 'active');
+  }
+
   await page.goto('/', { waitUntil: 'domcontentloaded' });
   await page.evaluate((opts) => {
     localStorage.clear();
-    localStorage.setItem('bird_academy_lmse_active_license', JSON.stringify(opts.license));
-    localStorage.setItem('bird_academy_lmse_all_licenses', JSON.stringify([opts.license]));
+    if (opts.license) {
+      localStorage.setItem('bird_academy_lmse_active_license', JSON.stringify(opts.license));
+      localStorage.setItem('bird_academy_lmse_all_licenses', JSON.stringify([opts.license]));
+    }
     localStorage.setItem('bird_academy_wizard_completed', 'true');
     localStorage.setItem('bird_academy_demo_active', 'true');
     localStorage.setItem('bird_academy_db_initialized', 'true');
 
-    if (opts.tier) {
-      localStorage.setItem('bird_academy_assistant_tier_override', opts.tier);
-    }
     if (opts.language) {
       localStorage.setItem('bird_academy_language', opts.language);
     }
@@ -190,10 +197,6 @@ test.describe('AI-ASSISTANT-PRO-IMPLEMENTATION-01 : Playwright E2E Functional Su
 
     const quotaBadge = page.locator('[data-testid="assistant-quota-badge"]');
     await expect(quotaBadge).toContainText('100');
-
-    // Switch on the fly to PRO via switcher
-    await page.locator('[data-testid="tier-switch-pro"]').click();
-    await expect(page.locator('[data-testid="assistant-tier-badge"]')).toContainText('PRO');
   });
 
   // TC-AI-04: PRO Tier
@@ -390,17 +393,31 @@ test.describe('AI-ASSISTANT-PRO-IMPLEMENTATION-01 : Playwright E2E Functional Su
     await expect(page.locator('[data-testid="assistant-conversation"]')).toContainText('13 jours');
   });
 
-  // TC-AI-14: Live Plan Switch on the fly
-  test('TC-AI-14: Changement de plan à chaud FREE -> PREMIUM -> PRO', async ({ page }) => {
+  // TC-AI-14: Plan change driven by active license FREE -> PREMIUM -> PRO
+  test('TC-AI-14: Changement de plan via licence active FREE -> PREMIUM -> PRO', async ({ page }) => {
+    // 1. Initial FREE state (no license)
     await setupAppState(page, { tier: 'FREE' });
     await page.locator('[data-testid="nav-item-assistant"]').click();
-
     await expect(page.locator('[data-testid="assistant-tier-badge"]')).toContainText('GRATUIT');
 
-    await page.locator('[data-testid="tier-switch-premium"]').click();
+    // 2. Activate PREMIUM license
+    const premiumLicense = await createValidTestLicense('commercial', 'active');
+    await page.evaluate((lic) => {
+      localStorage.setItem('bird_academy_lmse_active_license', JSON.stringify(lic));
+      localStorage.setItem('bird_academy_lmse_all_licenses', JSON.stringify([lic]));
+    }, premiumLicense);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('[data-testid="nav-item-assistant"]').click();
     await expect(page.locator('[data-testid="assistant-tier-badge"]')).toContainText('PREMIUM');
 
-    await page.locator('[data-testid="tier-switch-pro"]').click();
+    // 3. Upgrade to PRO license
+    const proLicense = await createValidTestLicense('enterprise', 'active');
+    await page.evaluate((lic) => {
+      localStorage.setItem('bird_academy_lmse_active_license', JSON.stringify(lic));
+      localStorage.setItem('bird_academy_lmse_all_licenses', JSON.stringify([lic]));
+    }, proLicense);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('[data-testid="nav-item-assistant"]').click();
     await expect(page.locator('[data-testid="assistant-tier-badge"]')).toContainText('PRO');
   });
 

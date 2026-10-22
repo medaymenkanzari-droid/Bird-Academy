@@ -15,8 +15,20 @@ import { BreedingRepository } from '../../breeding/repositories/BreedingReposito
 import { BirdIntelligenceEngine } from '../engines/BirdIntelligenceEngine';
 import { RuleEngine } from '../engines/RuleEngine';
 import { DataQualityEngine } from '../engines/DataQualityEngine';
+import { DecisionSupportEngine } from '../engines/DecisionSupportEngine';
 
-import { IntelligenceScore, RuleResult, DataQualityResult, TopPerformer, MonthlyTrendPoint, IntelligenceReport, IntelligenceClutch } from '../types';
+import { 
+  IntelligenceScore, 
+  RuleResult, 
+  DataQualityResult, 
+  TopPerformer, 
+  MonthlyTrendPoint, 
+  IntelligenceReport, 
+  IntelligenceClutch,
+  DecisionSupportItem,
+  DecisionSupportSummary,
+  MissingDataItem
+} from '../types';
 import { Canari, Depense, HabitatCage, Vente } from '../../../types';
 import { HealthEngine } from '../../../business/HealthEngine';
 import { Language } from '../../../utils/translations';
@@ -288,4 +300,115 @@ export class IntelligenceService {
 
     return report;
   }
+
+  // =========================================================================
+  // MISSION V1.9.2 — ASSISTANCE À LA DÉCISION (DSS) ENTRY POINTS
+  // =========================================================================
+
+  /**
+   * Explique un résultat de croisement officiel issu de CanaryCrossEngine / CanaryCrossBridge
+   */
+  static getDecisionSupportForCross(crossResult: any, language: Language = 'fr'): DecisionSupportItem {
+    return DecisionSupportEngine.buildCrossDecisionSupport(crossResult, language);
+  }
+
+  /**
+   * Explique un locus canonique et son statut épistémique
+   */
+  static getDecisionSupportForLocus(
+    locus: any,
+    birdContext?: { nom?: string; bague?: string; sexe?: string },
+    language: Language = 'fr'
+  ): DecisionSupportItem {
+    return DecisionSupportEngine.buildLocusDecisionSupport(locus, birdContext, language);
+  }
+
+  /**
+   * Explique le lien généalogique et la consanguinité entre 2 oiseaux
+   */
+  static getDecisionSupportForPair(maleId: number, femaleId: number, language: Language = 'fr'): DecisionSupportItem {
+    const data = this.getAggregateData();
+    return DecisionSupportEngine.buildInbreedingDecisionSupport(maleId, femaleId, data.birds, language);
+  }
+
+  /**
+   * Explique la fiche d'un oiseau avec ses points d'attention
+   */
+  static getDecisionSupportForBird(birdId: number, language: Language = 'fr'): DecisionSupportItem | null {
+    const data = this.getAggregateData();
+    const bird = data.birds.find(b => b.id === birdId);
+    if (!bird) return null;
+
+    const birdPairs = data.pairs.filter(p => p.maleId === bird.id || p.femaleId === bird.id);
+    const birdHealth = data.healthRecords.filter(h => h.canari_id === bird.id);
+    const offspring = data.birds.filter(b => b.pere_id === bird.id || b.mere_id === bird.id);
+
+    const missingData: string[] = [];
+    if (!bird.bague || bird.bague.length <= 3) missingData.push("Bague non renseignée");
+    if (!bird.sexe || bird.sexe === 'Indéterminé') missingData.push("Sexe indéterminé");
+    if (!bird.date_naissance) missingData.push("Date de naissance manquante");
+    if (!bird.pere_id && !bird.mere_id && !bird.acquisition) missingData.push("Parents non déclarés");
+
+    const vigilancePoints: string[] = [];
+    if (birdHealth.filter(h => h.categorie === 'Traitement').length > 2) {
+      vigilancePoints.push("Historique de soins répétés nécessitant un suivi vétérinaire.");
+    }
+    if (missingData.length > 0) {
+      vigilancePoints.push("Traçabilité incomplète pouvant limiter la précision des prévisions.");
+    }
+
+    return {
+      id: `dss-bird-${bird.id}-${Date.now()}`,
+      title: `Synthèse décisionnelle : ${bird.nom || bird.bague || `Oiseau #${bird.id}`}`,
+      level: missingData.length > 0 ? 'MISSING_DATA' : vigilancePoints.length > 0 ? 'VIGILANCE' : 'INFORMATION',
+      source: {
+        domain: 'canonical',
+        engineOrTable: 'BirdRepository'
+      },
+      epistemicStatus: missingData.length > 0 ? 'UNKNOWN' : 'CONFIRMED',
+      situation: `${bird.nom || 'Sans nom'} (${bird.bague || 'Sans bague'}) — ${bird.race || 'Race standard'} — Sexe : ${bird.sexe || 'Indéterminé'}.`,
+      result: `${birdPairs.length} couple(s) associés, ${offspring.length} jeune(s) direct(s), ${birdHealth.length} fiche(s) sanitaire(s).`,
+      meaning: "Cette fiche récapitule les faits biologiques et administratifs actuellement enregistrés pour cet oiseau.",
+      vigilancePoints: vigilancePoints.length > 0 ? vigilancePoints : ["Aucune anomalie détectée sur ce sujet."],
+      missingData,
+      nextVerification: missingData.length > 0 
+        ? "Compléter les données d'identification et de filiation dans le Bird Passport."
+        : "Vérifier la condition physiologique avant la mise en reproduction."
+    };
+  }
+
+  /**
+   * Synthèse décisionnelle globale du cheptel
+   */
+  static getFlockDecisionSupport(language: Language = 'fr'): DecisionSupportSummary {
+    const data = this.getAggregateData();
+    return DecisionSupportEngine.getComprehensiveFlockDecisionSupport(
+      {
+        birds: data.birds,
+        pairs: data.pairs,
+        clutches: data.clutches,
+        cages: data.cages,
+        healthRecords: data.healthRecords
+      },
+      language
+    );
+  }
+
+  /**
+   * Détecte toutes les données manquantes du cheptel
+   */
+  static getMissingData(language: Language = 'fr'): MissingDataItem[] {
+    const data = this.getAggregateData();
+    return DecisionSupportEngine.detectMissingData(
+      {
+        birds: data.birds,
+        pairs: data.pairs,
+        clutches: data.clutches,
+        cages: data.cages,
+        healthRecords: data.healthRecords
+      },
+      language
+    );
+  }
 }
+

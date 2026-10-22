@@ -7,6 +7,7 @@ import { License, LicenseValidationResult, DeviceFingerprint } from '../types/li
 import { CryptoService } from '../services/CryptoService';
 import { LicenseEntity } from '../domain/entities/License';
 import { KeyValidator } from '../validators/KeyValidator';
+import { ActivationCanonicalizer } from './ActivationCanonicalizer';
 
 export class LicenseValidator {
   /**
@@ -49,12 +50,55 @@ export class LicenseValidator {
       };
     }
 
-    // 2. Cryptographic signature check
-    const payloadToSign = `${license.id}:${license.key}:${license.holderName}:${license.type}:${license.issuedAt}:${license.expiresAt || 'NEVER'}:${license.policy.maxDevices}`;
-    const computedChecksum = await CryptoService.sha256(payloadToSign);
-    const checksumValid = computedChecksum.toLowerCase() === license.checksum.toLowerCase();
-    const signatureValid = await CryptoService.verifySignature(computedChecksum, license.signature);
-    
+    // 2. Cryptographic signature & activations check
+    if (ActivationCanonicalizer.hasDuplicates(license.activations)) {
+      return {
+        isValid: false,
+        status: 'suspended',
+        license,
+        code: 'CORRUPTED',
+        message: 'Intégrité compromise : activations dupliquées détectées.',
+        remainingDays: null,
+        deviceRegistered: false,
+        evaluatedState: 'INVALID',
+      };
+    }
+
+    let checksumValid = false;
+    let signatureValid = false;
+
+    // Check 1: 8-field canonical payload (with current activations or authenticatedActivations)
+    const signedActs = Array.isArray(license.metadata?.authenticatedActivations)
+      ? license.metadata.authenticatedActivations
+      : license.activations;
+
+    const actHash = await ActivationCanonicalizer.computeHash(signedActs);
+    const payload8 = `${license.id}:${license.key}:${license.holderName}:${license.type}:${license.issuedAt}:${license.expiresAt || 'NEVER'}:${license.policy.maxDevices}:${actHash}`;
+    const computedChecksum8 = await CryptoService.sha256(payload8);
+
+    if (computedChecksum8.toLowerCase() === license.checksum.toLowerCase()) {
+      checksumValid = true;
+      signatureValid = await CryptoService.verifySignature(computedChecksum8, license.signature);
+    } else {
+      // Check 2: 8-field canonical payload with empty activations (freshly issued license activated on device)
+      const actHashEmpty = await ActivationCanonicalizer.computeHash([]);
+      const payload8Empty = `${license.id}:${license.key}:${license.holderName}:${license.type}:${license.issuedAt}:${license.expiresAt || 'NEVER'}:${license.policy.maxDevices}:${actHashEmpty}`;
+      const computedChecksum8Empty = await CryptoService.sha256(payload8Empty);
+
+      if (computedChecksum8Empty.toLowerCase() === license.checksum.toLowerCase()) {
+        checksumValid = true;
+        signatureValid = await CryptoService.verifySignature(computedChecksum8Empty, license.signature);
+      } else {
+        // Check 3: Fallback for legacy 7-field payload
+        const payload7 = `${license.id}:${license.key}:${license.holderName}:${license.type}:${license.issuedAt}:${license.expiresAt || 'NEVER'}:${license.policy.maxDevices}`;
+        const computedChecksum7 = await CryptoService.sha256(payload7);
+        if (computedChecksum7.toLowerCase() === license.checksum.toLowerCase()) {
+          checksumValid = true;
+          signatureValid = await CryptoService.verifySignature(computedChecksum7, license.signature);
+        }
+      }
+    }
+
     if (!checksumValid || !signatureValid) {
       return {
         isValid: false,
@@ -113,22 +157,62 @@ export class LicenseValidator {
       };
     }
 
-    // 4. Anti-Clock-Tamper check
+    // 4. Anti-Clock-Tamper check (Hardened multi-anchor verification)
+    let baselineTimestamp: number | null = null;
+    let baselineSource = '';
+
     if (lastTimeMarker) {
-      const lastTime = new Date(lastTimeMarker).getTime();
-      // Allow max 10 minute backward skew for timezone shifts or small clock updates
-      if (now.getTime() < lastTime - 10 * 60 * 1000) {
-        return {
-          isValid: false,
-          status: 'suspended',
-          license,
-          code: 'CLOCK_TAMPERED',
-          message: 'Hacker/Rollback d\'horloge détecté. L\'horloge système est antérieure au dernier contrôle enregistré.',
-          remainingDays: null,
-          deviceRegistered: false,
-          evaluatedState: 'INVALID',
-        };
+      const parsedLastTime = new Date(lastTimeMarker).getTime();
+      if (!isNaN(parsedLastTime)) {
+        baselineTimestamp = parsedLastTime;
+        baselineSource = 'dernier contrôle enregistré';
       }
+    }
+
+    // Fallback or supplementary anchors embedded inside the signed license:
+    // 4.1. Issuance date anchor: A valid license cannot legitimately execute prior to its issuance date
+    if (license.issuedAt) {
+      const issuedTime = new Date(license.issuedAt).getTime();
+      if (!isNaN(issuedTime)) {
+        if (baselineTimestamp === null || issuedTime > baselineTimestamp) {
+          baselineTimestamp = issuedTime;
+          baselineSource = "date d'émission de la licence";
+        }
+      }
+    }
+
+    // 4.2. Activations anchor: Check prior activation and verification timestamps recorded on this license
+    if (Array.isArray(license.activations)) {
+      for (const act of license.activations) {
+        if (act.lastVerifiedAt) {
+          const verifiedTime = new Date(act.lastVerifiedAt).getTime();
+          if (!isNaN(verifiedTime) && (baselineTimestamp === null || verifiedTime > baselineTimestamp)) {
+            baselineTimestamp = verifiedTime;
+            baselineSource = "dernier horodatage d'activité";
+          }
+        }
+        if (act.activatedAt) {
+          const actTime = new Date(act.activatedAt).getTime();
+          if (!isNaN(actTime) && (baselineTimestamp === null || actTime > baselineTimestamp)) {
+            baselineTimestamp = actTime;
+            baselineSource = "date d'activation de la licence";
+          }
+        }
+      }
+    }
+
+    // Allow max 10 minute backward skew for timezone shifts or small clock updates
+    if (baselineTimestamp !== null && now.getTime() < baselineTimestamp - 10 * 60 * 1000) {
+      return {
+        isValid: false,
+        status: 'suspended',
+        license,
+        code: 'CLOCK_TAMPERED',
+        message: `Altération de l'horloge système détectée. L'horloge système est antérieure à la référence (${baselineSource}).`,
+        remainingDays: null,
+        deviceRegistered: false,
+        evaluatedState: 'INVALID',
+      };
     }
 
     // 5. Expiration check

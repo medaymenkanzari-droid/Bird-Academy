@@ -4,12 +4,13 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { Sparkles, Calendar, Egg as EggIcon, LayoutGrid, Users } from 'lucide-react';
+import { Sparkles, Calendar, Egg as EggIcon, LayoutGrid, Users, Clock } from 'lucide-react';
 import ClutchList from './ClutchList';
 import EggGrid from '../../eggs/components/EggGrid';
 import IncubationCalendarView from '../../incubation/components/IncubationCalendarView';
 import ClutchWizard from './ClutchWizard';
 import ChickGrid from '../../chicks/components/ChickGrid';
+import BreedingTimelineViewer from '../../components/BreedingTimelineViewer';
 import { useLanguage } from '../../../../context/LanguageContext';
 import { BIO_TRANSLATIONS } from '../../utils/bioTranslations';
 import { AppCard, AppButton, AppBadge } from '../../../../components/design-system';
@@ -27,7 +28,7 @@ export default function BiologicalLifecycleManager({ pairId }: BiologicalLifecyc
   }, [language]);
 
   const [selectedClutchId, setSelectedClutchId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'eggs' | 'incubation' | 'chicks'>('eggs');
+  const [activeTab, setActiveTab] = useState<'eggs' | 'incubation' | 'chicks' | 'timeline'>('eggs');
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -55,7 +56,7 @@ export default function BiologicalLifecycleManager({ pairId }: BiologicalLifecyc
         {selectedClutchId ? (
           <AppCard key={`${selectedClutchId}-${refreshTrigger}`} padding="md">
             {/* Tabs Selector */}
-            <div className="flex border-b border-slate-100 mb-4">
+            <div className="flex border-b border-slate-100 mb-4 overflow-x-auto">
               <button
                 onClick={() => setActiveTab('eggs')}
                 className={`flex items-center gap-2 pb-3 text-xs font-bold border-b-2 px-4 transition-all ${
@@ -89,6 +90,18 @@ export default function BiologicalLifecycleManager({ pairId }: BiologicalLifecyc
                 <Users className="w-4 h-4" />
                 {t('chicksTab')}
               </button>
+              <button
+                onClick={() => setActiveTab('timeline')}
+                className={`flex items-center gap-2 pb-3 text-xs font-bold border-b-2 px-4 transition-all ${
+                  activeTab === 'timeline' 
+                    ? 'border-amber-500 text-amber-600' 
+                    : 'border-transparent text-slate-400 hover:text-slate-600'
+                }`}
+                data-testid="tab-lifecycle-timeline"
+              >
+                <Clock className="w-4 h-4" />
+                <span>{language === 'ar' ? 'الجدول الزمني' : language === 'en' ? 'Timeline' : 'Chronologie'}</span>
+              </button>
             </div>
 
             {/* Tab content router */}
@@ -103,9 +116,15 @@ export default function BiologicalLifecycleManager({ pairId }: BiologicalLifecyc
                   clutchId={selectedClutchId} 
                   onRefreshClutches={handleRefresh}
                 />
-              ) : (
+              ) : activeTab === 'chicks' ? (
                 <ChickGrid 
                   clutchId={selectedClutchId}
+                />
+              ) : (
+                <BreedingTimelineViewer
+                  pairId={pairId}
+                  clutchId={selectedClutchId}
+                  language={language}
                 />
               )}
             </div>

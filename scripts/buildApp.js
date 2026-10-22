@@ -58,6 +58,18 @@ try {
     env: { ...process.env, VITE_APP_MODE: appMode, VITE_LMSE_ENV: targetEnv },
   });
 
+  // Architectural Isolation Guard (RELEASE-BINARY-AUTO-INCLUSION-FIX-001):
+  // Ensure that no native downloadable binaries (.exe, .apk) are ever bundled into web assets.
+  const distDownloadsDir = path.join('dist', 'downloads');
+  if (fs.existsSync(distDownloadsDir)) {
+    for (const f of fs.readdirSync(distDownloadsDir)) {
+      if (f.endsWith('.exe') || f.endsWith('.apk')) {
+        fs.rmSync(path.join(distDownloadsDir, f), { force: true });
+        console.log(`[BUILD SYSTEM GUARD] Excluded native binary from application bundle: ${f}`);
+      }
+    }
+  }
+
   fs.cpSync('dist', modeDir, { recursive: true });
 
   console.log(`[BUILD SYSTEM] Build ${rawMode} completed successfully in dist/ and ${modeDir}/.`);

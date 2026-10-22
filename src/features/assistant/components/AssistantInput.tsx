@@ -12,17 +12,31 @@ export interface AssistantInputProps {
   isLoading: boolean;
   isQuotaExceeded: boolean;
   disabled?: boolean;
+  value?: string;
+  onChange?: (val: string) => void;
 }
 
 export const AssistantInput: React.FC<AssistantInputProps> = ({
   onSendMessage,
   isLoading,
   isQuotaExceeded,
-  disabled = false
+  disabled = false,
+  value,
+  onChange
 }) => {
   const { t, isRtl } = useLanguage();
-  const [inputText, setInputText] = useState('');
+  const [internalText, setInternalText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const inputText = value !== undefined ? value : internalText;
+  const setInputText = (val: string) => {
+    if (onChange) {
+      onChange(val);
+    }
+    if (value === undefined) {
+      setInternalText(val);
+    }
+  };
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();

@@ -9,14 +9,16 @@ import { BirdRepository } from '../../birds/repositories/BirdRepository';
 import { IntelligenceService } from '../services/IntelligenceService';
 import { ProgressScore, ConfidenceBadge } from '../widgets/Widgets';
 import { IntelligenceBirdFinding } from '../types';
+import { DecisionSupportViewer } from './DecisionSupportViewer';
 import { useLanguage } from '../../../context/LanguageContext';
 import { Bird, ShieldAlert, Award, AlertCircle, Zap } from 'lucide-react';
 
 export const IntelligenceFiche: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [birds, setBirds] = useState<Canari[]>([]);
   const [selectedBirdId, setSelectedBirdId] = useState<number | null>(null);
   const [analysis, setAnalysis] = useState<ReturnType<typeof IntelligenceService.getBirdFiche>>(null);
+  const [birdDSS, setBirdDSS] = useState<ReturnType<typeof IntelligenceService.getDecisionSupportForBird>>(null);
 
   useEffect(() => {
     const list = BirdRepository.getAll();
@@ -30,10 +32,13 @@ export const IntelligenceFiche: React.FC = () => {
     if (selectedBirdId !== null) {
       const result = IntelligenceService.getBirdFiche(selectedBirdId);
       setAnalysis(result);
+      const dss = IntelligenceService.getDecisionSupportForBird(selectedBirdId, language);
+      setBirdDSS(dss);
     } else {
       setAnalysis(null);
+      setBirdDSS(null);
     }
-  }, [selectedBirdId]);
+  }, [selectedBirdId, language]);
 
   const activeBird = birds.find(b => b.id === selectedBirdId);
   const translateFinding = (finding: IntelligenceBirdFinding) => t(finding.key, finding.variables);
@@ -201,6 +206,17 @@ export const IntelligenceFiche: React.FC = () => {
                 ))}
               </div>
             </div>
+
+            {/* Structured Decision Support Card (Mission V1.9.2) */}
+            {birdDSS && (
+              <div className="pt-2">
+                <DecisionSupportViewer
+                  items={[birdDSS]}
+                  title={t('intelDecisionSupport') || "Aide à la décision"}
+                  defaultExpanded={true}
+                />
+              </div>
+            )}
 
           </div>
         </div>

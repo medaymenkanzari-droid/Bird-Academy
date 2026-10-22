@@ -77,7 +77,7 @@ describe('MISSION WEB-IMMERSIVE-EDITION-001 — Validation Technique & Graphique
   // 3. Expert Testimonial
   describe('3. Témoignage d\'Expert Jean-Marc Valenti (Juge & Maître Éleveur COM)', () => {
     it('I07: La citation de Jean-Marc Valenti et sa distinction COM sont présentes dans les 5 locales', () => {
-      for (const [lang, dict] of Object.entries(LOCALES)) {
+      for (const [lang, dict] of Object.entries(LOCALES) as [string, any][]) {
         assert.ok(dict.expertTestimonial, `expertTestimonial manquant en ${lang}`);
         assert.ok(dict.expertTestimonial.author.includes('Valenti'), `Auteur Jean-Marc Valenti manquant en ${lang}`);
         assert.ok(dict.expertTestimonial.role.includes('COM'), `Mention COM manquante en ${lang}`);

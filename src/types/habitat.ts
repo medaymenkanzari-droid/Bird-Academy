@@ -114,7 +114,7 @@ export interface DeplacementRecord {
 }
 
 // Smart QR Code Models
-export type QRCodeType = 'FACILITY' | 'ZONE' | 'AVIARY' | 'CAGE' | 'COMPARTMENT' | 'QUARANTINE';
+export type QRCodeType = 'FACILITY' | 'ZONE' | 'AVIARY' | 'CAGE' | 'COMPARTMENT' | 'QUARANTINE' | 'BIRD' | 'CERT';
 
 export interface QRCode {
   id: string; // UUID

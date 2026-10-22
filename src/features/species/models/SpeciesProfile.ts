@@ -10,7 +10,7 @@ export interface UserSpeciesProfile {
 }
 
 export const DEFAULT_SPECIES_PROFILE: UserSpeciesProfile = {
-  activeSpeciesIds: ['canari'],
+  activeSpeciesIds: [],
   activeBreedIds: {},
   updatedAt: new Date().toISOString()
 };

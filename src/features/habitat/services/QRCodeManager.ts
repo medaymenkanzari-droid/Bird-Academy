@@ -19,13 +19,16 @@ export class QRCodeManager {
    * Parses a formatted QR Code string into its type and entity ID.
    * Useful for the future mobile scan engine.
    */
-  static parseCode(code: string): { entityType: QRCodeType; entityId: string } | null {
-    if (!code || !code.startsWith('BA:')) return null;
-    const parts = code.split(':');
+  static parseCode(code: string): { entityType: QRCodeType; entityId: string; extra?: string } | null {
+    if (!code || typeof code !== 'string') return null;
+    const clean = code.trim();
+    if (!clean.startsWith('BA:')) return null;
+    const parts = clean.split(':');
     if (parts.length < 3) return null;
     return {
-      entityType: parts[1] as QRCodeType,
-      entityId: parts[2]
+      entityType: parts[1].toUpperCase() as QRCodeType,
+      entityId: parts[2].trim(),
+      extra: parts.length > 3 ? parts.slice(3).join(':').trim() : undefined
     };
   }
 

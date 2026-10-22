@@ -487,10 +487,8 @@ export const BirdBiologicalProfileTab: React.FC<BirdBiologicalProfileTabProps> =
 
             {management && (
               <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
-                <span className="font-bold text-slate-200 block">{t('regulatoryTitle')} :</span>
-                <p className="text-slate-400 text-2xs">{getLocalizedText(management.regulatoryStatus)}</p>
-                <div className="pt-1 flex items-center gap-2 text-2xs">
-                  <span className="font-semibold text-slate-300">{t('hybridizationPossible')} :</span>
+                <span className="font-bold text-slate-200 block">{t('hybridizationPossible')} :</span>
+                <div className="pt-0.5 flex items-center gap-2 text-2xs">
                   <span className={management.hybridizationPossible ? 'text-emerald-400 font-bold' : 'text-slate-400'}>
                     {management.hybridizationPossible ? t('hybridizationYes') : t('hybridizationNo')}
                   </span>

@@ -21,6 +21,7 @@ const PREFIX_TAGS: Record<LicenseType, string> = {
   enterprise: 'ENTP',
   association: 'ASSO',
   veterinary: 'VETE',
+  test: 'TEST',
 };
 
 /**

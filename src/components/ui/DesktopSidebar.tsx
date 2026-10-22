@@ -71,7 +71,7 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
     {
       title: t('navSectionAnalytics'),
       items: [
-        { id: 'assistant', label: t('assistant') || 'Assistant IA', icon: Sparkles },
+        { id: 'assistant', label: t('localAssistant') || t('assistant') || 'Assistant local', icon: Sparkles },
         { id: 'genetics', label: t('genetics'), icon: Dna },
         { id: 'intelligence', label: t('intelligence'), icon: BrainCircuit },
         { id: 'statistiques', label: t('statistiques'), icon: BarChart3 },
@@ -84,7 +84,6 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
         { id: 'depenses', label: t('depenses'), icon: TrendingDown },
         { id: 'ventes', label: t('ventes'), icon: TrendingUp },
         { id: 'parametres', label: t('parametres'), icon: Settings },
-        { id: 'demo_shortcut', label: t('demoSandbox'), icon: Database },
       ]
     }
   ];
@@ -194,7 +193,6 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
               {section.items.map((item) => {
                 const Icon = item.icon;
                 const isActive = currentTab === item.id;
-                const isDemo = item.id === 'demo_shortcut';
                 return (
                   <button
                     type="button"
@@ -207,13 +205,11 @@ export const DesktopSidebar: React.FC<DesktopSidebarProps> = ({
                       ${
                         isActive
                           ? 'bg-[#3F51B5] text-white shadow-md shadow-indigo-900/30'
-                          : isDemo
-                            ? 'text-amber-400/90 hover:bg-amber-500/10 hover:text-amber-300'
-                            : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                          : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                       }
                     `}
                   >
-                    <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : isDemo ? 'text-amber-400' : 'text-slate-400 group-hover:text-white'}`} />
+                    <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-white'}`} />
                     {!isCollapsed && <span className="truncate text-start">{item.label}</span>}
                   </button>
                 );

@@ -6,7 +6,7 @@
 import React, { lazy, Suspense, useState, useEffect, useRef } from 'react';
 import { 
   Home, Bird, Heart, Egg, Grid, Activity, Calendar, 
-  TrendingDown, TrendingUp, BarChart3, Settings, Wheat, Menu, X, Bell, BookOpen, BrainCircuit, Dna, ShieldCheck, ShieldAlert, Database, Sparkles
+  TrendingDown, TrendingUp, BarChart3, Settings, Wheat, Menu, X, Bell, BookOpen, BrainCircuit, Dna, ShieldCheck, ShieldAlert, Database, Sparkles, QrCode
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MOTION_VARIANTS } from './theme';
@@ -17,11 +17,7 @@ import {
 } from './types';
 
 // Default data sets
-import { 
-  INITIAL_CAGES, INITIAL_CANARIS, INITIAL_COUPLES, INITIAL_REPRODUCTIONS, 
-  INITIAL_PONTES, INITIAL_JEUNES, INITIAL_SANTE, INITIAL_ALIMENTATION, 
-  INITIAL_DEPENSES, INITIAL_VENTES 
-} from './data/defaultData';
+import { INITIAL_CAGES } from './data/defaultData';
 
 import { isUserBuild, isAdminBuild, BUILD_ID } from './config/appMode';
 
@@ -47,7 +43,7 @@ const ReferenceBiologique = lazy(() => import('./components/ReferenceBiologique'
 const HabitatComponent = lazy(() => import('./features/habitat/components').then(module => ({ default: module.HabitatComponent })));
 const IntelligenceDashboard = lazy(() => import('./features/intelligence/components').then(module => ({ default: module.IntelligenceDashboard })));
 const GeneticsDashboard = lazy(() => import('./features/genetics/components').then(module => ({ default: module.GeneticsDashboard })));
-const DemoModeTab = lazy(() => import('./features/quality/components/DemoModeTab').then(module => ({ default: module.DemoModeTab })));
+const ColorGeneticsV2ExpertAudit = lazy(() => import('./features/canonical/audit/components/ColorGeneticsV2ExpertAudit'));
 const WelcomeWizard = lazy(() => import('./features/quality/components/WelcomeWizard').then(module => ({ default: module.WelcomeWizard })));
 const AssistantView = lazy(() => import('./features/assistant/components/AssistantView'));
 import { LicenseStatusBadge } from './features/licensing/components/LicenseStatusBadge';
@@ -57,9 +53,13 @@ import { useLicensing } from './features/licensing/hooks/useLicensing';
 import { useSubscription } from './features/subscription/hooks/useSubscription';
 import { CapabilityResolver } from './features/subscription/services/CapabilityResolver';
 import { FeatureLockedCard } from './features/subscription/components/FeatureLockedCard';
+import { TierBadge } from './features/subscription/components/TierBadge';
 import { UpgradeModal } from './features/subscription/components/UpgradeModal';
 import { DesktopSidebar } from './components/ui/DesktopSidebar';
 import { DesktopTopBar } from './components/ui/DesktopTopBar';
+import { UniversalQrScannerModal } from './components/ui/UniversalQrScannerModal';
+import { BirdDetailModal } from './components/BirdDetailModal';
+import type { SmartQrResolutionSuccess } from './features/qr/services/SmartQrCodeResolver';
 
 // Storage and Decoupled Layers
 import { appStorage } from './storage';
@@ -92,8 +92,46 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showWizard, setShowWizard] = useState<boolean>(false);
+  const [isUniversalQrScannerOpen, setIsUniversalQrScannerOpen] = useState(false);
+  const [selectedBirdFromQr, setSelectedBirdFromQr] = useState<Canari | null>(null);
+  // QR: habitat entity to auto-select when navigating to 'cages' tab
+  const [qrHabitatFocus, setQrHabitatFocus] = useState<{
+    type: 'facility' | 'zone' | 'aviary' | 'cage' | 'compartment' | 'quarantineArea';
+    id: string;
+    data?: any;
+    timestamp?: number;
+  } | null>(null);
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileDrawerRef = useRef<HTMLElement>(null);
+
+  /** Map QR entity types to HabitatComponent selectedType values */
+  const QR_TYPE_TO_HABITAT: Record<string, 'facility' | 'zone' | 'aviary' | 'cage' | 'compartment' | 'quarantineArea'> = {
+    CAGE: 'cage',
+    AVIARY: 'aviary',
+    ZONE: 'zone',
+    COMPARTMENT: 'compartment',
+    QUARANTINE: 'quarantineArea',
+    FACILITY: 'facility',
+  };
+
+  const handleQrEntityResolved = (result: SmartQrResolutionSuccess) => {
+    if (result.entityType === 'BIRD' && result.data) {
+      setSelectedBirdFromQr(result.data);
+      setCurrentTab('canaris');
+    } else {
+      const habitatType = QR_TYPE_TO_HABITAT[result.entityType as string];
+      if (habitatType) {
+        const entityId = result.data?.id ? String(result.data.id) : result.entityId;
+        setQrHabitatFocus({
+          type: habitatType,
+          id: entityId,
+          data: result.data,
+          timestamp: Date.now()
+        });
+        setCurrentTab('cages');
+      }
+    }
+  };
 
   // Check onboarding on initial boot ONLY if license is valid
   useEffect(() => {
@@ -185,59 +223,30 @@ export default function App() {
         localStorage.setItem('bird_academy_db_initialized', 'true');
       }
     } else {
-      // Fresh installation
-      const isDemoEnv = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bird_academy_demo_active') === 'true';
-      if (isDemoEnv) {
-        // Initialize with pre-populated demo data only if explicitly in demo sandbox
-        BirdRepository.saveAll(INITIAL_CANARIS);
-        HabitatRepository.saveAll(INITIAL_CAGES);
-        BreedingRepository.saveCouples(INITIAL_COUPLES);
-        BreedingRepository.saveReproductions(INITIAL_REPRODUCTIONS);
-        BreedingRepository.savePontes(INITIAL_PONTES);
-        BreedingRepository.saveJeunes(INITIAL_JEUNES);
-        HealthRepository.saveAll(INITIAL_SANTE);
-        HandFeedingRepository.saveAll(INITIAL_ALIMENTATION);
-        FinanceRepository.saveExpenses(INITIAL_DEPENSES);
-        FinanceRepository.saveSales(INITIAL_VENTES);
+      // Fresh User installation -> Empty business database (0 birds, 0 couples, 0 cages, 0 sales, 0 expenses)
+      BirdRepository.saveAll([]);
+      HabitatRepository.saveAll([]);
+      BreedingRepository.saveCouples([]);
+      BreedingRepository.saveReproductions([]);
+      BreedingRepository.savePontes([]);
+      BreedingRepository.saveJeunes([]);
+      HealthRepository.saveAll([]);
+      HandFeedingRepository.saveAll([]);
+      FinanceRepository.saveExpenses([]);
+      FinanceRepository.saveSales([]);
 
-        setCanaris(INITIAL_CANARIS);
-        setCages(INITIAL_CAGES);
-        setCouples(INITIAL_COUPLES);
-        setReproductions(INITIAL_REPRODUCTIONS);
-        setPontes(INITIAL_PONTES);
-        setJeunes(INITIAL_JEUNES);
-        setSante(INITIAL_SANTE);
-        setAlimentation(INITIAL_ALIMENTATION);
-        setDepenses(INITIAL_DEPENSES);
-        setVentes(INITIAL_VENTES);
+      setCanaris([]);
+      setCages([]);
+      setCouples([]);
+      setReproductions([]);
+      setPontes([]);
+      setJeunes([]);
+      setSante([]);
+      setAlimentation([]);
+      setDepenses([]);
+      setVentes([]);
 
-        ActivityLogger.log(EventType.DB_RESET, "Initialisation de l'élevage avec les données de démonstration");
-      } else {
-        // Fresh User installation -> Empty business database (0 birds, 0 couples, 0 cages, 0 sales, 0 expenses)
-        BirdRepository.saveAll([]);
-        HabitatRepository.saveAll([]);
-        BreedingRepository.saveCouples([]);
-        BreedingRepository.saveReproductions([]);
-        BreedingRepository.savePontes([]);
-        BreedingRepository.saveJeunes([]);
-        HealthRepository.saveAll([]);
-        HandFeedingRepository.saveAll([]);
-        FinanceRepository.saveExpenses([]);
-        FinanceRepository.saveSales([]);
-
-        setCanaris([]);
-        setCages([]);
-        setCouples([]);
-        setReproductions([]);
-        setPontes([]);
-        setJeunes([]);
-        setSante([]);
-        setAlimentation([]);
-        setDepenses([]);
-        setVentes([]);
-
-        ActivityLogger.log(EventType.DB_RESET, "Initialisation d'une nouvelle base de données utilisateur vierge");
-      }
+      ActivityLogger.log(EventType.DB_RESET, "Initialisation d'une nouvelle base de données utilisateur vierge");
       localStorage.setItem('bird_academy_db_initialized', 'true');
     }
     console.log(`[BOOT-12] database hydration completed: BUILD_ID=${BUILD_ID} | time=${new Date().toISOString()}`);
@@ -516,59 +525,32 @@ export default function App() {
     }
   };
 
-  // RESET DATABASE
-  const onResetDatabase = (toEmpty: boolean) => {
-    if (toEmpty) {
-      BirdRepository.saveAll([]);
-      HabitatRepository.saveAll(INITIAL_CAGES.slice(0, 2));
-      BreedingRepository.saveCouples([]);
-      BreedingRepository.saveReproductions([]);
-      BreedingRepository.savePontes([]);
-      BreedingRepository.saveJeunes([]);
-      HealthRepository.saveAll([]);
-      HandFeedingRepository.saveAll([]);
-      FinanceRepository.saveExpenses([]);
-      FinanceRepository.saveSales([]);
+  // RESET DATABASE (Empty base only)
+  const onResetDatabase = () => {
+    BirdRepository.saveAll([]);
+    HabitatRepository.saveAll(INITIAL_CAGES.slice(0, 2));
+    BreedingRepository.saveCouples([]);
+    BreedingRepository.saveReproductions([]);
+    BreedingRepository.savePontes([]);
+    BreedingRepository.saveJeunes([]);
+    HealthRepository.saveAll([]);
+    HandFeedingRepository.saveAll([]);
+    FinanceRepository.saveExpenses([]);
+    FinanceRepository.saveSales([]);
 
-      // Refresh state
-      setCanaris([]);
-      setCages(INITIAL_CAGES.slice(0, 2));
-      setCouples([]);
-      setReproductions([]);
-      setPontes([]);
-      setJeunes([]);
-      setSante([]);
-      setAlimentation([]);
-      setDepenses([]);
-      setVentes([]);
+    // Refresh state
+    setCanaris([]);
+    setCages(INITIAL_CAGES.slice(0, 2));
+    setCouples([]);
+    setReproductions([]);
+    setPontes([]);
+    setJeunes([]);
+    setSante([]);
+    setAlimentation([]);
+    setDepenses([]);
+    setVentes([]);
 
-      ActivityLogger.log(EventType.DB_RESET, "Remise à zéro complète de l'élevage (Base vide)", {});
-    } else {
-      BirdRepository.saveAll(INITIAL_CANARIS);
-      HabitatRepository.saveAll(INITIAL_CAGES);
-      BreedingRepository.saveCouples(INITIAL_COUPLES);
-      BreedingRepository.saveReproductions(INITIAL_REPRODUCTIONS);
-      BreedingRepository.savePontes(INITIAL_PONTES);
-      BreedingRepository.saveJeunes(INITIAL_JEUNES);
-      HealthRepository.saveAll(INITIAL_SANTE);
-      HandFeedingRepository.saveAll(INITIAL_ALIMENTATION);
-      FinanceRepository.saveExpenses(INITIAL_DEPENSES);
-      FinanceRepository.saveSales(INITIAL_VENTES);
-
-      // Refresh state
-      setCanaris(INITIAL_CANARIS);
-      setCages(INITIAL_CAGES);
-      setCouples(INITIAL_COUPLES);
-      setReproductions(INITIAL_REPRODUCTIONS);
-      setPontes(INITIAL_PONTES);
-      setJeunes(INITIAL_JEUNES);
-      setSante(INITIAL_SANTE);
-      setAlimentation(INITIAL_ALIMENTATION);
-      setDepenses(INITIAL_DEPENSES);
-      setVentes(INITIAL_VENTES);
-
-      ActivityLogger.log(EventType.DB_RESET, "Réinitialisation de l'élevage avec les données de démonstration", {});
-    }
+    ActivityLogger.log(EventType.DB_RESET, "Remise à zéro complète de l'élevage (Base vide)", {});
   };
 
   // Tabs layout configuration
@@ -583,16 +565,24 @@ export default function App() {
     { id: 'calendrier', label: t('calendrier'), icon: Calendar },
     { id: 'depenses', label: t('depenses'), icon: TrendingDown },
     { id: 'ventes', label: t('ventes'), icon: TrendingUp },
-    { id: 'assistant', label: t('assistant') || 'Assistant IA', icon: Sparkles },
+    { id: 'assistant', label: t('localAssistant') || t('assistant') || 'Assistant local', icon: Sparkles },
     { id: 'statistiques', label: t('statistiques'), icon: BarChart3 },
     { id: 'intelligence', label: t('intelligence'), icon: BrainCircuit },
     { id: 'genetics', label: t('genetics'), icon: Dna },
     { id: 'reference_biologique', label: t('bioReference'), icon: BookOpen },
     { id: 'parametres', label: t('parametres'), icon: Settings },
-    { id: 'demo_shortcut', label: t('demoSandbox'), icon: Sparkles },
   ];
 
   const navigationItems = allNavigationItems;
+
+  // Expert Audit Station (Mission 12) isolated view
+  if (typeof window !== 'undefined' && window.location.search.includes('view=audit')) {
+    return (
+      <Suspense fallback={<AppSkeleton height={180} count={3} />}>
+        <ColorGeneticsV2ExpertAudit />
+      </Suspense>
+    );
+  }
 
   if (licenseState === 'INITIALIZING' || licenseState === 'LICENSE_CHECKING') {
     return (
@@ -626,7 +616,26 @@ export default function App() {
       <header className="lg:hidden bg-slate-900 border-b border-slate-800 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
         <AppLogo size="sm" variant="dark" sublineText="AVIAN ERP" />
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            data-testid="mobile-header-tier-badge-btn"
+            onClick={() => setIsUpgradeModalOpen(true)}
+            className="cursor-pointer focus:outline-none hover:opacity-90 transition-opacity"
+            title={t('commercialPlanDetails') || 'Détails du plan'}
+          >
+            <TierBadge tier={currentTier} size="sm" />
+          </button>
+          <button
+            type="button"
+            data-testid="mobile-header-qr-btn"
+            onClick={() => setIsUniversalQrScannerOpen(true)}
+            className="p-2 min-h-[40px] min-w-[40px] inline-flex items-center justify-center text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors cursor-pointer border border-slate-700"
+            aria-label={t('scanQrCode') || 'Scanner un QR code'}
+            title={t('scanQrCode') || 'Scanner un QR code'}
+          >
+            <QrCode className="w-5 h-5 text-blue-400" />
+          </button>
           <LanguageSelector variant="dark" />
           <button
             ref={mobileMenuButtonRef}
@@ -691,9 +700,30 @@ export default function App() {
                   </button>
                 </div>
 
-                {/* Mobile Language Selector Widget */}
-                <div className="mb-4">
+                {/* Mobile Language Selector & Plan Status Widget */}
+                <div className="mb-4 space-y-2">
                   <LanguageSelector variant="dark" />
+                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      data-testid="mobile-drawer-tier-badge-btn"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setIsUpgradeModalOpen(true);
+                      }}
+                      className="cursor-pointer focus:outline-none hover:opacity-90 transition-opacity"
+                      title={t('commercialPlanDetails') || 'Détails du plan'}
+                    >
+                      <TierBadge tier={currentTier} size="sm" />
+                    </button>
+                    <LicenseStatusBadge 
+                      onOpenActivation={() => {
+                        setMobileMenuOpen(false);
+                        setIsActivationModalOpen(true);
+                      }} 
+                      showDetails 
+                    />
+                  </div>
                 </div>
 
                 {/* Navigation Items */}
@@ -742,6 +772,7 @@ export default function App() {
           currentTab={currentTab}
           onOpenActivationModal={() => setIsActivationModalOpen(true)}
           onOpenUpgradeModal={() => setIsUpgradeModalOpen(true)}
+          onOpenQrScanner={() => setIsUniversalQrScannerOpen(true)}
         />
 
         {/* Main Content Area */}
@@ -770,6 +801,7 @@ export default function App() {
                   ventes={ventes}
                   setCurrentTab={setCurrentTab}
                   onCompleteSanteRecord={onCompleteSanteRecord}
+                  onOpenQrScanner={() => setIsUniversalQrScannerOpen(true)}
                   onQuickAddCanari={() => {
                     setQuickAddCanariOpen(true);
                     setCurrentTab('canaris');
@@ -824,7 +856,14 @@ export default function App() {
             case 'cages':
               return (
                 <ComponentErrorBoundary moduleName="Cages & Habitat">
-                  <HabitatComponent canaris={canaris} cages={cages} />
+                  <HabitatComponent
+                    canaris={canaris}
+                    cages={cages}
+                    initialSelectedType={qrHabitatFocus?.type}
+                    initialSelectedId={qrHabitatFocus?.id}
+                    initialSelectedData={qrHabitatFocus?.data}
+                    initialSelectedTimestamp={qrHabitatFocus?.timestamp}
+                  />
                 </ComponentErrorBoundary>
               );
             case 'sante':
@@ -877,7 +916,7 @@ export default function App() {
               );
             case 'assistant':
               return (
-                <ComponentErrorBoundary moduleName="Assistant IA">
+                <ComponentErrorBoundary moduleName={t('localAssistant') || 'Assistant local'}>
                   <AssistantView />
                 </ComponentErrorBoundary>
               );
@@ -904,12 +943,6 @@ export default function App() {
               return (
                 <ReferenceBiologique />
               );
-            case 'demo_shortcut':
-              return (
-                <div className="max-w-7xl mx-auto px-4 py-8">
-                  <DemoModeTab />
-                </div>
-              );
             case 'parametres':
               return (
                 <Parametres 
@@ -918,6 +951,10 @@ export default function App() {
                   onResetDatabase={onResetDatabase}
                   setCurrentTab={setCurrentTab}
                 />
+              );
+            case 'audit':
+              return (
+                <ColorGeneticsV2ExpertAudit />
               );
             default:
               return <div className="text-slate-500 font-semibold">Module non trouvé</div>;
@@ -957,6 +994,31 @@ export default function App() {
         onClose={() => setIsUpgradeModalOpen(false)}
         onOpenActivation={() => setIsActivationModalOpen(true)}
       />
+
+      {/* Universal Offline QR Scanner Modal */}
+      <UniversalQrScannerModal
+        isOpen={isUniversalQrScannerOpen}
+        onClose={() => setIsUniversalQrScannerOpen(false)}
+        onResolved={handleQrEntityResolved}
+      />
+
+      {/* Bird Passport Modal (opened directly from QR resolution) */}
+      {selectedBirdFromQr && (
+        <BirdDetailModal
+          bird={selectedBirdFromQr}
+          onClose={() => setSelectedBirdFromQr(null)}
+          allBirds={canaris}
+          cages={cages}
+          onEditBird={(birdToEdit) => {
+            onEditCanari(birdToEdit);
+            setSelectedBirdFromQr(birdToEdit);
+          }}
+          onDeleteBird={(birdToDelete) => {
+            onDeleteCanari(birdToDelete.id);
+            setSelectedBirdFromQr(null);
+          }}
+        />
+      )}
     </div>
   );
 }

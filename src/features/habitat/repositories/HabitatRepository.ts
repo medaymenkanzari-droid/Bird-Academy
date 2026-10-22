@@ -54,6 +54,9 @@ export class HabitatRepository {
 
     try {
       const oldCages = appStorage.getItem<Cage[]>('bird_academy_cages', []);
+      const legacyRawCages = (oldCages && oldCages.length > 0)
+        ? oldCages
+        : appStorage.getItem<Cage[]>('cages', []);
       
       let facilities = appStorage.getItem<Facility[]>(this.KEYS.facility, []);
       if (facilities.length === 0) {
@@ -91,7 +94,7 @@ export class HabitatRepository {
 
       const migratedCages: HabitatCage[] = appStorage.getItem<HabitatCage[]>(this.KEYS.cage, []);
       
-      oldCages.forEach(oldCage => {
+      legacyRawCages.forEach(oldCage => {
         const alreadyMigrated = migratedCages.some(c => c.id === String(oldCage.id));
         if (!alreadyMigrated) {
           migratedCages.push({
@@ -141,6 +144,7 @@ export class HabitatRepository {
         };
       });
       appStorage.setItem('bird_academy_cages', legacyCages);
+      appStorage.setItem('cages', legacyCages);
     } catch (e) {
       console.error('Failed to sync legacy cages:', e);
     }
@@ -258,6 +262,7 @@ export class HabitatRepository {
   static saveAll(cages: Cage[]): void {
     this.migrate();
     appStorage.setItem('bird_academy_cages', cages);
+    appStorage.setItem('cages', cages);
     
     // Sync into v2
     const list_v2 = this.getAll<HabitatCage>('cage');

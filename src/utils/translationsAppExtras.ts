@@ -88,8 +88,6 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     bioRefHealthTitle: "Santé, Prévention & Pathologies",
     bioRefCommonDiseases: "Pathologies fréquentes",
     bioRefExpertTips: "Conseils d'éleveur expert",
-    bioRefLegalStatus: "Statut réglementaire",
-    bioRefAllowedCaptivity: "Détention autorisée",
     bioRefYes: "OUI",
     bioRefNo: "NON",
     statusDomestique: "Espèce Domestique",
@@ -138,6 +136,14 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     "demo.confirmReset": "Êtes-vous sûr de vouloir réinitialiser la base de démonstration ? Toutes vos modifications locales de démo seront écrasées.",
     "demo.generateDataBtn": "Générer les données de démo",
     "demo.resetDbBtn": "Réinitialiser les données de démo",
+
+    // QR Scanner Camera Permissions
+    qrCameraDeniedAndroid: "Accès à la caméra refusé. Veuillez autoriser la caméra dans les paramètres d'applications de votre appareil.",
+    qrCameraDeniedWeb: "Accès à la caméra refusé. Vous pouvez autoriser la caméra dans votre navigateur ou importer une photo du QR code.",
+    qrCameraUnavailable: "Aucune caméra détectée sur cet appareil. Utilisez l'import d'image ou la saisie manuelle.",
+    qrCameraPermissionPrompt: "Demande d'autorisation de la caméra en cours…",
+    qrCameraInitializing: "Initialisation de la caméra…",
+    qrCameraRetry: "Réessayer la caméra",
   },
   en: {
     // Navigation Sidebar
@@ -221,8 +227,6 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     bioRefHealthTitle: "Health, Prevention & Pathologies",
     bioRefCommonDiseases: "Common diseases",
     bioRefExpertTips: "Expert breeder tips",
-    bioRefLegalStatus: "Regulatory status",
-    bioRefAllowedCaptivity: "Captivity allowed",
     bioRefYes: "YES",
     bioRefNo: "NO",
     statusDomestique: "Domestic Species",
@@ -271,6 +275,14 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     "demo.confirmReset": "Are you sure you want to reset the demo database? All local demo changes will be overwritten.",
     "demo.generateDataBtn": "Generate demo data",
     "demo.resetDbBtn": "Reset demo data",
+
+    // QR Scanner Camera Permissions
+    qrCameraDeniedAndroid: "Camera access denied. Please enable camera permission in your device application settings.",
+    qrCameraDeniedWeb: "Camera access denied. You can allow camera in your browser or import a QR code photo.",
+    qrCameraUnavailable: "No camera detected on this device. Use image import or manual entry.",
+    qrCameraPermissionPrompt: "Requesting camera permission…",
+    qrCameraInitializing: "Initializing camera…",
+    qrCameraRetry: "Retry camera",
   },
   ar: {
     // Navigation Sidebar
@@ -354,8 +366,6 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     bioRefHealthTitle: "الصحة والوقاية والأمراض",
     bioRefCommonDiseases: "الأمراض الشائعة",
     bioRefExpertTips: "نصائح المربي الخبير",
-    bioRefLegalStatus: "الوضع القانوني",
-    bioRefAllowedCaptivity: "التربية مسموح بها",
     bioRefYes: "نعم",
     bioRefNo: "لا",
     statusDomestique: "نوع أليف",
@@ -404,6 +414,14 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     "demo.confirmReset": "هل أنت متأكد من رغبتك في إعادة ضبط قاعدة العرض التجريبي؟ سيتم مسح كافة تعديلاتك التجريبية.",
     "demo.generateDataBtn": "توليد بيانات العرض التجريبي",
     "demo.resetDbBtn": "إعادة ضبط البيانات التجريبية",
+
+    // QR Scanner Camera Permissions
+    qrCameraDeniedAndroid: "تم رفض الوصول إلى الكاميرا. يرجى تفعيل إذن الكاميرا في إعدادات التطبيقات على جهازك.",
+    qrCameraDeniedWeb: "تم رفض الوصول إلى الكاميرا. يمكنك السماح بالكاميرا في متصفحك أو استيراد صورة رمز QR.",
+    qrCameraUnavailable: "لم يتم اكتشاف أي كاميرا على هذا الجهاز. استخدم استيراد الصور أو الإدخال اليدوي.",
+    qrCameraPermissionPrompt: "جاري طلب إذن الكاميرا…",
+    qrCameraInitializing: "جاري تهيئة الكاميرا…",
+    qrCameraRetry: "إعادة محاولة الكاميرا",
   },
   es: {
     // Navigation Sidebar
@@ -487,8 +505,6 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     bioRefHealthTitle: "Salud, Prevención y Patologías",
     bioRefCommonDiseases: "Patologías frecuentes",
     bioRefExpertTips: "Consejos de criador experto",
-    bioRefLegalStatus: "Estado regulatorio",
-    bioRefAllowedCaptivity: "Tenencia autorizada",
     bioRefYes: "SÍ",
     bioRefNo: "NO",
     statusDomestique: "Especie Doméstica",
@@ -537,6 +553,14 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     "demo.confirmReset": "¿Está seguro de restablecer la base de demostración?",
     "demo.generateDataBtn": "Generar datos de demo",
     "demo.resetDbBtn": "Restablecer datos de demo",
+
+    // QR Scanner Camera Permissions
+    qrCameraDeniedAndroid: "Acceso a la cámara denegado. Active el permiso de cámara en los ajustes de aplicaciones de su dispositivo.",
+    qrCameraDeniedWeb: "Acceso a la cámara denegado. Puede autorizar la cámara en su navegador o importar una foto del código QR.",
+    qrCameraUnavailable: "No se detectó ninguna cámara en este dispositivo. Utilice la importación de imágenes o la entrada manual.",
+    qrCameraPermissionPrompt: "Solicitando permiso de cámara…",
+    qrCameraInitializing: "Inicializando la cámara…",
+    qrCameraRetry: "Reintentar cámara",
   },
   it: {
     // Navigation Sidebar
@@ -620,8 +644,6 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     bioRefHealthTitle: "Salute, Prevenzione e Patologie",
     bioRefCommonDiseases: "Patologie frequenti",
     bioRefExpertTips: "Consigli dell'allevatore esperto",
-    bioRefLegalStatus: "Stato normativo",
-    bioRefAllowedCaptivity: "Detenzione autorizzata",
     bioRefYes: "SÌ",
     bioRefNo: "NO",
     statusDomestique: "Specie Domestica",
@@ -670,5 +692,13 @@ export const APP_EXTRAS_TRANSLATIONS: Record<Language, Record<string, string>> =
     "demo.confirmReset": "Sei sicuro di voler ripristinare il database demo?",
     "demo.generateDataBtn": "Genera dati demo",
     "demo.resetDbBtn": "Ripristina dati demo",
+
+    // QR Scanner Camera Permissions
+    qrCameraDeniedAndroid: "Accesso alla fotocamera negato. Abilita il permesso della fotocamera nelle impostazioni delle app del dispositivo.",
+    qrCameraDeniedWeb: "Accesso alla fotocamera negato. È possibile autorizzare la fotocamera nel browser o importare una foto del codice QR.",
+    qrCameraUnavailable: "Nessuna fotocamera rilevata su questo dispositivo. Usa l'importazione di immagini o l'inserimento manuale.",
+    qrCameraPermissionPrompt: "Richiesta di autorizzazione della fotocamera in corso…",
+    qrCameraInitializing: "Inizializzazione della fotocamera…",
+    qrCameraRetry: "Riprova fotocamera",
   }
 };

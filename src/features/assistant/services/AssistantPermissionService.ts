@@ -36,12 +36,19 @@ export class AssistantPermissionService {
       case 'GENERAL_FEEDING':
       case 'GENERAL_HABITAT':
       case 'GENERAL_HEALTH':
+      case 'TEXT_SIMPLIFICATION':
+      case 'TEXT_SUMMARIZATION':
+      case 'TEXT_REPHRASING':
+      case 'TEXT_EXPLANATION':
+      case 'NOTE_STRUCTURING':
         return 'GENERAL_KNOWLEDGE';
+      case 'EPISTEMIC_STATUS_EXPLANATION':
       case 'USER_BIRD':
       case 'USER_FARM':
       case 'USER_HABITAT':
       case 'USER_FEEDING':
         return 'BIRD_CONTEXT';
+      case 'CROSS_RESULT_EXPLANATION':
       case 'USER_BREEDING':
         return 'BREEDING_ANALYSIS';
       case 'USER_HEALTH':

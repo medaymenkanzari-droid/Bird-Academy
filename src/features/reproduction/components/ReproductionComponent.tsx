@@ -22,6 +22,7 @@ import {
 import ReproductionDashboard from './ReproductionDashboard';
 import BiologicalLifecycleManager from '../clutches/components/BiologicalLifecycleManager';
 import NurseryDashboard from '../nursery/components/NurseryDashboard';
+import BreedingPairContextCard from './BreedingPairContextCard';
 
 export default function ReproductionComponent() {
   const { language, isRtl } = useLanguage();
@@ -988,20 +989,15 @@ export default function ReproductionComponent() {
             </div>
           )}
 
-          {/* STEP 3: SUMMARY & SCIENTIFIC ANALYTICS */}
+          {/* STEP 3: CONTEXTE DES PARTENAIRES & POINTS DE CONTRÔLE (ZÉRO ÉTOILE / ZÉRO SCORE) */}
           {wizardStep === 3 && wizardCompatibility && (
             <div className="space-y-4 max-h-96 overflow-y-auto pr-1">
-              
-              {/* Stars rating banner */}
-              <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between">
-                <div>
-                  <span className="text-xs text-slate-400 block font-bold uppercase tracking-wider">{t('compatibilityScore')}</span>
-                  {renderStars(wizardCompatibility.score, "w-6 h-6 mt-1")}
-                </div>
-                <span className="text-lg font-black text-amber-600 bg-amber-50 px-4 py-1.5 rounded-full border border-amber-100">
-                  {wizardCompatibility.score} / 5
-                </span>
-              </div>
+              {/* Carte de contexte factuelle et neutre des partenaires */}
+              <BreedingPairContextCard
+                male={allBirds.find(b => b.id === selectedMaleId) || null}
+                female={allBirds.find(b => b.id === selectedFemaleId) || null}
+                language={language}
+              />
 
               {/* Checklist checkpoints points */}
               <div className="space-y-2">

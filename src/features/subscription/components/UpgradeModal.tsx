@@ -6,12 +6,14 @@
  * Multi-tier comparison and license activation modal.
  */
 
-import React from 'react';
-import { X, Check, Crown, Sparkles, Shield, KeyRound, ArrowRight } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { X, Check, Crown, Sparkles, Shield, KeyRound, ArrowRight, Upload, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { useSubscription } from '../hooks/useSubscription';
 import { SubscriptionTier } from '../types/subscription';
 import { TierBadge } from './TierBadge';
+import { LicensingService } from '../../licensing/services/LicensingService';
+import { useLicensing } from '../../licensing/hooks/useLicensing';
 
 export interface UpgradeModalProps {
   isOpen: boolean;
@@ -25,7 +27,67 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   onOpenActivation
 }) => {
   const { t, isRtl } = useLanguage();
-  const { currentTier, setTierOverride } = useSubscription();
+  const { currentTier } = useSubscription();
+  const { refresh } = useLicensing();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isImporting, setIsImporting] = useState(false);
+  const [importAlert, setImportAlert] = useState<{ type: 'success' | 'danger'; message: string } | null>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsImporting(true);
+    setImportAlert(null);
+
+    try {
+      const reader = new FileReader();
+      reader.onload = async (evt) => {
+        try {
+          const content = evt.target?.result as string;
+          const service = LicensingService.getInstance();
+          const res = await service.importOfflineBetaLicense(content);
+
+          if (res.isValid) {
+            setImportAlert({
+              type: 'success',
+              message: res.message || t('licenseLoadedSuccess') || 'Licence chargée et activée avec succès !',
+            });
+            await refresh();
+          } else {
+            setImportAlert({
+              type: 'danger',
+              message: res.message || t('licenseLoadFailed') || 'Échec du chargement de la licence.',
+            });
+          }
+        } catch (err: any) {
+          setImportAlert({
+            type: 'danger',
+            message: err?.message || t('licenseLoadFailed') || 'Erreur lors de la lecture du fichier.',
+          });
+        } finally {
+          setIsImporting(false);
+          if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+      };
+      reader.onerror = () => {
+        setImportAlert({
+          type: 'danger',
+          message: t('licenseLoadFailed') || 'Impossible de lire le fichier.',
+        });
+        setIsImporting(false);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      };
+      reader.readAsText(file);
+    } catch (err: any) {
+      setImportAlert({
+        type: 'danger',
+        message: err?.message || t('licenseLoadFailed') || 'Erreur inattendue.',
+      });
+      setIsImporting(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -77,9 +139,13 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
     }
   ];
 
-  const handleSelectTier = (tier: SubscriptionTier) => {
-    setTierOverride(tier);
-    onClose();
+  const handleSelectTier = (_tier: SubscriptionTier) => {
+    if (onOpenActivation) {
+      onClose();
+      onOpenActivation();
+    } else if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   return (
@@ -175,26 +241,82 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
           })}
         </div>
 
-        {/* Footer with LMSE License Activation */}
+        {/* Import Feedback Alert */}
+        {importAlert && (
+          <div 
+            data-testid="upgrade-modal-import-alert"
+            className={`mx-6 mb-2 p-3 rounded-xl border flex items-center justify-between text-xs font-semibold ${
+              importAlert.type === 'success'
+                ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500/30 text-emerald-700 dark:text-emerald-300'
+                : 'bg-red-50 dark:bg-red-950/40 border-red-500/30 text-red-700 dark:text-red-300'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              {importAlert.type === 'success' ? (
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+              ) : (
+                <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+              )}
+              <span>{importAlert.message}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setImportAlert(null)}
+              className="p-1 hover:opacity-75 transition-opacity cursor-pointer"
+              aria-label="Fermer"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {/* Footer with LMSE License Actions */}
         <div className="p-4 bg-slate-50 dark:bg-slate-950/60 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
           <div className="text-slate-500 dark:text-slate-400 text-center sm:text-left">
             <span>{t('haveOfficialLicenseKey') || 'Vous possédez une clé de licence LMSE officielle ?'}</span>
           </div>
 
-          {onOpenActivation && (
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Charger une licence existante (.lmse) */}
             <button
               type="button"
-              data-testid="upgrade-modal-activate-license-btn"
+              data-testid="upgrade-modal-load-existing-license-btn"
               onClick={() => {
-                onClose();
-                onOpenActivation();
+                setImportAlert(null);
+                fileInputRef.current?.click();
               }}
-              className="px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs hover:opacity-90 transition-all flex items-center gap-2 cursor-pointer"
+              disabled={isImporting}
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-xs disabled:opacity-50"
+              title={t('loadExistingLicenseDesc') || 'Sélectionnez un fichier .lmse pour activer votre licence sur cet appareil.'}
             >
-              <KeyRound className="w-3.5 h-3.5" />
-              <span>{t('activateLicenseKey') || 'Activer une clé de licence'}</span>
+              {isImporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+              <span>{t('loadExistingLicense') || 'Charger une licence existante'}</span>
             </button>
-          )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              data-testid="upgrade-modal-file-input"
+              accept="*/*,.lmse,.json,application/json,text/plain"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+
+            {onOpenActivation && (
+              <button
+                type="button"
+                data-testid="upgrade-modal-activate-license-btn"
+                onClick={() => {
+                  onClose();
+                  onOpenActivation();
+                }}
+                className="px-4 py-2 rounded-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs hover:opacity-90 transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <KeyRound className="w-3.5 h-3.5" />
+                <span>{t('activateLicenseKey') || 'Activer une clé de licence'}</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

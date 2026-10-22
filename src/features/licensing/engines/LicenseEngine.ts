@@ -14,7 +14,8 @@ export class LicenseEngine {
    */
   static isFeatureAllowed(license: License | null, featureKey: string): boolean {
     if (!license) return featureKey === 'core';
-    if (license.status === 'revoked') return false;
+    if (license.status === 'revoked' || license.status === 'expired' || license.status === 'suspended') return featureKey === 'core';
+    if (license.expiresAt && new Date(license.expiresAt).getTime() <= Date.now()) return featureKey === 'core';
     if (license.type === 'permanent' || license.type === 'enterprise') return true;
     if (!license.policy?.features) return true;
     return license.policy.features.includes(featureKey) || license.policy.features.includes('core');

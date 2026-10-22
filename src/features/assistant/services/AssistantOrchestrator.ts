@@ -5,13 +5,21 @@
 
 import { AIProvider } from '../providers/ai/AIProvider';
 import { LocalAIProvider } from '../providers/ai/LocalAIProvider';
-import { AssistantRequest, AssistantResponse } from '../types/assistant';
+import { AssistantRequest, AssistantResponse, QuestionCategory } from '../types/assistant';
+import { AssistantTier } from '../types/permissions';
 import { QuestionClassifier } from './QuestionClassifier';
 import { AssistantPermissionService } from './AssistantPermissionService';
 import { AssistantContextBuilder } from './AssistantContextBuilder';
 import { SafetyGuardService } from './SafetyGuardService';
 import { QuotaManager } from './QuotaManager';
 import { Language } from '../../../utils/translations';
+import { SubscriptionTierResolver } from '../../subscription/services/SubscriptionTierResolver';
+
+const TIER_RANK: Record<AssistantTier, number> = {
+  FREE: 0,
+  PREMIUM: 1,
+  PRO: 2
+};
 
 const QUOTA_EXCEEDED_MESSAGES: Record<Language, (limit: number) => string> = {
   fr: (limit) => `Vous avez atteint votre quota journalier de ${limit} requêtes pour votre plan. Passez au niveau PRO pour bénéficier de requêtes illimitées.`,
@@ -46,7 +54,15 @@ export class AssistantOrchestrator {
    * Processes an incoming assistant request through the complete foundation pipeline.
    */
   async process(request: AssistantRequest): Promise<AssistantResponse> {
-    const tier = request.tier || 'FREE';
+    // 0. Resolve Effective Tier with Security Clamping (Prevent privilege escalation)
+    const activeTier = SubscriptionTierResolver.getCurrentTierSync();
+    let tier: AssistantTier = activeTier;
+    if (request.tier) {
+      const reqRank = TIER_RANK[request.tier] ?? 0;
+      const activeRank = TIER_RANK[activeTier] ?? 0;
+      tier = reqRank <= activeRank ? request.tier : activeTier;
+    }
+
     const lang = request.language || 'fr';
     const isRtl = lang === 'ar';
 
@@ -83,9 +99,25 @@ export class AssistantOrchestrator {
     }
 
     const classification = QuestionClassifier.classify(request.query);
+    let effectiveCategory: QuestionCategory = classification.category;
+
+    // Enforce contextual category requirements based on explicit action or context payload
+    if (request.action === 'EXPLAIN_STATUS' || request.locusContext || request.passportContext) {
+      effectiveCategory = 'EPISTEMIC_STATUS_EXPLANATION';
+    } else if (request.action === 'EXPLAIN_RESULT' || request.crossResultContext) {
+      effectiveCategory = 'CROSS_RESULT_EXPLANATION';
+    } else if (request.action === 'SIMPLIFY') {
+      effectiveCategory = 'TEXT_SIMPLIFICATION';
+    } else if (request.action === 'SUMMARIZE') {
+      effectiveCategory = 'TEXT_SUMMARIZATION';
+    } else if (request.action === 'REPHRASE') {
+      effectiveCategory = 'TEXT_REPHRASING';
+    } else if (request.action === 'STRUCTURE_NOTE') {
+      effectiveCategory = 'NOTE_STRUCTURING';
+    }
 
     // 2. Permission Check
-    const auth = AssistantPermissionService.checkAuthorization(tier, classification.category, lang);
+    const auth = AssistantPermissionService.checkAuthorization(tier, effectiveCategory, lang);
     if (!auth.isAuthorized) {
       return {
         answer: auth.reason || "Fonctionnalité non autorisée pour votre niveau d'abonnement.",
@@ -120,16 +152,44 @@ export class AssistantOrchestrator {
     const safetyResult = SafetyGuardService.evaluateSafety(classification.category, request.query, lang);
 
     // 5. Provider Generation
-    const rawResponse = await this.aiProvider.generateResponse(request, context);
+    let rawResponse: AssistantResponse;
+    try {
+      if (!this.aiProvider) {
+        throw new Error('AI_PROVIDER_NULL');
+      }
+      rawResponse = await this.aiProvider.generateResponse(request, context);
+    } catch (_err: unknown) {
+      const errorMsgs: Record<Language, string> = {
+        fr: "Une erreur est survenue lors de l'exécution du fournisseur IA. Vos données restent sécurisées.",
+        en: "An error occurred during AI provider execution. Your data remains secure.",
+        ar: "حدث خطأ أثناء تشغيل مزود الذكاء الاصطناعي. تظل بياناتك آمنة.",
+        es: "Ocurrió un error durante la ejecución del proveedor IA. Sus datos permanecen seguros.",
+        it: "Si è verificato un errore durante l'esecuzione del provider IA. I tuoi dati rimangono sicuri."
+      };
+      return {
+        answer: errorMsgs[lang] || errorMsgs.fr,
+        language: lang,
+        confidence: 'UNKNOWN',
+        sources: [],
+        contextUsed: context.summary,
+        warnings: ['PROVIDER_ERROR'],
+        generatedAt: new Date().toISOString(),
+        responseType: 'ERROR',
+        status: 'ERROR',
+        isRtl
+      };
+    }
 
-    // 6. Consume quota once processed
-    QuotaManager.consume(tier);
+    // 6. Consume quota once processed (only if not an engine error/unavailable)
+    if (rawResponse.status === 'AVAILABLE') {
+      QuotaManager.consume(tier);
+    }
 
     // 7. Append Safety Disclaimers & Warnings
     const combinedWarnings = Array.from(new Set([...rawResponse.warnings, ...safetyResult.warnings]));
     let finalAnswer = rawResponse.answer;
 
-    if (safetyResult.disclaimers.length > 0) {
+    if (safetyResult.disclaimers.length > 0 && rawResponse.status !== 'UNAVAILABLE' && rawResponse.status !== 'ERROR') {
       finalAnswer = `${finalAnswer}\n\n${safetyResult.disclaimers.join('\n')}`;
     }
 

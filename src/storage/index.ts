@@ -17,7 +17,7 @@ const APPLICATION_DATA_KEYS = new Set([
 ]);
 
 const APPLICATION_KEY_PREFIXES = [
-  'bird_academy_', 'birdbox_', 'ba_', 'platform_', 'demo_', 'help_', 'wcag_'
+  'bird_academy_', 'birdbox_', 'ba_', 'platform_', 'help_', 'wcag_'
 ];
 
 function isApplicationStorageKey(key: string): boolean {
@@ -27,15 +27,7 @@ function isApplicationStorageKey(key: string): boolean {
 
 export class LocalStorageProvider implements IStorageProvider {
   private getPrefixedKey(key: string): string {
-    const isDemo = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bird_academy_demo_active') === 'true';
-    if (!isDemo) return key;
-    const systemKeys = [
-      'bird_academy_language', 'bird_academy_demo_active', 'db_version', 
-      'bird_academy_wizard_completed', 'bird_academy_wizard_step', 
-      'bird_academy_wizard_data', 'theme', 'bird_academy_wizard_state'
-    ];
-    if (systemKeys.includes(key)) return key;
-    return 'demo_' + key;
+    return key;
   }
 
   getItem<T>(key: string, defaultValue: T): T {
@@ -69,27 +61,14 @@ export class LocalStorageProvider implements IStorageProvider {
 
   clear(): void {
     try {
-      const isDemo = typeof sessionStorage !== 'undefined' && sessionStorage.getItem('bird_academy_demo_active') === 'true';
-      if (isDemo) {
-        // Clear only demo keys
-        const keysToRemove: string[] = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const k = localStorage.key(i);
-          if (k && k.startsWith('demo_')) {
-            keysToRemove.push(k);
-          }
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && isApplicationStorageKey(key)) {
+          keysToRemove.push(key);
         }
-        keysToRemove.forEach(k => localStorage.removeItem(k));
-      } else {
-        const keysToRemove: string[] = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && !key.startsWith('demo_') && isApplicationStorageKey(key)) {
-            keysToRemove.push(key);
-          }
-        }
-        keysToRemove.forEach(key => localStorage.removeItem(key));
       }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
     } catch (e) {
       console.error('Error clearing localStorage:', e);
     }
@@ -138,6 +117,7 @@ export class MigrationManager {
     // Conflicting values are intentionally preserved for a manual integrity audit.
     const businessAliases: Record<string, string> = {
       bird_academy_canaris: 'canaris',
+      bird_academy_cages: 'cages',
       bird_academy_couples: 'couples',
       bird_academy_reproductions: 'reproductions',
       bird_academy_pontes: 'pontes',

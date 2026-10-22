@@ -15,14 +15,15 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { translateGenetics } from '../utils/geneticsTranslations';
 import { HorizontalScrollContainer } from '../../../components/ui/HorizontalScrollContainer';
 import { 
-  Dna, GitBranch, HeartHandshake, Compass, Settings
+  Dna, GitBranch, HeartHandshake, Compass, Settings, ShieldCheck
 } from 'lucide-react';
+import { ColorGeneticsV2ExpertAudit } from '../../canonical/audit/components/ColorGeneticsV2ExpertAudit';
 
 export const GeneticsDashboard: React.FC = () => {
   const { language } = useLanguage();
   const gt = (key: string, variables?: Record<string, string | number>) => translateGenetics(language, key, variables);
   const [birds, setBirds] = useState<Canari[]>([]);
-  const [activeTab, setActiveTab] = useState<'explorer' | 'simulation' | 'lineage' | 'settings'>(() => {
+  const [activeTab, setActiveTab] = useState<'explorer' | 'simulation' | 'lineage' | 'settings' | 'audit'>(() => {
     return localStorage.getItem('ba_selected_pair_bird') ? 'simulation' : 'explorer';
   });
 
@@ -111,6 +112,18 @@ export const GeneticsDashboard: React.FC = () => {
           <Settings className="w-4 h-4 shrink-0" />
           <span className="whitespace-nowrap">{gt('genetics.tab.settings')}</span>
         </button>
+        <button
+          onClick={() => setActiveTab('audit')}
+          className={`px-4 py-3 text-xs font-bold transition-all border-b-2 flex items-center gap-1.5 shrink-0 cursor-pointer whitespace-nowrap ${
+            activeTab === 'audit' 
+              ? 'border-blue-500 text-blue-600 dark:text-blue-400 font-black' 
+              : 'border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-300'
+          }`}
+          data-testid="tab-expert-audit"
+        >
+          <ShieldCheck className="w-4 h-4 shrink-0 text-blue-400" />
+          <span className="whitespace-nowrap">Audit Expert V2 (Shadow)</span>
+        </button>
       </HorizontalScrollContainer>
 
       {/* Render sub-view */}
@@ -119,6 +132,7 @@ export const GeneticsDashboard: React.FC = () => {
         {activeTab === 'simulation' && <PairSimulation birds={birds} />}
         {activeTab === 'lineage' && <LineageAnalysis birds={birds} />}
         {activeTab === 'settings' && <GeneticsParameters />}
+        {activeTab === 'audit' && <ColorGeneticsV2ExpertAudit />}
       </div>
 
     </div>

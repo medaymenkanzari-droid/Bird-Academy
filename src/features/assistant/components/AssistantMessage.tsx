@@ -83,7 +83,8 @@ export const AssistantMessage: React.FC<AssistantMessageProps> = ({ message }) =
 
   return (
     <div
-      data-testid={`assistant-message-${message.id}`}
+      data-testid={isUser ? 'assistant-message-user' : 'assistant-message-assistant'}
+      data-message-id={message.id}
       className={`flex items-start gap-3 my-3 w-full ${isUser ? (isRtl ? 'flex-row' : 'flex-row-reverse') : (isRtl ? 'flex-row-reverse' : 'flex-row')}`}
     >
       {/* Sender Avatar */}

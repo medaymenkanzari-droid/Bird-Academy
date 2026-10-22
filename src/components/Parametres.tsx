@@ -468,20 +468,6 @@ export default function Parametres({
               <button
                 type="button"
                 onClick={() => {
-                  if (window.confirm(t('confirmResetDemoData'))) {
-                    onResetDatabase(false);
-                    setSuccessMsg(t('resetDemoDataSuccess'));
-                    setErrorMsg(null);
-                  }
-                }}
-                className="flex items-center justify-center gap-1.5 border border-amber-300 hover:bg-amber-50 dark:border-amber-700 dark:hover:bg-amber-950/30 text-amber-800 dark:text-amber-300 font-bold py-2 px-3.5 rounded-xl text-xs cursor-pointer transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" /> {t('loadDemoData')}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
                   if (window.confirm(t('confirmClearDatabase'))) {
                     onResetDatabase(true);
                     setSuccessMsg(t('clearDatabaseSuccess'));
@@ -510,30 +496,6 @@ export default function Parametres({
                 </>
               )}
             </div>
-
-            {/* Demo Data Generator Access Card */}
-            {setCurrentTab && (
-              <div className="mt-4 p-3.5 bg-indigo-50/70 dark:bg-indigo-950/40 rounded-xl border border-indigo-200/80 dark:border-indigo-850 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-indigo-600/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded-lg shrink-0">
-                    <Sparkles className="w-4 h-4 text-amber-500" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-xs text-slate-900 dark:text-white">{t('demoGenerator')}</h4>
-                    <p className="text-[10px] text-slate-500 dark:text-slate-400">{t('demoGeneratorDesc')}</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  data-testid="btn-open-demo-generator"
-                  onClick={() => setCurrentTab('demo_shortcut')}
-                  className="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 rounded-xl text-xs cursor-pointer transition-colors shrink-0 shadow-xs"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span>{t('openDemoGenerator')}</span>
-                </button>
-              </div>
-            )}
 
             {/* Tester Feedback Access Card */}
             <div className="mt-4 p-3.5 bg-emerald-50/70 dark:bg-emerald-950/40 rounded-xl border border-emerald-200/80 dark:border-emerald-850 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">

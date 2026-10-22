@@ -6,7 +6,9 @@
   },
   "files": [
     "dist/**/*",
-    "dist_admin/**/*",
+    "!dist/downloads/**",
+    "!dist/**/*.exe",
+    "!dist/**/*.apk",
     "electron-main.cjs",
     "preload.cjs"
   ],

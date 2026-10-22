@@ -10,14 +10,15 @@ import { Language } from './translations';
 
 export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = {
   fr: {
-    assistant: "Assistant IA",
-    assistantTitle: "Assistant IA Bird Academy",
+    localAssistant: "Assistant local",
+    assistant: "Assistant local",
+    assistantTitle: "Assistant local Bird Academy",
     assistantSub: "Assistant d'élevage 100% hors-ligne & expert aviaire",
     assistantTagline: "Vos données restent strictement sur cet appareil (100% Hors-ligne)",
     
     // Status & Badges
-    assistantEngineAvailable: "Moteur IA Disponible",
-    assistantEngineUnavailable: "Moteur IA Indisponible",
+    assistantEngineAvailable: "Assistant local disponible",
+    assistantEngineUnavailable: "Assistant local indisponible",
     assistantEngineLocal: "Local (Hors-ligne)",
     assistantQuota: "Quota",
     assistantQuotaRemaining: "{remaining} / {limit} requêtes restantes aujourd'hui",
@@ -51,13 +52,13 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     assistantSourceBreeding: "Registre de reproduction",
     assistantSourceHealth: "Dossier sanitaire",
     assistantSourceCalculated: "Calcul déterministe",
-    assistantSourceAi: "Moteur IA Local",
+    assistantSourceAi: "Assistant local",
     assistantContextUsed: "Contexte utilisé",
     assistantWarning: "Avertissement",
     assistantDisclaimer: "Rappel Vétérinaire",
     
     // Engine Unavailable & Disclaimers
-    assistantUnavailableNotice: "Le moteur IA local n'est pas disponible sur cet appareil.",
+    assistantUnavailableNotice: "L'assistant local n'est pas disponible sur cet appareil.",
     assistantUnavailableExplanation: "L'application fonctionne à 100% hors-ligne. Le référentiel biologique certifié et les outils d'analyse déterministes restent pleinement opérationnels pour répondre à vos questions.",
     assistantSpeciesNotFound: "Informations biologiques non disponibles pour cette espèce.",
     
@@ -82,17 +83,29 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     sug_bird_status: "Quel est l'état de cet oiseau ?",
     sug_bird_intelligence: "Analyse les alertes Bird Intelligence",
     sug_genealogy: "Analyse la généalogie de cet oiseau",
-    sug_monthly_summary: "Prépare une synthèse mensuelle"
+    sug_monthly_summary: "Prépare une synthèse mensuelle",
+
+    // Priority V1.9.0 Actions
+    actionSimplify: "Simplifier ce texte",
+    actionSummarize: "Résumer",
+    actionRephrase: "Reformuler",
+    actionExplain: "Expliquer simplement",
+    actionExplainStatus: "Que signifie ce statut ?",
+    actionStructureNote: "Structurer la note",
+    assistantPassportTitle: "Assistant IA — Bird Passport",
+    assistantPassportExplainLocus: "Expliquer ce statut avec l'IA",
+    assistantEpistemicReadOnlyNotice: "Mode consultation pure : l'assistant n'altère aucune donnée du Bird Passport."
   },
   en: {
-    assistant: "AI Assistant",
-    assistantTitle: "Bird Academy AI Assistant",
+    localAssistant: "Local assistant",
+    assistant: "Local assistant",
+    assistantTitle: "Bird Academy Local Assistant",
     assistantSub: "100% Offline breeding assistant & avian expert",
     assistantTagline: "Your data strictly stays on this device (100% Offline)",
     
     // Status & Badges
-    assistantEngineAvailable: "AI Engine Available",
-    assistantEngineUnavailable: "AI Engine Unavailable",
+    assistantEngineAvailable: "Local assistant available",
+    assistantEngineUnavailable: "Local assistant unavailable",
     assistantEngineLocal: "Local (Offline)",
     assistantQuota: "Quota",
     assistantQuotaRemaining: "{remaining} / {limit} requests remaining today",
@@ -126,13 +139,13 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     assistantSourceBreeding: "Breeding Registry",
     assistantSourceHealth: "Health Records",
     assistantSourceCalculated: "Deterministic Calculation",
-    assistantSourceAi: "Local AI Engine",
+    assistantSourceAi: "Local assistant",
     assistantContextUsed: "Context used",
     assistantWarning: "Warning",
     assistantDisclaimer: "Veterinary Reminder",
     
     // Engine Unavailable & Disclaimers
-    assistantUnavailableNotice: "The local AI engine is not available on this device.",
+    assistantUnavailableNotice: "The local assistant is not available on this device.",
     assistantUnavailableExplanation: "The application runs 100% offline. The certified biological registry and deterministic tools remain fully operational for scientific and breeding inquiries.",
     assistantSpeciesNotFound: "Biological information not available for this species.",
     
@@ -157,17 +170,29 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     sug_bird_status: "What is the status of this bird?",
     sug_bird_intelligence: "Analyze Bird Intelligence alerts",
     sug_genealogy: "Analyze the genealogy of this bird",
-    sug_monthly_summary: "Prepare a monthly summary"
+    sug_monthly_summary: "Prepare a monthly summary",
+
+    // Priority V1.9.0 Actions
+    actionSimplify: "Simplify text",
+    actionSummarize: "Summarize",
+    actionRephrase: "Rephrase",
+    actionExplain: "Explain simply",
+    actionExplainStatus: "What does this status mean?",
+    actionStructureNote: "Structure note",
+    assistantPassportTitle: "AI Assistant — Bird Passport",
+    assistantPassportExplainLocus: "Explain this status with AI",
+    assistantEpistemicReadOnlyNotice: "Pure read-only mode: the assistant does not alter any Bird Passport data."
   },
   ar: {
-    assistant: "المساعد الذكي",
-    assistantTitle: "مساعد Bird Academy الذكي",
+    localAssistant: "المساعد المحلي",
+    assistant: "المساعد المحلي",
+    assistantTitle: "مساعد Bird Academy المحلي",
     assistantSub: "مساعد تربية الطيور بدون إنترنت 100% وخبير علمي",
     assistantTagline: "تبقى بياناتك حصرياً على هذا الجهاز (100% بدون إنترنت)",
     
     // Status & Badges
-    assistantEngineAvailable: "محرك الذكاء الاصطناعي متاح",
-    assistantEngineUnavailable: "محرك الذكاء الاصطناعي غير متوفر",
+    assistantEngineAvailable: "المساعد المحلي متاح",
+    assistantEngineUnavailable: "المساعد المحلي غير متوفر",
     assistantEngineLocal: "محلي (بدون إنترنت)",
     assistantQuota: "الحصة اليومية",
     assistantQuotaRemaining: "{remaining} / {limit} استفسارات متبقية اليوم",
@@ -201,13 +226,13 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     assistantSourceBreeding: "سجل التزاوج",
     assistantSourceHealth: "الملف الصحي",
     assistantSourceCalculated: "حساب حتمي محلي",
-    assistantSourceAi: "محرك الذكاء الاصطناعي المحلي",
+    assistantSourceAi: "المساعد المحلي",
     assistantContextUsed: "السياق المستخدم",
     assistantWarning: "تنبيه",
     assistantDisclaimer: "تنبيه بيطري",
     
     // Engine Unavailable & Disclaimers
-    assistantUnavailableNotice: "محرك الذكاء الاصطناعي المحلي غير متوفر على هذا الجهاز.",
+    assistantUnavailableNotice: "المساعد المحلي غير متوفر على هذا الجهاز.",
     assistantUnavailableExplanation: "يعمل التطبيق بنسبة 100% بدون إنترنت. يظل المرجع البيولوجي المعتمد وأدوات التحليل الحسابية تعمل بكامل طاقتها للإجابة على استفساراتك.",
     assistantSpeciesNotFound: "المعلومات البيولوجية غير متوفرة لهذا الفصيل.",
     
@@ -232,17 +257,29 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     sug_bird_status: "ما هي حالة هذا الطائر؟",
     sug_bird_intelligence: "حلل تنبيهات ذكاء الطيور",
     sug_genealogy: "حلل شجرة نسب هذا الطائر",
-    sug_monthly_summary: "أعد تقريراً شهرياً موجزاً"
+    sug_monthly_summary: "أعد تقريراً شهرياً موجزاً",
+
+    // Priority V1.9.0 Actions
+    actionSimplify: "تبسيط هذا النص",
+    actionSummarize: "تلخيص",
+    actionRephrase: "إعادة صياغة",
+    actionExplain: "شرح مبسط",
+    actionExplainStatus: "ماذا تعني هذه الحالة؟",
+    actionStructureNote: "تنظيم الملاحظة",
+    assistantPassportTitle: "مساعد الذكاء الاصطناعي — جواز الطائر",
+    assistantPassportExplainLocus: "شرح هذه الحالة بالذكاء الاصطناعي",
+    assistantEpistemicReadOnlyNotice: "وضع القراءة فقط: لا يعدل المساعد أي بيانات في جواز الطائر."
   },
   es: {
-    assistant: "Asistente IA",
-    assistantTitle: "Asistente IA Bird Academy",
+    localAssistant: "Asistente local",
+    assistant: "Asistente local",
+    assistantTitle: "Asistente local Bird Academy",
     assistantSub: "Asistente de cría 100% offline y experto aviar",
     assistantTagline: "Sus datos permanecen estrictamente en este dispositivo (100% Sin conexión)",
     
     // Status & Badges
-    assistantEngineAvailable: "Motor IA Disponible",
-    assistantEngineUnavailable: "Motor IA No Disponible",
+    assistantEngineAvailable: "Asistente local disponible",
+    assistantEngineUnavailable: "Asistente local no disponible",
     assistantEngineLocal: "Local (Sin conexión)",
     assistantQuota: "Cuota",
     assistantQuotaRemaining: "{remaining} / {limit} consultas restantes hoy",
@@ -276,13 +313,13 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     assistantSourceBreeding: "Registro de cría",
     assistantSourceHealth: "Historial sanitario",
     assistantSourceCalculated: "Cálculo determinista",
-    assistantSourceAi: "Motor IA Local",
+    assistantSourceAi: "Asistente local",
     assistantContextUsed: "Contexto utilizado",
     assistantWarning: "Advertencia",
     assistantDisclaimer: "Aviso Veterinario",
     
     // Engine Unavailable & Disclaimers
-    assistantUnavailableNotice: "El motor de IA local no está disponible en este dispositivo.",
+    assistantUnavailableNotice: "El asistente local no está disponible en este dispositivo.",
     assistantUnavailableExplanation: "La aplicación funciona 100% sin conexión. El repositorio biológico certificado y las herramientas de cálculo siguen totalmente operativas.",
     assistantSpeciesNotFound: "Información biológica no disponible para esta especie.",
     
@@ -307,17 +344,29 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     sug_bird_status: "¿Cuál es el estado de este pájaro?",
     sug_bird_intelligence: "Analiza las alertas de Bird Intelligence",
     sug_genealogy: "Analiza la genealogía de este pájaro",
-    sug_monthly_summary: "Prepara una síntesis mensual"
+    sug_monthly_summary: "Prepara una síntesis mensual",
+
+    // Priority V1.9.0 Actions
+    actionSimplify: "Simplificar este texto",
+    actionSummarize: "Resumir",
+    actionRephrase: "Reformular",
+    actionExplain: "Explicar simplemente",
+    actionExplainStatus: "¿Qué significa este estado?",
+    actionStructureNote: "Estructurar nota",
+    assistantPassportTitle: "Asistente IA — Pasaporte del ave",
+    assistantPassportExplainLocus: "Explicar este estado con IA",
+    assistantEpistemicReadOnlyNotice: "Modo solo lectura: el asistente no altera ningún dato del pasaporte."
   },
   it: {
-    assistant: "Assistente IA",
-    assistantTitle: "Assistente IA Bird Academy",
+    localAssistant: "Assistente locale",
+    assistant: "Assistente locale",
+    assistantTitle: "Assistente locale Bird Academy",
     assistantSub: "Assistente all'allevamento 100% offline ed esperto aviario",
     assistantTagline: "I tuoi dati rimangono rigorosamente su questo dispositivo (100% Offline)",
     
     // Status & Badges
-    assistantEngineAvailable: "Motore IA Disponibile",
-    assistantEngineUnavailable: "Motore IA Non Disponibile",
+    assistantEngineAvailable: "Assistente locale disponibile",
+    assistantEngineUnavailable: "Assistente locale non disponibile",
     assistantEngineLocal: "Locale (Offline)",
     assistantQuota: "Quota",
     assistantQuotaRemaining: "{remaining} / {limit} richieste rimanenti oggi",
@@ -351,13 +400,13 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     assistantSourceBreeding: "Registro di riproduzione",
     assistantSourceHealth: "Cartella sanitaria",
     assistantSourceCalculated: "Calcolo deterministico",
-    assistantSourceAi: "Motore IA Locale",
+    assistantSourceAi: "Assistente locale",
     assistantContextUsed: "Contesto utilizzato",
     assistantWarning: "Avviso",
     assistantDisclaimer: "Promemoria Veterinario",
     
     // Engine Unavailable & Disclaimers
-    assistantUnavailableNotice: "Il motore IA locale non è disponibile su questo dispositivo.",
+    assistantUnavailableNotice: "L'assistente locale non è disponibile su questo dispositivo.",
     assistantUnavailableExplanation: "L'applicazione funziona al 100% offline. Il registro biologico certificato e gli strumenti di calcolo rimangono pienamente operativi.",
     assistantSpeciesNotFound: "Informazioni biologiche non disponibili per questa specie.",
     
@@ -382,6 +431,17 @@ export const ASSISTANT_TRANSLATIONS: Record<Language, Record<string, string>> = 
     sug_bird_status: "Qual è lo stato di questo uccello?",
     sug_bird_intelligence: "Analizza gli avvisi di Bird Intelligence",
     sug_genealogy: "Analizza la genealogia di questo uccello",
-    sug_monthly_summary: "Prepara una sintesi mensile"
+    sug_monthly_summary: "Prepara una sintesi mensile",
+
+    // Priority V1.9.0 Actions
+    actionSimplify: "Semplifica questo testo",
+    actionSummarize: "Riassumi",
+    actionRephrase: "Riformula",
+    actionExplain: "Spiega semplicemente",
+    actionExplainStatus: "Cosa significa questo stato?",
+    actionStructureNote: "Struttura nota",
+    assistantPassportTitle: "Assistente IA — Passaporto dell'uccello",
+    assistantPassportExplainLocus: "Spiega questo stato con l'IA",
+    assistantEpistemicReadOnlyNotice: "Modalità sola lettura: l'assistente non altera alcun dato del passaporto."
   }
 };

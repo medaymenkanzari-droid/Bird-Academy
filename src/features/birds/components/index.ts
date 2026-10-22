@@ -13,4 +13,7 @@ export * from './BirdPassportHealthTab';
 export * from './BirdPalmaresTab';
 export * from './BirdQrCodeModal';
 export * from './BirdPassportView';
+export * from './ProgressiveBirdPassportForm';
+export * from './BirdPassportProgressiveSummaryCard';
+export * from './BirdPhotoEditModal';
 

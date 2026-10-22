@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { License, LicenseType, LicensePolicy } from '../types/licensing';
+import { License, LicenseType, LicensePolicy, ActivationRecord } from '../types/licensing';
 import { CryptoService } from '../services/CryptoService';
 import { assertAdminContext } from '../../../config/appMode';
+import { ActivationCanonicalizer } from './ActivationCanonicalizer';
 
 export interface GenerateLicenseOptions {
   holderName: string;
@@ -15,6 +16,7 @@ export interface GenerateLicenseOptions {
   maxDevices?: number;
   customFeatures?: string[];
   metadata?: Record<string, any>;
+  activations?: ActivationRecord[];
 }
 
 export class LicenseGenerator {
@@ -85,7 +87,16 @@ export class LicenseGenerator {
     };
 
     const key = await this.generateKeyString(options.type, id, options.holderName);
-    const payloadToSign = `${id}:${key}:${options.holderName}:${options.type}:${issuedAt}:${expiresAt || 'NEVER'}:${maxDevices}`;
+    const activations = options.activations || [];
+    let payloadToSign: string;
+    if (activations.length > 0) {
+      payloadToSign = await ActivationCanonicalizer.computePayload(
+        { id, key, holderName: options.holderName, type: options.type, issuedAt, expiresAt, maxDevices },
+        activations
+      );
+    } else {
+      payloadToSign = `${id}:${key}:${options.holderName}:${options.type}:${issuedAt}:${expiresAt || 'NEVER'}:${maxDevices}`;
+    }
     
     const checksum = await CryptoService.sha256(payloadToSign);
     const signature = await CryptoService.generateSignature(checksum);
@@ -100,7 +111,7 @@ export class LicenseGenerator {
       issuedAt,
       expiresAt,
       policy,
-      activations: [],
+      activations: [...activations],
       revokedAt: null,
       revocationReason: null,
       checksum,

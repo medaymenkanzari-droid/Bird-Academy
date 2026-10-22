@@ -25,11 +25,12 @@ export class OfflineBetaExporter {
       features: license.policy.features,
       allowOfflineActivation: license.policy.allowOfflineActivation,
       mode: license.type === 'enterprise' ? 'ENTERPRISE' : (license.type === 'beta' ? 'OFFLINE_BETA' : 'COMMERCIAL'),
+      activations: license.activations,
     };
 
     return {
       format: 'bird-academy-lmse',
-      version: 1,
+      version: (license.activations && license.activations.length > 0) ? 2 : 1,
       license: payload,
       checksum: license.checksum,
       signature: license.signature,

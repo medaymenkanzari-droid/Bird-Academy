@@ -16,7 +16,7 @@ process.env.VITE_APP_MODE = 'admin';
 
 import { CapabilityResolver, PLAN_LIMITS } from '../src/features/subscription/services/CapabilityResolver';
 import { SubscriptionTierResolver } from '../src/features/subscription/services/SubscriptionTierResolver';
-import { DemoDataGenerator } from '../src/features/quality/utils/demoGenerator';
+import { DemoDataGenerator } from '../src/qa/demo/DemoGenerator';
 import { LicenseGenerator } from '../src/features/licensing/engines/LicenseGenerator';
 import { LicenseValidator } from '../src/features/licensing/engines/LicenseValidator';
 import { CryptoService } from '../src/features/licensing/services/CryptoService';
@@ -214,8 +214,8 @@ test('MISSION 013 — SUITE 3 : FREE Entitlement Ceiling & DEMO Lock', async (t)
 
   await t.test('3.3 DEMO Generator is locked for FREE users and capped to 20', () => {
     CapabilityResolver.setMockTierOverride('FREE');
-    assert.equal(CapabilityResolver.canUseDemoGenerator('FREE'), false);
-    assert.equal(PLAN_LIMITS.FREE.demoGeneratorAvailable, false);
+    assert.equal((CapabilityResolver as any).canUseDemoGenerator?.('FREE') ?? false, false);
+    assert.equal((PLAN_LIMITS.FREE as any).demoGeneratorAvailable ?? false, false);
 
     // Hard ceiling prevents mass creation
     const generated = DemoDataGenerator.generate('large'); // asks 1200

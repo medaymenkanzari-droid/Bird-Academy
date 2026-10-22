@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { calculateCageOccupancy } from '../src/features/habitat/utils/cageOccupancy';
 import { HabitatEngine } from '../src/business/HabitatEngine';
-import { DemoDataGenerator } from '../src/features/quality/utils/demoGenerator';
+import { DemoDataGenerator } from '../src/qa/demo/DemoGenerator';
 import { Canari, Cage } from '../src/types';
 
 describe('BUG-02 ROOT CAUSE FIX — CAGE OCCUPANCY & REAL RENDER AUDIT', () => {

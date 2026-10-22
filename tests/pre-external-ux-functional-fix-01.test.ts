@@ -31,7 +31,7 @@ if (typeof globalThis.localStorage === 'undefined') {
 
 // Core Services & Modules
 import { SpeciesProfileService } from '../src/features/species/services/SpeciesProfileService';
-import { DemoDataGenerator } from '../src/features/quality/utils/demoGenerator';
+import { DemoDataGenerator } from '../src/qa/demo/DemoGenerator';
 import { NotificationService } from '../src/features/platform/services/NotificationService';
 import { TRANSLATIONS } from '../src/utils/translations';
 
@@ -53,17 +53,16 @@ describe('MISSION PRE-EXTERNAL-UX-FUNCTIONAL-FIX-01 — TEST SUITE', () => {
   const parametresContent = fs.readFileSync(parametresPath, 'utf8');
   const indexCssContent = fs.readFileSync(indexCssPath, 'utf8');
   const electronMainContent = fs.readFileSync(electronMainPath, 'utf8');
-  const demoModeTabContent = fs.readFileSync(demoModeTabPath, 'utf8');
 
   // --------------------------------------------------------------------------
   // NAVIGATION & RESPONSIVE SCROLL (UX-01 to UX-04)
   // --------------------------------------------------------------------------
-  it('UX-01 : La sidebar contient tous les modules attendus (16 modules)', () => {
+  it('UX-01 : La sidebar contient tous les modules attendus (15 modules sans générateur démo)', () => {
     const expectedModules = [
       'dashboard', 'canaris', 'cages', 'couples', 'reproduction',
       'sante', 'alimentation', 'calendrier',
       'genetics', 'intelligence', 'statistiques', 'reference_biologique',
-      'depenses', 'ventes', 'parametres', 'demo_shortcut'
+      'depenses', 'ventes', 'parametres'
     ];
 
     for (const mod of expectedModules) {
@@ -130,70 +129,53 @@ describe('MISSION PRE-EXTERNAL-UX-FUNCTIONAL-FIX-01 — TEST SUITE', () => {
   });
 
   // --------------------------------------------------------------------------
-  // DEMO GENERATOR NOMENCLATURE & EXPOSURE (UX-05 to UX-07)
+  // DEMO GENERATOR PURGE FROM PRODUCTION (DEMO-PURGE-001)
   // --------------------------------------------------------------------------
-  it('UX-05 : Le générateur de démonstration est présent dans le code User', () => {
-    assert.ok(
+  it('UX-05 : Le générateur de démonstration est strictement ABSENT du code User production', () => {
+    assert.strictEqual(
       fs.existsSync(demoModeTabPath),
-      'DemoModeTab.tsx doit exister dans les composants User'
+      false,
+      'DemoModeTab.tsx doit être ABSENT de src/features/quality/components'
     );
-    assert.ok(
+    assert.strictEqual(
       appContent.includes("case 'demo_shortcut':"),
-      'App.tsx doit router vers DemoModeTab sous l\'onglet demo_shortcut'
+      false,
+      'App.tsx ne doit PAS router vers demo_shortcut'
     );
   });
 
-  it('UX-06 : Le libellé utilisateur principal n\'est plus "Sandbox Démo"', () => {
-    // Vérifier les traductions
-    assert.notStrictEqual(
-      TRANSLATIONS.fr.demoSandbox,
-      'Sandbox Démo',
-      'Le libellé FR ne doit plus être "Sandbox Démo"'
-    );
-    assert.strictEqual(
-      TRANSLATIONS.fr.demoSandbox,
-      'Données de Démonstration',
-      'Le libellé FR doit être "Données de Démonstration"'
-    );
-    assert.strictEqual(
-      TRANSLATIONS.en.demoSandbox,
-      'Demo Data Generator',
-      'Le libellé EN doit être "Demo Data Generator"'
-    );
-
-    // Vérifier l'en-tête de DemoModeTab
+  it('UX-06 : Le générateur de démonstration est isolé dans la zone QA uniquement', () => {
+    const qaDemoModeTabPath = path.join(rootDir, 'src', 'qa', 'demo', 'DemoModeTab.tsx');
     assert.ok(
-      !demoModeTabContent.includes('>Mode Démonstration Isolé<'),
-      'DemoModeTab ne doit plus utiliser l\'intitulé obsolète sans clé de traduction'
+      fs.existsSync(qaDemoModeTabPath),
+      'DemoModeTab.tsx doit exister uniquement dans src/qa/demo'
     );
   });
 
-  it('UX-07 : Le générateur est accessible depuis son point d\'entrée sidebar et Paramètres', () => {
+  it('UX-07 : Le générateur est strictement ABSENT de la sidebar et de Paramètres', () => {
     // Sidebar
-    assert.ok(
+    assert.strictEqual(
       desktopSidebarContent.includes("id: 'demo_shortcut'"),
-      'DesktopSidebar doit comporter l\'entrée demo_shortcut'
+      false,
+      'DesktopSidebar ne doit PAS comporter l\'entrée demo_shortcut'
     );
     // Paramètres
-    assert.ok(
+    assert.strictEqual(
       parametresContent.includes("data-testid=\"btn-open-demo-generator\""),
-      'Parametres.tsx doit comporter un bouton d\'accès rapide au générateur démo'
-    );
-    assert.ok(
-      parametresContent.includes("setCurrentTab('demo_shortcut')"),
-      'Le bouton dans Parametres doit rediriger vers setCurrentTab("demo_shortcut")'
+      false,
+      'Parametres.tsx ne doit PAS comporter le bouton du générateur démo'
     );
   });
 
   // --------------------------------------------------------------------------
   // DEMO GENERATOR SPECIES PROFILE SCOPING (UX-08 to UX-10)
   // --------------------------------------------------------------------------
-  it('UX-08 : Le Demo Generator respecte SpeciesProfileService', () => {
-    const demoGenPath = path.join(rootDir, 'src', 'features', 'quality', 'utils', 'demoGenerator.ts');
+  it('UX-08 : Le QA Demo Generator respecte SpeciesProfileService', () => {
+    const demoGenPath = path.join(rootDir, 'src', 'qa', 'demo', 'DemoGenerator.ts');
     const demoGenContent = fs.readFileSync(demoGenPath, 'utf8');
     assert.ok(
       demoGenContent.includes('SpeciesProfileService.getActiveSpeciesIds()'),
-      'demoGenerator.ts doit utiliser SpeciesProfileService.getActiveSpeciesIds()'
+      'DemoGenerator.ts doit utiliser SpeciesProfileService.getActiveSpeciesIds()'
     );
   });
 
@@ -320,19 +302,14 @@ describe('MISSION PRE-EXTERNAL-UX-FUNCTIONAL-FIX-01 — TEST SUITE', () => {
   // --------------------------------------------------------------------------
   // INTERNATIONALIZATION & RTL (UX-17 to UX-18)
   // --------------------------------------------------------------------------
-  it('UX-17 : Les traductions existent pour FR, EN, AR, ES, IT', () => {
+  it('UX-17 : Les traductions existent pour FR, EN, AR, ES, IT et ne contiennent plus de clés démo obsolètes', () => {
     const languages = ['fr', 'en', 'ar', 'es', 'it'] as const;
     for (const lang of languages) {
       const dict = TRANSLATIONS[lang];
       assert.ok(dict, `Le dictionnaire ${lang} doit exister`);
-      assert.ok(dict.demoSandbox, `${lang}.demoSandbox doit être défini`);
-      assert.ok(dict.demoGenerator, `${lang}.demoGenerator doit être défini`);
-      assert.ok(dict.openDemoGenerator, `${lang}.openDemoGenerator doit être défini`);
       assert.ok(dict.notificationCenterTitle, `${lang}.notificationCenterTitle doit être défini`);
-      assert.ok(
-        !dict.demoSandbox.toLowerCase().includes('sandbox'),
-        `Le libellé utilisateur pour ${lang} ne doit pas contenir "sandbox". Actuel : "${dict.demoSandbox}"`
-      );
+      assert.strictEqual(dict.demoGenerator, undefined, `${lang}.demoGenerator doit être absent`);
+      assert.strictEqual(dict.openDemoGenerator, undefined, `${lang}.openDemoGenerator doit être absent`);
     }
   });
 
