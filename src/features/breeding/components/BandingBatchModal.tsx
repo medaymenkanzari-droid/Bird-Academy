@@ -336,18 +336,19 @@ export const BandingBatchModal: React.FC<BandingBatchModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       const initialEntries: ChickBandingEntry[] = unbandedChicks.map((chick, idx) => {
-        const defaultMutation = geneticPredictions?.phenotypes[0]?.name || sire?.mutation || dam?.mutation || 'Classique';
-        const defaultColor = sire?.couleur_base || dam?.couleur_base || 'Jaune';
+        const defaultMutation = geneticPredictions?.phenotypes[0]?.name || sire?.mutation || dam?.mutation || '';
+        const defaultColor = sire?.couleur_base || dam?.couleur_base || '';
         const defaultSex = idx % 2 === 0 ? 'Indéterminé' : 'Indéterminé';
+        const speciesOrRaceName = sire?.race || sire?.espece || dam?.race || dam?.espece || 'Oiseau';
 
         return {
           id: chick.id,
           tempNumber: idx + 1,
           bague: chick.bague || `${seriesPrefix}${(seriesStartNumber + idx).toString().padStart(3, '0')}`,
-          nom: `${sire?.race || 'Canari'} #${chick.id}`,
+          nom: `${speciesOrRaceName} #${chick.id}`,
           sexe: defaultSex,
           mutation: defaultMutation,
-          couleur: `${defaultMutation} ${defaultColor}`,
+          couleur: [defaultMutation, defaultColor].filter(Boolean).join(' '),
           vigor: 'Normal',
           date_naissance: chick.date_naissance || new Date().toISOString().split('T')[0],
           cage_id: defaultCageId,
@@ -415,17 +416,24 @@ export const BandingBatchModal: React.FC<BandingBatchModalProps> = ({
     if (!isValid) return;
 
     const payload = entries.map((entry) => {
+      const parentSpecies = sire?.espece || dam?.espece || undefined;
+      const parentCategory = sire?.categorie || dam?.categorie || '';
+      const parentRace = sire?.race || dam?.race || '';
+      const parentBaseColor = sire?.couleur_base || dam?.couleur_base || '';
+      const parentFactor = sire?.facteur || dam?.facteur || '';
+      const fallbackNamePrefix = parentRace || parentSpecies || 'Oiseau';
+
       const newBird: Omit<Canari, 'id'> = {
         bague: entry.bague.trim().toUpperCase(),
-        nom: entry.nom || `${sire?.race || 'Canari'} ${entry.bague}`,
+        nom: entry.nom || `${fallbackNamePrefix} ${entry.bague}`,
         sexe: entry.sexe,
-        espece: sire?.espece || dam?.espece || 'canari',
-        categorie: sire?.categorie || dam?.categorie || 'canari_couleur',
-        race: sire?.race || dam?.race || 'Lipochrome',
-        mutation: entry.mutation || 'Classique',
-        couleur_base: sire?.couleur_base || dam?.couleur_base || 'Jaune',
-        facteur: sire?.facteur || dam?.facteur || 'Intensif',
-        couleur: entry.couleur || `${entry.mutation} ${sire?.couleur_base || 'Jaune'}`,
+        espece: parentSpecies,
+        categorie: parentCategory,
+        race: parentRace,
+        mutation: entry.mutation || sire?.mutation || dam?.mutation || '',
+        couleur_base: parentBaseColor,
+        facteur: parentFactor,
+        couleur: entry.couleur || [entry.mutation, parentBaseColor].filter(Boolean).join(' '),
         date_naissance: entry.date_naissance,
         cage_id: entry.cage_id,
         pere_id: sire ? sire.id : null,

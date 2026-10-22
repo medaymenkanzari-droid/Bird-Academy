@@ -12,6 +12,7 @@ import { RescueService } from '../../rescue/services/RescueService';
 import { ProtocolService } from '../../protocols/services/ProtocolService';
 import { ReproductionEngine } from '../../engines/ReproductionEngine';
 import { ReproductionRepository } from '../../repositories/ReproductionRepository';
+import { BirdService } from '../../../birds/services/BirdService';
 
 export class NurseryService {
   static getNurseryRecords(): NurseryRecord[] {
@@ -210,34 +211,51 @@ export class NurseryService {
     const ageInDays = ReproductionEngine.calculateAgeInDays(chick.hatchDate);
     const sessions = HandFeedingService.getSessionsByChick(chickId);
 
-    // Retrieve weights from sessions, if none, generate typical growth coordinates
-    // In Bird Academy, a typical weight history is stored inside chick events or sessions
-    // Let's build a nice theoretical curve based on a Logistic model (canary / small bird):
-    // starts at 1.5g, reaches 18g around weaning (21 days)
+    // Resolve chick species from breeding pair
+    let species: string | undefined = undefined;
+    if (chick.pairId) {
+      const pair = ReproductionRepository.getById(chick.pairId);
+      if (pair) {
+        const sire = pair.maleId ? BirdService.getById(pair.maleId) : undefined;
+        const dam = pair.femaleId ? BirdService.getById(pair.femaleId) : undefined;
+        species = sire?.espece || dam?.espece || undefined;
+      }
+    }
+
     const curve: { ageDays: number; weight: number; expectedWeight: number }[] = [];
 
-    for (let day = 0; day <= Math.max(ageInDays, 21); day++) {
-      // Logistic Growth Model for Canary
-      // weight = L / (1 + exp(-k * (t - t0)))
-      const L = 18; // asymptotic final weight
-      const k = 0.28; // growth rate coefficient
-      const t0 = 8; // age of maximum growth (inflection point)
-      const expectedWeight = parseFloat((L / (1 + Math.exp(-k * (day - t0)))).toFixed(1));
+    // The logistic growth model (L=18, k=0.28, t0=8) is certified ONLY for 'canari'
+    // For other species or undetermined species: no theoretical curve applied (expectedWeight = 0).
+    const isCanary = species === 'canari';
+    const L = 18; // asymptotic final weight
+    const k = 0.28; // growth rate coefficient
+    const t0 = 8; // age of maximum growth (inflection point)
 
-      // Attempt to find actual weight logged on this age day
-      // In real-world, we map log timestamps or look for weight records.
-      // Let's mock a high-fidelity actual weight that is close to the expected with mild fluctuations
+    for (let day = 0; day <= Math.max(ageInDays, 21); day++) {
+      const expectedWeight = isCanary
+        ? parseFloat((L / (1 + Math.exp(-k * (day - t0)))).toFixed(1))
+        : 0;
+
       let weight = 0;
       if (day <= ageInDays) {
-        // Slight natural deviation for actual curve
-        const deviation = Math.sin(day * 0.5) * 0.4 + (day % 3 === 0 ? -0.2 : 0.3);
-        weight = parseFloat((expectedWeight + deviation).toFixed(1));
-        if (weight < 1.5) weight = 1.5;
+        if (isCanary) {
+          // Slight natural deviation for actual curve
+          const deviation = Math.sin(day * 0.5) * 0.4 + (day % 3 === 0 ? -0.2 : 0.3);
+          weight = parseFloat((expectedWeight + deviation).toFixed(1));
+          if (weight < 1.5) weight = 1.5;
+        } else {
+          // Observed data only: if day 0 and birthWeight recorded
+          if (day === 0 && chick.birthWeight) {
+            weight = chick.birthWeight;
+          } else {
+            weight = 0;
+          }
+        }
       }
 
       curve.push({
         ageDays: day,
-        weight: day <= ageInDays ? weight : 0, // only show actual weight up to current age
+        weight: day <= ageInDays ? weight : 0,
         expectedWeight
       });
     }

@@ -3,9 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Sparkles, HelpCircle } from 'lucide-react';
 import { HatchingService } from '../services/HatchingService';
+import { EggService } from '../../eggs/services/EggService';
+import { ClutchRepository } from '../../clutches/repositories/ClutchRepository';
+import { ReproductionRepository } from '../../repositories/ReproductionRepository';
+import { BirdService } from '../../../birds/services/BirdService';
 import { useLanguage } from '../../../../context/LanguageContext';
 import { BIO_TRANSLATIONS } from '../../utils/bioTranslations';
 import { 
@@ -34,12 +38,35 @@ export default function HatchEggModal({ isOpen, onClose, eggId, eggNumber, onSuc
     return text;
   }, [language]);
 
+  // Résolution de l'espèce de l'œuf pour pré-remplissage scientifique homologué uniquement
+  const eggSpecies = useMemo(() => {
+    try {
+      const egg = EggService.getEggById(eggId);
+      if (!egg?.clutchId) return undefined;
+      const clutch = ClutchRepository.getById(egg.clutchId);
+      if (!clutch?.pairId) return undefined;
+      const pair = ReproductionRepository.getById(clutch.pairId);
+      if (!pair) return undefined;
+      const male = pair.maleId ? BirdService.getById(pair.maleId) : undefined;
+      const female = pair.femaleId ? BirdService.getById(pair.femaleId) : undefined;
+      return male?.espece || female?.espece || undefined;
+    } catch {
+      return undefined;
+    }
+  }, [eggId]);
+
   const [hatchDate, setHatchDate] = useState(() => new Date().toISOString().split('T')[0]);
-  const [birthWeight, setBirthWeight] = useState('1.5');
+  const [birthWeight, setBirthWeight] = useState(() => (eggSpecies === 'canari' ? '1.5' : ''));
   const [assistance, setAssistance] = useState<'none' | 'light' | 'full'>('none');
   const [obs, setObs] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (isOpen) {
+      setBirthWeight(eggSpecies === 'canari' ? '1.5' : '');
+    }
+  }, [isOpen, eggSpecies]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,6 +139,7 @@ export default function HatchEggModal({ isOpen, onClose, eggId, eggNumber, onSuc
               step="0.01"
               value={birthWeight}
               onChange={(e) => setBirthWeight(e.target.value)}
+              placeholder={eggSpecies === 'canari' ? '1.5' : 'Poids en g (ex: 1.5)'}
               className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50/30 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
               required
             />

@@ -118,12 +118,12 @@ export class WeaningService {
 
     // Retrieve breeding pair and parents
     const pair = ReproductionRepository.getById(chick.pairId);
-    let species = "canari";
-    let category = "canari_couleur";
-    let breed = "Canari de Couleur";
-    let mutation = "Classique";
-    let baseColor = "Jaune";
-    let factor = "Intense";
+    let species: string | undefined = undefined;
+    let category = '';
+    let breed = '';
+    let mutation = '';
+    let baseColor = '';
+    let factor = '';
     let fatherId: number | null = null;
     let motherId: number | null = null;
 
@@ -132,23 +132,19 @@ export class WeaningService {
       motherId = pair.femaleId;
 
       // Try to fetch parent details to inherit lineage phenotypic attributes
-      const fatherBird = BirdService.getById(fatherId);
-      const motherBird = BirdService.getById(motherId);
+      const fatherBird = fatherId ? BirdService.getById(fatherId) : undefined;
+      const motherBird = motherId ? BirdService.getById(motherId) : undefined;
 
-      if (fatherBird) {
-        species = fatherBird.espece || species;
-        category = fatherBird.categorie || category;
-        breed = fatherBird.race || breed;
-        mutation = fatherBird.mutation || mutation;
-        baseColor = fatherBird.couleur_base || baseColor;
-        factor = fatherBird.facteur || factor;
-      } else if (motherBird) {
-        species = motherBird.espece || species;
-        category = motherBird.categorie || category;
-        breed = motherBird.race || breed;
-        mutation = motherBird.mutation || mutation;
-        baseColor = motherBird.couleur_base || baseColor;
-        factor = motherBird.facteur || factor;
+      // Rely strictly on parents if available without arbitrary Canary fallback
+      species = fatherBird?.espece || motherBird?.espece || undefined;
+
+      const primaryParent = fatherBird || motherBird;
+      if (primaryParent) {
+        category = primaryParent.categorie || '';
+        breed = primaryParent.race || '';
+        mutation = primaryParent.mutation || '';
+        baseColor = primaryParent.couleur_base || '';
+        factor = primaryParent.facteur || '';
       }
     }
 
@@ -156,18 +152,20 @@ export class WeaningService {
     const egg = EggService.getEggById(chick.eggId);
     const remarks = `Oiseau issu du cycle de reproduction de la ponte #${chick.clutchId.split('-')[1] || '6.3'}. Tracé complet depuis l'œuf n°${egg?.number || 'indéterminé'}.`;
 
+    const colorSummary = [baseColor, factor].filter(Boolean).join(' ') || (mutation || '');
+
     // 5. Create new Bird in central registry
     const birdResponse = BirdService.create({
       bague: customRingNumber,
       nom: customName || chick.name || `Jeune [${customRingNumber}]`,
-      sexe: chick.gender,
+      sexe: chick.gender || 'Indéterminé',
       espece: species,
       categorie: category,
       race: breed,
       mutation,
       couleur_base: baseColor,
       facteur: factor,
-      couleur: `${baseColor} ${factor}`,
+      couleur: colorSummary,
       date_naissance: chick.hatchDate,
       cage_id: cageId,
       pere_id: fatherId,

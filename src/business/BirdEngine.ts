@@ -5,6 +5,7 @@
 
 import { Canari } from '../types';
 import { SPECIES_REGISTRY, getSpeciesById } from '../data/speciesRegistry';
+import { CanonicalDataBridgeAdapter } from '../features/canonical/CanonicalDataBridgeAdapter';
 import { calculateAgeString, calculateInbreedingCOI, getInbreedingCategory } from '../utils/genealogy';
 
 export interface BirdValidationError {
@@ -37,7 +38,8 @@ export class BirdEngine {
    */
   static validateSpecies(espece?: string): boolean {
     if (!espece) return false;
-    return SPECIES_REGISTRY.some(s => s.id === espece);
+    if (espece === 'UNKNOWN' || espece === 'Indéterminé') return true;
+    return SPECIES_REGISTRY.some(s => s.id === espece) || CanonicalDataBridgeAdapter.isRecognizedSpecies(espece);
   }
 
   /**
@@ -46,14 +48,14 @@ export class BirdEngine {
   static validateBreed(espece: string, category: string, race: string): boolean {
     if (!espece || !category || !race) return false;
     const speciesInfo = getSpeciesById(espece);
-    if (!speciesInfo) return false;
+    if (!speciesInfo) return race.trim().length > 0;
     
     const catInfo = speciesInfo.categories.find(c => 
       c.id === category || 
       c.defaultLabel.toLowerCase() === category.toLowerCase() ||
       c.id.toLowerCase() === category.toLowerCase()
     );
-    if (!catInfo) return false;
+    if (!catInfo) return race.trim().length > 0;
 
     // Standard check if breed exists in list, or allow custom breed if it is a non-empty string.
     return race.trim().length > 0;
@@ -290,24 +292,27 @@ export class BirdEngine {
       errors.push({ field: 'sexe', message: 'Le sexe de l’oiseau doit être Mâle, Femelle ou Indéterminé.' });
     }
 
-    // Species validation
-    if (!bird.espece || !this.validateSpecies(bird.espece)) {
+    // Species validation: if specified, must be valid. Indeterminate / UNKNOWN or absent is preserved.
+    if (bird.espece && !this.validateSpecies(bird.espece)) {
       errors.push({ field: 'espece', message: 'Espèce non valide.' });
     }
 
-    // Category / Breed validation
-    if (!bird.categorie || bird.categorie.trim().length === 0) {
-      errors.push({ field: 'categorie', message: 'La catégorie est obligatoire.' });
-    }
-    if (!bird.race || bird.race.trim().length === 0) {
-      errors.push({ field: 'race', message: 'La race est obligatoire.' });
-    } else if (bird.espece && bird.categorie && !this.validateBreed(bird.espece, bird.categorie, bird.race)) {
-      errors.push({ field: 'race', message: 'La race est incompatible avec cette espèce ou cette catégorie.' });
-    }
+    // Category / Breed validation: enforced when species is specified and known
+    const isSpeciesKnown = Boolean(bird.espece && bird.espece !== 'UNKNOWN' && bird.espece !== 'Indéterminé');
+    if (isSpeciesKnown) {
+      if (!bird.categorie || bird.categorie.trim().length === 0) {
+        errors.push({ field: 'categorie', message: 'La catégorie est obligatoire.' });
+      }
+      if (!bird.race || bird.race.trim().length === 0) {
+        errors.push({ field: 'race', message: 'La race est obligatoire.' });
+      } else if (bird.categorie && !this.validateBreed(bird.espece!, bird.categorie, bird.race)) {
+        errors.push({ field: 'race', message: 'La race est incompatible avec cette espèce ou cette catégorie.' });
+      }
 
-    // Color validation
-    if (!bird.couleur_base || bird.couleur_base.trim().length === 0) {
-      errors.push({ field: 'couleur_base', message: 'La couleur de base est requise.' });
+      // Color validation
+      if (!bird.couleur_base || bird.couleur_base.trim().length === 0) {
+        errors.push({ field: 'couleur_base', message: 'La couleur de base est requise.' });
+      }
     }
 
     // Date validation
