@@ -67,6 +67,16 @@ if (fs.existsSync(OUTPUT_BUILD_DIR)) {
 fs.rmSync(path.join(ROOT_DIR, 'dist'), { recursive: true, force: true });
 fs.cpSync(path.join(ROOT_DIR, 'dist_user'), path.join(ROOT_DIR, 'dist'), { recursive: true });
 
+// Architectural Isolation Guard: Ensure dist/downloads contains no native binaries
+const distDl = path.join(ROOT_DIR, 'dist', 'downloads');
+if (fs.existsSync(distDl)) {
+  for (const f of fs.readdirSync(distDl)) {
+    if (f.endsWith('.exe') || f.endsWith('.apk')) {
+      fs.rmSync(path.join(distDl, f), { force: true });
+    }
+  }
+}
+
 // Ensure package.json name is set to bird-academy-user and dependencies are empty for electron-builder
 const pkgPath = path.join(ROOT_DIR, 'package.json');
 const originalPkgContent = fs.readFileSync(pkgPath, 'utf8');
