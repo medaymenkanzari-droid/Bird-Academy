@@ -106,10 +106,12 @@ export class AnalyticsEngine {
     let indetCount = 0;
 
     birds.forEach(b => {
-      const sp = b.espece || 'Canari';
+      const rawSp = b.espece?.trim();
+      const isUnknownSp = !rawSp || rawSp === '' || rawSp.toUpperCase() === 'UNKNOWN' || rawSp.toLowerCase() === 'indéterminé' || rawSp.toLowerCase() === 'indéterminée' || rawSp.toLowerCase() === 'non spécifiée';
+      const sp = isUnknownSp ? 'Non spécifiée' : (rawSp === 'colombe' || rawSp === 'colombe-diamant' ? 'colombe_diamant' : rawSp);
       speciesMap[sp] = (speciesMap[sp] || 0) + 1;
       
-      const br = b.race || 'Canari de couleur';
+      const br = b.race?.trim() || 'Non spécifiée';
       breedMap[br] = (breedMap[br] || 0) + 1;
 
       const mt = b.mutation || 'Classique';

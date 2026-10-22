@@ -263,7 +263,7 @@ export const SPECIES_REGISTRY: SpeciesInfo[] = [
     ]
   },
   {
-    id: 'colombe',
+    id: 'colombe_diamant',
     nameKey: 'speciesColombe',
     defaultLabel: 'Colombe diamant',
     categories: [
@@ -294,8 +294,8 @@ export function getSpeciesById(id: string): SpeciesInfo | undefined {
   if (id === 'personatus') {
     return SPECIES_REGISTRY.find(s => s.id === 'agapornis_personatus');
   }
-  if (id === 'colombe_diamant' || id === 'colombe-diamant') {
-    return SPECIES_REGISTRY.find(s => s.id === 'colombe');
+  if (id === 'colombe' || id === 'colombe-diamant') {
+    return SPECIES_REGISTRY.find(s => s.id === 'colombe_diamant');
   }
   if (id === 'chardonneret' || id === 'carduelis_carduelis') {
     return SPECIES_REGISTRY.find(s => s.id === 'chardonneret_elegant');
@@ -530,6 +530,11 @@ export function migrateBirdTaxonomy<T extends {
         }
       }
     }
+  }
+
+  // 4. Colombe legacy species canonicalization (GAP-16 / GAP14-ANO-08)
+  if (migrated.espece === 'colombe' || migrated.espece === 'colombe-diamant') {
+    migrated.espece = 'colombe_diamant';
   }
 
   return migrated;

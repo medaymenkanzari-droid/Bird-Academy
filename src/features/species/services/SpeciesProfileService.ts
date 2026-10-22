@@ -100,7 +100,8 @@ export class SpeciesProfileService {
   static isSpeciesActive(speciesId: string): boolean {
     if (!speciesId) return false;
     const activeIds = this.getActiveSpeciesIds();
-    return activeIds.includes(speciesId);
+    const normalizedId = (speciesId === 'colombe' || speciesId === 'colombe-diamant') ? 'colombe_diamant' : speciesId;
+    return activeIds.includes(normalizedId) || activeIds.includes(speciesId);
   }
 
   /**

@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   User, Edit, HeartHandshake, QrCode, Copy, Archive, RefreshCw, Trash2, 
   MapPin, Calendar, Dna, ShieldCheck, Sparkles, X, ChevronRight, Share2,
-  Home, Trees, ShieldAlert
+  Home, Trees, ShieldAlert, Camera
 } from 'lucide-react';
 import { Canari } from '../../../types';
 import { BirdLocationSummary } from '../../habitat/services/HabitatService';
@@ -16,6 +16,7 @@ import { SpeciesBadge, AppButton, AppBadge } from '../../../components/design-sy
 import { useLanguage } from '../../../context/LanguageContext';
 import { getBiologicalProfileById } from '../../../reference/species/index';
 import { getSpeciesById } from '../../../data/speciesRegistry';
+import { BirdPhotoEditModal } from './BirdPhotoEditModal';
 
 export interface BirdHeroPassportCardProps {
   bird: Canari;
@@ -29,6 +30,7 @@ export interface BirdHeroPassportCardProps {
   onRestore?: (bird: Canari) => void;
   onDelete?: (bird: Canari) => void;
   onClose?: () => void;
+  onPhotoChange?: (bird: Canari) => void;
   isModal?: boolean;
 }
 
@@ -44,9 +46,11 @@ export const BirdHeroPassportCard: React.FC<BirdHeroPassportCardProps> = ({
   onRestore,
   onDelete,
   onClose,
+  onPhotoChange,
   isModal = false,
 }) => {
   const { t, language, isRtl } = useLanguage();
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState<boolean>(false);
 
   const isMale = (bird.sexe as string) === 'Mâle' || (bird.sexe as string) === 'Male';
   const isFemale = (bird.sexe as string) === 'Femelle' || (bird.sexe as string) === 'Female';
@@ -57,10 +61,16 @@ export const BirdHeroPassportCard: React.FC<BirdHeroPassportCardProps> = ({
   const bioProfile = resolvedSpeciesId ? getBiologicalProfileById(resolvedSpeciesId) : undefined;
   const speciesMeta = resolvedSpeciesId ? getSpeciesById(resolvedSpeciesId) : undefined;
 
-  // Localized species name for dynamic fallback
+  // Localized species name for dynamic fallback without silent Canary defaulting (AUDIT-31-03)
+  const declaredSpecies = (bird.espece && bird.espece.trim() !== '') ? bird.espece.trim() : '';
+  const scientificName = bioProfile?.identity?.scientificName || '';
+  const isOutOfScope = (resolvedSpeciesId && resolvedSpeciesId.toLowerCase().includes('passer')) || (bird as any).epistemicStatus === 'EXTRAPOLATION_DISABLED';
+
   const speciesCommonName = bioProfile?.identity?.names?.[language] 
     || (speciesMeta ? t(speciesMeta.nameKey) : '')
-    || t('speciesCanari');
+    || declaredSpecies
+    || scientificName
+    || (isOutOfScope ? 'Espèce hors catalogue V1 (OUT_OF_SCOPE)' : 'Espèce indéterminée (UNKNOWN)');
 
   // Dynamic biological adulthood threshold (minAgeReproduction from registry, defaults to 10 months)
   const minReproAge = bioProfile?.biology?.minAgeReproduction || 10;
@@ -103,26 +113,60 @@ export const BirdHeroPassportCard: React.FC<BirdHeroPassportCardProps> = ({
         {/* Left: Avatar & Identity details */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 w-full md:w-auto">
           
-          {/* Avatar frame with gender badge */}
+          {/* Avatar frame with gender badge and direct photo management trigger */}
           <div className="relative shrink-0">
-            <div className={`w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-950 border-2 flex items-center justify-center shadow-lg transition-transform ${
+            <div 
+              data-testid="hero-bird-avatar"
+              onClick={() => setIsPhotoModalOpen(true)}
+              className={`w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-slate-950 border-2 flex items-center justify-center shadow-lg transition-transform cursor-pointer group relative ${
               isMale 
                 ? 'border-blue-500/60 shadow-blue-500/10' 
                 : isFemale 
                   ? 'border-pink-500/60 shadow-pink-500/10' 
                   : 'border-slate-700 shadow-slate-900/50'
-            }`}>
+            }`}
+              title={photoSrc ? t('replacePhoto') : t('takePhoto')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setIsPhotoModalOpen(true);
+                }
+              }}
+            >
               {photoSrc ? (
                 <img 
                   src={photoSrc} 
                   alt={bird.nom || bird.bague} 
-                  className="w-full h-full object-cover" 
+                  className="w-full h-full object-cover transition-transform group-hover:scale-105" 
                   referrerPolicy="no-referrer" 
                 />
               ) : (
-                <User className={`w-12 h-12 ${isMale ? 'text-blue-400' : isFemale ? 'text-pink-400' : 'text-slate-500'}`} />
+                <User className={`w-12 h-12 transition-transform group-hover:scale-110 ${isMale ? 'text-blue-400' : isFemale ? 'text-pink-400' : 'text-slate-500'}`} />
               )}
+
+              {/* Hover overlay for immediate direct photo action */}
+              <div className="absolute inset-0 bg-slate-950/75 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-3xs font-bold gap-1 p-1 text-center">
+                <Camera className="w-5 h-5 text-emerald-400 animate-pulse" />
+                <span className="leading-tight">{photoSrc ? t('replacePhoto') : t('takePhoto')}</span>
+              </div>
             </div>
+
+            {/* Quick camera trigger button on the avatar corner */}
+            <button
+              type="button"
+              data-testid="hero-avatar-camera-trigger"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPhotoModalOpen(true);
+              }}
+              className={`absolute -top-1.5 ${isRtl ? '-left-1.5' : '-right-1.5'} p-1.5 rounded-full bg-slate-900/90 border border-slate-700 hover:border-emerald-400 text-slate-300 hover:text-white shadow-lg transition-transform hover:scale-110 cursor-pointer z-10`}
+              title={photoSrc ? t('replacePhoto') : t('takePhoto')}
+              aria-label={photoSrc ? t('replacePhoto') : t('takePhoto')}
+            >
+              <Camera className="w-3.5 h-3.5 text-emerald-400" />
+            </button>
 
             {/* Gender Badge */}
             <div className={`absolute -bottom-2 ${isRtl ? '-left-2' : '-right-2'} px-2.5 py-1 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1 shadow-md border ${
@@ -171,7 +215,7 @@ export const BirdHeroPassportCard: React.FC<BirdHeroPassportCardProps> = ({
 
             {/* Species, Breed & Mutation labels */}
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              <SpeciesBadge speciesId={resolvedSpeciesId || 'canari'} size="sm" />
+              <SpeciesBadge speciesId={resolvedSpeciesId} size="sm" />
               
               {bird.race && (
                 <span className="px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-200 font-semibold border border-slate-700/60">
@@ -320,6 +364,20 @@ export const BirdHeroPassportCard: React.FC<BirdHeroPassportCardProps> = ({
         </div>
 
       </div>
+
+      {/* Direct Photo Edit Modal */}
+      {isPhotoModalOpen && (
+        <BirdPhotoEditModal
+          isOpen={isPhotoModalOpen}
+          onClose={() => setIsPhotoModalOpen(false)}
+          bird={bird}
+          onSave={(updated) => {
+            if (onPhotoChange) {
+              onPhotoChange(updated);
+            }
+          }}
+        />
+      )}
     </div>
   );
 };

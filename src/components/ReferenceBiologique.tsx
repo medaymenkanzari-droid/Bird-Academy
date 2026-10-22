@@ -15,7 +15,7 @@ import { HorizontalScrollContainer } from './ui/HorizontalScrollContainer';
 import { useLanguage } from '../context/LanguageContext';
 import { 
   Bird, FileText, Heart, Egg, Grid, Thermometer, Droplets, 
-  Wheat, Info, Scale, ShieldAlert, Sparkles, BookOpen, 
+  Wheat, Info, ShieldAlert, Sparkles, BookOpen, 
   Search, CheckCircle2, AlertCircle, Compass, HelpCircle, ShieldCheck, Globe
 } from 'lucide-react';
 
@@ -28,17 +28,22 @@ export default function ReferenceBiologique() {
   const displayedProfiles = showAllCatalog ? BIOLOGICAL_SPECIES_REGISTRY : scopedProfiles;
 
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<string>(() => {
-    return activeSpeciesIds[0] || 'canari';
+    return activeSpeciesIds[0] || '';
   });
   const [activeSubTab, setActiveSubTab] = useState<'all' | 'bio' | 'repro' | 'breeding' | 'nutrition' | 'health'>('all');
 
   const selectedProfile = displayedProfiles.find(
     s => s.identity.id === selectedSpeciesId
-  ) || displayedProfiles[0] || BIOLOGICAL_SPECIES_REGISTRY[0];
+  );
 
-  const traceability = getBiologicalTraceability(selectedProfile.identity.id);
-
-  const { identity, biology, reproduction, breeding, nutrition, health, management } = selectedProfile;
+  const traceability = selectedProfile ? getBiologicalTraceability(selectedProfile.identity.id) : null;
+  const identity = selectedProfile?.identity;
+  const biology = selectedProfile?.biology;
+  const reproduction = selectedProfile?.reproduction;
+  const breeding = selectedProfile?.breeding;
+  const nutrition = selectedProfile?.nutrition;
+  const health = selectedProfile?.health;
+  const management = selectedProfile?.management;
 
   // Localized difficulty badge styling
   const getDifficultyBadge = (lvl: string) => {
@@ -112,6 +117,11 @@ export default function ReferenceBiologique() {
               aria-label={t('selectRace')}
               className="w-full px-3.5 py-2.5 text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-xs focus:ring-2 focus:ring-amber-500 focus:outline-none cursor-pointer"
             >
+              {(!selectedSpeciesId || !displayedProfiles.some(p => p.identity.id === selectedSpeciesId)) && (
+                <option value="">
+                  -- {language === 'ar' ? 'حدد نوعاً' : language === 'en' ? 'Select a species' : language === 'es' ? 'Seleccione una especie' : language === 'it' ? 'Seleziona una specie' : 'Sélectionnez une espèce'} --
+                </option>
+              )}
               {displayedProfiles.map((species) => (
                 <option key={species.identity.id} value={species.identity.id}>
                   🐦 {species.identity.names[language]} ({species.identity.scientificName}) {activeSpeciesIds.includes(species.identity.id) ? '★' : ''}
@@ -159,8 +169,42 @@ export default function ReferenceBiologique() {
         </div>
       </div>
 
-      {/* Hero Header for Selected Species */}
-      <div className="bg-gradient-to-r from-slate-800 to-slate-950 text-white p-6 md:p-8 rounded-2xl shadow-sm relative overflow-hidden min-w-0 max-w-full">
+      {(!selectedProfile || !traceability || !identity || !biology || !reproduction || !breeding || !nutrition || !health || !management) ? (
+        <div className="bg-white dark:bg-slate-900 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl p-10 flex flex-col items-center justify-center text-center space-y-4">
+          <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-full text-slate-400">
+            <Bird className="w-10 h-10" />
+          </div>
+          <div className="max-w-md space-y-1.5">
+            <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">
+              {language === 'ar' ? 'لم يتم تحديد أي نوع نشط' : language === 'en' ? 'No active species selected' : language === 'es' ? 'Ninguna especie activa seleccionada' : language === 'it' ? 'Nessuna specie attiva selezionata' : 'Aucune espèce active sélectionnée'}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              {language === 'ar' 
+                ? 'يرجى اختيار نوع من القائمة أعلاه أو تفعيل عرض الكتالوج الكامل للاطلاع على البيانات البيولوجية.' 
+                : language === 'en'
+                ? 'Please select a species from the list above or enable full catalog view to consult biological data.'
+                : language === 'es'
+                ? 'Por favor, seleccione una especie de la lista superior o active la vista del catálogo completo para consultar los datos biológicos.'
+                : language === 'it'
+                ? 'Seleziona una specie dall\'elenco sopra o attiva la visualizzazione dell\'intero catalogo per consultare i dati biologici.'
+                : 'Veuillez sélectionner une espèce ci-dessus ou activer l\'affichage du catalogue complet pour consulter les fiches biologiques.'}
+            </p>
+          </div>
+          {!showAllCatalog && (
+            <button
+              type="button"
+              onClick={() => setShowAllCatalog(true)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer shadow-xs"
+            >
+              <Globe className="w-4 h-4" />
+              <span>{t('bioRefViewFullCatalog') || 'Afficher tout le catalogue'}</span>
+            </button>
+          )}
+        </div>
+      ) : (
+        <>
+          {/* Hero Header for Selected Species */}
+          <div className="bg-gradient-to-r from-slate-800 to-slate-950 text-white p-6 md:p-8 rounded-2xl shadow-sm relative overflow-hidden min-w-0 max-w-full">
         {/* Subtle grid pattern overlay */}
         <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:14px_24px]"></div>
         
@@ -537,15 +581,6 @@ export default function ReferenceBiologique() {
             </div>
           </div>
 
-          {/* Regulatory Frame */}
-          <div className="bg-amber-50/50 border border-amber-100 p-6 rounded-2xl space-y-3">
-            <h4 className="text-xs font-bold text-amber-800 flex items-center gap-1.5 uppercase tracking-wider">
-              <Scale className="w-4 h-4 text-amber-600" />
-              {t('bioRefLegalStatus')}
-            </h4>
-            <p className="text-xs text-amber-900/80 leading-relaxed">{management.regulatoryStatus[language]}</p>
-          </div>
-
           {/* Expert Breeding Tips */}
           <div className="bg-white border border-slate-100 p-6 rounded-2xl space-y-3 shadow-xs">
             <h4 className="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
@@ -556,6 +591,8 @@ export default function ReferenceBiologique() {
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }
