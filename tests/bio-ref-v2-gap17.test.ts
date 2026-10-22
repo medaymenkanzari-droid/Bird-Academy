@@ -9,7 +9,7 @@
  * 1. Chaque nouvel EvidenceId est unique
  * 2. Chaque sourceId utilisé existe dans BIBLIOGRAPHIC_SOURCES
  * 3. Aucune référence orpheline
- * 4. Colombe possède désormais les EvidenceRecord attendus (2 œufs, 13j, in situ 23-37g, ex situ 35-45g, bagues 3.5/3.8, nid soucoupe, hybride stérile)
+ * 4. Colombe possède désormais les EvidenceRecord attendus (2 œufs, 13j, in situ 23-37g, ex situ 35-45g, bagues 3.5 UOF / 3.5 Aviornis [3.8 rejeté], nid soucoupe, hybride stérile)
  * 5. Personatus possède la traçabilité de ap_blue (blue1, bl, autosomique récessif, bl/bl)
  * 6. Fischer possède uniquement les preuves biologiques réellement documentées (bec, 4-6 œufs, 22j, bague 4.0)
  * 7. ap_blue reste CANONICAL
@@ -144,7 +144,7 @@ test('GAP17-04: Colombe diamant possède tous les EvidenceRecords canoniques att
   assert.ok(weightRec.claim.includes('aucune fusion de plages'));
   assert.ok(weightRec.limitations?.includes('GAP-12'));
 
-  // 4. Bagues 3.5 mm UOF/COM et 3.8 mm CDE/Aviornis
+  // 4. Bagues 3.5 mm UOF/COM et 3.5 mm Aviornis (3.8 mm rejeté comme canonique)
   const ringRec = recordMap.get('EVD-COL-01-RINGS');
   assert.ok(ringRec);
   assert.strictEqual(ringRec.ruleId, 'COL_BREED_RING_STANDARDS');

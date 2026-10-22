@@ -460,6 +460,6 @@ export const BIBLIOGRAPHIC_SOURCES: Readonly<Record<string, BibliographicSource>
     language: 'fr',
     verificationStatus: 'VERIFIED',
     consultedAt: '2026-10-21',
-    notes: 'Diamètres réglementaires officiels de bagues fermées : 3.8 mm pour Geopelia cuneata, 4.0 mm pour Agapornis fischeri et personatus, 4.5 mm pour Agapornis roseicollis.'
+    notes: 'Diamètres réglementaires officiels de bagues fermées : 3.8 mm mentionné historiquement pour Geopelia cuneata (décision humaine finale GAP-19 : 3.5 mm canonique UOF/COM et Aviornis International, 3.8 mm rejeté), 4.0 mm pour Agapornis fischeri et personatus, 4.5 mm pour Agapornis roseicollis.'
   })
 });

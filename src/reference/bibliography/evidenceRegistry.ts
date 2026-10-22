@@ -764,7 +764,7 @@ export const EVIDENCE_REGISTRY: Readonly<Record<string, EvidenceRecord>> = Objec
     evidenceId: 'EVD-COL-01-RINGS',
     speciesId: 'colombe_diamant',
     ruleId: 'COL_BREED_RING_STANDARDS',
-    claim: 'Standards réglementaires de baguage de Geopelia cuneata : coexistence documentée de 3.5 mm (standard officiel UOF / COM France) et 3.8 mm (standard officiel CDE / Aviornis France International), sans valeur unique universelle.',
+    claim: 'Standards réglementaires de baguage de Geopelia cuneata : conformité confirmée à 3.5 mm pour UOF / COM France et Aviornis International, avec rejet explicite de 3.8 mm comme valeur canonique.',
     citations: Object.freeze([
       Object.freeze({
         citationId: 'CIT-COL-01-RINGS-UOF',
@@ -772,12 +772,12 @@ export const EVIDENCE_REGISTRY: Readonly<Record<string, EvidenceRecord>> = Objec
         preciseLocation: Object.freeze({ section: 'Columbidés exotiques' }),
         concordance: 'CONCORDANT',
         epistemicRole: 'PRIMARY',
-        rationale: 'Diamètre officiel réglementaire UOF / COM France (3.5 mm) et CDE / Aviornis (3.8 mm).'
+        rationale: 'Recommandations réglementaires de baguage : UOF / COM France (3.5 mm) et Aviornis International (3.5 mm).'
       })
     ]),
     epistemicStatus: 'VERIFIED',
     humanReviewRequired: false,
-    limitations: 'Baguage multi-standard homologué sans imposition de 4.0 mm FFO comme valeur canonique.'
+    limitations: 'Baguage standardisé à 3.5 mm pour UOF / COM et Aviornis International ; 3.8 mm rejeté comme valeur canonique et 4.0 mm FFO non canonique.'
   }),
 
   'EVD-COL-01-NEST': Object.freeze({

@@ -110,7 +110,7 @@ export const COLOMBE_DIAMANT_PROFILE: BiologicalSpeciesProfile = {
     weaningAge: 28 // Sevrage complet et autonomie vers 28 jours
   },
   breeding: {
-    bandSize: '3.5 mm (UOF / COM France) / 3.8 mm (CDE / Aviornis France International)',
+    bandSize: '3.5 mm (UOF / COM France) / 3.5 mm (Aviornis International)',
     ringStandards: [
       {
         federationCode: 'UOF_COM_FRANCE',
@@ -126,16 +126,16 @@ export const COLOMBE_DIAMANT_PROFILE: BiologicalSpeciesProfile = {
         }
       },
       {
-        federationCode: 'CDE_AVIORNIS',
-        federationName: 'CDE / Aviornis France International',
-        diameterMm: 3.8,
-        label: '3.8 mm',
+        federationCode: 'AVIORNIS_INTERNATIONAL',
+        federationName: 'Aviornis International',
+        diameterMm: 3.5,
+        label: '3.5 mm',
         notes: {
-          fr: 'Standard officiel CDE / Aviornis France International (3,8 mm)',
-          en: 'Official CDE / Aviornis France International standard (3.8 mm)',
-          ar: 'المعيار الرسمي CDE / Aviornis فرنسا الدولية (3.8 مم)',
-          es: 'Estándar oficial CDE / Aviornis Francia Internacional (3.8 mm)',
-          it: 'Standard ufficiale CDE / Aviornis Francia Internazionale (3.8 mm)'
+          fr: 'Standard officiel Aviornis International (3,5 mm) [3,8 mm rejeté comme valeur canonique]',
+          en: 'Official Aviornis International standard (3.5 mm) [3.8 mm rejected as canonical value]',
+          ar: 'المعيار الرسمي Aviornis الدولية (3.5 مم) [3.8 مم مرفوض كقيمة قياسية]',
+          es: 'Estándar oficial Aviornis Internacional (3.5 mm) [3.8 mm rechazado como valor canónico]',
+          it: 'Standard ufficiale Aviornis International (3.5 mm) [3.8 mm rifiutato come valore canonico]'
         }
       }
     ],
@@ -226,16 +226,16 @@ export const COLOMBE_DIAMANT_PROFILE: BiologicalSpeciesProfile = {
     }
   },
   traceability: {
-    source: 'Standards C.O.M. / UOF (3,5 mm) / CDE / Aviornis (3,8 mm) / Monographie Columbidae / Frith 1982 / HANZAB 1996 / Décision scientifique humaine GAP-10-E',
-    revisionDate: '2026-10-21',
+    source: 'Standards C.O.M. / UOF (3,5 mm) / Aviornis International (3,5 mm) [3,8 mm rejeté comme canonique] / Monographie Columbidae / Frith 1982 / HANZAB 1996 / Décision scientifique humaine GAP-10-E / GAP-19',
+    revisionDate: '2026-10-22',
     validationStatus: 'draft',
     author: 'Comité Scientifique Bird Academy',
     disclaimer: {
-      fr: 'Fiche biologique dédiée structurée (2 œufs, incubation 13j, nid soucoupe, bague multi-standard 3.5/3.8 mm, poids in situ 23-37g et ex situ 35-45g). Source bibliographique validée GAP-10-E sous statut draft avant clôture globale (HUMAN_REVIEW_REQUIRED).',
-      en: 'Dedicated biological profile structured (2 eggs, 13d incubation, saucer nest, multi-standard band 3.5/3.8 mm, in situ weight 23-37g and ex situ 35-45g). Bibliographic source validated GAP-10-E in draft status pending global closure (HUMAN_REVIEW_REQUIRED).',
-      ar: 'بطاقة بيولوجية مخصصة ومحدثة (بيضتان، حضن 13 يوماً، عش صحن، تحجيل متعدد المعايير 3.5/3.8 مم، وزن بيئي 23-37 غ ووزن أسري 35-45 غ).',
-      es: 'Ficha biológica dedicada estructurada (2 huevos, incubación 13d, nido plato, anillado multi-estándar 3.5/3.8 mm, peso in situ 23-37g y ex situ 35-45g).',
-      it: 'Scheda biologica dedicata strutturata (2 uova, incubazione 13gg, nido a piattello, inanellamento multi-standard 3.5/3.8 mm, peso in situ 23-37g ed ex situ 35-45g).'
+      fr: 'Fiche biologique dédiée structurée (2 œufs, incubation 13j, nid soucoupe, bague contextuelle 3.5 mm UOF-COM / 3.5 mm Aviornis [3.8 mm rejeté comme canonique], poids in situ 23-37g et ex situ 35-45g). Source bibliographique validée GAP-10-E / GAP-19 sous statut draft avant clôture globale (HUMAN_REVIEW_REQUIRED).',
+      en: 'Dedicated biological profile structured (2 eggs, 13d incubation, saucer nest, contextual band 3.5 mm UOF-COM / 3.5 mm Aviornis [3.8 mm rejected as canonical], in situ weight 23-37g and ex situ 35-45g). Bibliographic source validated GAP-10-E / GAP-19 in draft status pending global closure (HUMAN_REVIEW_REQUIRED).',
+      ar: 'بطاقة بيولوجية مخصصة ومحدثة (بيضتان، حضن 13 يوماً، عش صحن، تحجيل سياقي 3.5 مم UOF-COM / 3.5 مم Aviornis [3.8 مم مرفوض كقيمة قياسية]، وزن بيئي 23-37 غ ووزن أسري 35-45 غ).',
+      es: 'Ficha biológica dedicada estructurada (2 huevos, incubación 13d, nido plato, anillado contextual 3.5 mm UOF-COM / 3.5 mm Aviornis [3.8 mm rechazado como canónico], peso in situ 23-37g y ex situ 35-45g).',
+      it: 'Scheda biologica dedicata strutturata (2 uova, incubazione 13gg, nido a piattello, inanellamento contestuale 3.5 mm UOF-COM / 3.5 mm Aviornis [3.8 mm rifiutato come canonico], peso in situ 23-37g ed ex situ 35-45g).'
     }
   }
 };

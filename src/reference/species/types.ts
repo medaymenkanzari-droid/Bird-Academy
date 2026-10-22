@@ -72,10 +72,10 @@ export interface SpeciesReproduction {
 }
 
 export interface FederationRingStandard {
-  federationCode: string; // e.g. 'UOF_COM_FRANCE' | 'CDE_AVIORNIS'
-  federationName: string; // e.g. 'UOF / COM France' | 'CDE / Aviornis France International'
-  diameterMm: number; // e.g. 3.5 | 3.8
-  label: string; // e.g. '3.5 mm' | '3.8 mm'
+  federationCode: string; // e.g. 'UOF_COM_FRANCE' | 'AVIORNIS_INTERNATIONAL'
+  federationName: string; // e.g. 'UOF / COM France' | 'Aviornis International'
+  diameterMm: number; // e.g. 3.5
+  label: string; // e.g. '3.5 mm'
   notes?: MultilingualText;
 }
 

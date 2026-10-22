@@ -11,7 +11,7 @@ Status: Active Master Tracking
 | ID | Domaine / Sujet | Statut | Mission d'origine | Résolution / Statut Actuel |
 |---|---|---|---|---|
 | **HRR-01** | Perruche ondulée — Profil V2 | **RÉSOLU** | GAP-01 | Homologué et intégré |
-| **HRR-02** | Colombe diamant — Profil V2 | **TECHNICALLY IMPLEMENTED — SCIENTIFIC DECISION RECORDED** | GAP-02 / GAP-10-C / GAP-10-E / GAP-12 / GAP-17 | Décision scientifique humaine enregistrée et implémentée techniquement en GAP-12 (bagues 3.5/3.8 mm, poids in situ 23–37 g / ex situ 35–45 g). Preuves documentaires formalisées en GAP-17 (`EVD-COL-01-TAXON`, `EVD-COL-01-REPRO`, `EVD-COL-01-WEIGHT`, `EVD-COL-01-RINGS`, `EVD-COL-01-NEST`, `EVD-COL-01-HYB`). Profil maintenu en draft sous gouvernance V2 jusqu'à clôture globale. |
+| **HRR-02** | Colombe diamant — Profil V2 | **TECHNICALLY IMPLEMENTED — SCIENTIFIC DECISION RECORDED** | GAP-02 / GAP-10-C / GAP-10-E / GAP-12 / GAP-17 / GAP-19 | Décision scientifique humaine finale enregistrée et implémentée techniquement (baguage contextuel : UOF / COM 3,5 mm, Aviornis International 3,5 mm, 3,8 mm non canonique ; poids in situ 23–37 g / ex situ 35–45 g). Preuves documentaires formalisées (`EVD-COL-01-TAXON`, `EVD-COL-01-REPRO`, `EVD-COL-01-WEIGHT`, `EVD-COL-01-RINGS`, `EVD-COL-01-NEST`, `EVD-COL-01-HYB`). Profil maintenu en draft sous gouvernance V2 jusqu'à clôture globale. |
 | **HRR-03** | Zero Canary Fallback — Éradication des fallbacks génériques, périphériques & affichage | **TECHNICALLY RESOLVED — ZERO CANARY FALLBACK REMEDIATED (GAP-13, GAP-15 & GAP-16)** | GAP-06-A / GAP-13 / GAP-14 / GAP-15 / GAP-16 | Éradication technique intégrale des 12 fallbacks implicites initiaux (GAP-13), des 4 anomalies résiduelles dans les périphériques de reproduction (GAP-15), et des 4 anomalies d'affichage / canonicalisation (GAP-16 : ReferenceBiologique, Bird Passport, Dashboard/Analytics, canonicalisation colombe_diamant). Strictement species-scoped : toute espèce absente/inconnue/autre ne fait l'objet d'aucune hypothèse Canary. Comportements Canary explicitement sélectionnés (`speciesId === 'canari'`) préservés intacts. |
 | **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNIQUEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
 | **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **PARTIELLEMENT HOMOLOGUÉ** (`ap_blue` actif & tracé EVD / allèles complexes et Masque Orange restent HRR) | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C / GAP-10-E / GAP-11 / GAP-17 | Homologation technique réalisée en GAP-11 pour `ap_blue` (blue1 / bl, autosomique récessive, status: CANONICAL) dans le catalogue d'*Agapornis personatus*, avec traçabilité formelle enregistrée en GAP-17 (`EVD-AGAP-PERS-BLUE`). Les allèles complexes (`blue2 / bl2`, `turquoise`, `sapphire`), `ar_masque_orange` et les catalogues Fischeri restent formellement **HUMAN_REVIEW_REQUIRED** / non homologués. HRR-05 non clôturé globalement. |
@@ -641,14 +641,15 @@ BIO_REF_V2_STATUS = HUMAN_DECISIONS_RECORDED_AWAITING_TECHNICAL_IMPLEMENTATION
   - Ajout du type extensible `FederationRingStandard` dans `src/reference/species/types.ts`.
   - Ajout du champ optionnel typé `ringStandards?: FederationRingStandard[]` dans `SpeciesBreeding`.
   - Fonction helper dédiée `getSpeciesRingStandards(speciesId)` dans `src/reference/species/index.ts`.
-- **Standards canoniques enregistrés dans `COLOMBE_DIAMANT_PROFILE.breeding` :**
+- **Standards canoniques enregistrés dans `COLOMBE_DIAMANT_PROFILE.breeding` (révision finale GAP-19) :**
   1. `UOF_COM_FRANCE` : diamètre 3.5 mm (`label: '3.5 mm'`), Fédération UOF / COM France.
-  2. `CDE_AVIORNIS` : diamètre 3.8 mm (`label: '3.8 mm'`), Fédérations CDE / Aviornis France International.
+  2. `AVIORNIS_INTERNATIONAL` : diamètre 3.5 mm (`label: '3.5 mm'`), Fédération Aviornis International (3.8 mm rejeté comme valeur canonique).
 - **Règles épistémiques respectées :**
-  - Aucun standard ne remplace l'autre.
-  - `bandSize` présente explicitement les deux contextes fédéraux : `'3.5 mm (UOF / COM France) / 3.8 mm (CDE / Aviornis France International)'`.
-  - Zéro réduction unilatérale à une valeur universelle unique (ni 3.5 mm seul, ni 3.8 mm seul).
-  - FFO 4.0 mm formellement exclu du modèle canonique GAP-12.
+  - Maintien des deux contextes fédéraux distincts (UOF / COM et Aviornis International).
+  - `bandSize` présente explicitement les deux contextes fédéraux : `'3.5 mm (UOF / COM France) / 3.5 mm (Aviornis International)'`.
+  - Zéro réduction unilatérale à une valeur universelle unique sans contexte.
+  - 3.8 mm rejeté formellement comme valeur canonique.
+  - FFO 4.0 mm formellement exclu du modèle canonique.
 
 #### B. Poids adulte séparé in situ / ex situ
 - **Architecture de données :**
@@ -704,7 +705,7 @@ Formalisation de 6 EvidenceRecords canoniques rattachés aux affirmations exista
 1. `EVD-COL-01-TAXON` : Identité taxonomique et morphométrie (19–21.5 cm, dimorphisme périorbital) rattachées à `SRC-GIBBS-2001` et `SRC-FRITH-1982`.
 2. `EVD-COL-01-REPRO` : Ponte invariable de 2 œufs blancs, incubation 12–14j (moy. 13j) au rythme circadien partagé, rattachées à `SRC-FRITH-1982`, `SRC-GIBBS-2001`, `SRC-HANZAB-1996`.
 3. `EVD-COL-01-WEIGHT` : Masse corporelle in situ (23–37 g, moy. indicative ~35 g) distincte du gabarit ex situ (35–45 g) rattachée à `SRC-HANZAB-1996` et `SRC-FRITH-1982`.
-4. `EVD-COL-01-RINGS` : Standards réglementaires de baguage (3.5 mm UOF/COM et 3.8 mm CDE/Aviornis) rattachés à `SRC-UOF-BAGUES-2024`.
+4. `EVD-COL-01-RINGS` : Standards réglementaires de baguage (3.5 mm UOF/COM et 3.5 mm Aviornis International, 3.8 mm rejeté comme canonique) rattachés à `SRC-UOF-BAGUES-2024`.
 5. `EVD-COL-01-NEST` : Nidification en plateforme ouverte rudimentaire (soucoupe en captivité) rattachée à `SRC-FRITH-1982` et `SRC-GOODWIN-1983`.
 6. `EVD-COL-01-HYB` : Hybridation stérile documentée du genre Geopelia rattachée à `SRC-MCCARTHY-2006`.
 - *Invariants préservés :* Zéro fusion de plages (23–45 g interdit), zéro promotion de 4.0 mm FFO comme canonique, profil biologique non modifié.
@@ -740,4 +741,48 @@ Formalisation de 2 EvidenceRecords strictement biologiques :
 - Total Sources : 26 (25 rattachées à des preuves/standards + 1 référence générale).
 - Zéro source orpheline, zéro citation non résolue.
 - Zéro modification de règle biologique ou génétique.
+
+---
+
+## Détails GAP-19 — Implémentation des Décisions Scientifiques Humaines Finales & Clôture
+
+### 1. Synthèse de l'Exécution
+- **Date d'exécution :** 2026-10-22
+- **Phase :** Biological Reference V2 — GAP-19
+- **Objectif :** Implémenter les décisions scientifiques humaines finales révisées sans rouvrir les audits biologiques ni inventer de règles.
+- **Statut global :** `BIO_REF_V2_FINAL_HUMAN_DECISIONS_IMPLEMENTED`
+
+### 2. Décisions Humaines Finales Implémentées
+
+#### A. HRR-02 — Colombe diamant (*Geopelia cuneata*)
+- **Baguage réglementaire :**
+  - UOF / COM France : **3,5 mm** (canonique)
+  - Aviornis International : **3,5 mm** (canonique)
+  - 3,8 mm : **REJETÉ comme valeur canonique**
+  - FFO 4,0 mm : **NON CANONIQUE**
+  - Structure : multi-standard contextuelle préservant les deux organismes (`UOF_COM_FRANCE` et `AVIORNIS_INTERNATIONAL`) sans fusion unilatérale en une valeur universelle non contextualisée.
+  - Champ `bandSize` : `'3.5 mm (UOF / COM France) / 3.5 mm (Aviornis International)'`.
+  - EvidenceRecord `EVD-COL-01-RINGS` : mis à jour pour refléter 3,5 mm UOF/COM et 3,5 mm Aviornis International avec rejet explicite de 3,8 mm comme canonique.
+- **Masse corporelle adulte :**
+  - In situ (sauvage) : **23–37 g** (moyenne indicative ≈ 35 g)
+  - Ex situ (captivité) : **35–45 g**
+  - Zéro fusion en 23–45 g, zéro promotion de 32–45 g, aucun seuil vétérinaire inventé.
+- **Statut de gouvernance :** Maintenu en `draft` sous gouvernance V2 conformément aux règles du collège scientifique jusqu'à signature formelle de clôture globale.
+
+#### B. HRR-05 — Agapornis génétique (`agapornis_personatus + ap_blue`)
+- **Mutation canonique homologuée :** `ap_blue` (blue1 / symbole bl / autosomique récessif / homozygote bl/bl).
+- **Statut :** CANONICAL dans le catalogue Personatus, avec traçabilité `EVD-AGAP-PERS-BLUE`.
+- **Garde-fou :** Allèles complexes (`blue2`, `bl2`, `turquoise`, `sapphire`) strictement maintenus en **HUMAN_REVIEW_REQUIRED** / non activés.
+- Fischeri strictement maintenu `OUT_OF_SCOPE` (aucun catalogue actif).
+
+#### C. HRR-06 — Isolation interspécifique
+- **Politique GeneticsEngine :** Maintien permanent et inviolable du refus fail-closed `HYBRID_CROSS_UNSUPPORTED`.
+- Zéro calcul mendélien, prédiction de descendance ou pourcentage pour les croisements interspécifiques.
+- Tout futur module éducatif/préventif sur l'hybridation restera strictement extérieur au moteur.
+
+#### D. HRR-07 — Bibliographie et Preuves
+- Traçabilité 100% assurée sans référence orpheline.
+- Réserves documentaires historiques maintenues.
+- Aucune source bibliographique fictive créée.
+
 

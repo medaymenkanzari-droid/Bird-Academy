@@ -44,21 +44,21 @@ describe('GAP-12: Colombe diamant — Multi-standard bague & Poids in situ / ex 
   });
 
   describe('B. Diamètres de bague multi-standard', () => {
-    it('GAP12-04: Le référentiel n\'impose pas une valeur universelle unique dans bandSize', () => {
+    it('GAP12-04: Le référentiel n\'impose pas une valeur universelle unique non contextualisée dans bandSize', () => {
       const profile = COLOMBE_DIAMANT_PROFILE;
-      assert.notEqual(profile.breeding.bandSize, '3.5 mm', 'bandSize ne doit pas être réduit uniquement à 3.5 mm');
-      assert.notEqual(profile.breeding.bandSize, '3.8 mm', 'bandSize ne doit pas être réduit uniquement à 3.8 mm');
+      assert.notEqual(profile.breeding.bandSize, '3.5 mm', 'bandSize ne doit pas être réduit uniquement à 3.5 mm sans contexte');
+      assert.notEqual(profile.breeding.bandSize, '3.8 mm', '3.8 mm ne doit pas être la valeur de bandSize');
       assert.notEqual(profile.breeding.bandSize, '3.5', 'bandSize ne doit pas être un nombre unique 3.5');
       assert.notEqual(profile.breeding.bandSize, '3.8', 'bandSize ne doit pas être un nombre unique 3.8');
 
-      // Doit mentionner les deux contextes / standards
+      // Doit mentionner les deux contextes fédéraux distincts
       assert.ok(profile.breeding.bandSize.includes('3.5 mm'), 'Doit mentionner 3.5 mm');
-      assert.ok(profile.breeding.bandSize.includes('3.8 mm'), 'Doit mentionner 3.8 mm');
+      assert.ok(!profile.breeding.bandSize.includes('3.8 mm'), '3.8 mm doit être rejeté de bandSize');
       assert.ok(profile.breeding.bandSize.includes('UOF') || profile.breeding.bandSize.includes('COM'), 'Doit mentionner UOF / COM');
-      assert.ok(profile.breeding.bandSize.includes('CDE') || profile.breeding.bandSize.includes('Aviornis'), 'Doit mentionner CDE / Aviornis');
+      assert.ok(profile.breeding.bandSize.includes('Aviornis'), 'Doit mentionner Aviornis');
     });
 
-    it('GAP12-05: Conservation explicite des standards UOF/COM (3.5 mm) et CDE/Aviornis (3.8 mm)', () => {
+    it('GAP12-05: Conservation explicite des standards UOF/COM (3.5 mm) et Aviornis International (3.5 mm)', () => {
       const ringStandards = getSpeciesRingStandards('colombe_diamant');
       assert.ok(ringStandards, 'Des standards de bagues doivent être définis');
       assert.equal(ringStandards.length, 2, 'Exactement 2 standards canoniques doivent être configurés');
@@ -68,19 +68,19 @@ describe('GAP-12: Colombe diamant — Multi-standard bague & Poids in situ / ex 
       assert.equal(uofCom.diameterMm, 3.5, 'Diamètre UOF/COM doit être 3.5 mm');
       assert.equal(uofCom.label, '3.5 mm');
 
-      const cdeAviornis = ringStandards.find(s => s.federationCode === 'CDE_AVIORNIS');
-      assert.ok(cdeAviornis, 'Standard CDE_AVIORNIS doit exister');
-      assert.equal(cdeAviornis.diameterMm, 3.8, 'Diamètre CDE/Aviornis doit être 3.8 mm');
-      assert.equal(cdeAviornis.label, '3.8 mm');
+      const aviornis = ringStandards.find(s => s.federationCode === 'AVIORNIS_INTERNATIONAL' || s.federationCode === 'CDE_AVIORNIS');
+      assert.ok(aviornis, 'Standard Aviornis International doit exister');
+      assert.equal(aviornis.diameterMm, 3.5, 'Diamètre Aviornis doit être 3.5 mm conformément à la décision finale GAP-19');
+      assert.equal(aviornis.label, '3.5 mm');
     });
 
-    it('GAP12-06: Aucun standard ne remplace silencieusement l\'autre', () => {
+    it('GAP12-06: Les contextes fédéraux restent distincts et 3.8 mm est rejeté comme canonique', () => {
       const ringStandards = getSpeciesRingStandards('colombe_diamant');
       assert.ok(ringStandards);
       const diameters = ringStandards.map(s => s.diameterMm);
-      assert.ok(diameters.includes(3.5), '3.5 mm doit être présent');
-      assert.ok(diameters.includes(3.8), '3.8 mm doit être présent');
-      assert.notEqual(diameters[0], diameters[1], 'Les deux standards doivent être distincts');
+      assert.ok(diameters.every(d => d === 3.5), 'Tous les standards canoniques actuels sont à 3.5 mm');
+      assert.ok(!(diameters as number[]).includes(3.8), '3.8 mm ne doit plus être présent comme standard canonique');
+      assert.notEqual(ringStandards[0].federationCode, ringStandards[1].federationCode, 'Les deux standards doivent avoir des contextes fédéraux distincts');
     });
 
     it('GAP12-07: FFO 4.0 mm n\'est PAS inclus dans le modèle canonique GAP-12', () => {

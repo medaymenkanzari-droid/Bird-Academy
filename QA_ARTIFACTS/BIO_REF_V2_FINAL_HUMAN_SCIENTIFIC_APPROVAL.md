@@ -190,15 +190,16 @@ DÉCISION DU COLLÈGE SCIENTIFIQUE :
 
 ARBITRAGES ET INSTRUCTIONS DU COLLÈGE SCIENTIFIQUE :
 
-1. Diamètre de bague Colombe diamant :  [X] Autre : Multi-standard contextuel (3.8 mm CDE/Aviornis vs 3.5 mm UOF/COM)
+1. Diamètre de bague Colombe diamant :  [X] Autre : Multi-standard contextuel (3.5 mm UOF/COM & 3.5 mm Aviornis International, 3.8 mm rejeté comme canonique)
 2. Poids Colombe diamant :              [X] Double référence in situ (23–37 g, moy. 35 g) / ex situ (35–45 g)
 3. Mutation ap_blue Personatus :       [X] Homologuer (blue1 / bl, autosomique récessif, A. personatus)
 4. Hybridation interspécifique :        [X] Maintenir le refus strict HYBRID_CROSS_UNSUPPORTED permanent
 
 
 Commentaires détaillés :
-- Colombe diamant : La bague fermée ne constitue pas une vérité biologique universelle
-  mais une norme fédérale ; le modèle doit contextualiser par standard/fédération.
+- Colombe diamant : La bague fermée est établie selon une contextualisation multi-standard :
+  3.5 mm pour l'UOF / COM France et 3.5 mm pour Aviornis International ;
+  3.8 mm est formellement rejeté comme valeur canonique (4.0 mm FFO non canonique).
   Le poids sépare formellement l'écologie in situ du standard ex situ sans fusion de plages.
 - Agapornis : Homologation formelle de ap_blue (blue1/bl). Les allèles complexes
   (blue2, turquoise, sapphire) et systèmes multi-alléliques restent réservés sous HRR.
@@ -222,14 +223,16 @@ Cette section consigne officiellement les quatre arbitrages scientifiques humain
 
 ### 1. COLOMBE DIAMANT (*Geopelia cuneata*) — DIAMÈTRE DE BAGUE FERMÉE
 
-- **Décision :** Le référentiel biologique ne doit pas imposer une valeur unique de diamètre de bague lorsque plusieurs standards fédéraux officiels coexistent.
-- **Portée :** Adoption d'une structure **multi-standard contextuelle** :
-  - **3.8 mm :** CDE (Club des Éleveurs d'Étrillidés et Colombidés) / Aviornis France International.
-  - **3.5 mm :** UOF (Union Ornithologique de France) / COM France.
-- **Ce qui est homologué :** Reconnaissance formelle de la dualité normative des fédérations ornithologiques.
-- **Ce qui n'est PAS une vérité biologique :** Ni 3.8 mm ni 3.5 mm ne doivent être présentés comme une « vérité biologique universelle ». La valeur est relative à la fédération d'affiliation de l'éleveur.
-- **Ce qui reste différé :** L'implémentation logicielle du sélecteur multi-standard dans le composant UI et le modèle de données de production fera l'objet d'une mission de développement dédiée.
-- **Impact futur attendu :** Élimination du risque de baguage inapproprié par contextualisation réglementaire dans le passeport et les fiches d'élevage.
+- **Décision humaine finale révisée et confirmée (GAP-19) :**
+  - **UOF / COM France :** `3,5 mm`
+  - **Aviornis International :** `3,5 mm`
+  - **3,8 mm :** **REJETÉ comme valeur canonique**
+  - **4,0 mm FFO :** **NON CANONIQUE**
+- **Portée :** Adoption d'une structure **multi-standard contextuelle** préservant les deux organismes comme contextes distincts (`UOF_COM_FRANCE` et `AVIORNIS_INTERNATIONAL`), les deux ayant la valeur 3,5 mm.
+- **Règle absolue :** Ne pas conserver de structure suggérant `CDE / Aviornis → 3,8 mm`. La valeur canonique Aviornis est formellement corrigée à `3,5 mm`.
+- **Ce qui est homologué :** Reconnaissance des contextes fédéraux distincts UOF/COM (3,5 mm) et Aviornis International (3,5 mm).
+- **Ce qui n'est PAS canonique :** 3,8 mm est rejeté comme valeur canonique. 4,0 mm FFO est non canonique.
+- **Impact attendu :** Clarté réglementaire absolue pour les éleveurs sans risque de prescription de bague surdimensionnée ou de confusion fédérale.
 
 ---
 
@@ -282,12 +285,12 @@ Cette section consigne officiellement les quatre arbitrages scientifiques humain
 
 ---
 
-### 5. SYNTHÈSE DE GOUVERNANCE GAP-10-E
+### 5. SYNTHÈSE DE GOUVERNANCE GAP-10-E & GAP-19
 
 | Décision | Objet | Statut scientifique | Statut technique actuel | Prochaine étape requise |
 |---|---|---|---|---|
-| **D-01** | Bague Colombe diamant | Multi-standard (3.8 CDE / 3.5 UOF) | Profil hérité à 3.5 mm | Implémentation du sélecteur multi-standard |
-| **D-02** | Poids Colombe diamant | Double référence in situ / ex situ | Profil hérité à 35–45 g | Refonte du schéma de métrique pondérale |
-| **D-03** | Mutation `ap_blue` Personatus | Homologuée (`blue1 / bl` autosomique récessif) | Guard `HUMAN_REVIEW_REQUIRED` | Création `EVD-AGA-PERS-BLU` & ouverture catalogue |
-| **D-04** | Hybridation interspécifique | Maintien permanent `HYBRID_CROSS_UNSUPPORTED` | Refus fail-closed actif (6 paliers) | Conception du module informatif externe |
+| **D-01** | Bague Colombe diamant | Multi-standard (3.5 mm UOF / 3.5 mm Aviornis, 3.8 mm rejeté) | Implémenté techniquement (3.5 mm / 3.5 mm contextuel) | Clôture documentaire finale |
+| **D-02** | Poids Colombe diamant | Double référence in situ (23–37 g) / ex situ (35–45 g) | Implémenté techniquement (`weightContexts`) | Clôture documentaire finale |
+| **D-03** | Mutation `ap_blue` Personatus | Homologuée (`blue1 / bl` autosomique récessif) | Homologué CANONICAL (GAP-11, `EVD-AGAP-PERS-BLUE` GAP-17) | Clôture documentaire finale |
+| **D-04** | Hybridation interspécifique | Maintien permanent `HYBRID_CROSS_UNSUPPORTED` | Refus fail-closed actif permanent (6 paliers) | Clôture documentaire finale |
 

@@ -166,7 +166,7 @@ export function getBiologicalTraceability(id: string) {
 
 /**
  * Retourne les standards officiels de baguage pour une espèce donnée.
- * Pour la colombe diamant : structure multi-standard (UOF/COM France 3.5 mm et CDE/Aviornis 3.8 mm).
+ * Pour la colombe diamant : structure contextuelle multi-standard (UOF/COM France 3.5 mm et Aviornis International 3.5 mm, 3.8 mm rejeté comme canonique).
  */
 export function getSpeciesRingStandards(speciesId: string) {
   const profile = getBiologicalProfileById(speciesId);
