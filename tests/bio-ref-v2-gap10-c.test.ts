@@ -56,9 +56,8 @@ test('GAP10C-01: Colombe diamant - Statut documentaire draft et données biologi
 });
 
 test('GAP10C-02: Absence stricte d\'identifiants de sources ou de preuves inventés', () => {
-  // Règle 6 : Interdiction de créer des identifiants non documentés formellement
+  // Règle 6 : Interdiction de créer des identifiants non documentés formellement (EVD-COL- homologué en GAP-17)
   const forbiddenEvidencePrefixes = [
-    'EVD-COL-',
     'EVD-AGA-FISC-',
     'EVD-AGA-PERS-',
     'EVD-AGAP-GEN-'
@@ -291,8 +290,8 @@ test('GAP10D-01: Consolidation finale — Invariants de sécurité et état de c
   );
   assert.equal(cross.status, 'HYBRID_CROSS_UNSUPPORTED');
 
-  // 5. Intégrité des 28 enregistrements d'évidence et traçabilité des sources
-  assert.equal(Object.keys(EVIDENCE_REGISTRY).length, 28);
+  // 5. Intégrité des enregistrements d'évidence et traçabilité des sources (28 initiaux + 11 formalisés GAP-17)
+  assert.equal(Object.keys(EVIDENCE_REGISTRY).length, 39);
   for (const record of Object.values(EVIDENCE_REGISTRY)) {
     for (const citation of record.citations) {
       assert.ok(hasBibliographicSource(citation.sourceId));

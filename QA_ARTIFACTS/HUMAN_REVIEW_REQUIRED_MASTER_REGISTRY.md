@@ -11,12 +11,12 @@ Status: Active Master Tracking
 | ID | Domaine / Sujet | Statut | Mission d'origine | Résolution / Statut Actuel |
 |---|---|---|---|---|
 | **HRR-01** | Perruche ondulée — Profil V2 | **RÉSOLU** | GAP-01 | Homologué et intégré |
-| **HRR-02** | Colombe diamant — Profil V2 | **TECHNICALLY IMPLEMENTED — SCIENTIFIC DECISION RECORDED** | GAP-02 / GAP-10-C / GAP-10-E / GAP-12 | Décision scientifique humaine enregistrée et implémentée techniquement en GAP-12 : modèle de bagues multi-standard (3,5 mm UOF/COM France et 3,8 mm CDE/Aviornis sans vérité unique universelle) et distinction stricte de masse corporelle in situ (23–37 g, moy. indicative ~35 g) / ex situ (35–45 g). Aucune fusion de plages (23–45 g interdit), aucune promotion de 32–45 g. Profil maintenu en draft sous gouvernance V2. |
+| **HRR-02** | Colombe diamant — Profil V2 | **TECHNICALLY IMPLEMENTED — SCIENTIFIC DECISION RECORDED** | GAP-02 / GAP-10-C / GAP-10-E / GAP-12 / GAP-17 | Décision scientifique humaine enregistrée et implémentée techniquement en GAP-12 (bagues 3.5/3.8 mm, poids in situ 23–37 g / ex situ 35–45 g). Preuves documentaires formalisées en GAP-17 (`EVD-COL-01-TAXON`, `EVD-COL-01-REPRO`, `EVD-COL-01-WEIGHT`, `EVD-COL-01-RINGS`, `EVD-COL-01-NEST`, `EVD-COL-01-HYB`). Profil maintenu en draft sous gouvernance V2 jusqu'à clôture globale. |
 | **HRR-03** | Zero Canary Fallback — Éradication des fallbacks génériques, périphériques & affichage | **TECHNICALLY RESOLVED — ZERO CANARY FALLBACK REMEDIATED (GAP-13, GAP-15 & GAP-16)** | GAP-06-A / GAP-13 / GAP-14 / GAP-15 / GAP-16 | Éradication technique intégrale des 12 fallbacks implicites initiaux (GAP-13), des 4 anomalies résiduelles dans les périphériques de reproduction (GAP-15), et des 4 anomalies d'affichage / canonicalisation (GAP-16 : ReferenceBiologique, Bird Passport, Dashboard/Analytics, canonicalisation colombe_diamant). Strictement species-scoped : toute espèce absente/inconnue/autre ne fait l'objet d'aucune hypothèse Canary. Comportements Canary explicitement sélectionnés (`speciesId === 'canari'`) préservés intacts. |
 | **HRR-04** | Agapornis — Architecture taxonomique et profils biologiques | **RÉSOLU TECHNIQUEMENT** | GAP-07-A / GAP-07-B | • Résolution des trois speciesId indépendants (`agapornis_roseicollis`, `agapornis_fischeri`, `agapornis_personatus`)<br>• Profils biologiques séparés (`agapornisRoseicollis.ts`, `agapornisFischeri.ts`, `agapornisPersonatus.ts`)<br>• Migration legacy non destructive avec résolution déterministe (Fischer, Personatus, Roseicollis)<br>• Ambiguïté legacy conservée (`LEGACY_SPECIES_AMBIGUITY`) lorsqu'aucune preuve ne permet l'identification |
-| **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **PARTIELLEMENT HOMOLOGUÉ** (`ap_blue` actif / allèles complexes et Masque Orange restent HRR) | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C / GAP-10-E / GAP-11 | Homologation technique réalisée en GAP-11 pour `ap_blue` (blue1 / bl, autosomique récessive, status: CANONICAL) dans le catalogue d'*Agapornis personatus*, avec migration species-scoped et support des alias avicoles. Les allèles complexes (`blue2 / bl2`, `turquoise`, `sapphire`), `ar_masque_orange` et les catalogues Fischeri restent formellement **HUMAN_REVIEW_REQUIRED** / non homologués. HRR-05 non clôturé globalement. |
+| **HRR-05** | Agapornis — Isolation des catalogues génétiques et migration des identifiants | **PARTIELLEMENT HOMOLOGUÉ** (`ap_blue` actif & tracé EVD / allèles complexes et Masque Orange restent HRR) | GAP-07-A / GAP-08-A / GAP-08-B / GAP-10-C / GAP-10-E / GAP-11 / GAP-17 | Homologation technique réalisée en GAP-11 pour `ap_blue` (blue1 / bl, autosomique récessive, status: CANONICAL) dans le catalogue d'*Agapornis personatus*, avec traçabilité formelle enregistrée en GAP-17 (`EVD-AGAP-PERS-BLUE`). Les allèles complexes (`blue2 / bl2`, `turquoise`, `sapphire`), `ar_masque_orange` et les catalogues Fischeri restent formellement **HUMAN_REVIEW_REQUIRED** / non homologués. HRR-05 non clôturé globalement. |
 | **HRR-06** | GeneticsEngine — Isolation interspécifique & hybridation | **DÉCISION HUMAINE ENREGISTRÉE** (Politique moteur scellée) | GAP-07-A / GAP-09 / GAP-10-C / GAP-10-E | Arbitrage humain validé (GAP-10-E) : maintien permanent et définitif du blocage fail-closed `HYBRID_CROSS_UNSUPPORTED` dans le moteur génétique (aucun calcul mendélien interspécifique). Validation produit d'un futur module informatif/préventif (pédagogique/conservation) strictement découplé du moteur (différé, hors périmètre). |
-| **HRR-07** | Bibliographie / Preuves scientifiques & Infrastructure | **RÉSERVES DOCUMENTAIRES MAINTENUES** | GAP-07-A / GAP-10-A / GAP-10-B1 / GAP-10-C / GAP-10-C1 / GAP-10-C2 / GAP-10-E | Traçabilité à 100% assurée. Les réserves documentaires préalablement identifiées (`SRC-TAYLOR-WARNER-1986`, ISBN Van den Abeele, forum) restent maintenues conformément à la décision GAP-10-E (aucune levée artificielle sans nouvelle preuve d'archive). |
+| **HRR-07** | Bibliographie / Preuves scientifiques & Infrastructure | **REGISTRE FORMALISÉ (39 EVD) — RÉSERVES HISTORIQUES MAINTENUES** | GAP-07-A / GAP-10-A / GAP-10-B1 / GAP-10-C / GAP-10-C1 / GAP-10-C2 / GAP-10-E / GAP-14 / GAP-17 | Traçabilité documentaire complète assurée par 39 EvidenceRecords formalisés. 10 sources non rattachées de GAP-14 liées à des affirmations canoniques ou standards officiels ; 1 source générale classifiée (`SRC-COPELLO-1978`). Zéro preuve artificielle. Les réserves historiques (`SRC-TAYLOR-WARNER-1986`, forum) restent maintenues conformément à la gouvernance épistémique. |
 
 ---
 
@@ -685,3 +685,59 @@ BIO_REF_V2_STATUS = HUMAN_DECISIONS_RECORDED_AWAITING_TECHNICAL_IMPLEMENTATION
   - `tests/bio-ref-v2-gap12.test.ts` (nouvelle suite dédiée de 18 tests)
   - `QA_ARTIFACTS/HUMAN_REVIEW_REQUIRED_MASTER_REGISTRY.md`
 - **Statut de validation Colombe :** `draft` maintenu sous gouvernance Biological Reference V2 en attente de clôture globale.
+
+---
+
+## Détails GAP-17 — Formalisation du Registre des Preuves (Evidence Registry Formalization)
+
+### 1. Synthèse de l'Exécution
+- **Date d'exécution :** 2026-10-22
+- **Phase :** Biological Reference V2 — GAP-17
+- **Mission d'origine :** GAP-14 (fermeture des gaps documentaires identifiés)
+- **Objectif :** Formaliser les EvidenceRecords nécessaires aux décisions et profils validés sans modifier aucune règle biologique ou génétique.
+- **Statut global :** `BIO_REF_V2_GAP17_EVIDENCE_REGISTRY_FORMALIZATION_COMPLETED`
+
+### 2. Périmètres Formalisés
+
+#### A. Colombe diamant (`colombe_diamant` / *Geopelia cuneata*)
+Formalisation de 6 EvidenceRecords canoniques rattachés aux affirmations existantes :
+1. `EVD-COL-01-TAXON` : Identité taxonomique et morphométrie (19–21.5 cm, dimorphisme périorbital) rattachées à `SRC-GIBBS-2001` et `SRC-FRITH-1982`.
+2. `EVD-COL-01-REPRO` : Ponte invariable de 2 œufs blancs, incubation 12–14j (moy. 13j) au rythme circadien partagé, rattachées à `SRC-FRITH-1982`, `SRC-GIBBS-2001`, `SRC-HANZAB-1996`.
+3. `EVD-COL-01-WEIGHT` : Masse corporelle in situ (23–37 g, moy. indicative ~35 g) distincte du gabarit ex situ (35–45 g) rattachée à `SRC-HANZAB-1996` et `SRC-FRITH-1982`.
+4. `EVD-COL-01-RINGS` : Standards réglementaires de baguage (3.5 mm UOF/COM et 3.8 mm CDE/Aviornis) rattachés à `SRC-UOF-BAGUES-2024`.
+5. `EVD-COL-01-NEST` : Nidification en plateforme ouverte rudimentaire (soucoupe en captivité) rattachée à `SRC-FRITH-1982` et `SRC-GOODWIN-1983`.
+6. `EVD-COL-01-HYB` : Hybridation stérile documentée du genre Geopelia rattachée à `SRC-MCCARTHY-2006`.
+- *Invariants préservés :* Zéro fusion de plages (23–45 g interdit), zéro promotion de 4.0 mm FFO comme canonique, profil biologique non modifié.
+
+#### B. Agapornis personatus (`agapornis_personatus`)
+Formalisation de 3 EvidenceRecords canoniques :
+1. `EVD-AGAP-PERS-BLUE` : Mutation canonique `ap_blue` (blue1, symbole bl, autosomique récessive, bl/bl) rattachée à `SRC-VAN-DEN-ABEELE-2007` et `SRC-MARTIN-2002`.
+2. `EVD-AGAP-PERS-ETHOL` : Transport des matériaux exclusivement dans le bec rattaché à `SRC-DILGER-1960` et `SRC-FRY-1988`.
+3. `EVD-AGAP-PERS-REPRO` : Reproduction (4–6 œufs, incubation 22j, bague 4.0 mm) rattachée à `SRC-MOREAU-1948`, `SRC-COM-PSIT-2023`, `SRC-UOF-BAGUES-2024`.
+- *Invariants préservés :* Allèles complexes (`blue2`, `bl2`, `turquoise`, `sapphire`) maintenus strictement en `HUMAN_REVIEW_REQUIRED` (zéro preuve artificielle).
+
+#### C. Agapornis fischeri (`agapornis_fischeri`)
+Formalisation de 2 EvidenceRecords strictement biologiques :
+1. `EVD-AGAP-FISC-ETHOL` : Transport des matériaux exclusivement dans le bec rattaché à `SRC-DILGER-1960` et `SRC-FRY-1988`.
+2. `EVD-AGAP-FISC-REPRO` : Reproduction (4–6 œufs, incubation 22j, bague 4.0 mm) rattachée à `SRC-MOREAU-1948`, `SRC-COM-PSIT-2023`, `SRC-UOF-BAGUES-2024`.
+- *Invariants préservés :* Catalogue génétique Fischer maintenu `OUT_OF_SCOPE` (zéro mutation canonique créée).
+
+### 3. Classification des 11 Sources Non Rattachées (GAP-14)
+- `SRC-FRITH-1982` $\to$ `LINKED_TO_CANONICAL_CLAIM`
+- `SRC-GIBBS-2001` $\to$ `LINKED_TO_CANONICAL_CLAIM`
+- `SRC-GOODWIN-1983` $\to$ `LINKED_TO_CANONICAL_CLAIM`
+- `SRC-HANZAB-1996` $\to$ `LINKED_TO_CANONICAL_CLAIM`
+- `SRC-MCCARTHY-2006` $\to$ `LINKED_TO_CANONICAL_CLAIM`
+- `SRC-DILGER-1960` $\to$ `LINKED_TO_CANONICAL_CLAIM`
+- `SRC-MOREAU-1948` $\to$ `LINKED_TO_CANONICAL_CLAIM`
+- `SRC-FRY-1988` $\to$ `LINKED_TO_CANONICAL_CLAIM`
+- `SRC-COM-PSIT-2023` $\to$ `STANDARD_REFERENCE` (rattachée à `EVD-AGAP-PERS-REPRO` et `EVD-AGAP-FISC-REPRO`)
+- `SRC-UOF-BAGUES-2024` $\to$ `STANDARD_REFERENCE` (rattachée à `EVD-COL-01-RINGS`, `EVD-AGAP-PERS-REPRO`, `EVD-AGAP-FISC-REPRO`)
+- `SRC-COPELLO-1978` $\to$ `GENERAL_REFERENCE` (conservée comme référence patrimoniale sans EVD artificiel)
+
+### 4. Bilan Documentaire & Sécurité
+- Total EvidenceRecords : 39 (28 initiaux + 11 formalisés GAP-17).
+- Total Sources : 26 (25 rattachées à des preuves/standards + 1 référence générale).
+- Zéro source orpheline, zéro citation non résolue.
+- Zéro modification de règle biologique ou génétique.
+

@@ -665,6 +665,324 @@ export const EVIDENCE_REGISTRY: Readonly<Record<string, EvidenceRecord>> = Objec
     epistemicStatus: 'UNKNOWN',
     humanReviewRequired: true,
     limitations: 'Aucune mutation domestique certifiée dans le profil génétique canonique de base du Chardonneret.'
+  }),
+
+  // =========================================================================
+  // COLOMBE DIAMANT (Geopelia cuneata)
+  // =========================================================================
+  'EVD-COL-01-TAXON': Object.freeze({
+    evidenceId: 'EVD-COL-01-TAXON',
+    speciesId: 'colombe_diamant',
+    ruleId: 'COL_TAXON_IDENTITY',
+    claim: 'Identité taxonomique et morphométrie de Geopelia cuneata : Columbidé australien de 19–21.5 cm, dimorphisme du cercle oculaire périorbital (2–3 mm rouge corail chez le mâle mature vs plus mince et pâle chez la femelle).',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-COL-01-TAXON-GIBBS',
+        sourceId: 'SRC-GIBBS-2001',
+        preciseLocation: Object.freeze({ page: '313-315' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Monographie de référence sur la morphométrie (longueur 19-21.5 cm) et la taxonomie de Geopelia cuneata.'
+      }),
+      Object.freeze({
+        citationId: 'CIT-COL-01-TAXON-FRITH',
+        sourceId: 'SRC-FRITH-1982',
+        preciseLocation: Object.freeze({ page: '200-205' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Caractérisation du dimorphisme sexuel basé sur le cercle oculaire charnu périorbital.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false
+  }),
+
+  'EVD-COL-01-REPRO': Object.freeze({
+    evidenceId: 'EVD-COL-01-REPRO',
+    speciesId: 'colombe_diamant',
+    ruleId: 'COL_REPRO_CLUTCH_INCUBATION',
+    claim: 'Reproduction invariante de Geopelia cuneata : ponte constante de strictement 2 œufs blancs, incubation de 12–14 jours (moyenne 13 jours) partagée au rythme circadien (mâle le jour, femelle la nuit).',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-COL-01-REPRO-FRITH',
+        sourceId: 'SRC-FRITH-1982',
+        preciseLocation: Object.freeze({ page: '200-205' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Ponte invariable de 2 œufs blancs et durée d\'incubation de 12 à 14 jours (moyenne 13 jours).'
+      }),
+      Object.freeze({
+        citationId: 'CIT-COL-01-REPRO-GIBBS',
+        sourceId: 'SRC-GIBBS-2001',
+        preciseLocation: Object.freeze({ page: '313-315' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Confirmation du rythme circadien de partage de la couvaison (mâle diurne, femelle nocturne).'
+      }),
+      Object.freeze({
+        citationId: 'CIT-COL-01-REPRO-HANZAB',
+        sourceId: 'SRC-HANZAB-1996',
+        preciseLocation: Object.freeze({ page: '838-848' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Données encyclopédiques de reproduction et développement des pigeonneaux.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false
+  }),
+
+  'EVD-COL-01-WEIGHT': Object.freeze({
+    evidenceId: 'EVD-COL-01-WEIGHT',
+    speciesId: 'colombe_diamant',
+    ruleId: 'COL_BIOL_WEIGHT_CONTEXTS',
+    claim: 'Contextes de masse corporelle distincts de Geopelia cuneata : poids sauvage in situ de 23–37 g (moyenne indicative ~35 g) distinct du poids d\'élevage captif ex situ de 35–45 g (aucune fusion de plages).',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-COL-01-WEIGHT-HANZAB',
+        sourceId: 'SRC-HANZAB-1996',
+        preciseLocation: Object.freeze({ page: '838-848' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Masse corporelle documentée sur populations sauvages in situ : 23–37 g (moyenne ~35 g).'
+      }),
+      Object.freeze({
+        citationId: 'CIT-COL-01-WEIGHT-FRITH',
+        sourceId: 'SRC-FRITH-1982',
+        preciseLocation: Object.freeze({ page: '202' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Relevés biométriques sauvages et distinction avec le gabarit en captivité.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false,
+    limitations: 'Plages in situ et ex situ maintenues strictement séparées conformément à la décision scientifique GAP-10-E / GAP-12.'
+  }),
+
+  'EVD-COL-01-RINGS': Object.freeze({
+    evidenceId: 'EVD-COL-01-RINGS',
+    speciesId: 'colombe_diamant',
+    ruleId: 'COL_BREED_RING_STANDARDS',
+    claim: 'Standards réglementaires de baguage de Geopelia cuneata : coexistence documentée de 3.5 mm (standard officiel UOF / COM France) et 3.8 mm (standard officiel CDE / Aviornis France International), sans valeur unique universelle.',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-COL-01-RINGS-UOF',
+        sourceId: 'SRC-UOF-BAGUES-2024',
+        preciseLocation: Object.freeze({ section: 'Columbidés exotiques' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Diamètre officiel réglementaire UOF / COM France (3.5 mm) et CDE / Aviornis (3.8 mm).'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false,
+    limitations: 'Baguage multi-standard homologué sans imposition de 4.0 mm FFO comme valeur canonique.'
+  }),
+
+  'EVD-COL-01-NEST': Object.freeze({
+    evidenceId: 'EVD-COL-01-NEST',
+    speciesId: 'colombe_diamant',
+    ruleId: 'COL_BREED_NEST_TYPE',
+    claim: 'Nidification de Geopelia cuneata : plateforme ouverte rudimentaire de brindilles en nature, soucoupe ou corbeille peu profonde en captivité (diamètre 8–10 cm).',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-COL-01-NEST-FRITH',
+        sourceId: 'SRC-FRITH-1982',
+        preciseLocation: Object.freeze({ page: '200-205' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Description de la plateforme de nidification rudimentaire et fragile de brindilles.'
+      }),
+      Object.freeze({
+        citationId: 'CIT-COL-01-NEST-GOODWIN',
+        sourceId: 'SRC-GOODWIN-1983',
+        preciseLocation: Object.freeze({ page: '164-166' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Comportement d\'installation sur nid ouvert type soucoupe et parade nuptiale en éventail.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false
+  }),
+
+  'EVD-COL-01-HYB': Object.freeze({
+    evidenceId: 'EVD-COL-01-HYB',
+    speciesId: 'colombe_diamant',
+    ruleId: 'COL_MGMT_HYBRID_STERILITY',
+    claim: 'Hybridation de Geopelia cuneata : croisements interspécifiques captifs répertoriés avec Geopelia striata et Geopelia placida produisant des hybrides strictement stériles ; aucune hybridation fertile documentée en élevage domestique.',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-COL-01-HYB-MCCARTHY',
+        sourceId: 'SRC-MCCARTHY-2006',
+        preciseLocation: Object.freeze({ page: '110' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Inventaire des hybrides interspécifiques captifs du genre Geopelia et confirmation de leur stérilité.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false
+  }),
+
+  // =========================================================================
+  // AGAPORNIS PERSONATUS (Agapornis personatus)
+  // =========================================================================
+  'EVD-AGAP-PERS-BLUE': Object.freeze({
+    evidenceId: 'EVD-AGAP-PERS-BLUE',
+    speciesId: 'agapornis_personatus',
+    ruleId: 'ap_blue',
+    claim: 'Mutation bleue canonique chez Agapornis personatus (ap_blue) : nomenclature blue1, symbole bl, transmission autosomique récessive, état homozygote bl/bl provoquant l\'abolition totale des psittacines avec masque blanc et corps bleu.',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-PERS-BLUE-VAN-DEN-ABEELE',
+        sourceId: 'SRC-VAN-DEN-ABEELE-2007',
+        preciseLocation: Object.freeze({ page: '84-89', chapter: 'Masked Lovebird blue mutation' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Génétique formelle de la mutation blue1 (bl) autosomique récessive chez Agapornis personatus.'
+      }),
+      Object.freeze({
+        citationId: 'CIT-PERS-BLUE-MARTIN',
+        sourceId: 'SRC-MARTIN-2002',
+        preciseLocation: Object.freeze({ page: '98-102' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Confirmation du mode autosomique récessif du véritable bleu chez les psittacidés africains.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false,
+    limitations: 'Seul allèle canonique homologué (GAP-10-E / GAP-11). Les allèles complexes blue2, bl2, turquoise, sapphire restent exclus et sous HUMAN_REVIEW_REQUIRED.'
+  }),
+
+  'EVD-AGAP-PERS-ETHOL': Object.freeze({
+    evidenceId: 'EVD-AGAP-PERS-ETHOL',
+    speciesId: 'agapornis_personatus',
+    ruleId: 'AGAP_PERS_ETHOL_NESTING',
+    claim: 'Éthologie de nidification d\'Agapornis personatus : transport des matériaux de nid exclusivement dans le bec (jamais insérés dans le croupion comme chez A. roseicollis).',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-PERS-ETHOL-DILGER',
+        sourceId: 'SRC-DILGER-1960',
+        preciseLocation: Object.freeze({ page: '649-685' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Démonstration éthologique princeps : le groupe à cercle oculaire transporte exclusivement au bec.'
+      }),
+      Object.freeze({
+        citationId: 'CIT-PERS-ETHOL-FRY',
+        sourceId: 'SRC-FRY-1988',
+        preciseLocation: Object.freeze({ page: '398-404' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Confirmation encyclopédique du comportement de nidification d\'Agapornis personatus.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false
+  }),
+
+  'EVD-AGAP-PERS-REPRO': Object.freeze({
+    evidenceId: 'EVD-AGAP-PERS-REPRO',
+    speciesId: 'agapornis_personatus',
+    ruleId: 'AGAP_PERS_REPRO_PARAMS',
+    claim: 'Paramètres de reproduction et baguage d\'Agapornis personatus : ponte de 4–6 œufs (moyenne 5), incubation de 21–23 jours (moyenne 22 jours), diamètre de bague réglementaire officiel de 4.0 mm (tolérance 4.2 mm, 4.5 mm proscrit).',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-PERS-REPRO-MOREAU',
+        sourceId: 'SRC-MOREAU-1948',
+        preciseLocation: Object.freeze({ page: '206-239' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Données princeps de reproduction : ponte 4-6 œufs, incubation 22 jours.'
+      }),
+      Object.freeze({
+        citationId: 'CIT-PERS-REPRO-COM',
+        sourceId: 'SRC-COM-PSIT-2023',
+        preciseLocation: Object.freeze({ section: 'Standard Agapornis personatus' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Standard mondial morphologique (145-150 mm) et proscription des hybridations.'
+      }),
+      Object.freeze({
+        citationId: 'CIT-PERS-REPRO-UOF',
+        sourceId: 'SRC-UOF-BAGUES-2024',
+        preciseLocation: Object.freeze({ section: 'Psittacidés - Agapornis' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Diamètre officiel réglementaire de bague fermée fixé à 4.0 mm.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false
+  }),
+
+  // =========================================================================
+  // AGAPORNIS FISCHERI (Agapornis fischeri)
+  // =========================================================================
+  'EVD-AGAP-FISC-ETHOL': Object.freeze({
+    evidenceId: 'EVD-AGAP-FISC-ETHOL',
+    speciesId: 'agapornis_fischeri',
+    ruleId: 'AGAP_FISC_ETHOL_NESTING',
+    claim: 'Éthologie de nidification d\'Agapornis fischeri : transport des matériaux de nid exclusivement dans le bec (comportement diagnostique du groupe eye-ring, aucune insertion dans le croupion).',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-FISC-ETHOL-DILGER',
+        sourceId: 'SRC-DILGER-1960',
+        preciseLocation: Object.freeze({ page: '649-685' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Caractérisation éthologique princeps : transport au bec exclusif chez Agapornis fischeri.'
+      }),
+      Object.freeze({
+        citationId: 'CIT-FISC-ETHOL-FRY',
+        sourceId: 'SRC-FRY-1988',
+        preciseLocation: Object.freeze({ page: '398-404' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Confirmation naturaliste du comportement de transport au bec en milieu naturel.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false
+  }),
+
+  'EVD-AGAP-FISC-REPRO': Object.freeze({
+    evidenceId: 'EVD-AGAP-FISC-REPRO',
+    speciesId: 'agapornis_fischeri',
+    ruleId: 'AGAP_FISC_REPRO_PARAMS',
+    claim: 'Paramètres de reproduction et baguage d\'Agapornis fischeri : ponte de 4–6 œufs (moyenne 5), incubation de 21–23 jours (moyenne 22 jours), bague réglementaire officielle de 4.0 mm (tolérance 4.2 mm, 4.5 mm proscrit). Catalogue génétique maintenu OUT_OF_SCOPE.',
+    citations: Object.freeze([
+      Object.freeze({
+        citationId: 'CIT-FISC-REPRO-MOREAU',
+        sourceId: 'SRC-MOREAU-1948',
+        preciseLocation: Object.freeze({ page: '206-239' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'PRIMARY',
+        rationale: 'Paramètres de ponte (4-6 œufs) et d\'incubation (~22 jours) d\'Agapornis fischeri.'
+      }),
+      Object.freeze({
+        citationId: 'CIT-FISC-REPRO-COM',
+        sourceId: 'SRC-COM-PSIT-2023',
+        preciseLocation: Object.freeze({ section: 'Standard Agapornis fischeri' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Standard mondial morphologique officiel (140 mm).'
+      }),
+      Object.freeze({
+        citationId: 'CIT-FISC-REPRO-UOF',
+        sourceId: 'SRC-UOF-BAGUES-2024',
+        preciseLocation: Object.freeze({ section: 'Psittacidés - Agapornis' }),
+        concordance: 'CONCORDANT',
+        epistemicRole: 'CORROBORATIVE',
+        rationale: 'Diamètre officiel réglementaire de bague fermée fixé à 4.0 mm.'
+      })
+    ]),
+    epistemicStatus: 'VERIFIED',
+    humanReviewRequired: false,
+    limitations: 'Catalogue génétique d\'Agapornis fischeri strictement hors périmètre (OUT_OF_SCOPE), aucune mutation canonique activée.'
   })
 });
 
@@ -769,7 +1087,7 @@ export function getAllEvidenceRecords(): EvidenceRecord[] {
  */
 export function getEvidenceRecordsForSpecies(speciesId: string): EvidenceRecord[] {
   if (!speciesId || typeof speciesId !== 'string') return [];
-  const normalized = speciesId === 'serinus_canaria' ? 'canari' : speciesId;
+  const normalized = speciesId === 'serinus_canaria' ? 'canari' : (speciesId === 'colombe' ? 'colombe_diamant' : speciesId);
   return Object.values(EVIDENCE_REGISTRY).filter(record => record.speciesId === normalized);
 }
 
@@ -830,6 +1148,24 @@ export function getEvidenceRecordsForRule(ruleId: string): EvidenceRecord[] {
     'aga_loc_opaline': ['EVD-AGA-01-OPL'],
     'agap_bleu': ['EVD-AGA-01-BLU'],
     'aga_loc_blue': ['EVD-AGA-01-BLU'],
+    // Personatus
+    'ap_blue': ['EVD-AGAP-PERS-BLUE'],
+    'personatus_blue': ['EVD-AGAP-PERS-BLUE'],
+    'true_blue': ['EVD-AGAP-PERS-BLUE'],
+    'blue1': ['EVD-AGAP-PERS-BLUE'],
+    'bl': ['EVD-AGAP-PERS-BLUE'],
+    'agap_pers_ethol_nesting': ['EVD-AGAP-PERS-ETHOL'],
+    'agap_pers_repro_params': ['EVD-AGAP-PERS-REPRO'],
+    // Fischeri
+    'agap_fisc_ethol_nesting': ['EVD-AGAP-FISC-ETHOL'],
+    'agap_fisc_repro_params': ['EVD-AGAP-FISC-REPRO'],
+    // Colombe diamant
+    'col_taxon_identity': ['EVD-COL-01-TAXON'],
+    'col_repro_clutch_incubation': ['EVD-COL-01-REPRO'],
+    'col_biol_weight_contexts': ['EVD-COL-01-WEIGHT'],
+    'col_breed_ring_standards': ['EVD-COL-01-RINGS'],
+    'col_breed_nest_type': ['EVD-COL-01-NEST'],
+    'col_mgmt_hybrid_sterility': ['EVD-COL-01-HYB'],
     // Perruche
     'budgie_pa': ['EVD-BUD-01-001'],
     'loc_budgie_pa': ['EVD-BUD-01-001'],
