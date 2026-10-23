@@ -867,12 +867,30 @@ export class LmseBackendServer {
           ],
         },
         'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf': {
-          expectedSha256: 'B783B4817E246B9DC34624927CDA4339952CDC36E6099C4AF4BC5DB34B87844D',
-          expectedSize: 191586,
+          expectedSha256: 'C2A05D43DAE7D69EC0CAA33CA14A850633C2457CEA463A053423C8DFA58A3D21',
+          expectedSize: 192358,
           candidatePaths: [
             path.join(rootDir, 'public', 'downloads', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf'),
             path.join(rootDir, 'dist_binaries', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf'),
             path.join(rootDir, 'dist', 'downloads', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf'),
+          ],
+        },
+        'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf': {
+          expectedSha256: 'C2A05D43DAE7D69EC0CAA33CA14A850633C2457CEA463A053423C8DFA58A3D21',
+          expectedSize: 192358,
+          candidatePaths: [
+            path.join(rootDir, 'public', 'downloads', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf'),
+            path.join(rootDir, 'dist_binaries', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf'),
+            path.join(rootDir, 'dist', 'downloads', 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf'),
+          ],
+        },
+        'Rapport-de-qualification-technique-interne-V2.0.0-RC1.pdf': {
+          expectedSha256: '256C5A3751B5B77F704FE0B5860D4BE0EC12EB6BAD896132AD0AD8F9D84F0691',
+          expectedSize: 89937,
+          candidatePaths: [
+            path.join(rootDir, 'public', 'downloads', 'Rapport-de-qualification-technique-interne-V2.0.0-RC1.pdf'),
+            path.join(rootDir, 'dist_binaries', 'Rapport-de-qualification-technique-interne-V2.0.0-RC1.pdf'),
+            path.join(rootDir, 'dist', 'downloads', 'Rapport-de-qualification-technique-interne-V2.0.0-RC1.pdf'),
           ],
         },
       };

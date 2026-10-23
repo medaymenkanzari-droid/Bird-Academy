@@ -46,8 +46,10 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
 
   const handleTriggerDownload = (filename: string) => {
     let effectiveFilename = filename;
-    if (filename.includes('Rapport-de-test') && locale && locale !== 'fr') {
-      effectiveFilename = `Rapport-de-test-Bird-Academy-V2.0.0-RC1-${locale}.pdf`;
+    if (filename.includes('Rapport-de-test') || filename.includes('remplir')) {
+      effectiveFilename = locale && locale !== 'fr'
+        ? `Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur-${locale}.pdf`
+        : 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf';
     }
     const url = WebDownloadService.getPublicDownloadUrl(effectiveFilename);
     const a = document.createElement('a');
@@ -450,7 +452,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {docArtifacts.map((doc) => {
-              const isTestReport = doc.filename.includes('Rapport-de-test');
+              const isTestReport = doc.filename.includes('Rapport-de-test') || doc.filename.includes('remplir');
               const isCopied = copiedSha === doc.sha256;
               const isShaOpen = openShaId === doc.filename;
 
@@ -472,7 +474,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                           ? 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800'
                           : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300'
                       }`}>
-                        {isTestReport ? (t('downloadPage.testReportTag') || 'Formulaire de testeur • V2.0.0-RC1') : 'Guide officiel de mise en route'}
+                        {isTestReport ? (t('downloadPage.testReportTag') || 'Rapport de test — À remplir par le testeur') : 'Guide officiel de mise en route'}
                       </span>
                       <span className="text-[11px] font-mono font-bold text-slate-500 dark:text-slate-400">
                         {doc.sizeMB}
@@ -539,7 +541,7 @@ export const WebDownloadCenterPage: React.FC<WebDownloadCenterPageProps> = ({ on
                       id={`download-btn-${doc.filename}`}
                     >
                       <Download className="w-4 h-4" />
-                      <span>{isTestReport ? (t('downloadPage.btnDownloadTestReport') || 'Télécharger le rapport de testeur') : 'Télécharger le guide'}</span>
+                      <span>{isTestReport ? (t('downloadPage.btnDownloadTestReport') || 'Télécharger le rapport de test (À remplir)') : 'Télécharger le guide'}</span>
                     </button>
                   </div>
                 </div>

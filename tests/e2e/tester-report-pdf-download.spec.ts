@@ -21,18 +21,18 @@ test.describe('MISSION TESTER-REPORT-PDF-REDESIGN-V1 — E2E & Verification', ()
 
     // Verify badge text (case-insensitive due to CSS uppercase)
     const badgeText = await card.locator('span').first().innerText();
-    expect(badgeText.toLowerCase()).toContain('formulaire de testeur');
-    expect(badgeText).toContain('V2.0.0-RC1');
+    expect(badgeText.toLowerCase()).toContain('rapport de test');
+    expect(badgeText.toLowerCase()).toContain('remplir');
 
     // Verify card title & description
     const cardText = await card.innerText();
-    expect(cardText).toContain('Rapport de testeur V2.0.0-RC1 (PDF)');
-    expect(cardText).toContain('Formulaire officiel d\'évaluation et de retour terrain');
+    expect(cardText).toContain('Rapport de test — V2.0.0-RC1 — À remplir par le testeur');
+    expect(cardText).toContain('remplir par le testeur');
 
     // Verify download button
     const dlBtn = page.locator('[data-testid="download-test-report-btn"]');
     await expect(dlBtn).toBeVisible();
-    await expect(dlBtn).toHaveText(/Télécharger le rapport de testeur/i);
+    await expect(dlBtn).toHaveText(/Télécharger le rapport de test/i);
 
     // Trigger download
     const [download] = await Promise.all([
@@ -41,14 +41,14 @@ test.describe('MISSION TESTER-REPORT-PDF-REDESIGN-V1 — E2E & Verification', ()
     ]);
 
     const filename = download.suggestedFilename();
-    expect(filename).toBe('Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf');
+    expect(filename).toBe('Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf');
 
     // Verify downloaded file is valid and non-empty
     const downloadPath = await download.path();
     expect(downloadPath).toBeTruthy();
     if (downloadPath) {
       const stats = fs.statSync(downloadPath);
-      expect(stats.size).toBeGreaterThan(50000); // PDF is ~191 KB
+      expect(stats.size).toBeGreaterThan(50000); // PDF is ~192 KB
 
       const buffer = fs.readFileSync(downloadPath);
       expect(buffer.subarray(0, 4).toString()).toBe('%PDF');
@@ -62,7 +62,8 @@ test.describe('MISSION TESTER-REPORT-PDF-REDESIGN-V1 — E2E & Verification', ()
       const b = Buffer.from(hex, 'hex');
       b.swap16();
       const decodedTitle = b.toString('utf16le');
-      expect(decodedTitle).toContain('RAPPORT DE TESTEUR');
+      expect(decodedTitle).toContain('RAPPORT DE TEST');
+      expect(decodedTitle).toContain('REMPLIR PAR LE TESTEUR');
       expect(decodedTitle).toContain('V2.0.0-RC1');
       expect(decodedTitle).toContain('BA-V2.0.0-RC1');
     }
@@ -70,11 +71,11 @@ test.describe('MISSION TESTER-REPORT-PDF-REDESIGN-V1 — E2E & Verification', ()
 
   test('Multi-Language: Card updates across FR, EN, ES, IT, AR', async ({ page }) => {
     const LANG_DATA = [
-      { code: 'fr', btn: 'Télécharger le rapport de testeur', title: 'Rapport de testeur', dir: 'ltr' },
-      { code: 'en', btn: 'Download Tester Form', title: 'Tester Report', dir: 'ltr' },
-      { code: 'es', btn: 'Descargar formulario de probador', title: 'Informe de probador', dir: 'ltr' },
-      { code: 'it', btn: 'Scarica il modulo del tester', title: 'Rapporto del tester', dir: 'ltr' },
-      { code: 'ar', btn: 'تنزيل استمارة المختبر', title: 'تقرير واستمارة المختبر', dir: 'rtl' },
+      { code: 'fr', btn: 'Télécharger le rapport de test', title: 'Rapport de test — V2.0.0-RC1 — À remplir par le testeur', filename: 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf', dir: 'ltr' },
+      { code: 'en', btn: 'Download Test Report', title: 'Test Report — V2.0.0-RC1 — To be completed by tester', filename: 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur-en.pdf', dir: 'ltr' },
+      { code: 'es', btn: 'Descargar informe de test', title: 'Informe de test — V2.0.0-RC1 — A rellenar por el tester', filename: 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur-es.pdf', dir: 'ltr' },
+      { code: 'it', btn: 'Scarica il rapporto di test', title: 'Rapporto di test — V2.0.0-RC1 — Da compilare dal tester', filename: 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur-it.pdf', dir: 'ltr' },
+      { code: 'ar', btn: 'تنزيل استمارة الاختبار', title: 'تقرير الاختبار — V2.0.0-RC1 — للتعبئة من قبل المختبر', filename: 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur-ar.pdf', dir: 'rtl' },
     ];
 
     await page.setViewportSize({ width: 1280, height: 800 });
@@ -102,11 +103,7 @@ test.describe('MISSION TESTER-REPORT-PDF-REDESIGN-V1 — E2E & Verification', ()
         btn.click()
       ]);
 
-      const expectedFilename = lang.code === 'fr'
-        ? 'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf'
-        : `Rapport-de-test-Bird-Academy-V2.0.0-RC1-${lang.code}.pdf`;
-
-      expect(download.suggestedFilename()).toBe(expectedFilename);
+      expect(download.suggestedFilename()).toBe(lang.filename);
     }
   });
 
@@ -120,7 +117,7 @@ test.describe('MISSION TESTER-REPORT-PDF-REDESIGN-V1 — E2E & Verification', ()
     const fullText = await page.evaluate(() => document.body.innerText);
 
     // 1. Titles & Headers
-    expect(fullText).toContain('RAPPORT DE TESTEUR');
+    expect(fullText).toContain('RAPPORT DE TEST — À REMPLIR PAR LE TESTEUR');
     expect(fullText).toContain('V2.0.0-RC1');
     expect(fullText).toContain('BA-V2.0.0-RC1');
     expect(fullText).toContain('formulaire d\'évaluation terrain destiné au testeur');
@@ -207,7 +204,7 @@ test.describe('MISSION TESTER-REPORT-PDF-REDESIGN-V1 — E2E & Verification', ()
     expect(bodyDir).toBe('rtl');
 
     const arText = await page.evaluate(() => document.body.innerText);
-    expect(arText).toContain('تقرير واستمارة المختبر');
+    expect(arText).toContain('تقرير واستمارة الاختبار — للتعبئة من قبل المختبر');
     expect(arText).toContain('القسم أ — معلومات المختبر');
     expect(arText).toContain('القسم ب — التثبيت وبدء الاستخدام الأول');
     expect(arText).toContain('القسم ج — الاختبارات الوظيفية');

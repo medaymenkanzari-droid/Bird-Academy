@@ -27,7 +27,7 @@ const LOCALES = {
     dir: 'ltr',
     brand: 'BIRD ACADEMY',
     tagline: 'ÉLEVAGE & GESTION AVICOLE',
-    title: 'RAPPORT DE TESTEUR',
+    title: 'RAPPORT DE TEST — À REMPLIR PAR LE TESTEUR',
     subtitle: 'Bird Academy — V2.0.0-RC1 (BUILD_ID: BA-V2.0.0-RC1)',
     intro: 'Ce document est un formulaire d\'évaluation terrain destiné au testeur pour noter ses observations après utilisation de l\'application Bird Academy. Suivez votre parcours de test, notez vos constats, signalez les éventuels problèmes rencontrés et partagez votre avis d\'éleveur pour nous aider à améliorer l\'expérience.',
     secA_title: 'SECTION A — INFORMATIONS DU TESTEUR',
@@ -132,7 +132,7 @@ const LOCALES = {
     dir: 'ltr',
     brand: 'BIRD ACADEMY',
     tagline: 'AVIAN BREEDING & ERP MANAGEMENT',
-    title: 'TESTER REPORT',
+    title: 'TESTER REPORT — TO BE COMPLETED BY TESTER',
     subtitle: 'Bird Academy — V2.0.0-RC1 (BUILD_ID: BA-V2.0.0-RC1)',
     intro: 'This document is a field evaluation form designed for testers to record observations while using Bird Academy. Follow your testing journey, note down your findings, report any issues encountered, and share your breeder feedback to help us refine the application.',
     secA_title: 'SECTION A — TESTER INFORMATION',
@@ -237,7 +237,7 @@ const LOCALES = {
     dir: 'ltr',
     brand: 'BIRD ACADEMY',
     tagline: 'GESTIÓN AVÍCOLA Y CRÍA PROFESIONAL',
-    title: 'INFORME DE PROBADOR',
+    title: 'INFORME DE TEST — A RELLENAR POR EL TESTER',
     subtitle: 'Bird Academy — V2.0.0-RC1 (BUILD_ID: BA-V2.0.0-RC1)',
     intro: 'Este documento es un formulario de evaluación de campo destinado al probador para registrar sus observaciones tras utilizar la aplicación Bird Academy. Siga su sesión de prueba, anote sus hallazgos, señale cualquier problema detectado y comparta su opinión de criador.',
     secA_title: 'SECCIÓN A — INFORMACIÓN DEL PROBADOR',
@@ -342,7 +342,7 @@ const LOCALES = {
     dir: 'ltr',
     brand: 'BIRD ACADEMY',
     tagline: 'ALLEVAMENTO & GESTIONE AVICOLA',
-    title: 'RAPPORTO DEL TESTER',
+    title: 'RAPPORTO DI TEST — DA COMPILARE A CURA DEL TESTER',
     subtitle: 'Bird Academy — V2.0.0-RC1 (BUILD_ID: BA-V2.0.0-RC1)',
     intro: 'Questo documento è un modulo di valutazione sul campo destinato al tester per annotare le proprie osservazioni durante l\'utilizzo di Bird Academy. Segui la sessione di test, registra i tuoi riscontri, segnala eventuali problemi e condividi la tua opinione di allevatore.',
     secA_title: 'SEZIONE A — INFORMAZIONI SUL TESTER',
@@ -447,7 +447,7 @@ const LOCALES = {
     dir: 'rtl',
     brand: 'أكاديمية الطيور — BIRD ACADEMY',
     tagline: 'إدارة وتربية الطيور الاحترافية',
-    title: 'تقرير واستمارة المختبر',
+    title: 'تقرير واستمارة الاختبار — للتعبئة من قبل المختبر',
     subtitle: 'Bird Academy — V2.0.0-RC1 (BUILD_ID: BA-V2.0.0-RC1)',
     intro: 'هذه الوثيقة عبارة عن استمارة تقييم ميدانية مخصصة للمختبر لتدوين ملاحظاته بعد استخدام تطبيق Bird Academy. اتبع خطوات تجربتك، وسجل ملاحظاتك، وأبلغ عن أية مشاكل تواجهها، وشاركنا رأيك كمربي لمساعدتنا في تحسين التطبيق.',
     secA_title: 'القسم أ — معلومات المختبر',
@@ -1263,8 +1263,16 @@ async function generateAllPdfs() {
       // Output files:
       // FR is both the default 'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf' AND 'Rapport-de-test-Bird-Academy-V2.0.0-RC1-fr.pdf'
       const filenames = code === 'fr'
-        ? ['Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf', `Rapport-de-test-Bird-Academy-V2.0.0-RC1-${code}.pdf`]
-        : [`Rapport-de-test-Bird-Academy-V2.0.0-RC1-${code}.pdf`];
+        ? [
+            'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf',
+            'Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur-fr.pdf',
+            'Rapport-de-test-Bird-Academy-V2.0.0-RC1.pdf',
+            'Rapport-de-test-Bird-Academy-V2.0.0-RC1-fr.pdf'
+          ]
+        : [
+            `Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur-${code}.pdf`,
+            `Rapport-de-test-Bird-Academy-V2.0.0-RC1-${code}.pdf`
+          ];
 
       for (const fn of filenames) {
         const filePath = path.join(outputDir, fn);
