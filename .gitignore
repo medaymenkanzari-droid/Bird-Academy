@@ -41,3 +41,9 @@ coverage/
 # OS & IDE
 Thumbs.db
 .idea/
+
+# Next.js build cache & outputs
+.next/
+
+# Test results runners
+test-results/
