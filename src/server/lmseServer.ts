@@ -899,8 +899,8 @@ export class LmseBackendServer {
         },
       };
 
-      // Support des documents Markdown & PDF officiels de documentation et qualification
-      if (filename.endsWith('.md') || filename.endsWith('.pdf')) {
+      // Support des documents Markdown, PDF & texte officiels de documentation et qualification
+      if (filename.endsWith('.md') || filename.endsWith('.pdf') || filename.endsWith('.txt')) {
         const docCandidates = [
           path.join(rootDir, 'public', 'downloads', filename),
           path.join(rootDir, 'dist', 'downloads', filename),
@@ -909,9 +909,12 @@ export class LmseBackendServer {
         for (const cand of docCandidates) {
           if (fs.existsSync(cand) && fs.statSync(cand).isFile()) {
             const stat = fs.statSync(cand);
-            const contentType = filename.endsWith('.pdf') 
-              ? 'application/pdf' 
-              : 'text/markdown; charset=utf-8';
+            let contentType = 'text/plain; charset=utf-8';
+            if (filename.endsWith('.pdf')) {
+              contentType = 'application/pdf';
+            } else if (filename.endsWith('.md')) {
+              contentType = 'text/markdown; charset=utf-8';
+            }
             res.setHeader('Content-Type', contentType);
             res.setHeader('Content-Length', stat.size);
             res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
