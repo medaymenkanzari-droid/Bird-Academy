@@ -22,29 +22,29 @@ const assetsToUpload = [
     name: 'Bird-Academy-User-Windows-Setup.exe',
     filePath: path.join(ROOT_DIR, 'release', 'Bird-Academy-User-Windows-Setup.exe'),
     contentType: 'application/x-msdownload',
-    expectedSize: 109726359,
-    expectedSha256: 'EEFB55F80511FFA36F10541438D1BA7A8EFBA02EAAADAAB584DB6D26A1E8FDF3'
+    expectedSize: 109747064,
+    expectedSha256: 'BA8EC925064FBE1AAFB53635FB1FF4277611485A5C8F1BD916B45339A3EC3EA1'
   },
   {
     name: 'Bird-Academy-Avian-ERP-Setup.exe',
     filePath: path.join(ROOT_DIR, 'release', 'Bird-Academy-Avian-ERP-Setup.exe'),
     contentType: 'application/x-msdownload',
-    expectedSize: 109726359,
-    expectedSha256: 'EEFB55F80511FFA36F10541438D1BA7A8EFBA02EAAADAAB584DB6D26A1E8FDF3'
+    expectedSize: 109747064,
+    expectedSha256: 'BA8EC925064FBE1AAFB53635FB1FF4277611485A5C8F1BD916B45339A3EC3EA1'
   },
   {
     name: 'Bird-Academy-User.exe',
     filePath: path.join(ROOT_DIR, 'release', 'Bird-Academy-User.exe'),
     contentType: 'application/x-msdownload',
-    expectedSize: 109387829,
-    expectedSha256: '6D302819F9C3E240484B7F5B54FB7904F004961D58444EA5373DDC763D2E372D'
+    expectedSize: 109408543,
+    expectedSha256: '1C7F50E6A689970B12BFF15EFD4DB769DF8138B0159A8E142617EF683032939B'
   },
   {
     name: 'Bird-Academy-User.apk',
     filePath: path.join(ROOT_DIR, 'release', 'Bird-Academy-User.apk'),
     contentType: 'application/vnd.android.package-archive',
-    expectedSize: 18402794,
-    expectedSha256: '8ABFC3F66329109F1F5A70EFE4EF0C5964795B19ED3D64C88D32EF24B9725DEC'
+    expectedSize: 20461460,
+    expectedSha256: '1D3CC180339B55C2701CB3AE6CF6FC209D37720D8737B3CD8DBBD3BEFABDD290'
   }
 ];
 
@@ -187,10 +187,10 @@ async function main() {
 ### Empreintes Numériques SHA-256 Scellées
 | Artefact | Taille | SHA-256 |
 |---|---:|---|
-| **Bird-Academy-User-Windows-Setup.exe** | 109 726 359 octets | \`EEFB55F80511FFA36F10541438D1BA7A8EFBA02EAAADAAB584DB6D26A1E8FDF3\` |
-| **Bird-Academy-Avian-ERP-Setup.exe** | 109 726 359 octets | \`EEFB55F80511FFA36F10541438D1BA7A8EFBA02EAAADAAB584DB6D26A1E8FDF3\` |
-| **Bird-Academy-User.exe** | 109 387 829 octets | \`6D302819F9C3E240484B7F5B54FB7904F004961D58444EA5373DDC763D2E372D\` |
-| **Bird-Academy-User.apk** | 18 402 794 octets | \`8ABFC3F66329109F1F5A70EFE4EF0C5964795B19ED3D64C88D32EF24B9725DEC\` |
+| **Bird-Academy-User-Windows-Setup.exe** | 109 747 064 octets | \`BA8EC925064FBE1AAFB53635FB1FF4277611485A5C8F1BD916B45339A3EC3EA1\` |
+| **Bird-Academy-Avian-ERP-Setup.exe** | 109 747 064 octets | \`BA8EC925064FBE1AAFB53635FB1FF4277611485A5C8F1BD916B45339A3EC3EA1\` |
+| **Bird-Academy-User.exe** | 109 408 543 octets | \`1C7F50E6A689970B12BFF15EFD4DB769DF8138B0159A8E142617EF683032939B\` |
+| **Bird-Academy-User.apk** | 20 461 460 octets | \`1D3CC180339B55C2701CB3AE6CF6FC209D37720D8737B3CD8DBBD3BEFABDD290\` |
 
 ---
 *Authentifié par l'autorité cryptographique Bird Academy Enterprise — BUILD_ID: BA-V2.0.0-RC1*`;
