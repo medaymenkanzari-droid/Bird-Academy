@@ -1,7 +1,7 @@
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
- * 
+ *
  * BIRD ACADEMY ENTERPRISE — WEB DOWNLOAD SERVICE
  * Official multi-platform download repository and cryptographic checksum registry.
  */
@@ -107,6 +107,71 @@ export class WebDownloadService {
       minOsVersion: 'Tous systèmes',
       isAvailable: true,
       descriptionKey: 'downloadPage.docsDesc',
+    },
+    // Kit d'Accompagnement du Testeur Public (V2.0.0-RC1)
+    {
+      platform: 'kit',
+      name: 'Guide Officiel du Testeur Public (V2.0.0-RC1)',
+      filename: 'PUBLIC_TESTER_GUIDE.md',
+      version: 'V2.0.0-RC1',
+      buildId: 'BA-V2.0.0-RC1',
+      sizeBytes: 7203,
+      sizeMB: '7 203 octets',
+      sha256: '61BE6242C11610A6A67181F3A18C41C7A130AD08CB3141788AA6E032A0457824',
+      releaseDate: '2026-10-25',
+      downloadUrl: '/downloads/PUBLIC_TESTER_GUIDE.md',
+      architecture: 'Universel (Markdown)',
+      minOsVersion: 'Tous systèmes',
+      isAvailable: true,
+      descriptionKey: 'downloadPage.testerGuideDesc',
+    },
+    {
+      platform: 'kit',
+      name: 'Invitation Officielle au Programme de Test (V2.0.0-RC1)',
+      filename: 'PUBLIC_TESTER_INVITATION.md',
+      version: 'V2.0.0-RC1',
+      buildId: 'BA-V2.0.0-RC1',
+      sizeBytes: 3209,
+      sizeMB: '3 209 octets',
+      sha256: 'E959832599D66F33ADBAE30BCD1E4947ADADF51D21F55FE902942F10339BC052',
+      releaseDate: '2026-10-25',
+      downloadUrl: '/downloads/PUBLIC_TESTER_INVITATION.md',
+      architecture: 'Universel (Markdown)',
+      minOsVersion: 'Tous systèmes',
+      isAvailable: true,
+      descriptionKey: 'downloadPage.testerInvitationDesc',
+    },
+    {
+      platform: 'kit',
+      name: 'Guide Approfondi du Testeur Public (V2.0.0-RC1)',
+      filename: 'QA_PUBLIC_TESTER_GUIDE_V2.0.0-RC1.md',
+      version: 'V2.0.0-RC1',
+      buildId: 'BA-V2.0.0-RC1',
+      sizeBytes: 9761,
+      sizeMB: '9 761 octets',
+      sha256: 'F630B365F18B7EB9B939B56815D4C44961EA30F38906D7FFB6BE9C641539E77B',
+      releaseDate: '2026-10-25',
+      downloadUrl: '/downloads/QA_PUBLIC_TESTER_GUIDE_V2.0.0-RC1.md',
+      architecture: 'Universel (Markdown)',
+      minOsVersion: 'Tous systèmes',
+      isAvailable: true,
+      descriptionKey: 'downloadPage.testerGuideAdvancedDesc',
+    },
+    {
+      platform: 'kit',
+      name: 'Formulaire Officiel de Remontée d\'Incident (V2.0.0-RC1)',
+      filename: 'QA_PUBLIC_INCIDENT_REPORT_FORM_V2.0.0-RC1.md',
+      version: 'V2.0.0-RC1',
+      buildId: 'BA-V2.0.0-RC1',
+      sizeBytes: 3533,
+      sizeMB: '3 533 octets',
+      sha256: '8232ECAE1938D7AB9B81A33D951FC26F13FF729E276E86CAA6569F5F151ED379',
+      releaseDate: '2026-10-25',
+      downloadUrl: '/downloads/QA_PUBLIC_INCIDENT_REPORT_FORM_V2.0.0-RC1.md',
+      architecture: 'Universel (Markdown)',
+      minOsVersion: 'Tous systèmes',
+      isAvailable: true,
+      descriptionKey: 'downloadPage.incidentFormDesc',
     },
   ];
 

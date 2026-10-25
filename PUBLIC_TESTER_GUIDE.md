@@ -1,6 +1,6 @@
 # Bird Academy — Guide du testeur
 
-Bienvenue dans le programme de test public de **Bird Academy Enterprise — Volière Manager** (version **v1.3.6**, build **BA-V1.3.6**). Ce guide s'adresse aux éleveurs et passionnés participant aux essais terrain de l'application.
+Bienvenue dans le programme de test public de **Bird Academy Enterprise — Volière Manager** (version **V2.0.0-RC1**, build **BA-V2.0.0-RC1**). Ce guide s'adresse aux éleveurs et passionnés participant aux essais terrain de l'application.
 
 ---
 
@@ -8,21 +8,33 @@ Bienvenue dans le programme de test public de **Bird Academy Enterprise — Voli
 
 Bird Academy est une application de gestion d'élevage avicole (canaris et passereaux) conçue pour fonctionner **100% hors-ligne**, sans aucun stockage de vos oiseaux dans le cloud.
 
-Vous testez une **version de pré-lancement**. Son objectif est de vérifier la clarté des écrans, la précision des calculs (généalogie, consanguinité, pontes) et la robustesse de l'enregistrement de vos données au quotidien.
+Vous testez la version officiellement certifiée **V2.0.0-RC1**. Son objectif est de vérifier la clarté des écrans, la précision des calculs (généalogie, consanguinité de Wright, pontes, baguage) et la robustesse de l'enregistrement souverain de vos données au quotidien.
 
 ---
 
-## 2. Installation
+## 2. Installation & Vérification des Binaires
 
-L'installation sous Windows s'effectue en quelques secondes :
+L'application est disponible sur **Windows (Setup et Portable)** et sur **Android (APK)** depuis le Centre de Téléchargement officiel :
 
-1. **Téléchargez** le fichier d'installation `Bird-Academy-User-Windows-Setup.exe` depuis la page de téléchargement officielle.
-2. **Double-cliquez** sur le fichier téléchargé.
-3. L'installateur configure automatiquement l'application sur votre poste.
-4. Une icône **Bird Academy Enterprise** est créée sur votre bureau et dans le menu Démarrer.
-5. Lancez l'application.
+### A. Windows (Installateur Setup)
+1. **Téléchargez** `Bird-Academy-Avian-ERP-Setup.exe` (ou `Bird-Academy-User-Windows-Setup.exe`) depuis le centre de téléchargement officiel.
+   - Taille certifiée : **109 747 064 octets** (104.66 Mo)
+   - SHA-256 : `BA8EC925064FBE1AAFB53635FB1FF4277611485A5C8F1BD916B45339A3EC3EA1`
+2. **Double-cliquez** sur le fichier téléchargé. L'installateur configure automatiquement l'application dans votre profil local utilisateur.
+3. Lancez l'application depuis le raccourci Bureau ou le menu Démarrer.
 
-> *Note : Une version portable (`Bird-Academy-User.exe`) sans installation est également disponible si vous préférez l'exécuter depuis une clé USB.*
+### B. Windows (Version Portable)
+1. **Téléchargez** `Bird-Academy-User.exe`.
+   - Taille certifiée : **109 408 543 octets** (104.34 Mo)
+   - SHA-256 : `1C7F50E6A689970B12BFF15EFD4DB769DF8138B0159A8E142617EF683032939B`
+2. Exécutez directement le fichier sans installation requise (idéal pour clé USB ou disque externe).
+
+### C. Android (Smartphone / Tablette)
+1. **Téléchargez** `Bird-Academy-User.apk` sur votre terminal Android (Android 10+ / API 29+).
+   - Taille certifiée : **20 461 460 octets** (19.51 Mo)
+   - SHA-256 : `1D3CC180339B55C2701CB3AE6CF6FC209D37720D8737B3CD8DBBD3BEFABDD290`
+2. Si votre navigateur ou gestionnaire de fichiers vous invite à autoriser l'installation d'applications de sources inconnues, acceptez pour cette installation.
+3. Ouvrez le fichier et suivez la procédure d'installation jusqu'à son terme.
 
 ---
 
@@ -30,11 +42,11 @@ L'installation sous Windows s'effectue en quelques secondes :
 
 Dès le premier lancement :
 
-1. **Choix de la langue** : Sélectionnez votre langue (Français, Anglais, Espagnol, Italien, Arabe).
-2. **Plan de départ** : L'application démarre directement en **Plan GRATUIT (FREE)** vous permettant de gérer jusqu'à 20 oiseaux sans aucune clé requise.
+1. **Choix de la langue** : Sélectionnez votre langue parmi les 5 supportées (Français, Anglais, Espagnol, Italien, Arabe avec support complet RTL).
+2. **Plan de départ** : L'application démarre directement en **Plan GRATUIT (FREE)** vous permettant de gérer jusqu'à 20 oiseaux vivants sans clé requise.
 3. **Activation de votre Licence de Test** :
    - Cliquez sur **« Activer la Licence »** (en haut à droite ou dans les Paramètres).
-   - Saisissez votre clé de test fournie au format `LMSE-TEST-XXXX-XXXX-XXXX` ou importez votre fichier `.lmse`.
+   - Saisissez votre clé de test fournie au format `LMSE-TEST-XXXX-XXXX-XXXX` ou importez votre fichier de licence `.lmse`.
    - Votre licence de test vous donne un accès complet aux fonctionnalités avancées pendant **30 jours**.
 4. **Assistant de démarrage (Wizard)** : Suivez les 3 étapes d'initialisation pour définir vos premières cages et vos premiers pensionnaires.
 
@@ -44,22 +56,22 @@ Dès le premier lancement :
 
 Nous vous invitons à tester les opérations courantes d'une saison d'élevage :
 
-- **Gestion des oiseaux** :
-  - Ajouter un oiseau avec son numéro de bague, sexe, couleur et date de naissance.
+- **Gestion du cheptel (Oiseaux)** :
+  - Ajouter un oiseau avec son numéro de bague, sexe, variété/couleur et date de naissance.
   - Modifier la fiche d'un oiseau.
   - Déclarer des ascendants (père et mère) pour observer l'arbre généalogique.
 - **Gestion des couples & reproduction** :
   - Créer un couple et vérifier l'alerte de consanguinité (coefficient de Wright).
   - Enregistrer une ponte, le mirage des œufs et les naissances.
   - Baguer les jeunes issus de la nichée.
-- **Logement & cages** :
+- **Logement & cages (Habitat)** :
   - Créer une cage ou volière et y affecter des oiseaux.
-  - Vérifier l'occupation des cages.
+  - Vérifier l'occupation des cages et les alertes de surpopulation.
 - **Santé & soins** :
-  - Enregistrer un événement de santé ou un rappel sanitaire.
-  - Consulter le calendrier des rappels.
+  - Enregistrer un événement sanitaire ou un rappel de traitement.
+  - Consulter le calendrier des rappels sans connexion externe.
 - **Statistiques & exports** :
-  - Consulter le tableau de bord et les statistiques.
+  - Consulter le tableau de bord et les statistiques d'élevage.
   - Générer un export ou une sauvegarde locale dans les **Paramètres**.
 
 ---
@@ -77,42 +89,41 @@ Votre regard d'éleveur est précieux. Dites-nous très simplement :
 
 ---
 
-## 6. Comment signaler un problème ?
+## 6. Comment signaler un problème & Transmettre vos retours ?
 
-Vous disposez d'un système de retour directement intégré dans l'application :
+Vous disposez de trois canaux complémentaires pour transmettre vos retours de test :
 
-1. Cliquez sur le bouton **« Retour testeur »** (icône message 💬 en haut à droite ou dans l'onglet **Paramètres**).
-2. Choisissez la catégorie :
-   - **BUG** : Comportement anormal, message d'erreur ou blocage.
-   - **PROBLÈME D'UTILISATION (UX)** : Écran confus, texte illisible ou navigation difficile.
-   - **QUESTION** : Interrogation sur le fonctionnement d'un calcul ou d'une option.
-   - **SUGGESTION** : Idée pour rendre l'outil plus pratique.
-   - **FONCTIONNALITÉ MANQUANTE** : Outil absent dont vous avez besoin.
-3. Indiquez le niveau de gravité (**Bloquant**, **Important**, **Mineur**, **Idée**).
-4. Décrivez ce que vous faisiez au moment du constat.
-5. Vous pouvez enregistrer le rapport localement, copier son texte pour nous l'envoyer par email à `contact@birdacademy.internal`, ou joindre une capture d'écran.
+1. **Bouton intégré dans l'application** :
+   Cliquez sur le bouton **« Retour testeur »** (icône message 💬 en haut à droite ou dans l'onglet **Paramètres**).
+   Choisissez la catégorie (**BUG**, **UX**, **QUESTION**, **SUGGESTION**, **MANQUE**) et le niveau de gravité.
+2. **Formulaire officiel PDF à remplir** :
+   Téléchargez le document `Rapport-de-test-Bird-Academy-V2.0.0-RC1-A-remplir-par-le-testeur.pdf` (disponible en 5 langues sur le centre de téléchargement), remplissez-le et renvoyez-le.
+   - Taille certifiée : **192 358 octets** (187.85 Ko)
+   - SHA-256 : `C2A05D43DAE7D69EC0CAA33CA14A850633C2457CEA463A053423C8DFA58A3D21`
+3. **Par email direct** :
+   Envoyez vos constats, suggestions et captures d'écran à : `contact@birdacademy.internal`.
 
 ---
 
-## 7. Données personnelles & Confidentialité
+## 7. Données personnelles & Confidentialité locale
 
-- **Respect absolu de votre vie privée** : Bird Academy fonctionne en vase clos sur votre machine.
+- **Respect absolu de votre vie privée** : Bird Academy fonctionne en vase clos sur votre machine ou terminal mobile.
 - Vos données d'élevage (vos oiseaux, bagues, fiches de couples, pedigree, dépenses) **ne sont jamais envoyées sur internet**.
-- Lors d'un signalement, seules les informations techniques nécessaires (version, système d'exploitation, module concerné) sont incluses.
-- Aucun email publicitaire ne vous sera adressé.
+- Lors d'un signalement, seules les informations techniques strictement utiles (version, système d'exploitation, module concerné) sont incluses.
+- Aucun compte cloud ni email publicitaire n'est requis.
 
 ---
 
-## 8. Fin du test
+## 8. Fin du test & Règle Zero Deletion
 
 - Votre licence de test est valable pour une durée de **30 jours**.
 - À l'expiration des 30 jours, votre application **rétrograde automatiquement vers le plan FREE**.
 - **Conservation intégrale de vos données (Zero Deletion)** :
   - Aucun oiseau, aucun couple, aucune donnée historique n'est supprimé à l'expiration.
   - Vous conservez l'accès en lecture et gestion de toutes vos fiches existantes.
-  - En plan FREE, l'ajout de nouveaux oiseaux est plafonné à 20 individus.
+  - En plan FREE, l'ajout de nouveaux oiseaux est plafonné à 20 individus vivants.
   - Si vous souhaitez poursuivre les tests ou renouveler votre période d'évaluation, contactez l'équipe support.
 
 ---
 
-*Merci pour votre contribution à l'amélioration de Bird Academy Enterprise !*
+*Bird Academy Enterprise — Volière Manager (V2.0.0-RC1 • BUILD_ID: BA-V2.0.0-RC1)*
