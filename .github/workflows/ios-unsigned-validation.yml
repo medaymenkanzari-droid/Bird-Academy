@@ -27,6 +27,8 @@ jobs:
 
       - name: Build Web Application Bundle
         run: npm run build:user:beta
+        env:
+          VITE_LMSE_API_URL: https://lmse.bird-academy.fr
 
       - name: Sync Capacitor iOS Assets & Plugins
         run: npx cap sync ios
