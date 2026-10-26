@@ -66,5 +66,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Bird Academy utilise l'appareil photo pour photographier vos oiseaux et scanner les codes QR de licence ou de cage.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Bird Academy accède à votre photothèque pour vous permettre de sélectionner et d'associer des photos à vos oiseaux.</string>
 </dict>
 </plist>

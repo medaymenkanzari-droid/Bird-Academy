@@ -37,6 +37,7 @@ coverage/
 /data/license-audit-logs.json
 /data/license-state.json
 /data/revocations.json
+mdpsbase.txt
 
 # OS & IDE
 Thumbs.db
